@@ -15,7 +15,8 @@ let obj = {
 	//发布
 	trigger: function(){
 		// let key = Array.prototype.shift.apply(arguments)
-		let [key] = Array.from(arguments)
+		// let [key] = Array.from(arguments)
+		let [key] = [...arguments]
 
 		let listFns = this.list[key]
 		if(listFns.length == 0 || !listFns){
