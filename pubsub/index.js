@@ -51,7 +51,7 @@
 		trigger: function(){
 			// let key = Array.prototype.shift.apply(arguments)
 			// let [key] = Array.from(arguments)
-			let [key] = [...arguments]
+			let [key,...args] = [...arguments]
 
 			let listFns = this.list[key]
 			if(listFns.length == 0 || !listFns){
@@ -59,7 +59,7 @@
 			}
 
 			for(let itemFn of listFns){
-				itemFn.apply(this,arguments)
+				itemFn.apply(this,args)
 			}
 		}
 	}
@@ -97,7 +97,7 @@
 		trigger: function(){
 			// let key = Array.prototype.shift.apply(arguments)
 			// let [key] = Array.from(arguments)
-			let [key] = [...arguments]
+			let [key,...args] = [...arguments]
 
 			let listFns = this.list[key]
 			if(listFns.length == 0 || !listFns){
@@ -105,7 +105,7 @@
 			}
 
 			for(let itemFn of listFns){
-				itemFn.apply(this,arguments)
+				itemFn.apply(this,args)
 			}
 		}
 	}
@@ -131,11 +131,8 @@
 }
 
 
+
 {
-	/**
-	  * https://www.cnblogs.com/tugenhua0707/p/4687947.html
-	  */
- 
  	let obj = {
 		list: [],
 
@@ -154,7 +151,7 @@
 		trigger: function(){
 			// let key = Array.prototype.shift.apply(arguments)
 			// let [key] = Array.from(arguments)
-			let [key] = [...arguments]
+			let [key,...args] = [...arguments]
 
 			let listFns = this.list[key]
 			if(listFns.length == 0 || !listFns){
@@ -162,27 +159,51 @@
 			}
 
 			for(let itemFn of listFns){
-				itemFn.apply(this,arguments)
+				itemFn.apply(this,args)
 			}
 		},
 
 		//取消订阅
 		removeListener: function(){
-			let [key] = Array.from(arguments)
+			let [key,fn] = Array.from(arguments)
+			let fns = this.list[key]
 
+			if(!fns){
+				return;
+			}
 			
+			/**
+			 * [if description]
+			 * 如果没有传fn,则取消订阅所有函数
+			 * @DateTime    2018-01-17T00:57:53+0800
+			 */
+			if(!fn){
+				fns.length = 0
+			}else{
+				Array.from(fns,(item,index)=>{
+					item == fn && fns.splice(index,1)
+				})
+			}
 		}
 	}
 
-	obj.listener('eat',(food)=>{
+	function fn1(food){
 		console.log(`晚上吃的是${food}`)
-	})
-	obj.listener('drink',(water)=>{
-		console.log(`晚上喝的是${water}`)
+	}
+	obj.listener('eat',fn1)
+	obj.listener('eat',(foods)=>{
+		console.log(`今晚的晚餐是${foods}`)
 	})
 
+	function fn2(water){
+		console.log(`晚上喝的是${water}`)
+	}
+	obj.listener('drink',fn2)
+
+
 	// obj.trigger('eat','面条')
-	obj.removeListener('eat','面条')
+	obj.removeListener('eat',fn1)
+	obj.trigger('eat','全家')
 
 	obj.trigger('drink','椰子水')
 }
