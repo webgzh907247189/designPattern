@@ -3,23 +3,19 @@ let obj = {
 
 	// 订阅
 	listener: function (key,fn) {
-		// let this_list = this.list[key] 
-		// this_list = this_list || []
-
-		// this_list = [...this_list,fn]
-		// this_list.push(fn)
+		this.list[key] = [...(this.list[key] || []),fn]
 
 
-
-		this.list[key] = this.list[key] || []
+		// this.list[key] = this.list[key] || []
 
 		// this.list[key].push(fn)
-		this.list[key] = [...this.list[key],fn]
+		// this.list[key] = [...this.list[key],fn]
 	},
 
 	//发布
 	trigger: function(){
-		let key = Array.prototype.shift.apply(arguments)
+		// let key = Array.prototype.shift.apply(arguments)
+		let [key] = Array.from(arguments)
 
 		let listFns = this.list[key]
 		if(listFns.length == 0 || !listFns){
