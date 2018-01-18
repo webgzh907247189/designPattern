@@ -7,12 +7,12 @@ const openBrowserWebpackPlugin = require('open-browser-webpack-plugin')
 
 
 let childProcess = require('child_process')
-let devPort = '6000'
+let devPort = '8000'
 
 const commonDevModules = [
     'babel-polyfill',
-    `webpack-dev-server/client?http://localhost:${devPort}`
-    // 'webpack/hot/only-dev-server'
+    `webpack-dev-server/client?http://localhost:${devPort}`,
+    'webpack/hot/only-dev-server'
 ]
 
 module.exports = {
