@@ -39,7 +39,7 @@
 		}
 
 	}
-	
+
 	/** 注意ES6中的arguments */
 	function windes(target,name,descriptor) {
 		let fn = descriptor.value 
@@ -65,3 +65,10 @@
 
 	p1.die()
 }
+
+
+/**
+ * https://www.cnblogs.com/Chen-XiaoJun/p/6193403.html
+ * http://taobaofed.org/blog/2015/11/16/es7-decorator/
+ * http://www.cnblogs.com/tugenhua0707/p/5198407.html#_labe9
+ */
