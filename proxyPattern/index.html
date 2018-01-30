@@ -1,0 +1,56 @@
+ <!DOCTYPE html>
+ <html>
+     <head>
+        <meta charset="utf-8">
+
+        <!-- https://segmentfault.com/a/1190000002407912  https://www.jianshu.com/p/739d7ce9c6fe  http://blog.csdn.net/rogerjava/article/details/17123593 https://www.zhihu.com/question/22431667-->
+
+        <!-- 控制状态栏显示样式 -->
+        <meta content="black" name="apple-mobile-web-app-status-bar-style">
+
+        <!-- 删除默认的苹果工具栏和菜单栏,默认就是显示工具栏和菜单栏 (伪装app，离线应用)-->
+        <meta content="yes" name="apple-mobile-web-app-capable">
+
+        <!-- "添加到主屏幕“后，全屏显示(苹果特有) -->
+        <meta content="yes" name="apple-touch-fullscreen">
+
+        <!-- 去除默认的数字做为点好号码的设置 -->
+        <meta content="telephone=no,email=no" name="format-detection">
+
+        <!-- iOS上的Safari和Windows Phone上的IE在内的一些移动端浏览器会在超链接元素被触摸（tap）的时候显示一个半透明的高亮背景，来给用户一个附加的反馈。然而，很多网站想要禁用这种默认的行为来更好地控制自己站点的外观和体验。 -->
+        <meta name="msapplication-tap-highlight" content="no">
+
+        <!-- 禁止浏览器从本地计算机的缓存中访问页面内容 -->
+        <!-- <meta http-equiv="Pragma" content="no-cache"> -->
+
+        <!-- 用百度打开网页可能会对其进行转码（比如贴广告），避免转码可添加如下meta -->
+        <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+        <link rel="shortcut icon" type="image/x-icon" href="bai.ico" />
+
+        <!-- 添加到主屏后的标题 -->
+        <meta name="apple-mobile-web-app-title" content="测试项目">
+        <!-- IOS (将网站添加到iPhone的主屏幕上,且添加指定的图片作为桌面icon)-->
+        <link rel="apple-touch-icon" href="/custom_icon.png"/>
+        <link rel="apple-touch-icon" sizes="72x72" href="/custom_icon.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/custom_icon.png" />
+        <!-- iOS将图标添加高光效果 -->
+        <link rel="apple-touch-icon-precomposed" href="/custom_icon.png"/>
+
+        <!-- 添加智能 App 广告条 Smart App Banner：告诉浏览器这个网站对应的app
+        https://developer.apple.com/library/content/documentation/AppleApplications/Reference/SafariWebContent/PromotingAppswithAppBanners/PromotingAppswithAppBanners.html -->
+        <!-- <meta name="apple-itunes-app" content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">  -->
+
+        <meta name="screen-orientation" content="portrait">
+        <meta name="x5-orientation" content="portrait">
+
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"> -->
+     </head>
+     <body>
+     	<script src='http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js'></script>
+		<div id='root'>12346789</div>
+        <script type="text/javascript">
+            !function(){var a="@charset \"utf-8\";html{color:#000;background:#fff;overflow-y:scroll;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}html *{outline:0;-webkit-text-size-adjust:none;-webkit-tap-highlight-color:rgba(0,0,0,0)}html,body{font-family:sans-serif}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td,hr,button,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{margin:0;padding:0}input,select,textarea{font-size:100%}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}abbr,acronym{border:0;font-variant:normal}del{text-decoration:line-through}address,caption,cite,code,dfn,em,th,var{font-style:normal;font-weight:500}ol,ul{list-style:none}caption,th{text-align:left}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:500}q:before,q:after{content:''}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}a:hover{text-decoration:underline}ins,a{text-decoration:none}",b=document.createElement("style");if(document.getElementsByTagName("head")[0].appendChild(b),b.styleSheet)b.styleSheet.disabled||(b.styleSheet.cssText=a);else try{b.innerHTML=a}catch(c){b.innerText=a}}();!function(a,b){function c(){var b=f.getBoundingClientRect().width;b/i>540&&(b=540*i);var c=b/10;f.style.fontSize=c+"px",k.rem=a.rem=c}var d,e=a.document,f=e.documentElement,g=e.querySelector('meta[name="viewport"]'),h=e.querySelector('meta[name="flexible"]'),i=0,j=0,k=b.flexible||(b.flexible={});if(g){console.warn("将根据已有的meta标签来设置缩放比例");var l=g.getAttribute("content").match(/initial\-scale=([\d\.]+)/);l&&(j=parseFloat(l[1]),i=parseInt(1/j))}else if(h){var m=h.getAttribute("content");if(m){var n=m.match(/initial\-dpr=([\d\.]+)/),o=m.match(/maximum\-dpr=([\d\.]+)/);n&&(i=parseFloat(n[1]),j=parseFloat((1/i).toFixed(2))),o&&(i=parseFloat(o[1]),j=parseFloat((1/i).toFixed(2)))}}if(!i&&!j){var p=(a.navigator.appVersion.match(/android/gi),a.navigator.appVersion.match(/iphone/gi)),q=a.devicePixelRatio;i=p?q>=3&&(!i||i>=3)?3:q>=2&&(!i||i>=2)?2:1:1,j=1/i}if(f.setAttribute("data-dpr",i),!g)if(g=e.createElement("meta"),g.setAttribute("name","viewport"),g.setAttribute("content","initial-scale="+j+", maximum-scale="+j+", minimum-scale="+j+", user-scalable=no"),f.firstElementChild)f.firstElementChild.appendChild(g);else{var r=e.createElement("div");r.appendChild(g),e.write(r.innerHTML)}a.addEventListener("resize",function(){clearTimeout(d),d=setTimeout(c,300)},!1),a.addEventListener("pageshow",function(a){a.persisted&&(clearTimeout(d),d=setTimeout(c,300))},!1),"complete"===e.readyState?e.body.style.fontSize=12*i+"px":e.addEventListener("DOMContentLoaded",function(){e.body.style.fontSize=12*i+"px"},!1),c(),k.dpr=a.dpr=i,k.refreshRem=c,k.rem2px=function(a){var b=parseFloat(a)*this.rem;return"string"==typeof a&&a.match(/rem$/)&&(b+="px"),b},k.px2rem=function(a){var b=parseFloat(a)/this.rem;return"string"==typeof a&&a.match(/px$/)&&(b+="rem"),b}}(window,window.lib||(window.lib={}));
+        </script>
+     </body>
+ </html>

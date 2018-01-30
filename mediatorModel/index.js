@@ -13,7 +13,7 @@
 		// return target
 	}
 
-	console.log(Hero.age)
+	console.log(Hero.age)  //test
 }
 
 
@@ -44,16 +44,19 @@
 	function windes(target,name,descriptor) {
 		let fn = descriptor.value 
 
-		// descriptor.value = (...argums)=>{
-		// 	console.log(argums) argums 是一个数组 
+		descriptor.value = (...argums)=>{
+			console.log(argums)  //argums 是一个数组 
 
-		// 	return fn.apply(target,argums)
-		// }
-
-		descriptor.value = ()=>{
-			console.log(arguments)
-			return fn.apply(target,...arguments)
+			return fn.apply(target,argums)
 		}
+
+		/**
+		 * 下面写法是错误的
+		 */
+		// descriptor.value = ()=>{
+		// 	console.log(arguments)
+		// 	return fn.apply(target,...arguments)
+		// }
 
 		return descriptor
 	}
