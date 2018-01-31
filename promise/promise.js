@@ -18,6 +18,7 @@
 
 /**
  * ES6新增了Promise函数用于简化项目代码流程。然而在使用promise时，我们仍然要使用callback，并且并不知道程序要干什么
+ * https://juejin.im/post/5a7125c36fb9a01c952663d1?utm_source=gold_browser_extension
  */
 {
 	let waitOneSecond = function () {
@@ -137,3 +138,307 @@
 
 
 // https://www.cnblogs.com/onepixel/p/7143769.html
+
+/**
+ * 每次调用 next 方法，会返回一个对象，表示当前阶段的信息（ value 属性和 done 属性）。
+ * value 属性是 yield 语句后面表达式的值，表示当前阶段的值；
+ * done 属性是一个布尔值，表示 Generator 函数是否执行完毕，即是否还有下一个阶段。 <false: 没有执行完毕，true: 执行完毕>
+ */
+
+
+{
+	let draw = function (count){
+		// 抽奖业务逻辑
+		console.log(`剩余的次数${count}`)
+	}
+
+	let drawCount = function *(count){
+		while(count>0){
+			count--
+			yield draw(count)
+		}
+	}
+
+	let drawDes = drawCount(5)
+	let div = document.createElement('div')
+	div.id = 'create-element-by-test'
+	// div.innerHTML = '13213213'
+	div.textContent = 'this is test for createElement'
+	document.body.appendChild(div)
+
+	document.getElementById('create-element-by-test').addEventListener('click',()=>{
+		/**
+		 * 调用Generator函数不会立即执行，而是返回遍历器对象。疲于手动执行遍历器对象
+		 */
+		let a = drawDes.next()
+		console.log(a)   //{value: undefined, done: false or true}
+	},false)
+}
+
+
+{
+	let ajax = function *(){
+		yield new Promise((resolve,reject)=>{
+			setTimeout(()=>{
+				resolve({code: '0'})
+			},200)
+		})
+	}
+
+	/**
+	 * 调用Generator函数不会立即执行，而是返回遍历器对象。疲于手动执行遍历器对象
+	 */
+	let pull = function(){
+		let gen = ajax()
+		let step = gen.next()
+		step.value.then((d)=>{
+			if(d.code !== '0'){
+				setTimeout(()=>{
+					console.log('wait')
+					pull()
+				},1000)
+			}else{
+				console.log('完成')
+			}
+		})
+	}
+
+	pull()
+}
+
+
+
+
+
+
+
+
+/**
+ *  async关键字表示是一个异步的函数，await表示需要等待执行。相对于yield表达式，语义化更强。
+ *  async函数返回值是Promise对象，这比Generator函数的返回值是Iterator对象方便多了，可以使用then方法来指定下一步的操作。
+ *  await关键字后边的表达式可以是一个Promise对象，或者简单(复杂)数据类型(Number, String, RegExp, Boolean, Array, Objext)。
+ *  如果是简单(复杂)数据类型，async函数会隐式调用Promise.resolve方法将其转换为Pormise对象。
+ */
+async function as () {
+  return await 123   //如果是其他数据类型，也是如此。
+}
+as().then(data => {
+  console.log(data)
+})  // 123
+
+// 如果await关键字后面的表达式是非Promise、非thenable的普通的值，则会隐式调用Promise.resolve方法将其转换为Promise对象
+
+
+
+
+
+// 如果某个await关键字后面的表达式抛出错误，async函数的状态就会变为reject，那么函数就会暂停执行，后面的表达式就不会在继续执行。
+// 因为Promise函数有一个特点是，一旦状态改变，就不会再变，之后在调用也是保持同一个状态。
+function foo () {
+  throw new Error('err')
+}
+async function as () {
+  await foo()
+  return Promise.resolve('succ') // 不会执行到这里，因为Promise对象的状态一旦改变就不会在变了，因此不执行。
+}
+as()
+.then(data => {})
+.catch(err => {
+	console.log(err);
+})
+
+
+
+
+/**
+ * 因为async函数默认情况下返回的是Promise对象，因此可以将async函数作为await关键字后面的表达式。
+ */
+async function foo () {
+  return Promise.resolve('async')
+}
+async function as () {
+  return await foo()   // 调用foo函数会返回Promise对象
+}
+as().then(data => {
+  console.log(data)
+})
+
+
+
+
+
+
+/**
+ * 如果async函数内部没有抛出错误，函数正常执行。那么每一个await关键字后面的异步任务会继发执行。
+ * 也就是说，一个异步任务结束之后才会执行另外一个异步任务，而不是并发执行。
+ */
+
+async function foo () {
+  return new Promise((resolve, reject) => {
+    window.setTimeout(() => {
+      resolve(10)
+    }, 1000)
+  })
+}
+async function bar () {
+  return new Promise((resolve, reject) => {
+    window.setTimeout(() => {
+      resolve(20)
+    }, 2000)
+  })
+}
+async function as () {
+  let t1 = Date.now()
+  const a = await foo()
+  const b = await bar()
+  let t2 = Date.now()
+  console.log(t2 - t1)  // 有误差，大概3004ms
+  return a + b
+}
+as().then(data => {
+  console.log(data)   // 大概3s后输入30
+})
+
+
+
+// 方法二:
+async function as () {
+  const t1 = Date.now()
+  const arr = await Promise.all([foo(), bar()])
+  const t2 = Date.now()
+  console.log(t2 - t1)
+  return arr[0] + arr[1]
+}
+as().then(data => {
+  console.log(data)  // 30
+})
+
+
+// 方法一：
+async function as () {
+  const t1 = Date.now()
+  const [fo, ba] = [foo(), bar()]
+  // 以上两个函数同时执行，并将结果作为await关键字的表达式
+  const a = await fo
+  const b = await ba
+  const t2 = Date.now()
+  console.log(t2 - t1)
+  return a + b
+}
+
+
+
+
+/**
+ * try...catch只能用于处理同步的操作，对于异步任务无法捕获到错误。
+ * 而await关键字能够暂停函数处理，等待异步任务结束之后返回。
+ * 因此在async函数中使用try...catch结合await关键字捕获异步错误是一个不错的方法。
+ */
+async function as () {
+  let a = 0
+  let b = 0
+  try {
+    a = await foo()
+    b = await bar()
+  } catch (e) {}
+  return a + b
+}
+as().then(data => {
+  console.log(data) // 30
+})
+
+
+/**
+ * async函数是基于Generator函数实现的，是Generator函数的语法糖。其内置执行器，调用后返回Promise对象.......
+ * async函数内部抛出错误或者await关键字后面的表达式抛出错误，会使async函数返回的Promise对象从pending状态变为reject状态，从而可以被catch方法捕获错误。
+ * 而且，Promise对象的状态一旦改变就不会再变，之后的异步任务就不会执行了。
+ *
+ * await关键字后面的表达式可以是Promise对象，也可以是其他数据类型。如果是其他数据类型，则会通过Promise.resolve将其转换为Promise对象
+ *
+ * async函数内部如果有多个await关键字，其后的异步任务会继发执行。如果每一个异步任务不相互依赖，则可以使用Promise.all让其并发执行，
+ * 这样可以在同样的时间里完成多个异步任务，提高函数执行效率。
+ *
+ * 对于async内部抛出的错误，可以使用try...catch来捕获异常。
+ * 虽然try...catch只能用于捕获同步任务，但是await关键字可以使得异步任务同步化,因此可以结合try...catch和await关键字捕获异步任务。
+ */
+
+{
+	function foo (obj) {
+	  return new Promise((resolve, reject) => {
+	    window.setTimeout(() => {
+	      let data = {
+	        height: 180
+	      }
+	      data = Object.assign({}, obj, data)
+	      resolve(data)
+	    }, 1000)
+	  })
+	}
+
+	function bar (obj) {
+	  return new Promise((resolve, reject) => {
+	    window.setTimeout(() => {
+	      let data = {
+	        talk () {
+	          console.log(this.name, this.height);
+	        }
+	      }
+	      data = Object.assign({}, obj, data)
+	      resolve(data)
+	    }, 1500)
+	  })
+	}
+
+	function main () {
+	  return new Promise((resolve, reject) => {
+	    const data = {
+	      name: 'keith'
+	    }
+	    resolve(data)
+	  })
+	}
+
+
+	// main().then(data => {
+	//   foo(data).then(res => {
+	//     bar(res).then(data => {
+	//       return data.talk()   // keith 180
+	//     })
+	//   })
+	// })
+
+
+	function *gen () {
+	  const data = {
+	    name: 'keith'
+	  }
+	  const fooData = yield foo(data)
+	  const barData = yield bar(fooData)
+	  return barData.talk()
+	}
+
+	function run (gen) {
+	  const g = gen()
+	  const next = data => {
+	    let result = g.next(data)
+	    if (result.done) return result.value
+	    result.value.then(data => {
+	      next(data)
+	    })
+	  }
+	  next()
+	}
+	run(gen)
+
+	async function main () {
+	  const data = {
+	    name: 'keith'
+	  }
+	  const fooData = await foo(data)
+	  const barData = await bar(fooData)
+	  return barData
+	}
+	main().then(data => {
+	  data.talk()
+	})
+}
