@@ -44,5 +44,21 @@
 
 
 {
-	
+	let imgSrc = (function () {
+		let imgNode = document.createElement('img')
+		document.body.append(imgNode)
+		let img = new Image();
+		img.onload = function(){
+			console.log(this.src)
+			imgNode.src = this.src
+		}
+		return {
+			setSrc(src){
+				imgNode.src = "http://img.lanrentuku.com/img/allimg/1212/5-121204193Q9-50.gif";
+				img.src = src
+			}
+		}
+	})()
+
+	imgSrc.setSrc('https://img.alicdn.com/tps/i4/TB1b_neLXXXXXcoXFXXc8PZ9XXX-130-200.png')
 }
