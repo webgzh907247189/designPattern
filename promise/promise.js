@@ -13,6 +13,8 @@
  * 并发限制 (浏览器对同一个域名下的请求有并发的限制，（ie6为2个，其他为6个）设置单独域名服务器，可以提升请求并发数，也就是令浏览器并行下载更多资源，提高站点性能)
  *
  * 方便复用－－放在另一个服务器上，可以方便全局内其他产品的使用。
+ *
+ * generator的yield表示： 后面表达式的值
  */
 
 
@@ -141,7 +143,7 @@
 
 /**
  * 每次调用 next 方法，会返回一个对象，表示当前阶段的信息（ value 属性和 done 属性）。
- * value 属性是 yield 语句后面表达式的值，表示当前阶段的值；
+ * value 属性是 yield 语句后面表达式的值，表示当前阶段的值；-> (一条直线被2个点，分为3段)
  * done 属性是一个布尔值，表示 Generator 函数是否执行完毕，即是否还有下一个阶段。 <false: 没有执行完毕，true: 执行完毕>
  */
 
@@ -216,6 +218,7 @@
 /**
  *  async关键字表示是一个异步的函数，await表示需要等待执行。相对于yield表达式，语义化更强。
  *  async函数返回值是Promise对象，这比Generator函数的返回值是Iterator对象方便多了，可以使用then方法来指定下一步的操作。
+ *  
  *  await关键字后边的表达式可以是一个Promise对象，或者简单(复杂)数据类型(Number, String, RegExp, Boolean, Array, Objext)。
  *  如果是简单(复杂)数据类型，async函数会隐式调用Promise.resolve方法将其转换为Pormise对象。
  */
@@ -399,13 +402,13 @@ as().then(data => {
 	}
 
 
-	// main().then(data => {
-	//   foo(data).then(res => {
-	//     bar(res).then(data => {
-	//       return data.talk()   // keith 180
-	//     })
-	//   })
-	// })
+	main().then(data => {
+	  foo(data).then(res => {
+	    bar(res).then(data => {
+	      return data.talk()   // keith 180
+	    })
+	  })
+	})
 
 
 	function *gen () {
