@@ -47,18 +47,24 @@
 	let imgSrc = (function () {
 		let imgNode = document.createElement('img')
 		document.body.append(imgNode)
+		console.log('11111111')
 		let img = new Image();
 		img.onload = function(){
+			console.log('666666666')
 			console.log(this.src)
 			imgNode.src = this.src
 		}
 		return {
 			setSrc(src){
+				console.log('333333333333')
 				imgNode.src = "http://img.lanrentuku.com/img/allimg/1212/5-121204193Q9-50.gif";
+				console.log('444444444444')
 				img.src = src
+				console.log('5555555555555555')
 			}
 		}
 	})()
 
+	console.log('2222222222')
 	imgSrc.setSrc('https://img.alicdn.com/tps/i4/TB1b_neLXXXXXcoXFXXc8PZ9XXX-130-200.png')
 }
