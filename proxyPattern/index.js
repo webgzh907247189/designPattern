@@ -48,14 +48,21 @@
 		let imgNode = document.createElement('img')
 		document.body.append(imgNode)
 		let img = new Image();
+
+		console.log('闭包内先执行','000')
 		img.onload = function(){
+			console.log('调用执行','4444')
 			console.log(this.src)
 			imgNode.src = this.src
+			console.log('调用执行','555')
 		}
 		return {
 			setSrc(src){
+				console.log('调用执行','111')
 				imgNode.src = "http://img.lanrentuku.com/img/allimg/1212/5-121204193Q9-50.gif";
+				console.log('调用执行','2222')
 				img.src = src
+				console.log('调用执行','3333')
 			}
 		}
 	})()
