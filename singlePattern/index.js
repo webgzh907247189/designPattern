@@ -18,7 +18,7 @@
 	class Singleton {
 		constructor(name){
 			this.name = name
-			this.ins = null;
+			this.ins = null
 		}
 
 		@getSingleName
@@ -30,7 +30,7 @@
 		target.age = '111'
 	}
 	/**
-	 * 给target写内容,就return    target
+	 * 给target写内容,就 target
 	 * 给descriptor写你被人,就return   descriptor
 	 */
 	function getSingleName(target,name,descriptor){
