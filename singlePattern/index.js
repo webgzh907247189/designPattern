@@ -20,9 +20,28 @@
 			this.name = name
 			this.ins = null;
 		}
+
+		@getSingleName
+		getSingleName(eat,drink){
+			console.log(this.name,'使用装饰器了',eat,drink)
+		}
 	}
 	function getName(target,name,descriptor){
-		return target.name = '111'
+		target.age = '111'
+	}
+	/**
+	 * 给target写内容,就return    target
+	 * 给descriptor写你被人,就return   descriptor
+	 */
+	function getSingleName(target,name,descriptor){
+		let fn = descriptor.value
+		descriptor.value = function(...args){
+			args = [...args,'喝水']
+
+			// console.log(args)   //["吃饭", "喝水"]
+			return fn.apply(this,args)
+		}
+		return descriptor
 	}
 
 	let getInstance = function (name) {
@@ -30,11 +49,15 @@
 	}
 
 	let a = getInstance('aa')
+	a.getSingleName('吃饭')
 	console.log(a)   // {name: 'aa', ins: null}
 
 	let b = getInstance('bb')
 	console.log(b)   // {name: 'aa', ins: null}
 	console.log(a == b) // true
+
+
+	console.log(Singleton.age,a.age) // 111 undefined
 }
 
 
