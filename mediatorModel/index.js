@@ -10,7 +10,7 @@
 	}
 	function desFn(target,name,descriptor) {
 		target.age = 'test'
-		// return target
+		// return target   报错
 	}
 
 	console.log(Hero.age)  //test
