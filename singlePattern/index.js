@@ -18,7 +18,7 @@
 	class Singleton {
 		constructor(name){
 			this.name = name
-			this.ins = null
+			this.ins = null;
 		}
 	}
 	function getName(target,name,descriptor){
