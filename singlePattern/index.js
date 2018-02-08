@@ -13,24 +13,71 @@
 // https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000/001431917590955542f9ac5f5c1479faf787ff2b028ab47000
 
 
-{	
+// {	
+// 	@getName
+// 	class Singleton {
+// 		constructor(name){
+// 			this.name = name
+// 			this.ins = null
+// 		}
+
+// 		@getSingleName
+// 		getSingleName(eat,drink){
+// 			console.log(this.name,'使用装饰器了',eat,drink)
+// 		}
+// 	}
+// 	function getName(target,name,descriptor){
+// 		target.age = '111'
+// 	}
+// 	/**
+// 	 * 给target写内容,就 target (不需要return)
+// 	 * 给descriptor写你被人,就return   descriptor
+// 	 */
+// 	function getSingleName(target,name,descriptor){
+// 		let fn = descriptor.value
+// 		descriptor.value = function(...args){
+// 			args = [...args,'喝水']
+
+// 			// console.log(args)   //["吃饭", "喝水"]
+// 			return fn.apply(this,args)
+// 		}
+// 		return descriptor
+// 	}
+
+// 	let getInstance = function (name) {
+// 		return this.ins = this.ins || new Singleton(name)
+// 	}
+
+// 	let a = getInstance('aa')
+// 	a.getSingleName('吃饭')
+// 	console.log(a)   // {name: 'aa', ins: null}
+
+// 	let b = getInstance('bb')
+// 	console.log(b)   // {name: 'aa', ins: null}
+// 	console.log(a == b) // true
+
+
+// 	console.log(Singleton.age,a.age) // 111 undefined
+// }
+
+
+{
 	@getName
 	class Singleton {
 		constructor(name){
 			this.name = name
-			this.ins = null
 		}
 
 		@getSingleName
-		getSingleName(eat,drink){
-			console.log(this.name,'使用装饰器了',eat,drink)
+		getSingleName(drink,eat){
+			console.log(this.name,'使用装饰器了',drink,eat)
 		}
 	}
 	function getName(target,name,descriptor){
-		target.age = '111'
+		target.age = '222'
 	}
 	/**
-	 * 给target写内容,就 target
+	 * 给target写内容,就 target (不需要return)
 	 * 给descriptor写你被人,就return   descriptor
 	 */
 	function getSingleName(target,name,descriptor){
@@ -44,23 +91,18 @@
 		return descriptor
 	}
 
-	let getInstance = function (name) {
-		return this.ins = this.ins || new Singleton(name)
-	}
+	let getInstance = (function (name) {
+		let ins = null
+		return function(name){
+			return ins = ins || new Singleton(name)	
+		}
+	})()
 
-	let a = getInstance('aa')
-	a.getSingleName('吃饭')
+ 	let a = getInstance('aa')
+	// a.getSingleName('吃饭')
 	console.log(a)   // {name: 'aa', ins: null}
 
 	let b = getInstance('bb')
 	console.log(b)   // {name: 'aa', ins: null}
 	console.log(a == b) // true
-
-
-	console.log(Singleton.age,a.age) // 111 undefined
-}
-
-
-{
-
 }
