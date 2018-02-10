@@ -158,60 +158,60 @@
 
 
 
-// {	
-// 	let createModalCount = function(count){
-// 		return function(target,name,descriptor){
-// 			let fn = descriptor.value
-// 			descriptor.value = function (...args){
-// 				args = [...args,count]
-// 				fn.apply(this,args)
-// 			}
-// 			return descriptor
-// 		}
-// 	}
+{	
+	let createModalCount = function(count){
+		return function(target,name,descriptor){
+			let fn = descriptor.value
+			descriptor.value = function (...args){
+				args = [...args,count]
+				fn.apply(this,args)
+			}
+			return descriptor
+		}
+	}
 
-// 	class CreateModal{
-// 		constructor(modalDes){
-// 			this.html = modalDes
-// 			this.createModal()
-// 		}
+	class CreateModal{
+		constructor(modalDes){
+			this.html = modalDes
+			this.createModal()
+		}
 
-// 		@createModalCount(1)
-// 		createModal(count){
-// 			console.log('创建了',`${count + '次'}`)
-// 			let div = document.createElement('div')
-// 			div.id = 'modal'
-// 			div.innerHTML = this.html
-// 			document.body.append(div)
+		@createModalCount(1)
+		createModal(count){
+			console.log('创建了',`${count + '次'}`)
+			let div = document.createElement('div')
+			div.id = 'modal'
+			div.innerHTML = this.html
+			document.body.append(div)
 
-// 			this.closeModal(div.id )
-// 		}
+			this.closeModal(div.id )
+		}
 
-// 		closeModal(id){
-// 			let modal = document.getElementById(id)
-// 			modal.onclick = function(){
-// 				modal.style.display = 'none'
-// 			}
-// 		}
+		closeModal(id){
+			let modal = document.getElementById(id)
+			modal.onclick = function(){
+				modal.style.display = 'none'
+			}
+		}
 
-// 		showModal(){
-// 			document.getElementById('modal').style.display = 'block'
-// 			return this
-// 		}
-// 	}
+		showModal(){
+			document.getElementById('modal').style.display = 'block'
+			return this
+		}
+	}
 
-// 	let proxy = (function(){
-// 		let createDiv = null
-// 		return function(modalDes){
-// 			return createDiv = createDiv && createDiv.showModal() || new CreateModal(modalDes)
-// 		}
-// 	})()
+	let proxy = (function(){
+		let createDiv = null
+		return function(modalDes){
+			return createDiv = createDiv && createDiv.showModal() || new CreateModal(modalDes)
+		}
+	})()
 
-// 	document.getElementById('root').onclick = function(){
-// 		let a = proxy('我是modal的内容')
-// 		console.log(a) // {html: "我是modal的内容"}
-// 	}
-// }
+	document.getElementById('root').onclick = function(){
+		let a = proxy('我是modal的内容')
+		console.log(a) // {html: "我是modal的内容"}
+	}
+}
 
 
 
@@ -232,9 +232,9 @@
 		}
 
 		createModal(){
-			console.log('创建了')
+			console.log('创建了modalTest')
 			let div = document.createElement('div')
-			div.id = 'modal'
+			div.id = 'modal-test'
 			div.innerHTML = this.html
 			document.body.append(div)
 
@@ -249,16 +249,138 @@
 		}
 
 		showModal(){
-			document.getElementById('modal').style.display = 'block'
+			document.getElementById('modal-test').style.display = 'block'
 			return this
 		}
 	}
 
 	function getModal(desText){
-		return this.modal = this.modal && this.modal.showModal() || new CreateModal(desText)
+		return this.modalTest = this.modalTest && this.modalTest.showModal() || new CreateModal(desText)
 	}
 
-	document.getElementById('root').onclick = function(){
+	document.getElementById('test').onclick = function(){
 		getModal('modal的内容aaa')
+	}
+}
+
+
+
+// {	
+// 	let initDes = function (text){
+// 		return function(target,name,descriptor){
+// 			let fn = descriptor.value
+// 			descriptor.value = function (...args){
+// 				args = [...args,text]
+// 				fn.apply(this,args)
+// 			}
+// 			return descriptor
+// 		}
+// 	}
+
+// 	class Create{
+// 		constructor(fn,desText){
+// 			console.log('创建了')
+// 			this.html = desText
+// 			this.fn = fn
+
+// 			this.init()
+// 		}
+
+// 		@initDes('描述追加')
+// 		init(...des){
+// 			this.fn.apply(this,des)
+// 		}
+// 	}
+
+// 	let proxy = (function(){
+// 		let createResult = null
+// 		return function(fn,desText){
+// 			return createResult = createResult || new Create(fn,desText)
+// 		}
+// 	})()
+
+// 	function createDiv(desText){
+// 		let div = document.createElement('div')
+// 		div.id = '111'
+// 		div.innerHTML = `${this.html +','+ desText}`
+// 		document.body.append(div)
+// 	}
+
+// 	function createIframe(desText){
+// 		let iframe = document.createElement('iframe')
+// 		iframe.id = '2222'
+// 		iframe.innerHTML = `${this.html +','+ desText}`
+// 		document.body.append(iframe)
+// 	}
+
+// 	document.getElementById('decouple-test').onclick = function(){
+// 		let a = proxy(createDiv,'创建的div')
+// 		console.log(a)
+
+// 		let b = proxy(createIframe,'创建的Iframe')
+// 		console.log(b)
+// 	}
+// }
+
+
+{	
+	let initDes = function (text){
+		return function(target,name,descriptor){
+			let fn = descriptor.value
+			descriptor.value = function (...args){
+				args = [...args,text]
+				fn.apply(this,args)
+			}
+			return descriptor
+		}
+	}
+
+	class Create{
+		constructor(fn,desText){
+			console.log('创建了')
+			this.html = desText
+			this.fn = fn
+
+			this.init()
+		}
+
+		@initDes('描述追加')
+		init(...des){
+			this.fn.apply(this,des)
+		}
+	}
+
+	let proxy = function(fn){
+		let createResult = null
+
+		console.log(createResult, ' createResultcreateResultcreateResult')
+		return function(desText){
+			return createResult = createResult || new Create(fn,desText)
+		}
+	}
+
+	function createDiv(desText){
+		let div = document.createElement('div')
+		div.id = '111'
+		div.innerHTML = `${this.html +','+ desText}`
+		document.body.append(div)
+	}
+
+	function createIframe(desText){
+		let iframe = document.createElement('iframe')
+		iframe.id = '2222'
+		iframe.innerHTML = `${this.html +','+ desText}`
+		document.body.append(iframe)
+	}
+
+	
+	document.getElementById('decouple-test').onclick = function(){
+		let proxya = proxy(createDiv)
+		let a = proxya('创建的div')
+		console.log(a)
+
+		let proxyb = proxy(createIframe)
+		let b = proxyb('创建的Iframe')
+		console.log(b)
 	}
 }
