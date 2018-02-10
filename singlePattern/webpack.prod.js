@@ -7,7 +7,8 @@ const webpackDevServer = require('webpack-dev-server')
 module.exports = {
     entry: {
         common: 'babel-polyfill',
-        index: './index.js'
+        index: './index.js',
+        proxy: './es6proxy.js'
     },
     output: {
         path: path.resolve(__dirname,'./dist'),
