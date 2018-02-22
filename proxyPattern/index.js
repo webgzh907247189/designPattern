@@ -17,7 +17,7 @@
 	}
 
 	class Ceo {
-		constructor(name,gift){
+		constructor(name){
 			this.name = name
 		}
 
@@ -88,6 +88,11 @@
 	let proxy = (function(){
 		let img = new Image();
 		img.onload = function(src){
+
+			/**
+			 * 此处的this.src(指的是运行环境下的src)
+			 * 当图片真正加载完后的话，调用imgSrc中的imgSrc.setSrc方法设置图片的路径(先进行onload操作,onload完成之后,进行设置路径)
+			 */
 			imgSrc.setSrc(this.src)
 		}
 		return {
