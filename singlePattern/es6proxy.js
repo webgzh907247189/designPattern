@@ -21,7 +21,8 @@
 
 {
 	let proxyObj = new Proxy({i: 1}, {
-		get(target) { 
+		get(target) {
+			console.log('111')
 			return () => target.i++ 
 		}
 	});
