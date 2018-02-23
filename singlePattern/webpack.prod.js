@@ -8,7 +8,8 @@ module.exports = {
     entry: {
         common: 'babel-polyfill',
         index: './index.js',
-        proxy: './es6proxy.js'
+        proxy: './es6proxy.js',
+        modal: './modal.js'
     },
     output: {
         path: path.resolve(__dirname,'./dist'),
@@ -33,6 +34,24 @@ module.exports = {
                 test: /\.js?$/,
                 exclude: /node_modules/,
                 loader: 'babel-loader'         //'babel-loader?cacheDirectory'   babel的缓存编译结果
+            },
+            {
+                test: /\.css$/,
+                use: ['style-loader','css-loader?importLoaders=1'] ///对于css中@import进来的css同样做前缀处理
+            },
+            {
+                test: /\.less$/,
+                use: ['style-loader','css-loader?importLoaders=1','less-loader'] //less-loader需要依赖less才能实现。如果用的npm3.0+，less是不会随着less-loader自动安装的，需要手动安装
+            },
+            {
+                test: /\.(png|jpe?g|gif)(\?.*)?$/,
+                use: {
+                    loader: 'url-loader',
+                    options: {
+                        limit: 10240,
+                        name: './assets/imgs/[name].[hash].[ext]'
+                    }
+                }
             }
         ]
     },
