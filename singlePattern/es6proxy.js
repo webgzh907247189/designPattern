@@ -118,7 +118,31 @@
 	console.log(a.i,a) // 2  {i: 2}
 }
 
+{
+	let obj = {name: '11111',sex: '男'}
+	let q = function(obj,key){
+		Object.defineProperty(obj,key,{
+			get(){
+				let keys = Object.keys(this)
+				let lowerKey = key.toLowerCase()
+				let lowerKeys = keys.map((item)=>{
+					return item.toLowerCase()
+				})
 
+				if(keys.includes(key)){
+					return this[key]
+				}else if(lowerKeys.includes(lowerKey)){
+					let index = lowerKeys.findIndex((key)=>{
+						return key.toLowerCase() === lowerKey
+					})
+					return this[keys[index]]
+				}
+			}
+		})
+		return obj[key]
+	}
+	q(obj,'NaME') // 11
+}
 	
 {	
 	let obj = {name: '11',sex: '男'}
@@ -127,20 +151,20 @@
 			let keys = Object.keys(target)
 			let lowerKey = key.toLowerCase()
 			let lowerKeys = keys.map((item)=>{
-				ietm.toLowerCase()
+				return item.toLowerCase()
 			})
+
 			if(keys.includes(key)){
 				return target[key]
 			}else if(lowerKeys.includes(lowerKey)){
 				let index = lowerKeys.findIndex((key)=>{
-					key.toLowerCase() === lowerKey
+					return key.toLowerCase() === lowerKey
 				})
-				return target[kes[index]]
+				return target[keys[index]]
 			}
 		}
 	})
-
-
+	console.log(q.NaMe) // 11
 }
 
 /**
