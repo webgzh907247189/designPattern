@@ -380,3 +380,34 @@
 		console.log(b)
 	}
 }
+
+
+
+/**
+ * 理解模块模式
+ */
+{	
+	class CustomType{
+		constructor(){
+			this.name = 'web'
+		}
+
+		getName(){
+			return this.name
+		}
+
+	}
+
+	let obj = (function(){
+		let privateA = 'privateName'
+
+		let o = new CustomType()
+		o.sex = 'nan'
+		o.getPrivete = function(){
+			return privateA
+		}
+		return o
+	})()
+
+	console.log(obj.sex,obj.getPrivete(),obj.name,obj.getName())  // 'nan' 'privateName' 'web' 'web'
+}

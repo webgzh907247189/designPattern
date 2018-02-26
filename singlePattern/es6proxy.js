@@ -71,11 +71,11 @@
 	}
 	let g = val()
 
-	Object.defineProperty(window, 'a', {
+	Object.defineProperty(window, 'aa', {
 		get() { return g.next().value }
 	})
 
-	if (a === 1 && a === 2 && a === 3) {
+	if (aa === 1 && aa === 2 && aa === 3) {
 		console.log('Hello World!');   // Hello World
 	}
 }
@@ -119,7 +119,7 @@
 }
 
 {
-	let obj = {name: '11111',sex: '男'}
+	let obj = {NAME: '11111',sex: '男'}
 	let q = function(obj,key){
 		Object.defineProperty(obj,key,{
 			get(){
@@ -132,10 +132,10 @@
 				if(keys.includes(key)){
 					return this[key]
 				}else if(lowerKeys.includes(lowerKey)){
-					let index = lowerKeys.findIndex((key)=>{
-						return key.toLowerCase() === lowerKey
+					let matchIndex = lowerKeys.findIndex((item)=>{
+						return item === lowerKey
 					})
-					return this[keys[index]]
+					return this[keys[matchIndex]]
 				}
 			}
 		})
@@ -158,7 +158,7 @@
 				return target[key]
 			}else if(lowerKeys.includes(lowerKey)){
 				let index = lowerKeys.findIndex((key)=>{
-					return key.toLowerCase() === lowerKey
+					return key === lowerKey
 				})
 				return target[keys[index]]
 			}
