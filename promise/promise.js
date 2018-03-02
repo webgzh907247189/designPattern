@@ -445,3 +445,8 @@ as().then(data => {
 	  data.talk()
 	})
 }
+
+
+/**
+ *  https://segmentfault.com/a/1190000007678185  (promise的reject之后，then还会执行)
+ */
