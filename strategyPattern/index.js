@@ -24,12 +24,16 @@
 
 	class Bouns{
 		constructor(name,salary){
-			this.name = null
+			this.levelObj = null
 			this.salary = null
 		}
 
-		getSalary(salary){
-			return this.salary.getMoney(salary)
+		getSalary(){
+			return this.salary.getMoney(this.levelObj)
+		}
+
+		setlevelObj(levelObj){
+			this.levelObj = levelObj
 		}
 
 		setSalary(performatClass){
@@ -39,5 +43,29 @@
 
 	let performatABouns = new Bouns()
 	performatABouns.setSalary(new performatA())
-	performatABouns.getSalary(2000)
+	performatABouns.setlevelObj(2000)  // 8000
+	performatABouns.getSalary()
 }
+
+
+{
+	let obj = {
+        "A": function(salary) {
+            return salary * 4;
+        },
+        "B" : function(salary) {
+            return salary * 3;
+        },
+        "C" : function(salary) {
+            return salary * 2;
+        } 
+	}
+
+	let calculateBouns =function(level,salary) {
+		return obj[level](salary)
+	}
+  	let money = calculateBouns('A',2000)
+  	console.log(money)  // 8000
+}
+
+
