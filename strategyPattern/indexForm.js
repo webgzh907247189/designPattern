@@ -28,23 +28,20 @@
 		add(dom,rule,errorMsg){
 			let [fnKey,length] = rule.split(':')
 			this.cache = [...this.cache,()=>{
-					return strategy[fnKey].apply(dom,[dom.value,length,errorMsg])
+					return strategy[fnKey].apply(dom,[dom.value,length || errorMsg,errorMsg])
 				}
 			]
 		}
 
 		start(){
 			for (let item of this.cache){
-				// let msg = item()
-				// if(msg){
-				// 	return msg
-				// }
+				let msg = item()
+				if(msg){
+					return msg
+				}
 				
-				// let a = item && item()
-				// console.log(a,'start()')
-				// a && ( ()=> a )()
-
-				return item && item() || undefined
+				/*错误的写法, return直接跳出循环*/
+				// return item && item() || undefined
 			}
 		}
 	}
@@ -52,19 +49,26 @@
 	let validatorRule = function(){
 		let validator = new Validator()
 		validator.add(registerForm.password,'minLength:6','密码长度不能小于6位');
-		let msg = validator.start()
+		validator.add(registerForm.userName,'isNotEmpty','用户名不能为空');
+		validator.add(registerForm.phoneNumber,'mobileFormat','手机号码格式不正确');
 
-		console.log(msg,'msg',typeof(msg))
-		if(msg){
-			return msg
-		}
+		// let msg = validator.start()
+		// if(msg){
+		// 	return msg
+		// }
+
+		return validator.start() || undefined
 	}
 
 	let registerForm = document.getElementById("registerForm");
 	registerForm.onsubmit = function(){
-		let a = validatorRule()
 
-		console.log(a,'aa')
-		return false
+		// let val = validatorRule()
+		// if(val){
+		// 	console.log(val)
+		// 	return false
+		// }
+		
+		return validatorRule() && false
 	}
 }
