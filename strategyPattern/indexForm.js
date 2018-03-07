@@ -35,14 +35,15 @@
 
 		start(){
 			for (let item of this.cache){
-				// item && item()
 				// let msg = item()
 				// if(msg){
 				// 	return msg
 				// }
 				
-				// let a = item() 
-				// console.log(a,'item()')
+				// let a = item && item()
+				// console.log(a,'start()')
+				// a && ( ()=> a )()
+
 				return item && item() || undefined
 			}
 		}
@@ -52,6 +53,7 @@
 		let validator = new Validator()
 		validator.add(registerForm.password,'minLength:6','密码长度不能小于6位');
 		let msg = validator.start()
+
 		console.log(msg,'msg',typeof(msg))
 		if(msg){
 			return msg
@@ -61,6 +63,7 @@
 	let registerForm = document.getElementById("registerForm");
 	registerForm.onsubmit = function(){
 		let a = validatorRule()
+
 		console.log(a,'aa')
 		return false
 	}
