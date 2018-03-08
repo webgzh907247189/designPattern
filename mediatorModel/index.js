@@ -70,7 +70,7 @@
 {
 	let players = []
 	class Hero {
-		constructor(name,enemies,state,name,teamColor){
+		constructor(name,enemies,state,teamColor){
 			this.friends = [];    //保存队友列表
 		    this.enemies = [];    // 保存敌人列表
 		    this.state = 'live';  // 玩家状态
