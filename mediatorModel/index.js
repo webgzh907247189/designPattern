@@ -19,7 +19,7 @@
 
 {
 	class Hero {
-		constructor(name,enemy=null){
+		constructor(name,enemy = null){
 			this.name = name
 			this.enemy = enemy 
 		}
@@ -42,16 +42,14 @@
 
 	/** 注意ES6中的arguments */
 	function windes(target,name,descriptor) {
-		let fn = descriptor.value 
-
+		let fn = descriptor.value
 		descriptor.value = (...argums)=>{
 			console.log(argums)  //argums 是一个数组 
-
-			return fn.apply(target,argums)
+			return fn.apply(null,argums)
 		}
 
 		/**
-		 * 下面写法是错误的
+		 * 下面写法是错误的 (因为arguments的原因)
 		 */
 		// descriptor.value = ()=>{
 		// 	console.log(arguments)
@@ -69,6 +67,32 @@
 	p1.die()
 }
 
+{
+	let players = []
+	class Hero {
+		constructor(name,enemies,state,name,teamColor){
+			this.friends = [];    //保存队友列表
+		    this.enemies = [];    // 保存敌人列表
+		    this.state = 'live';  // 玩家状态
+		    this.name = name;     // 角色名字
+		    this.teamColor = teamColor; // 队伍的颜色
+		}
+
+		win(){
+			console.log(`${this.name}赢了`)
+		}
+
+		lose(){
+			console.log(`${this.name}输了`)
+		}
+
+		die(){
+			// this.lose()
+			// this.enemy.win(this.enemy)
+		}
+	}
+
+}
 
 /**
  * https://www.cnblogs.com/Chen-XiaoJun/p/6193403.html
