@@ -75,4 +75,7 @@
  * http://taobaofed.org/blog/2015/11/16/es7-decorator/
  * http://www.cnblogs.com/tugenhua0707/p/5198407.html#_labe9
  * https://segmentfault.com/a/1190000007343993
+ *
+ *
+ * https://segmentfault.com/a/1190000010581422
  */

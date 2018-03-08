@@ -1,5 +1,5 @@
 {
-	let strategy = {
+	let strategyObj = {
 	    isNotEmpty: function(value,errorMsg) {
 	        if(value === '') {
 	            return errorMsg;
@@ -26,30 +26,26 @@
 		}
 
 		add(dom,rules){
-
 			for(let itemRule of rules){
 				((itemRule) => {
-					let {strategy:strategy1,errorMsg} = itemRule
-					let [,length] = strategy1.split(':')
+					let {strategy,errorMsg} = itemRule
+					let [fnKey,length] = strategy.split(':')
 					this.cache = [...this.cache,()=>{
-							return strategy[strategy1].apply(dom,[dom.value,length || errorMsg,errorMsg])
+							return strategyObj[fnKey].apply(dom,[dom.value,length || errorMsg,errorMsg])
 						}
 					]
 				})(itemRule)
 			}
 		}
 
-		start(){
-			console.log(this.cache[1]())
-			return true
-
-			
+		start(){			
 			for (let item of this.cache){
 				let msg = item()
 				if(msg){
 					return msg
 				}
-				
+
+
 				/*错误的写法, return直接跳出循环*/
 				// return item && item() || undefined
 			}
@@ -57,8 +53,6 @@
 	}
 
 	let validatorRule = function(){
-	    // debugger
-
 		let validator = new Validator()
 		validator.add(registerForm.userName,[
 	        {strategy: 'isNotEmpty',errorMsg:'用户名不能为空'},
@@ -71,26 +65,49 @@
 	        {strategy: 'mobileFormat',errorMsg:'手机号格式不正确'},
 	    ]);
 
-		let msg = validator.start()
-		if(msg){
-			return msg
-		}
+		// let msg = validator.start()
+		// if(msg){
+		// 	return msg
+		// }
 
-		// return validator.start() || undefined
+		return validator.start() || undefined
 	}
 
 	let registerForm = document.getElementById("registerForm");
 	registerForm.onsubmit = function(){
 
 		let val = validatorRule()
-		console.log(val,'11')
 		if(val){
 			console.log(val)
 			return false
 		}
 
-		return false
-
 		// return validatorRule() && false
 	}
 }
+
+
+
+
+
+
+
+/**
+ *  var f 时，如果当前作用于下已经有了一个同名的变量，编译器会忽略这个声明，所以不存在f被undefined 覆盖的情况
+ *  
+ */
+// {
+// 	var x = 0;  
+// 	f();  
+// 	console.log(x);  
+// 	var f = function(){  
+// 	    x = 1;  
+// 	}  
+// 	f();  
+// 	console.log(x);  
+// 	function f(){  
+// 	    x = 2;  
+// 	}  
+// 	f();  
+// 	console.log(x);  
+// }
