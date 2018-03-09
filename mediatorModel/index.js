@@ -70,11 +70,11 @@
 {
 	let players = []
 	class Hero {
-		constructor(name,enemies,state,teamColor){
-			this.friends = [];    //保存队友列表
-		    this.enemies = [];    // 保存敌人列表
-		    this.state = 'live';  // 玩家状态
-		    this.name = name;     // 角色名字
+		constructor(name,teamColor,...[friends = [],enemies = [],state = 'live']){
+			this.friends = friends;     //保存队友列表
+		    this.enemies = enemies;     // 保存敌人列表
+		    this.state = state;         // 玩家状态
+		    this.name = name;           // 角色名字
 		    this.teamColor = teamColor; // 队伍的颜色
 		}
 
@@ -87,11 +87,58 @@
 		}
 
 		die(){
-			// this.lose()
-			// this.enemy.win(this.enemy)
+			let allDide = true
+			this.state = 'dide'
+			for(let item of this.friends){   // 查找每一个队友的生存情况
+			 	if(item.state !== 'dide'){
+			 		allDide = false
+			 		break   //return 也可以
+			 	}
+			}
+
+			if(allDide){        // 全部队友死亡
+				this.lose()
+				for(let item of this.enemies){  // 通知敌人胜利了
+					item.win()
+				}
+
+				for(let item of this.friends){ // 通知队友失败了
+					item.lose()
+				}
+			}
 		}
 	}
 
+	let heroFactory = function(name,color){
+		let newPlayer = new Hero(name,color)
+
+		for(let item of players){ //？优化写法
+
+			// if(item.teamColor === newPlayer.teamColor){
+			// 	newPlayer.friends = [...newPlayer.friends,item]
+			// 	item.friends = [...item.friends,newPlayer]
+			// }else{
+			// 	newPlayer.enemies = [...newPlayer.enemies,item]
+			// 	item.enemies = [...item.enemies,newPlayer]
+			// }
+			
+			let isFriendArr = {true: [newPlayer.friends,item.friends], false: [newPlayer.enemies,item.enemies]}[item.teamColor === newPlayer.teamColor]
+			let [newPlayerArr, itemArr] = isFriendArr
+			newPlayerArr = [...newPlayerArr,item]
+			itemArr = [...itemArr,newPlayer]
+		}
+		players = [...players,newPlayer] //？顺序
+
+		return newPlayer
+	}
+
+	let p1 = heroFactory('p1','red')
+	let p2 = heroFactory('p2','red')
+	let p3 = heroFactory('p3','blue')
+	let p4 = heroFactory('p4','blue')
+
+	p1.die()
+	p2.die()
 }
 
 /**
