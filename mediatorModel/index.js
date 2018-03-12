@@ -112,25 +112,87 @@
 	let heroFactory = function(name,color){
 		let newPlayer = new Hero(name,color)
 
-		for(let item of players){ //？优化写法
+		for(let item of players){ 
+
+			let isFriendArr = {true: 'friends',false: 'enemies'}[item.teamColor === newPlayer.teamColor]
+			newPlayer[isFriendArr] = [...newPlayer[isFriendArr],item]
+			item[isFriendArr] = [...item[isFriendArr],newPlayer]
+
+			/** 上面的为优化写法 */
 
 			// if(item.teamColor === newPlayer.teamColor){
-			// 	newPlayer.friends = [...newPlayer.friends,item]
+			// 	newPlayer.friends = [...newPlayer.friends,item]  // 相互添加队友列表
 			// 	item.friends = [...item.friends,newPlayer]
 			// }else{
-			// 	newPlayer.enemies = [...newPlayer.enemies,item]
+			// 	newPlayer.enemies = [...newPlayer.enemies,item]  // 相互添加到敌人列表
 			// 	item.enemies = [...item.enemies,newPlayer]
 			// }
-			
-			let isFriendArr = {true: [newPlayer.friends,item.friends], false: [newPlayer.enemies,item.enemies]}[item.teamColor === newPlayer.teamColor]
-			let [newPlayerArr, itemArr] = isFriendArr
-			newPlayerArr = [...newPlayerArr,item]
-			itemArr = [...itemArr,newPlayer]
 		}
-		players = [...players,newPlayer] //？顺序
-
+		players = [...players,newPlayer] // 保证不重复添加队友(所以从二个开始添加)
 		return newPlayer
 	}
+
+	let p1 = heroFactory('p1','red')
+	let p2 = heroFactory('p2','red')
+	let p3 = heroFactory('p3','blue')
+	let p4 = heroFactory('p4','blue')
+
+	p1.die()
+	p2.die()
+}
+
+
+{
+	let players = []
+	class Hero {
+		constructor(name,teamColor,...[state = 'live']){
+		    this.state = state;         // 玩家状态
+		    this.name = name;           // 角色名字
+		    this.teamColor = teamColor; // 队伍的颜色
+		}
+
+		win(){
+			console.log(`${this.name}赢了`)
+		}
+
+		lose(){
+			console.log(`${this.name}输了`)
+		}
+
+		die(){
+			this.state = 'dide'
+			playerDirector.ReceiveMessage('playerDead',this);
+		}
+
+		remove(){
+			playerDirector.ReceiveMessage('removePlayer',this);
+		}
+
+		changeTeam(){
+			playerDirector.ReceiveMessage('changeTeam',this);
+		}
+	}
+
+	let heroFactory = function(name,color){
+		let newPlayer = new Hero(name,color)
+		playerDirector.ReceiveMessage('addPlayer',newHero)
+		return newPlayer
+	}
+
+	let playerDirector = (function(){
+		let operations = {
+			addPlayer(){},
+			removePlayer(){},
+			changeTeam(){}
+		}
+
+		return {
+			ReceiveMessage(...argums){
+				let [message] = argums
+				operations[message].apply(this,argums)
+			}
+		}
+	})()
 
 	let p1 = heroFactory('p1','red')
 	let p2 = heroFactory('p2','red')
