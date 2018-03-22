@@ -121,17 +121,19 @@
 {
 	let obj = {NAME: '11111',sex: '男'}
 	let q = function(obj,key){
+		let keys = Object.keys(obj)
+		if(keys.includes(key)){
+			return obj[key]
+		}
+
 		Object.defineProperty(obj,key,{
 			get(){
-				let keys = Object.keys(this)
 				let lowerKey = key.toLowerCase()
 				let lowerKeys = keys.map((item)=>{
 					return item.toLowerCase()
 				})
 
-				if(keys.includes(key)){
-					return this[key]
-				}else if(lowerKeys.includes(lowerKey)){
+				if(lowerKeys.includes(lowerKey)){
 					let matchIndex = lowerKeys.findIndex((item)=>{
 						return item === lowerKey
 					})
