@@ -7,7 +7,7 @@ const openBrowserWebpackPlugin = require('open-browser-webpack-plugin')
 
 
 let childProcess = require('child_process')
-let devPort = '8004'
+let devPort = '8005'
 
 const commonDevModules = [
     'babel-polyfill',
@@ -21,7 +21,8 @@ module.exports = {
         common: commonDevModules,
         index: './index.js',
         proxy: './es6proxy.js',
-        modal: './modal.js'
+        modal: './modal.js',
+        higherOrderFunctionDecoratyion: './higherOrderFunctionDecoratyion.js'
     },
     output: {
         path: path.resolve(__dirname,'./dist'),

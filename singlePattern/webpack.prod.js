@@ -9,7 +9,8 @@ module.exports = {
         common: 'babel-polyfill',
         index: './index.js',
         proxy: './es6proxy.js',
-        modal: './modal.js'
+        modal: './modal.js',
+        higherOrderFunctionDecoratyion: './higherOrderFunctionDecoratyion.js'
     },
     output: {
         path: path.resolve(__dirname,'./dist'),
