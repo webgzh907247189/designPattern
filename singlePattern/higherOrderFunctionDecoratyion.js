@@ -42,14 +42,14 @@
 		let fn = descriptor.value
 		let cache = null
 		descriptor.value = function(...args){
-			// return cache = cache || fn.call(this,args)
+			// return cache = cache || fn.apply(this,args)
 			
 			if(cache){
 				console.log('calculate  在decoration中的情况   有缓存',cache)
 				return cache
 			}else{
 				console.log('calculate  在decoration中的情况  没有缓存',cache)
-				return cache = fn.call(this,args)
+				return cache = fn.apply(this,args)
 			}
 		}
 		return descriptor
@@ -64,7 +64,7 @@
 				console.log('函数的调用次数%s',useCount)
 				if(useCount < count){
 					useCount ++
-					return fn.call(this.args)
+					return fn.apply(this.args)
 				}
 
 			}

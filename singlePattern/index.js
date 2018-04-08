@@ -108,6 +108,7 @@
 
 	let b = getInstance('bb')
 	console.log(b)   // {name: 'aa'}
+	
 	console.log(a == b) // true
 }
 
