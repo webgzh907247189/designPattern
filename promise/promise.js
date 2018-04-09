@@ -450,3 +450,56 @@ as().then(data => {
 /**
  *  https://segmentfault.com/a/1190000007678185  (promise的reject之后，then还会执行)
  */
+
+
+
+
+/**
+ * Promise.all() 里面放的是数组，实际上all() 里面存放着是多个promise 
+ *
+ * p1(),p2(),p3()  三个运行完之后，是三个promise实例
+ */
+function p1(){
+	return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+            resolve('111')
+        },2000)
+    })
+}
+
+function p2(){
+	return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+            resolve('2222')
+        },0)
+    })
+}
+
+function p3(){
+	return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+            resolve('333')
+        },1000)
+    })
+}
+
+Promise.all([p1(),p2(),p3()]).then((d)=>{
+	console.log(d)   // ["111", "2222", "333"]
+})
+
+
+
+
+
+/**
+ * promise的reject之后，then还会执行
+ * then 是上面的promise 运行完成之后，才运行的函数(resolve,reject 都会运行then)
+ */
+new Promise((resolve,reject)=>{
+	setTimeout(()=>{
+		resolve('111')
+	},2000)
+}).then((d)=>{
+	console.log('AAAAAAAAAAAAAAAAAAAAAAAAAA')  // AAAAAAAAAAAAAAAAAAAAAAAAAA
+	console.log(d)                             // 111
+})
