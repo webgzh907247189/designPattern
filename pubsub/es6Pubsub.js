@@ -3,7 +3,9 @@
  * @type {Object}
  * https://juejin.im/post/5a7d6ecc5188257a5911b9bb?utm_source=gold_browser_extension#heading-10
  * https://www.cnblogs.com/WhiteHorseIsNotHorse/p/7016010.html   ??receiver   ?? key fn
- * iterrator   {...obj}  babel  [...arr]
+ * iterrator   {...obj}  babel??  [...arr]
+ *
+ * 陆家嘴小才女4月底 && 老钱5月底
  */
 
 {
@@ -166,7 +168,7 @@
 	arr.includes(11)   //false
 	arr.includes(1,2)  //false (从哪一位开始)
 
-	2 in arr           // true
+	2 in arr           // true   检测 arr[2] 是否存在
 
 	arr.some((item)=>{
 		return item == 2
@@ -176,4 +178,34 @@
 
 	[NaN].includes(NaN)  // true
 	[NaN].indexOf(NaN)   // -1
+}
+
+
+
+
+
+
+
+
+
+{
+	let arr = [1,2,3]
+	let brr = [...arr]
+	arr.push('aa')
+	console.log(arr,brr)   //  [1, 2, 3, "aa"]  [1, 2, 3]
+}
+
+{
+	let obj = {name: '11',sex: '男',a: {b: 11}}
+	let o = {...obj,className: '一年级'}
+	obj.a.b = 22
+	console.log(o,'??',obj)
+	//{name: "11", sex: "男", a: {b: 22}, className: "一年级"}
+	//{name: "11", sex: "男", a: {b: 22}}
+}
+
+
+/** iterrator */
+{
+	let obj = {name: '11',sex: '男',a: {b: 11}}
 }
