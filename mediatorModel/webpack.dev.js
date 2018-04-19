@@ -19,6 +19,7 @@ module.exports = {
     entry: {
         common: commonDevModules,
         index: './index1.js',
+        test: './test.js'
     },
     output: {
         path: path.resolve(__dirname,'./dist'),
