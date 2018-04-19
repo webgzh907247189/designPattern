@@ -3,7 +3,7 @@
  * @type {Object}
  * https://juejin.im/post/5a7d6ecc5188257a5911b9bb?utm_source=gold_browser_extension#heading-10
  * https://www.cnblogs.com/WhiteHorseIsNotHorse/p/7016010.html     ?? key fn
- * iterrator   {...obj} 
+ * Symbol.iterator   {...obj}   http://es6.ruanyifeng.com/#docs/symbol
  *
  * 陆家嘴小才女4月底 && 老钱5月底
  */
@@ -345,6 +345,13 @@
 /** iterrator */
 {
 	let obj = {name: '11',sex: '男',a: {b: 11}}
+	obj[Symbol.iterator] = function* () {
+      	for(let item of Object.keys(obj)){
+			yield obj[item]
+		}
+    };
+
+	console.log(...obj) // 11  男  {b: 11}
 }
 
 
@@ -545,6 +552,22 @@
 			idx = idx > 0 ? arr.lastIndexOf(el,idx - 1) : -1
 		}
 		return repeatIndex
+	}
+
+	let arr = ['a','b','a','c','a','d'];
+	getArrRepeatIndex(arr,'a')
+}
+
+{
+	function getArrRepeatIndex(arr,el){
+		let idx = arr.lastIndexOf(el)
+		return arr.reduce((result,item)=>{
+			if(idx >= 0){
+				result = [...result,idx]
+			}
+			idx = idx > 0 ? arr.lastIndexOf(el,idx - 1) : -1
+			return result
+		},[])
 	}
 
 	let arr = ['a','b','a','c','a','d'];
