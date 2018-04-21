@@ -7,7 +7,6 @@
 	//{name: "11", sex: "男", a: {b: 22}}
 }
 
-
 /** babel转换后的 */
 
 var _extends = Object.assign || function (target) { 
@@ -30,3 +29,21 @@ var _extends = Object.assign || function (target) {
 	//{name: "11", sex: "男", a: {b: 22}, className: "一年级"}
 	//{name: "11", sex: "男", a: {b: 22}}
 }
+
+
+
+{
+	let obj = {
+		name: '11',
+		sex: '男',
+		a: {b: 11},
+		*[Symbol.iterator]() {
+	      	for(let item of Object.keys(obj)){
+				yield obj[item]
+			}
+	    }
+	}
+	console.log(...obj) // 11  男  {b: 11}
+}
+
+

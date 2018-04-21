@@ -51,21 +51,21 @@ module.exports = {
         }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
-                // properties: false,  /* 兼容IE8 */
-                // warnings: false,   // 在UglifyJs删除没有用到的代码时不输出警告
-                // reduce_vars: true, // 提取出出现多次但是没有定义成变量去引用的静态值
-                // drop_console: true // 删除所有的 `console` 语句  还可以兼容ie浏览器
+                properties: false,  /* 兼容IE8 */
+                warnings: false,   // 在UglifyJs删除没有用到的代码时不输出警告
+                reduce_vars: true, // 提取出出现多次但是没有定义成变量去引用的静态值
+                drop_console: true // 删除所有的 `console` 语句  还可以兼容ie浏览器
             },
             mangle: {
-                // screw_ie8: false,    /* 兼容IE8(把支持IE8的代码clear掉) */
-                // keep_fnames: true
+                screw_ie8: false,    /* 兼容IE8(把支持IE8的代码clear掉) */
+                keep_fnames: true
             },
             output: {
-                // quote_keys: true,   /* 兼容IE8 */
-                // comments: false,   // 删除所有的注释
-                // beautify: false    // 最紧凑的输出(是否 最紧凑的输出  ->  美化输出)
+                quote_keys: true,   /* 兼容IE8 */
+                comments: false,   // 删除所有的注释
+                beautify: false    // 最紧凑的输出(是否 最紧凑的输出  ->  美化输出)
             },
-            // sourceMap: false  //生成SourceMap文件，会导致编译过程变慢，默认true (将错误信息的位置映射到模块)
+            sourceMap: false  //生成SourceMap文件，会导致编译过程变慢，默认true (将错误信息的位置映射到模块)
         }),
         new HtmlWebPlugin({
             filename: 'detail.html',

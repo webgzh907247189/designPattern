@@ -2,8 +2,8 @@
  * 使用ES6 实现发布订阅
  * @type {Object}
  * https://juejin.im/post/5a7d6ecc5188257a5911b9bb?utm_source=gold_browser_extension#heading-10
- * https://www.cnblogs.com/WhiteHorseIsNotHorse/p/7016010.html     ?? key fn
- * Symbol.iterator   {...obj}   http://es6.ruanyifeng.com/#docs/symbol
+ * http://es6.ruanyifeng.com/#docs/iterator#Iterator-%E6%8E%A5%E5%8F%A3%E4%B8%8E-Generator-%E5%87%BD%E6%95%B0    Symbol.iterator
+ * https://www.cnblogs.com/WhiteHorseIsNotHorse/p/7016010.html     ?? key fn  微信分享文章
  *
  * 陆家嘴小才女4月底 && 老钱5月底
  */
@@ -342,6 +342,7 @@
 
 
 
+
 /** iterrator */
 {
 	let obj = {name: '11',sex: '男',a: {b: 11}}
@@ -353,6 +354,41 @@
 
 	console.log(...obj) // 11  男  {b: 11}
 }
+
+{
+	let obj = {
+		name: '11',
+		sex: '男',
+		a: {b: 11},
+		[Symbol.iterator]: function* () {
+	      	for(let item of Object.keys(obj)){
+				yield obj[item]
+			}
+	    }
+	}
+	console.log(...obj) // 11  男  {b: 11}
+}
+
+{
+	let obj = {
+		name: '11',
+		sex: '男',
+		a: {b: 11},
+		*[Symbol.iterator]() {
+	      	for(let item of Object.keys(obj)){
+				yield obj[item]
+			}
+	    }
+	}
+	console.log(...obj) // 11  男  {b: 11}
+}
+
+
+
+
+
+
+
 
 
 /** 无法中途跳出forEach循环，break命令或return命令都不能奏效。 */
@@ -379,6 +415,9 @@
 		console.log(item) //  aa  跳出循环
 	}
 }
+
+
+
 
 
 
@@ -432,6 +471,8 @@
       	}
     }    //正常
 }
+
+
 
 
 /** 变量x是单纯的解构赋值，所以可以读取对象o继承的属性；变量y和z是扩展运算符的解构赋值，只能读取对象o自身的属性，所以变量z可以赋值成功，变量y取不到值 */
@@ -521,6 +562,11 @@
 
 
 
+
+
+
+
+
 {
 	function getArrRepeatIndex(arr,el){
 		let repeatIndex = []
@@ -572,4 +618,13 @@
 
 	let arr = ['a','b','a','c','a','d'];
 	getArrRepeatIndex(arr,'a')
+}
+
+{
+  let cars = ['BMW','Benz', 'Benz', 'Tesla', 'BMW', 'Toyota'];
+  let carsObj = cars.reduce(function (obj, name) { 
+    obj[name] = obj[name] && ++obj[name] || 1
+    return obj
+  }, Object.create(null));
+  console.log(carsObj) // => { BMW: 2, Benz: 2, Tesla: 1, Toyota: 1 }
 }
