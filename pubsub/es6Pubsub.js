@@ -52,30 +52,29 @@
 		listener(){
 			let [key,fn] = Array.from(arguments)
 			if(!this.listSet.size){
-				this.listSet.add({key: [fn]})
-				return
+				this.listSet.add( {[key]: []} )
 			}
 
-			for(let item of this.listSet.keys()){
+			for(let item of this.listSet.values()){
 				if(item[key]){
-					item[key].push(fn)
+					item[key] = [...item[key],fn]
 				}else{
 					this.listSet.add({key: [fn]})
 				}
 			}
 		},
 		trigger(target){
-			let _this = this
-			return new Proxy(target,{
-				set(target,key,value){
-					let result = Reflect.set(target,key,value)
-					for(let item of _this.listSet){
-						// item()
-						console.log(item)
-					}
-					return result
-				}
-			})
+			// let _this = this
+			// return new Proxy(target,{
+			// 	set(target,key,value){
+			// 		let result = Reflect.set(target,key,value)
+			// 		for(let item of _this.listSet){
+			// 			// item()
+			// 			console.log(item)
+			// 		}
+			// 		return result
+			// 	}
+			// })
 		}
 	}
 	let obj = {name: '111',sex: '男'}
@@ -95,6 +94,24 @@
 	proxyResult.name = '张三'
 	console.log(proxyResult,obj) // Proxy {name: "姓名", sex: "男"}                 {name: "姓名", sex: "男"}
 }
+
+
+{
+	let arr = [1,2,1,2,3,5,4,5,3,4,4,4,4];
+    let result = arr.sort().reduce((init, current)=>{
+        if(init.length === 0 || init[init.length-1] !== current){
+            init.push(current);
+        }
+        return init;
+    }, []);
+    console.log(result); //[1,2,3,4,5]
+}
+
+
+
+
+
+
 
 
 {
@@ -382,6 +399,9 @@
 	}
 	console.log(...obj) // 11  男  {b: 11}
 }
+
+
+
 
 
 
