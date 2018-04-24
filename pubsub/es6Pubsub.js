@@ -107,6 +107,23 @@
     console.log(result); //[1,2,3,4,5]
 }
 
+{
+	let person = [
+		{id: 0, name: "小明"},
+		{id: 1, name: "小张"},
+		{id: 2, name: "小李"},
+		{id: 3, name: "小孙"},
+		{id: 1, name: "小周"},
+		{id: 2, name: "小陈"},   
+	];
+
+	let obj = {};
+	person = person.reduce((cur,next) => {
+	    obj[next.id] ? "" : obj[next.id] = true && cur.push(next);
+	    return cur;
+	},[]) //设置cur默认类型为数组，并且初始值为空的数组
+	log(person);
+}
 
 
 
@@ -400,7 +417,45 @@
 	console.log(...obj) // 11  男  {b: 11}
 }
 
+{	
+	let obj = {name: '11',sex: '男'}
+	function* objToArr(obj){
+		for(let item of Reflect.ownKeys(obj)){
+			yield [item,obj[item]]
+		}
+	}
+	for(let [key,value] of objToArr(obj)){
+		console.log(key,value)
+	}
+}
 
+/**
+ * for...of循环以外，扩展运算符（...）、解构赋值和Array.from方法内部调用的，都是遍历器接口。
+ * 这意味着，它们都可以将 Generator 函数返回的 Iterator 对象，作为参数。
+ * http://es6.ruanyifeng.com/#docs/generator#yield--%E8%A1%A8%E8%BE%BE%E5%BC%8F
+ */
+{
+	function* numbers () {
+		yield 1
+		yield 2
+		return 3
+		yield 4
+	}
+
+	[...numbers()]
+
+	Array.from(numbers(),(item)=>{
+		console.log(item)
+		return item
+	})
+
+	let [x,y] = numbers()
+	console.log(x,y)
+
+	for(let item of numbers()){
+		console.log(item)
+	}
+}
 
 
 
