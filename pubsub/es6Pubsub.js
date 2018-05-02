@@ -122,7 +122,7 @@
 	    obj[next.id] ? "" : obj[next.id] = true && cur.push(next);
 	    return cur;
 	},[]) //设置cur默认类型为数组，并且初始值为空的数组
-	log(person);
+	console.log(person);
 }
 
 
