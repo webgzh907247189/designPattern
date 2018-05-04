@@ -41,8 +41,11 @@ async function getD(){
 getD()
 
 
+
+
 /**
  * async 默认返回一个promise
+ * https://mp.weixin.qq.com/s/TMRSvxXlMi8P8k6HBIwMeQ
  */
 {
 	let result = await func()
@@ -60,6 +63,7 @@ getD()
 		return new Promise(resolve => resolve(1))
 	}
 }
+
 
 
 
@@ -91,19 +95,47 @@ getD()
 	await [1, 2, 3].forEachSync(async item => {
 		console.log(item ** 2)
 	})
-
 	// 1  4  9
 }
 
 {
 	[1, 2, 3].filter(item => item % 2 !== 0) //[1, 3]
 
+
+	/**
+	 * 可以直接在内部调用 map方法，因为我们知道 map会将所有的返回值返回为一个新的数组。
+	 * 这也就意味着，我们 map可以拿到我们对所有 item进行筛选的结果， true或者 false。 
+	 * 接下来对原数组每一项进行返回对应下标的结果即可。
+	 */
 	Array.prototype.filterSync = async function(cb,thisArg){
 		let result = await Promise.all(this.map(cb))
 
-		return this.filter((_,index) => result[index])
+		return this.filter((item,index) => result[index])
 	}
 
 	await [1, 2, 3].filterSync(item => item % 2 !== 0)
 }
-//https://mp.weixin.qq.com/s/TMRSvxXlMi8P8k6HBIwMeQ
+
+{
+	Array.prototype.someSync = async function(cb,thisArg){
+		for(let [key,item] of this.entries()){
+			if(await cb(item)){
+				return true
+			}
+		}
+		return false
+	}
+	await [1, 2, 3].someSync(async item => item === 2)
+}
+
+{
+	Array.prototype.everySync = async function(cb,thisArg){
+		for(let [key,item] of this.entries()){
+			if(!await cb(item)){
+				return false
+			}
+		}
+		return true
+	}
+	await [1, 2, 3].everySync(async item => item === 2)
+}
