@@ -107,3 +107,75 @@ getD()
 	await [1, 2, 3].filterSync(item => item % 2 !== 0)
 }
 //https://mp.weixin.qq.com/s/TMRSvxXlMi8P8k6HBIwMeQ
+
+
+
+
+
+/**
+ * https://mp.weixin.qq.com/s/b_SojysoGA_Z7WLJrilizg
+ */
+{
+	//通过新函数来提供永久的绑定，还会覆盖call apply
+	function returnThis () {
+		return this
+	}
+
+	let boss1 = { name: 'boss1'}
+	let boss1returnThis = returnThis.bind(boss1)
+	boss1returnThis() // boss1
+
+	let boss2 = { name: 'boss2' }
+	boss1returnThis.call(boss2) // still boss1
+}
+
+
+{
+	function callback (cb) {
+		cb()
+	}
+
+	callback(() => { console.log(this) }) // window
+
+	let boss1 = {
+		name: 'boss1',
+		callback: callback,
+		callback2 () {
+			callback(() => { console.log(this,'22') })
+		}
+	}
+
+	boss1.callback(() => { console.log(this) }) // still window
+
+	boss1.callback2(() => { console.log(this,'111') }) // boss1
+}
+
+
+{
+	let returnThis = () => this
+
+	returnThis() // window
+
+	new returnThis() // TypeError
+
+	let boss1 = {
+		name: 'boss1',
+		returnThis () {
+			let func = () => this
+			return func()
+		}
+	}
+
+	returnThis.call(boss1) // still window
+
+	let boss1returnThis = returnThis.bind(boss1)
+	boss1returnThis() // still window
+
+	boss1.returnThis() // boss1
+
+	let boss2 = {
+	  	name: 'boss2',
+	  	returnThis: boss1.returnThis
+	}
+	boss2.returnThis() // boss2
+}
