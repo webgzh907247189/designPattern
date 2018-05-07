@@ -1,4 +1,4 @@
 
-document.getElementById("throttle").onscroll = function(){
+window.onscroll = function(){
 	console.log('111111111111')
 }
