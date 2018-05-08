@@ -1,5 +1,4 @@
 //https://www.cnblogs.com/walls/p/6399837.html
-//https://www.cnblogs.com/LuckyWinty/p/5949970.html
 /**
  * 函数节流
  * 是指一定时间内js方法只跑一次。比如人的眨眼睛，就是一定时间内眨一次。这是函数节流最形象的解释
@@ -35,3 +34,51 @@ window.onscroll = function(){
 		console.log('开始执行了','111111111111')
 	},300)
 }
+
+
+
+
+//https://www.cnblogs.com/LuckyWinty/p/5949970.html
+// function queryData(text){
+//     console.log("搜索：" + text);
+// }
+// function throttle(fn,value,ctx,delay){
+// 	clearTimeout(throttle.id)
+
+// 	throttle.id = setTimeout(function(){
+// 		fn.call(ctx,value)
+// 	},delay)
+// }
+
+// var input = document.getElementById("inputText");
+// input.addEventListener("keyup", function(event){ 
+// 	throttle(queryData,this.value,this,1000)
+// });
+
+
+function queryData(text){
+    console.log("搜索：" + text);
+}
+function throttle(fn,value,ctx,delay,mustApplyTime){
+	clearTimeout(throttle.id)
+
+	throttle.startTime = new Date()
+	if(!throttle._cur){
+		throttle._cur = throttle.startTime
+	}
+
+	if(throttle.startTime - throttle._cur > mustApplyTime){
+		console.log('11')
+		fn.call(ctx,value)
+		throttle._cur = throttle.startTime
+	}else{
+		throttle.id = setTimeout(function(){
+			fn.call(ctx,value)
+		},delay)
+	}
+}
+
+var input = document.getElementById("inputText");
+input.addEventListener("keyup", function(event){ 
+	throttle(queryData,this.value,this,500,1000)
+});
