@@ -38,6 +38,9 @@ window.onscroll = function(){
 
 
 
+
+
+
 //https://www.cnblogs.com/LuckyWinty/p/5949970.html
 // function queryData(text){
 //     console.log("搜索：" + text);
@@ -67,6 +70,7 @@ function throttle(fn,value,ctx,delay,mustApplyTime){
 		throttle._cur = throttle.startTime
 	}
 
+	console.log(throttle.startTime,'?')
 	if(throttle.startTime - throttle._cur > mustApplyTime){
 		console.log('11')
 		fn.call(ctx,value)
