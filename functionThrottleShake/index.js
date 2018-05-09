@@ -82,3 +82,8 @@ var input = document.getElementById("inputText");
 input.addEventListener("keyup", function(event){ 
 	throttle(queryData,this.value,this,500,1000)
 });
+
+
+// var prices = ['￥7', 500, 8123, 12];
+// prices.toLocaleString('ja-JP', { style: 'currency', currency: 'JPY' });
+// "￥7,￥500,￥8,123,￥12"
