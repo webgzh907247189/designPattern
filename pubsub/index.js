@@ -163,6 +163,18 @@
 			}
 		},
 
+		// 监听一次
+		once: function(key,fn){
+			// 先绑定，调用后删除
+			function wrap() {
+                fn.apply(this,[...arguments]);
+                this.removeListener(key, wrap);
+            }
+            // 自定义属性
+            wrap.listen = fn;
+            this.listener(key, wrap);
+		},
+
 		//取消订阅
 		removeListener: function(){
 			let [key,fn] = Array.from(arguments)
@@ -190,25 +202,39 @@
 	function fn1(food){
 		console.log(`晚上吃的是${food}`)
 	}
-	obj.listener('eat',fn1)
-	obj.listener('eat',(foods)=>{
-		console.log(`今晚的晚餐是${foods}`)
-	})
 
 	function fn2(water){
 		console.log(`晚上喝的是${water}`)
 	}
+
+	function fn3(food){
+		console.log(`我只会监听一次... 参数是${food}`,this)
+	}
+
+	obj.listener('eat',fn1)
+	obj.listener('eat',(foods)=>{
+		console.log(`今晚的晚餐是${foods}`)
+	})
 	obj.listener('drink',fn2)
 
+	obj.once('eat',fn3)
 
 	// obj.trigger('eat','面条')
 	obj.removeListener('eat',fn1)
 	obj.trigger('eat','全家')
 
 	obj.trigger('drink','椰子水')
+
+	/**
+	 *	今晚的晚餐是全家
+	 * 	我只会监听一次...  参数是全家 {list: Array(0), listener: ƒ, trigger: ƒ, once: ƒ, removeListener: ƒ}
+	 *  晚上喝的是椰子水
+	 */
 }
 
 
 /**
  * https://www.cnblogs.com/tugenhua0707/p/4687947.html
+ * 
+ * https://juejin.im/post/5b125ad3e51d450688133f22  (node的events模块)
  */
