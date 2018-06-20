@@ -177,3 +177,104 @@
  */
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ *  https://juejin.im/post/5b09234d6fb9a07acf569905
+ */
+
+
+/** 
+ * 显然这两个并不是同一个对象，但是我通过改变enhancePerson的city属性却影响到了person的city属性，这就是我们通常会忽略掉的，
+ * 如果你不设置Proxy的set方法，它会保持默认行为：
+ * set (target, propKey, value) {
+ *     target[propKey] = value
+ * }
+ */
+{
+	const person = {
+		name: 'xiaoyun',
+	    province: '江苏省',
+	    city: '南京市'
+	}
+
+	const enhancePerson = new Proxy(person, {
+	    get (target, name) {
+		    switch (name) {
+		        case 'address':
+		        	return `${target['province']}-${target['city']}`
+		        default:
+		          	return target[name]
+		    }
+	    }
+  	})
+  	console.log(enhancePerson.address) // 江苏省-南京市
+
+  	enhancePerson.city = '苏州市'
+  	console.log(enhancePerson.city === person.city) // true
+
+
+  	/**
+  	 * 显然这两个并不是同一个对象，但是我通过改变enhancePerson的city属性却影响到了person的city属性，这就是我们通常会忽略掉的，
+  	 * 如果你不设置Proxy的set方法，它会保持默认行为：
+	 * set (target, propKey, value) {
+	 *     target[propKey] = value
+	 * }
+  	 */
+}
+
+
+{
+	const person = {
+		name: 'xiaoyun',
+	    province: '江苏省',
+	    city: '南京市',
+		get address () {
+          return `${this.province}-${this.city}`
+        }
+	}
+
+	const enhancePerson = new Proxy(person, {
+	    get (target, name) {
+		    switch (name) {
+		        case 'address':
+		        	return `${target['province']}-${target['city']}`
+		        default:
+		          	return target[name]
+		    }
+	    },
+
+        ownKeys (target) {
+          return Object.keys(target)
+        }
+  	})
+  	console.log(enhancePerson.address) // 江苏省-南京市
+
+  	enhancePerson.city = '苏州市'
+  	console.log(enhancePerson.city === person.city) // true
+	console.log(Object.keys(enhancePerson)) //["name", "province", "city", "address"]
+
+	/**
+	 * Proxy中的ownKeys拦截的方法太多，所以我们拦截ownKeys之后，会导致某些方法无法使用，并且拦截ownKeys返回的结果也有严格的要求：
+	 *
+	 * 返回的结果必须是一个数组
+	 * 并且数组的元素必须是String或者Symbol类型
+	 * 结果必须包含对象的所有不可配置、自身拥有的属性
+	 * 如果对象不能扩展，则结果只能包含自身拥有的属性，不能含有其他属性
+
+	 * 所以在拦截方法注意点很多，不然很容易出现问题。
+	 */
+}
