@@ -115,12 +115,14 @@ getD()
 	// [1,4,9]
 }
 
+
 {
 	[1, 2, 3].reduce((accumulator, item) => accumulator + item, 0)  //6
 
 	await [1, 2, 3].reduce(async (accumulator, item) => await accumulator + item, 0)  
 	//6
 }
+
 
 {
 	[1, 2, 3].forEach(item => {
@@ -138,6 +140,7 @@ getD()
 	})
 	// 1  4  9
 }
+
 
 {
 	[1, 2, 3].filter(item => item % 2 !== 0) //[1, 3]
@@ -157,6 +160,7 @@ getD()
 	await [1, 2, 3].filterSync(item => item % 2 !== 0)
 }
 
+
 {
 	Array.prototype.someSync = async function(cb,thisArg){
 		for(let [key,item] of this.entries()){
@@ -168,6 +172,7 @@ getD()
 	}
 	await [1, 2, 3].someSync(async item => item === 2)
 }
+
 
 {
 	Array.prototype.everySync = async function(cb,thisArg){
