@@ -43,6 +43,16 @@ getD()
 
 
 
+
+
+
+
+
+
+
+
+
+
 /**
  * async 默认返回一个promise
  * https://mp.weixin.qq.com/s/TMRSvxXlMi8P8k6HBIwMeQ
@@ -64,6 +74,37 @@ getD()
 	}
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+{	
+	function a(item){
+		new Promise((resolve,reject)=>{
+			setTimeout(()=>{
+				resolve(item)
+				console.log(item)
+			},1000)
+		})
+	}
+	async function process(arrList){
+		for await (let item of arrList){
+			a(item)
+		}
+	}
+
+	process([1,2,3,4])
+
+	//1 2 3 4 循环里面4个promise,等待1s 之后，全部resolve
+}
 
 
 
@@ -140,6 +181,15 @@ getD()
 	await [1, 2, 3].everySync(async item => item === 2)
 }
 //https://mp.weixin.qq.com/s/TMRSvxXlMi8P8k6HBIwMeQ
+
+
+
+
+
+
+
+
+
 
 
 
