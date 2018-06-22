@@ -76,6 +76,15 @@ o.sex('www.aaaaa.com')
 
 
 
+
+
+
+
+
+
+
+
+
 /**
  * 上报数据
  *
@@ -109,7 +118,6 @@ Object.defineProperty(o,'sex',{
     }
 })
 o.sex('www.aaaaa.com')
-
 
 // 发送了ajax，config是:  www.aaaaa.com
 // 上报ajax数据啦!
