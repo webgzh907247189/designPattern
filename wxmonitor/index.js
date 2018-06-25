@@ -156,3 +156,22 @@ des('111')
 // 上报ajax数据啦!
 // 我是o.sex http://monitor.com/monitor/ajax
 // 我是o.sex 111
+
+
+
+
+
+
+
+
+
+
+/**
+ * 占位符 替换
+ * @type {String}
+ */
+var desText = '123213'
+var desTitle = '/lessons/{0}'.replace('{0}', desText)
+console.log(desText,desTitle) 
+//123213 /lessons/123213
+
