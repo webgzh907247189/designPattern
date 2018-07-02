@@ -67,3 +67,75 @@
 	let fn = flow([greeting, toUpper, trim])
 	console.log(fn('  jack  ', 'smith  '))
 }
+
+
+
+/**
+ * https://segmentfault.com/blog/dongzhe3917875
+ * promise版本的compose   https://segmentfault.com/a/1190000011447164  
+ * promise 微信
+ */
+
+
+/**
+ * promise
+ */
+{
+	let compose = function(...args){
+		let resultArgsFirst = args.pop()
+		return function(...relayArgs){
+			return args.reverse().reduce((fnResult,itemFn)=>{
+				return fnResult.then((data)=>{
+					return itemFn.call(null,data)
+				})
+			},Promise.resolve(resultArgsFirst.apply(null,relayArgs)))
+		}
+	}
+
+	let greeting = (firstName, lastName) => `hello, ${firstName} ${lastName}`;
+	let toUpper = str => str.toUpperCase();
+	let trim = str => str.trim()
+
+	let fns = compose(trim, toUpper, greeting)
+	let result = fns('  jack  ', 'smith  ')
+	console.log(result)
+}
+
+
+/**
+ * generator
+ */
+
+{
+	function *itearStep(args){
+		let result
+		for(let i=0; i<args.length; i++){
+			if(result){
+				result = yield  args[i].call(null,result)
+			}else{
+				result = yield
+			}
+		}
+	}
+
+	let compose = function(...args){
+		let firstResult = args.pop()
+		let g = itearStep(args)
+
+		return function(...relayArgs){
+			args.reverse().reduce((result,itemFn)=>{
+				g.next(result)
+				return result
+			},firstResult.apply(null,relayArgs))
+		}
+	}
+
+
+	let greeting = (firstName, lastName) => `hello, ${firstName} ${lastName}`;
+	let toUpper = str => str.toUpperCase();
+	let trim = str => str.trim()
+
+	let fns = compose(trim, toUpper, greeting)
+	let result = fns('  jack  ', 'smith  ')
+	console.log(result)
+}
