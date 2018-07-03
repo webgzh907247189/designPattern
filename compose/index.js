@@ -66,6 +66,17 @@
 
 	let fn = flow([greeting, toUpper, trim])
 	console.log(fn('  jack  ', 'smith  '))
+
+
+	/**
+	 * 反转调用 (从右到左执行)
+	 */
+	let flowright = function(funs){
+		return flow(funs.reverse())
+	}
+
+	let fnRight = flowright([trim, toUpper, greeting])
+	console.log(fnRight('  jack  ', 'smith  '))
 }
 
 
