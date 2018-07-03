@@ -44,3 +44,62 @@ func = func.before(func1).after(func3);
 // }
 
 func();
+
+
+
+
+
+
+
+
+
+
+/**
+ * AOP
+ */
+{
+    Function.prototype.before = function(fn){
+        let that = this
+        return function(...relayArgs){
+            let result = that.apply(null,relayArgs)
+            return fn.call(null,result)
+        }
+    }
+
+    Function.prototype.after = function(fn){
+        let that = this
+        return function(...relayArgs){
+            let result = fn.apply(null,relayArgs)
+            return that.call(null,result)
+        }
+    }
+
+    let compose = function(...args){
+        let lastFn = args.pop()
+        let countdownSecondFn = args.pop()
+
+        if(args.length){
+            return args.reverse().reduce((result,fn)=>{
+                
+                // return result.before(fn)
+                return fn.after(result)
+
+            },lastFn.before(countdownSecondFn))
+        }
+
+        return lastFn.before(countdownSecondFn)
+    }
+
+    let greeting = (firstName, lastName) => ` hello, ${firstName} ${lastName}`;
+    let toUpper = str => str.toUpperCase();
+    let trim = str => str.trim()
+    let test = str => `${str} + 1`
+
+    let fns = compose(toUpper, greeting)
+    let result = fns('  jack  ', 'smith  ')
+    console.log(result)  // HELLO,   JACK   SMITH
+
+    let fnTest = compose(trim, toUpper, greeting)
+    let resultTest = fnTest('  jack  ', 'smith  ')
+    console.log(resultTest)  // HELLO,   JACK   SMITH
+}
