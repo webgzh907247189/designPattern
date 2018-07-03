@@ -1,5 +1,9 @@
 /**
  * https://segmentfault.com/a/1190000008394749
+ *
+ * https://segmentfault.com/a/1190000011447164
+ *
+ * https://segmentfault.com/blog/dongzhe3917875
  */
 
 {
@@ -171,7 +175,7 @@
 
 		if(args.length){
 			return args.reverse().reduce((result,fn)=>{
-				
+
 				// return result.before(fn)
 				return fn.after(result)
 
@@ -198,8 +202,27 @@
 
 
 
+/**
+ * 函数组合
+ */
+{	
+	let compose = function(...args){
+		return function(...relayArgs){
+			return args.reverse().reduce((result,fn)=>{
+				return fn.call(null,result)
+			},args.shift().apply(null,relayArgs))	
+		}
+	}
 
+	let greeting = (firstName, lastName) => ` hello, ${firstName} ${lastName}`;
+	let toUpper = str => str.toUpperCase();
+	let trim = str => str.trim()
+	let test = str => `${str} + 1`
 
+	let fns = compose(test, trim, toUpper, greeting)
+	let result = fns('  jack  ', 'smith  ')
+	console.log(result)  // HELLO,   JACK   SMITH
+}
 
 
 
@@ -208,6 +231,5 @@
 
 /**
  * https://segmentfault.com/blog/dongzhe3917875
- * promise版本的compose   https://segmentfault.com/a/1190000011447164  
  * promise 微信
  */
