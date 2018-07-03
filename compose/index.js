@@ -80,14 +80,6 @@
 }
 
 
-
-/**
- * https://segmentfault.com/blog/dongzhe3917875
- * promise版本的compose   https://segmentfault.com/a/1190000011447164  
- * promise 微信
- */
-
-
 /**
  * promise
  */
@@ -109,18 +101,18 @@
 
 	let fns = compose(trim, toUpper, greeting)
 	let result = fns('  jack  ', 'smith  ')
-	console.log(result)
+	console.log(result)   //promise
 }
 
 
 /**
  * generator
  */
-
 {
 	function *itearStep(args){
 		let result
-		for(let i=0; i<args.length; i++){
+
+		for(let i=args.length-1; i>=0; i--){
 			if(result){
 				result = yield  args[i].call(null,result)
 			}else{
@@ -130,23 +122,92 @@
 	}
 
 	let compose = function(...args){
-		let firstResult = args.pop()
 		let g = itearStep(args)
+		g.next()
 
 		return function(...relayArgs){
-			args.reverse().reduce((result,itemFn)=>{
-				g.next(result)
-				return result
-			},firstResult.apply(null,relayArgs))
+
+			return args.reduce((result,itemFn)=>{
+				return g.next(result).value
+			},args.pop().apply(null,relayArgs))
 		}
 	}
 
 
-	let greeting = (firstName, lastName) => `hello, ${firstName} ${lastName}`;
+	let greeting = (firstName, lastName) => ` hello, ${firstName} ${lastName}`;
 	let toUpper = str => str.toUpperCase();
 	let trim = str => str.trim()
 
 	let fns = compose(trim, toUpper, greeting)
 	let result = fns('  jack  ', 'smith  ')
-	console.log(result)
+	console.log(result)  // HELLO,   JACK   SMITH
 }
+
+
+
+/**
+ * AOP
+ */
+{
+	Function.prototype.before = function(fn){
+		let that = this
+		return function(...relayArgs){
+			let result = that.apply(null,relayArgs)
+			return fn.call(null,result)
+		}
+	}
+
+	Function.prototype.after = function(fn){
+		let that = this
+		return function(...relayArgs){
+			let result = fn.apply(null,relayArgs)
+			return that.call(null,result)
+		}
+	}
+
+	let compose = function(...args){
+		let lastFn = args.pop()
+		let countdownSecondFn = args.pop()
+
+		if(args.length){
+			return args.reverse().reduce((result,fn)=>{
+				
+				// return result.before(fn)
+				return fn.after(result)
+
+			},lastFn.before(countdownSecondFn))
+		}
+
+		return lastFn.before(countdownSecondFn)
+	}
+
+	let greeting = (firstName, lastName) => ` hello, ${firstName} ${lastName}`;
+	let toUpper = str => str.toUpperCase();
+	let trim = str => str.trim()
+	let test = str => `${str} + 1`
+
+	let fns = compose(toUpper, greeting)
+	let result = fns('  jack  ', 'smith  ')
+	console.log(result)  // HELLO,   JACK   SMITH
+
+	let fnTest = compose(trim, toUpper, greeting)
+	let resultTest = fnTest('  jack  ', 'smith  ')
+	console.log(resultTest)  // HELLO,   JACK   SMITH
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * https://segmentfault.com/blog/dongzhe3917875
+ * promise版本的compose   https://segmentfault.com/a/1190000011447164  
+ * promise 微信
+ */
