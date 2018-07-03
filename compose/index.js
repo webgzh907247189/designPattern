@@ -224,7 +224,24 @@
 	console.log(result)  // HELLO,   JACK   SMITH
 }
 
+{	
+	let compose = function(...args){
+		return args.reverse().reduce((result,fn)=>{
+			return (...relayArgs)=>{
+				return fn.call(null,result.apply(null,relayArgs))
+			}
+		},args.shift())	
+	}
 
+	let greeting = (firstName, lastName) => ` hello, ${firstName} ${lastName}`;
+	let toUpper = str => str.toUpperCase();
+	let trim = str => str.trim()
+	let test = str => `${str} + 1`
+
+	let fns = compose(test, trim, toUpper, greeting)
+	let result = fns('  jack  ', 'smith  ')
+	console.log(result)  // HELLO,   JACK   SMITH
+}
 
 
 
