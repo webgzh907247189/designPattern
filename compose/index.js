@@ -230,7 +230,7 @@
 			return (...relayArgs)=>{
 				return fn.call(null,result.apply(null,relayArgs))
 			}
-		},args.shift())	
+		},args.shift())
 	}
 
 	let greeting = (firstName, lastName) => ` hello, ${firstName} ${lastName}`;
@@ -250,3 +250,34 @@
  * https://segmentfault.com/blog/dongzhe3917875
  * promise 微信
  */
+
+
+
+
+
+{
+	const formatDate = (date=new Date(), format='yyyy-MM-dd hh:mm:ss') => {
+
+	  	// 指定格式字符 
+	  	let cfg = {
+	    	yyyy: date.getFullYear(),                             // 年 : 4位
+	    	yy: date.getFullYear().toString().substring(2),       // 年 : 2位
+	    	M: date.getMonth() + 1,                               // 月 : 如果1位的时候不补0
+	    	MM: (date.getMonth() + 1 + '').padStart(2, 0),        // 月 : 如果1位的时候补0
+	    	d: date.getDate(),                                    // 日 : 如果1位的时候不补0
+	    	dd: (date.getDate() + '').padStart(2, 0),             // 日 : 如果1位的时候补0
+	    	h: date.getHours(),                                   // 时
+	    	hh: (date.getHours() + '').padStart(2, 0),            // 时
+	    	mm: (date.getMinutes() + '').padStart(2, 0),          // 分
+	    	ss: (date.getSeconds() + '').padStart(2, 0)           // 秒
+	  	}
+	   	return format.replace(/([a-z])(\1)*/ig, (item)=>{
+	   		return cfg[item]
+	   	})
+	}
+
+	let data1 = formatDate(new Date(), 'yyyy-M-dd') // "2018-7-04"
+	let date2 = formatDate(new Date(), 'yyyy-MM-dd') // "2018-07-04"
+
+	console.log(data1, date2)  //2018-7-04 2018-07-04
+}
