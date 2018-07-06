@@ -192,9 +192,16 @@
 			if(!fn){
 				fns.length = 0
 			}else{
-				Array.from(fns,(item,index)=>{
-					item == fn && fns.splice(index,1)
-				})
+
+				/**
+				 * 下面写法错误 (在once情况下出错，原因 ->  ) 
+				 */
+				// Array.from(fns,(item,index)=>{
+				// 	item == fn && fns.splice(index,1)
+				// })
+
+
+				this.list[key] = fns.filter(itemFn => fn !== itemFn && fn !== itemFn.listen)
 			}
 		}
 	}
@@ -211,6 +218,10 @@
 		console.log(`我只会监听一次... 参数是${food}`,this)
 	}
 
+	function fn4(food){
+		console.log(`once测试`,)
+	}
+
 	obj.listener('eat',fn1)
 	obj.listener('eat',(foods)=>{
 		console.log(`今晚的晚餐是${foods}`)
@@ -218,6 +229,7 @@
 	obj.listener('drink',fn2)
 
 	obj.once('eat',fn3)
+	obj.once('eat',fn4)
 
 	// obj.trigger('eat','面条')
 	obj.removeListener('eat',fn1)
