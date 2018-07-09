@@ -6,6 +6,15 @@ const ejs = require('ejs');
 const serve = require("koa-static");
 
 
+// koa redirect之后,下面的代码还会走吗
+// 
+// 
+// 
+// 
+// 
+// 
+
+
 
 const app = new Koa();
 const router = new KoaRouter();
