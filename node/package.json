@@ -4,12 +4,21 @@
   "description": "",
   "main": "childrenProcess.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "startkoa": "nodemon ./testKoa.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "ejs": "^2.6.1",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "koa": "^2.5.1",
+    "koa-route": "^3.2.0",
+    "koa-router": "^7.4.0",
+    "koa-static": "2.0.0",
+    "koa-views": "6.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.5"
   }
 }
