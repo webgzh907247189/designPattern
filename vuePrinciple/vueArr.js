@@ -38,6 +38,9 @@
 	/**
 	 * 已经改变了 arr的数组方法了
 	 * console.log(arr)  查看__proto__ 发现不一样了
+	 *
+	 * arr.__proto__ == arrayProto  true
+	 * arrayProto.__proto__ == Array.prototype true
 	 */
 
 
