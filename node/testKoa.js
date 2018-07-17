@@ -8,6 +8,8 @@ const serve = require("koa-static");
 
 // koa redirect之后,下面的代码还会走吗
 // / 路径下 render不对
+// https://www.chrisyue.com/please-dont-put-script-tag-at-the-end-of-body.html
+
 
 const app = new Koa();
 const router = new KoaRouter();
