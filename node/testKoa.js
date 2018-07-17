@@ -18,10 +18,10 @@ const router = new KoaRouter();
 //   ctx.body = '检查应用是否存活';
 // });
 
-// router.get('/', (ctx) => {
-// 	console.log('11111111')
-// 	ctx.body = '检查应用是否存活';
-// })
+router.get('/', (ctx) => {
+	console.log('11111111')
+	ctx.body = '检查应用是否存活';
+})
 
 // router.get('/a',(req,res,next)=>{
 // 	console.log('start')
@@ -35,10 +35,11 @@ router.get('/b', function *(ctx) {
 	yield ctx.render('index.html')
 })
 
-app.use(serve(__dirname+ "/view",{ extensions: ['html']}));
 
 app.use(router.routes());  // 添加路由中间件
 app.use(router.allowedMethods()); // 对请求进行一些限制处理
+
+app.use(serve(__dirname+ "/view",{ extensions: ['html']}));  //这个放的位置会影响router，具体为对应的根路由影响
 
 app.listen(3000,()=>{
 	console.log('服务启动成功')
