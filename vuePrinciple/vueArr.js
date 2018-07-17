@@ -131,9 +131,57 @@
 	 * 这个数组是由原生的Array构造出来的，所以它的push等方法依然是原生数组的方法，无法到达重写的目的。
 	 *
 	 * 当我们给构造函数显式返回的时候，我们得到的fakeList就是原生的数组。因此调用push方法是没法观测到的。
-	 * 但是我们不能返回的Array.apply(this,arguments)更深层的原因在于我们这边调用Array.apply(this,arguments)的目的是为了借用原生的Array的构造函数将Array属性赋值到当前对象上。
+	 * 但是我们不能返回的Array.apply(this,arguments)更深层的原因在于:
+	 * 我们这边调用Array.apply(this,arguments)的目的是为了借用原生的Array的构造函数将Array属性赋值到当前对象上。
 	 */
 }
+
+/**
+ * ES5的继承方式中，先是生成派生类型的this(例如：MyArray)，然后调用基类的构造函数(例如：Array.apply(this))，这也就是说this首先指向的是派生类的实例，然后指向的是基类的实例。
+ *
+ * ES6的extends的继承方式却是与之相反的，首先是由基类(Array)创建this的值，然后再由派生类的构造函数修改这个值
+ */
+
+
+
+/**
+ * Symbol.species的主要作用就是可以使得原本返回基类实例的继承方法返回派生类的实例
+ *
+ * 即使去掉了静态访问器属性get [Symbol.species]，myArray.slice()也会仍然返回MyArray的实例，这是因为即使你不显式定义，默认的Symbol.species属性也会返回this。
+ * 当然你也将this改变为其他值来改变对应方法的返回的实例类型。例如希望实例myArray的slice方法返回的是原生数组类型Array
+ */
+{
+	class MyArray extends Array {
+	  	static get [Symbol.species](){
+	    	return this;
+	  	}	
+	}
+
+	let myArray = new MyArray(); // MyArray[]
+	myArray.slice(); // MyArray []
+}
+{
+	class MyArray extends Array {
+	  	
+	}
+
+	let myArray = new MyArray(); // MyArray[]
+	myArray.slice(); // MyArray []
+}
+
+/** 希望实例myArray的slice方法返回的是原生数组类型Array */
+{
+	class MyArray extends Array {
+	  	static get [Symbol.species](){
+	    	return Array;
+	  	}
+	}
+
+	let myArray = new MyArray(); // []
+	myArray.slice(); // []
+}
+
+
 
 
 {
