@@ -189,13 +189,50 @@ getD()
 
 
 
+{
+	let timeout = ms => new Promise((resolve)=>{
+		setTimeout(()=>{
+			resolve()
+		},ms)	
+	})
 
+	let ajax1 = () => timeout(2000).then(()=>{
+		console.log(1)
+		return 1
+	})
 
+	let ajax2 = () => timeout(1000).then(()=>{
+		console.log(2)
+		return 2
+	})
 
+	let ajax3 = () => timeout(2000).then(()=>{
+		console.log(3)
+		return 3
+	})
 
+	let meregpromise = async (arr) =>{
+	     let arr1 = []
 
+		for(let item of arr){			
+			// arr1.push(await item())
+			arr1 = [...arr1,(await item())]
+		}
 
+		return Promise.all(arr1)
+	}
 
+	meregpromise([ajax1,ajax2,ajax3]).then((data)=>{
+		console.log('done')
+
+		console.log(data)
+	})
+	//1
+	//2
+	//3
+	//done
+	//[1,2,3]
+}
 
 
 
