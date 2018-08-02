@@ -62,8 +62,6 @@
 }
 
 
-
-//??????????????????????????????
 {	
 	/**
 	 * 这样的写法会改边原数据
@@ -190,4 +188,92 @@
 		return result[item[0]] = item[1],result
 	},Object.create(null))
 	console.log(obj) //{name: "Jim", age: 18, single: true}
+}
+
+
+
+
+
+
+{
+	const deepAttr = { a: { b: { c: 15 } } };
+	function pluckDeep(str){
+		let strArr = str.split('.')
+		return function(obj){
+			return strArr.reduce((result,item)=>{
+				// result = result[item]
+				// return result
+				return result = result[item],result
+			},obj)
+		}
+	}
+
+	pluckDeep("a.b.c")(deepAttr);
+}
+{	
+	const deepAttr = { a: { b: { c: 15 } } };
+	function getValue(target,key){
+	    let obj = new Proxy(target,{
+	        get(target,key){
+	            return key.split('.').map((item,index)=>{
+	                return target && (target = target[item]) || undefined
+	            }).pop()
+	        }
+	    })
+	    return obj[key]
+	}
+	getValue(deepAttr,'a.b.c.d.h')
+}	
+{	
+	const deepAttr = { a: { b: { c: 15 } } };
+	function getValue(target,key){      
+	    let obj = new Proxy(target,{
+	        get(target,key){
+	            return key.split('.').reduce((result,item)=>{
+	                return result && (result = result[item]) || undefined
+	            },target)
+	        }
+	    })
+	    return obj[key]
+	}
+	getValue(deepAttr,'a.b.c.d.h')
+}
+
+
+
+
+
+
+
+/**
+ * 将用户中的男性和女性分别放到不同的数组里
+ */
+{
+	let users = [
+	  { name: "Adam", age: 30, sex: "male" },
+	  { name: "Helen", age: 27, sex: "female" },
+	  { name: "Amy", age: 25, sex: "female" },
+	  { name: "Anthony", age: 23, sex: "male" },
+	];
+
+
+	users.reduce((result,item)=>{
+		result = item.sex == 'male' ? [[...result[0],item],result[1]] : [result[0],[...result[1],item]]
+		return result
+	},[[],[]])
+
+
+	users.reduce((result,item)=>{
+		return item.sex == 'male' ? [[...result[0],item],result[1]] : [result[0],[...result[1],item]]
+	},[[],[]])	
+
+
+	users.reduce((result,item)=>{
+		return result = item.sex == 'male' ? [[...result[0],item],result[1]] : [result[0],[...result[1],item]],result
+	},[[],[]])	
+}
+
+
+{
+	
 }
