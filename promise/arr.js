@@ -1,3 +1,7 @@
+/**
+ * arr  https://juejin.im/post/5b5a9451f265da0f6a036346#heading-0
+ * 
+ */
 {
 	let timeout = ms => new Promise((resolve)=>{
 		setTimeout(()=>{
@@ -42,6 +46,58 @@
 	//done
 	//[1,2,3]
 }
+{	
+	let arrNumber = []
+
+	let timeout = ms => new Promise((resolve)=>{
+		setTimeout(()=>{
+			resolve()
+		},ms)	
+	})
+
+	let ajax1 = () => timeout(2000).then(()=>{
+		console.log(1)
+		return 1
+	}).then((d)=>{
+		console.log(d,'我先打印,涉及微任务，宏任务')
+		return d
+	})
+
+	let ajax2 = (num) => timeout(1000).then(()=>{
+		arrNumber.push(num)
+		console.log(2)
+		return 2
+	})
+
+	let ajax3 = (num) => timeout(2000).then(()=>{
+		arrNumber.push(num)
+		console.log(3)
+		return 3
+	})
+
+	let compose = function(...args){
+		let lastFn = args.pop()
+		return function(...realArgs){
+			return args.reverse().reduce((result,fn)=>{
+				return result.then((data)=>{
+					return fn.call(null,data)
+				})
+			},Promise.resolve(lastFn.apply(null,realArgs)))
+		}
+	}
+
+	let result = compose(ajax3,ajax2,ajax1)
+	result().then((d)=>{
+		arrNumber.push(3)
+		console.log('done',arrNumber)
+	})
+	// 1
+	// 14 1 "我先打印,涉及微任务，宏任务"
+	// 19 2
+	// 25 3
+	// 43 done (3) [1, 2, 3]
+}
+
 
 
 
@@ -281,6 +337,22 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**
  * 递归写法
  */
@@ -309,6 +381,7 @@
 	zipWith(add)(num1)(num2)
 	// [46, 27, 10, 73, 94]
 }
+
 
 
 {
@@ -343,8 +416,6 @@
 	
 	filterName(getName)(houses)
 }
-
-
 
 
 
@@ -411,3 +482,18 @@
 
 
 
+
+
+/**
+ * 注意，这个例子只是为了好玩。
+ * 生产环境中不要直接修改 JS 内置数据类型的原型链。原因是 V8 引擎有一个原型链快速推测机制，修改原型链会破坏这个机制，造成性能问题。
+ */
+{
+	Number.prototype[Symbol.iterator] = function*() {
+		for (let i = 0; i <= this; i++) {
+	    	yield i;
+	  	}
+	};
+
+	[...6]; // [0, 1, 2, 3, 4, 5, 6]
+}
