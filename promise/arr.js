@@ -274,6 +274,140 @@
 }
 
 
+
+
+
+
+
+
+
+/**
+ * 递归写法
+ */
 {
-	
+	const num1 = [3, 4, 5, 6, 7];
+	const num2 = [43, 23, 5, 67, 87, 3, 6];
+
+	function zipWith(add){
+		return function (arr1){
+			return function(arr2){
+				if(arr1.length == 0 || arr2.length == 0){
+					return []
+				}
+
+				let [first1,...nextArr1] = arr1
+				let [first2,...nextArr2] = arr2
+				return [add(first1,first2),...zipWith(add)(nextArr1)(nextArr2)]
+			}
+		}
+	}
+
+	function add(x,y){
+		return x+y
+	}
+
+	zipWith(add)(num1)(num2)
+	// [46, 27, 10, 73, 94]
 }
+
+
+{
+
+	const houses = [
+      "Eddard Stark",
+      "Catelyn Stark",
+      "Rickard Stark",
+      "Brandon Stark",
+      "Rob Stark",
+      "Sansa Stark",
+      "Arya Stark",
+      "Bran Stark",
+      "Rickon Stark",
+      "Lyanna Stark",
+      "Tywin Lannister",
+      "Cersei Lannister",
+      "Jaime Lannister",
+      "Tyrion Lannister",
+      "Joffrey Baratheon"
+    ];
+
+	function filterName(f){
+		return function([head,...nextArr]){
+			return f(head) ? [head,...filterName(f)(nextArr)] : []
+		}
+	}
+
+	function getName(item){
+		return item.toLowerCase().includes('stark')
+	}
+	
+	filterName(getName)(houses)
+}
+
+
+
+
+
+/**
+ * 注意解构，存在差异性
+ */
+{
+	const numList = [1, 3, 11, 4, 2, 5, 6, 7];
+
+	function filterNumber([first,...nextArr]){
+		return function(f){
+			if(!first){
+				return []
+			}
+						
+			let result = f(first) ? [first, ...filterNumber(nextArr)(getNumber)] : filterNumber(nextArr)(getNumber)
+			return result
+		}
+	}
+	function getNumber(item){
+		return item%2 == 1
+	}
+	
+	let result = filterNumber(numList)(getNumber)
+	result.splice(0,4) 
+	//[1, 3, 11, 5]
+}
+{
+	const numList = [1, 3, 11, 4, 2, 5, 6, 7];
+
+	function filterNumber(number,[first,...nextArr]){
+		return function(f){
+			if(number == 0 || !first){
+				return []
+			}
+			
+			let result = f(first) ? [first, ...filterNumber(number - 1 ,nextArr)(getNumber)] : filterNumber(number,nextArr)(getNumber)
+			return result
+		}
+	}
+	function getNumber(item){
+		return item%2 == 1
+	}
+	filterNumber(5,numList)(getNumber)
+	// [1, 3, 11, 5, 7]
+}
+{
+	const numList = [1, 3, 11, 4, 2, 5, 6, 7];
+
+    const takeFirst = (limit, f, arr) => {
+      if (limit === 0 || arr.length === 0) return [];
+      const [head, ...tail] = arr;
+
+      return f(head)
+        ? [head, ...takeFirst(limit - 1, f, tail)]
+        : takeFirst(limit, f, tail);
+    };
+
+    const isOdd = n => n % 2 === 1;
+
+    takeFirst(40, isOdd, numList);
+    // [1, 3, 11, 5, 7]
+}
+
+
+
