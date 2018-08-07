@@ -46,6 +46,119 @@
 	//done
 	//[1,2,3]
 }
+
+
+
+
+
+
+/**
+ * 这样写之后，相当于promise.all()
+ * 同时发出多个异步任务
+ * 
+ * https://juejin.im/post/5b685ed1e51d4533f52859e8
+ */
+{
+	let timeout = ms => new Promise((resolve)=>{
+		setTimeout(()=>{
+			resolve()
+		},ms)	
+	})
+
+	let ajax1 = () => timeout(2000).then(()=>{
+		console.log(1)
+		return 1
+	})
+
+	let ajax2 = () => timeout(1000).then(()=>{
+		console.log(2)
+		return 2
+	})
+
+	let ajax3 = () => timeout(2000).then(()=>{
+		console.log(3)
+		return 3
+	})
+
+	let meregpromise = async (arr) =>{
+	     let arr1 = []
+
+		for await (let item of arr){			
+			arr1.push(item())
+		}
+		return Promise.all(arr1)
+	}
+
+	meregpromise([ajax1,ajax2,ajax3]).then((data)=>{
+		console.log('done')
+
+		console.log(data)
+	})
+	//2
+	//1
+	//3
+	//done
+	//[1,2,3]
+}
+
+/**
+ * 这样写之后，相当于会单个的执行 依次的执行
+ * 任务完成一个，再去完成下一个
+ * 
+ * https://juejin.im/post/5b685ed1e51d4533f52859e8
+ */
+{	
+	let arr = []
+	async function process(array) {
+		let index = 0
+
+	    for (let i of array) {
+	        let result = await doSomething(i,index)
+			console.log(result,'zz')
+			index++
+
+			arr.push(result)
+	    }
+		return arr
+    }
+	
+	function doSomething(i,index){
+		return new Promise((resolve,reject)=>{
+			setTimeout(()=>{
+                resolve(i)
+            },(index+1)*1000)	
+		})
+	}
+	
+	process(['aa','bb','cc']).then((d)=>{
+
+		console.log(d,'d')
+	})
+
+	console.log(arr,'arr')	
+
+	// [] "arr"
+	// aa zz
+	// bb zz
+	// cc zz
+	// ["aa", "bb", "cc"] "d"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {	
 	let arrNumber = []
 
