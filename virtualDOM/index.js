@@ -70,3 +70,36 @@ function setProps(target, props) {
  *
  * 
  */
+
+
+// "evaluationContrast": {
+// 	"currentResult": [{
+// 		"rate": "1",
+// 		"tagId": 9104,
+// 		"tagName": "句子理解"
+// 	}, {
+// 		"rate": "0.33000001311302185",
+// 		"tagId": 9105,
+// 		"tagName": "篇章结构"
+// 	}, {
+// 		"rate": "1",
+// 		"tagId": 9103,
+// 		"tagName": "形义匹配"
+// 	}],
+// 	"lastResult": [{
+// 		"rate": "1",
+// 		"tagId": 9104,
+// 		"tagName": "句子理解"
+// 	}, {
+// 		"rate": "0.5",
+// 		"tagId": 9105,
+// 		"tagName": "篇章结构"
+// 	}, {
+// 		"rate": "0.6299999952316284",
+// 		"tagId": 9103,
+// 		"tagName": "形义匹配"
+// 	}]
+// },
+// 
+// http://www.css88.com/archives/7724
+// https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Atomics
