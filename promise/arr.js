@@ -533,7 +533,7 @@
 
 
 /**
- * 注意解构，存在差异性
+ * 注意解构，存在差异性(参数解构的差异)
  */
 {
 	const numList = [1, 3, 11, 4, 2, 5, 6, 7];
@@ -609,4 +609,56 @@
 	};
 
 	[...6]; // [0, 1, 2, 3, 4, 5, 6]
+}
+
+
+
+
+{
+	let currentResult = [{
+		"rate": "1",
+		"tagId": 9104,
+		"tagName": "句子理解"
+	}, {
+		"rate": "1",
+		"tagId": 9105,
+		"tagName": "篇章结构"
+	}, {
+		"rate": "1",
+		"tagId": 9103,
+		"tagName": "形义匹配"
+	}]
+
+	let lastResult =  [{
+		"rate": "2",
+		"tagId": 9104,
+		"tagName": "句子理解"
+	}, {
+		"rate": "2",
+		"tagId": 9103,
+		"tagName": "形义匹配"
+	}]
+
+	let mergeResult = currentResult.reduce((result,item)=>{
+		let match = lastResult.find((itemOther)=>{
+			return item.tagId == itemOther.tagId
+		})
+		
+		return result = match ? [[...result[0],item],[...result[1],match]] : [[...result[0],item],[...result[1],{rate: '',tagId: item.tagId,tagName: ''}] ],result
+	},[[],[]])
+
+	console.log(mergeResult)
+
+	// [
+	// 		[
+	// 			{rate: "1", tagId: 9104, tagName: "句子理解"}
+	// 			{rate: "1", tagId: 9105, tagName: "篇章结构"}
+	// 			{rate: "1", tagId: 9103, tagName: "形义匹配"}
+	// 		],
+	// 		[
+	// 			{rate: "2", tagId: 9104, tagName: "句子理解"}
+	// 			{rate: "", tagId: 9105, tagName: ""}
+	// 			{rate: "2", tagId: 9103, tagName: "形义匹配"}
+	// 		]
+	// ]
 }
