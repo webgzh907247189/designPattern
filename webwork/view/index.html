@@ -53,9 +53,12 @@
 
             console.log(worker)
             worker.onmessage = function (e) {
-                console.log(e)
+                console.log(e.data)
             }
 
+            /**
+             * 打印的同时，可以点击
+             */
             let btn = document.getElementById('root')
             btn.onclick = function () {
                 alert('11111test')

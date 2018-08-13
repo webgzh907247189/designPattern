@@ -29,10 +29,6 @@
 	console.log(a,b)  // name   {value: "111", writable: true, enumerable: true, configurable: true}
 }
 
-
-
-
-
 /**
  * https://juejin.im/post/5b38527951882574a672615d
  * 
