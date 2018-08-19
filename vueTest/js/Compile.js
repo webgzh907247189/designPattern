@@ -70,7 +70,8 @@ class Compile {
     compileElement(node) {
         // 取出当前节点的属性，类数组
         let attrs = node.attributes;
-        Array.form(attrs).forEach(attr => {
+        
+        Array.from(attrs).forEach(attr => {
             // 获取属性名，判断属性是否为指令，即含 v-
             let attrName = attr.name;
 
@@ -90,10 +91,10 @@ class Compile {
     // 编译文本
     compileText(node) {
         // 获取文本节点的内容
-        let exp = node.contentText;
+        let exp = node.textContent;
 
         // 创建匹配 {{}} 的正则表达式
-        let reg = /\{\{([^}+])\}\}/g;
+        let reg = /\{\{([^}]+)\}\}/g; // {{a}} {{b}} {{c}}
 
         // 如果存在 {{}} 则使用 text 指令的方法
         if (reg.test(exp)) {

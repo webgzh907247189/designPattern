@@ -5,7 +5,7 @@ class MVVM {
         this.$data = options.data;
 
         // 如果有要编译的模板就开始编译
-        if (this.el) {
+        if (this.$el) {
             // 数据劫持，就是把对象所有的属性添加 get 和 set
             new Observer(this.$data);
 
@@ -13,7 +13,7 @@ class MVVM {
             this.proxyData(this.$data);
 
             // 用数据和元素进行编译
-            new Compile(this.el, this);
+            new Compile(this.$el, this);
         }
     }
     proxyData(data) { // 代理数据的方法

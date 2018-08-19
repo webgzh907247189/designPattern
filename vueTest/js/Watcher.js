@@ -26,7 +26,7 @@ class Watcher {
 
         // 如果新值和旧值不相等，就执行 callback 对 dom 进行更新
         if(newValue !== oldValue) {
-            this.callback();
+            this.callback(newValue);
         }
     }
 }
