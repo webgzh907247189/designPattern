@@ -12,6 +12,7 @@ class Watcher {
         Dep.target = this;
 
         // 获取值触发数据劫持
+        console.log(this.exp,'Watcher-----')
         let value = CompileUtil.getVal(this.vm, this.exp);
 
         // 清空 Dep 上的 Watcher，防止重复添加

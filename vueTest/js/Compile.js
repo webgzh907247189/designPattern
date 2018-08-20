@@ -70,6 +70,7 @@ class Compile {
     compileElement(node) {
         // 取出当前节点的属性，类数组
         let attrs = node.attributes;
+        // console.log(attrs,'attrs')
         
         Array.from(attrs).forEach(attr => {
             // 获取属性名，判断属性是否为指令，即含 v-
@@ -78,6 +79,7 @@ class Compile {
             if (this.isDirective(attrName)) {
                 // 如果是指令，取到该属性值得变量在 data 中对应得值，替换到节点中
                 let exp = attr.value;
+                console.log(exp,'Compile的compileElement')
 
                 // 取出方法名
                 let [, type] = attrName.split("-");

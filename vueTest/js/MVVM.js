@@ -18,12 +18,16 @@ class MVVM {
     }
     proxyData(data) { // 代理数据的方法
         Object.keys(data).forEach(key => {
+
+            // this 指向vm
             Object.defineProperty(this, key, {
                 configurable: true,
                 get() {
+                    console.log('MVVM--GET',key)
                     return data[key];
                 },
                 set(newVal) {
+                    console.log('MVVM--SET',key)
                     data[key] = newVal;
                 }
             });
@@ -35,6 +39,8 @@ class MVVM {
 
 
 /**
+ * http://v.qq.com/x/page/y0759iqv88s.html (1小时快速了解JavaScript多线程)
+ * 
  * 将属性绑定到this身上  (某些场景，批量往windos添加属性)
  *  
  * 注意configurable 设置为true   (不设置为true的话只能运行一次,第二次设置报错)

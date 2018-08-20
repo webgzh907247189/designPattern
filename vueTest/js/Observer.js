@@ -21,6 +21,8 @@ class Observer {
     defineReactive (object, key, value) {
         let _this = this;
         // 每个变化的数据都会对应一个数组，这个数组是存放所有更新的操作
+        
+        console.log('Observer--每个变化的数据一个数组',key,'object',Object.keys(object))
         let dep = new Dep();
 
         // 获取某个值被监听到
@@ -28,10 +30,12 @@ class Observer {
             enumerable: true,
             configurable: true,
             get () { // 当取值时调用的方法
+                console.log('Observer--GET',key)
                 Dep.target && dep.addSub(Dep.target);
                 return value;
             },
             set (newValue) { // 当给 data 属性中设置的值适合，更改获取的属性的值
+                console.log('Observer--SET',key)
                 if(newValue !== value) {
                     _this.observe(newValue); // 重新赋值如果是对象进行深度劫持
                     value = newValue;
