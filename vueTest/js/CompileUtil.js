@@ -127,11 +127,13 @@ CompileUtil = {
             return this.getVal(vm, arg[1]);
         });
     },
+
+
     text (node, vm, exp) { //文本处理
         let updateFn = this.updater['textUpdater'];
         let value = this.getTextVal(vm, exp);
 
-        // console.log(value,'value',node)
+        // console.log(value,'value',exp)
         exp.replace(/\{\{([^}]+)\}\}/g, (...arg) => {
             new Watcher(vm, arg[1], newValue => {
                 // 如果数据变化了，文本节点应该重新获取依赖的数据更新文本中的内容
@@ -158,8 +160,12 @@ CompileUtil = {
             this.setVal(vm, exp, newValue);
         });
         // 防止没有的指令解析时报错
+        
+        // console.log('11111111111111',node,'222',value)
         updateFn && updateFn(node, value);
     },
+
+
     updater: {
         // 文本更新
         textUpdater (node, value) {

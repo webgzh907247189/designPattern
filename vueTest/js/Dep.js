@@ -8,6 +8,7 @@ class Dep {
     }
     // 通知
     notify() {
+        console.log(this.subs,'this.subs')
         this.subs.forEach(watcher => watcher.update());
     }
 }

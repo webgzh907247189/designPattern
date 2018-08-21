@@ -30,12 +30,17 @@ class Observer {
             enumerable: true,
             configurable: true,
             get () { // 当取值时调用的方法
-                console.log('Observer--GET',key)
+                if(Dep.target){
+                    console.log('Observer--GET11',Dep.target.update)
+                }
+
                 Dep.target && dep.addSub(Dep.target);
                 return value;
             },
             set (newValue) { // 当给 data 属性中设置的值适合，更改获取的属性的值
-                console.log('Observer--SET',key)
+                debugger
+                console.log('Observer--SET',key,'dep',dep)
+                // debugger
                 if(newValue !== value) {
                     _this.observe(newValue); // 重新赋值如果是对象进行深度劫持
                     value = newValue;
