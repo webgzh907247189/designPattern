@@ -32,13 +32,15 @@ class Observer {
             get () { // 当取值时调用的方法
                 if(Dep.target){
                     console.log('Observer--GET11',Dep.target.update)
+
+                    // console.log(dep,'dep')
+                    // dep.addSub(Dep.target);
                 }
 
-                Dep.target && dep.addSub(Dep.target);
+                Dep.target && dep.addSub(Dep.target);    // ？？？？？？？？？？？？？？？？？？？数组的问题  dep
                 return value;
             },
             set (newValue) { // 当给 data 属性中设置的值适合，更改获取的属性的值
-                debugger
                 console.log('Observer--SET',key,'dep',dep)
                 // debugger
                 if(newValue !== value) {
