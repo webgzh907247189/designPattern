@@ -29,7 +29,7 @@ router.use(views(__dirname + '/view'));
 // router.get('/', (ctx) => {
 // 	console.log('11111111')
 // 	ctx.body = '检查应用是否存活';
-})
+// })
 router.get('/',  function *(ctx){
 	console.log('11111111')
 	yield ctx.render('test.html')
