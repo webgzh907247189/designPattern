@@ -33,6 +33,7 @@
             var flag = document.createDocumentFragment();
             var child;
             while (child = node.firstChild) {
+                // console.log('测试node的child',child)
                 compile(child, vm);
                 flag.appendChild(child);
             }
@@ -107,6 +108,7 @@
             }
         };
         function Vue (options) {
+            // debugger
             this.data = options.data;
             var data = this.data;
             observe(data, this);
