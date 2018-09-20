@@ -23,6 +23,7 @@
                     return val
                 },
                 set: function (newVal) {
+                    // debugger
                     if (newVal === val) return
                     val = newVal;
                     dep.notify();
