@@ -49,3 +49,35 @@
 
 	Object.getOwnPropertyDescriptor(obj,'name')  //{value: "AAAAAAAAAAAAAA", writable: true, enumerable: true, configurable: true}
 }
+
+
+{
+	let obj = {
+		eat(){
+			return '吃饭'
+		}
+	}
+
+	let o = {
+		__proto__: obj,
+		eat(){
+			return `${super.eat()} | 喝水`
+		}
+	}
+
+	console.log(o.eat())  // 吃饭 | 喝水
+}
+
+{
+	let fn = function (argument) {
+		// body...
+	}
+	console.log(fn.name)  //fn
+
+	
+
+	let fn1 = function a(argument) {
+		// body...
+	}
+	console.log(fn1.name)  //a
+}
