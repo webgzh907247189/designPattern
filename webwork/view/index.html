@@ -2,6 +2,7 @@
  <html>
      <head>
         <meta charset="utf-8">
+        <title><%= title %></title>
 
         <!-- https://segmentfault.com/a/1190000002407912  https://www.jianshu.com/p/739d7ce9c6fe  http://blog.csdn.net/rogerjava/article/details/17123593 https://www.zhihu.com/question/22431667-->
 
@@ -45,9 +46,21 @@
         <meta name="x5-orientation" content="portrait">
 
         <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"> -->
+        <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
      </head>
      <body>
 		<div id='root'>bbbbbbbbbbbbb</div>
+        <script type="text/javascript">
+            $.ajax({
+                type: "GET",
+                url: "/c",
+                dataType: "json",
+                success: function(data){
+                
+                }
+            })
+
+        </script>
         <script type="text/javascript">
             let worker = new Worker('random.js')
 
