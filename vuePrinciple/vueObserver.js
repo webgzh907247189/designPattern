@@ -74,7 +74,7 @@
 	}
 	console.log(fn.name)  //fn
 
-	
+
 
 	let fn1 = function a(argument) {
 		// body...
