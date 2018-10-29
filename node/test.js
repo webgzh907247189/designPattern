@@ -13,6 +13,29 @@
 
 
 
+/**
+ * 测试 方法的 export  
+ * 
+ * node里面下面的操作没问题 (require)   浏览器环境下走的import这样写有问题的
+ */
+let {objToArr} = require('./util')
+let util = require('./util')
+
+{
+	let obj = {name: 'test', age: '18'}
+	for (let [key,value] of objToArr(obj)){
+		console.log(`key: ${key} , value: ${value}`)
+	}
+}
+
+{
+	let testTreeShak = util.testTreeShak
+	console.log(testTreeShak(),'测试')
+}
+/** end */
+
+
+
 
 let express = require('express')
 let path = require('path')

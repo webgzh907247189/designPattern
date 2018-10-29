@@ -15,6 +15,7 @@ let path = require('path')
 let bodyParser = require('body-parser')
 let ejs = require('ejs')
 let app = express()
+let request = require('request');
 
 app.use(bodyParser.json({type: 'application/json'}))
 
@@ -33,7 +34,18 @@ app.set('views', path.join(__dirname, './view'));
 
 
 app.get('/',(req,res,next)=>{
+	
 	res.render('index',{title: '测试dist'})
+})
+
+app.get('/c',(req,res,next)=>{
+	let a = request({
+		method: 'GET',
+		url: 'http://localhost:4000/a'
+	}, function (error, response, body) {
+		// res.json(body)
+	});
+	a.pipe(res)
 })
 
 
