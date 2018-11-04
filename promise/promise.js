@@ -503,3 +503,37 @@ new Promise((resolve,reject)=>{
 	console.log('AAAAAAAAAAAAAAAAAAAAAAAAAA')  // AAAAAAAAAAAAAAAAAAAAAAAAAA
 	console.log(d)                             // 111
 })
+
+
+
+
+
+/**
+ * https://juejin.im/post/5b6e5cbf51882519ad61b67e#heading-8
+ */
+{
+	let promise = new Promise(function(resolve,reject){
+    	throw new Error('出错了') // 抛出错误
+	})
+
+	promise.then(()=>{
+	    console.log('success1')
+	},()=>{
+	    console.log('error1')
+	})
+	/**
+	 * 如果发现错误，就会进入失败态 不需要手动的   reject
+	 */
+}
+
+
+{
+
+	https://juejin.im/post/5b784baf51882542ed141a84?utm_source=gold_browser_extension
+	https://juejin.im/post/5b798501f265da43473130a1?utm_source=gold_browser_extension
+	https://juejin.im/post/5a9315e46fb9a0633a711f25
+	https://www.jianshu.com/p/22f82cc60285
+	https://github.com/pyloque/fastscan/blob/master/index.js
+	http://www.ayqy.net/blog/es-module/
+	http://www.ayqy.net/blog/es-module/
+}
