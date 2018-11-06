@@ -81,3 +81,56 @@
 	}
 	console.log(fn1.name)  //a
 }
+
+
+
+
+
+
+
+
+
+
+/**
+ * https://juejin.im/entry/5be0d229e51d4520fe640450
+ *
+ * Object.getOwnPropertyDescriptors(obj) 接受一个对象，并返回一个带有描述符集的对象。
+ */
+
+{
+	let person1 = {
+	    set name(newName) {
+	    	console.log(newName)
+	    }
+	}
+
+	let person2 = {}
+	Object.assign(person2, person1)
+
+	//person2 {name: undefined}
+}
+
+
+{
+	let person1 = {
+	    set name(newName) {
+	    	console.log(newName)
+	    }
+	}
+
+	let person2 = {}
+	Object.assign(person2, person1)
+
+	const person3 = {}
+	Object.defineProperties(person3,Object.getOwnPropertyDescriptors(person1))
+	person1.name = 'x'
+	person2.name = 'x'
+	person3.name = 'x'
+
+	console.log(person1,person2,person3)
+	/**
+	 * person2 丢失了 setter ，因为它没有复制过来。
+	 *
+	 * 使用 Object.create() 对浅拷贝对象也有同样的限制。
+	 */
+}
