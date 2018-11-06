@@ -536,4 +536,9 @@ new Promise((resolve,reject)=>{
 	https://github.com/pyloque/fastscan/blob/master/index.js
 	http://www.ayqy.net/blog/es-module/
 	http://www.ayqy.net/blog/es-module/
-}
+
+	https://juejin.im/post/5b561426518825195f499772
+	https://juejin.im/post/5b02fe326fb9a07ab1117c82
+	https://juejin.im/post/5b06f44b6fb9a07abc2a53c1
+	https://juejin.im/post/5af38e0c518825670c45ef6e
+}	
