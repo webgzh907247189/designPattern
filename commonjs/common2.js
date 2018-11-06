@@ -3,6 +3,7 @@
  * https://yq.aliyun.com/ziliao/116807
  * 
  * 通过剖析commonJs源码
+ * require.cache 查看模块缓存的情况，cache是一个对象，包含了饮用这个模块的具体信息
 
  * 懂得了模块加载的整个流程
 
