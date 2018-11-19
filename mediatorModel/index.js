@@ -2,6 +2,7 @@
  * https://juejin.im/post/59f1c484f265da431c6f8940#heading-1
  * http://taobaofed.org/blog/2015/11/16/es7-decorator/		(bable 转换后 的代码，其中有一句是 descriptor = decorator(target, key, descriptor) || descriptor; )
  */
+
 {
 	@desFn
 	class Hero {
@@ -202,7 +203,6 @@
 	p1.die()
 	p2.die()
 }
-
 /**
  * https://www.cnblogs.com/Chen-XiaoJun/p/6193403.html
  * http://taobaofed.org/blog/2015/11/16/es7-decorator/
