@@ -31,10 +31,38 @@ var mem = process.memoryUsage(); // 获取内存使用情况
 console.log('已使用堆大小 heapUsed：' + format(mem.heapUsed));
 
 global.gc();
-setInterval(function() {
+let count = 0
+let time = setInterval(function() {
+	count++
   	temp.push(test()); //把函数保存起来，里面的函数 里面的eval 随时可能用到 a ，所以不敢回收
   	//test()();// 会被回收
   	global.gc();
   	mem = process.memoryUsage(); // 重新获取内存使用情况 对象
-  	console.log('运行代码后-已使用堆大小 heapUsed：' + format(mem.heapUsed));
+	console.log('运行代码后-已使用堆大小 heapUsed：' + format(mem.heapUsed),process.pid);
+	  
+	if(count == 10){
+		clearInterval(time)
+	}
 }, 2000);
+
+
+let time2 = setInterval(()=>{
+	global.gc();
+	mem = process.memoryUsage(); // 重新获取内存使用情况 对象
+	console.log('即将关闭 -》 运行代码后-已使用堆大小 heapUsed：' + format(mem.heapUsed));
+},10000)
+
+
+setInterval(()=>{
+	clearInterval(time2)
+	temp = null
+	global.gc();
+	mem = process.memoryUsage(); // 重新获取内存使用情况 对象
+	console.log('即将关闭111111 -》 运行代码后-已使用堆大小 heapUsed：' + format(mem.heapUsed));
+},60000)
+
+
+
+所以node引入arraybuffer？是因为二进制传输？？？？？
+websocket断开，能重联上嘛？
+quic 为什么验证效率会低一点？难道，验证不好吗？更安全啊
