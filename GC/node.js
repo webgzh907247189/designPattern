@@ -60,9 +60,3 @@ setInterval(()=>{
 	mem = process.memoryUsage(); // 重新获取内存使用情况 对象
 	console.log('即将关闭111111 -》 运行代码后-已使用堆大小 heapUsed：' + format(mem.heapUsed));
 },60000)
-
-
-
-所以node引入arraybuffer？是因为二进制传输？？？？？
-websocket断开，能重联上嘛？
-quic 为什么验证效率会低一点？难道，验证不好吗？更安全啊
