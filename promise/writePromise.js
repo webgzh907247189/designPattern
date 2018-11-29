@@ -385,3 +385,36 @@
 
 	}
 }
+
+
+
+
+
+
+/**
+ * 异步迭代器
+ */
+{
+	let promise = [
+		new Promise((res,rej)=>{
+			setTimeout(()=>{
+				res('111')
+			},7000)
+		}),
+		new Promise((res,rej)=>{
+			setTimeout(()=>{
+				res('222')
+			},1000)
+		}),
+		new Promise((res,rej)=>{
+			res('333')
+		}),
+	]
+
+	async function test(){
+		for await (let item of promise){
+			console.log(item)
+		}
+	}
+	test()
+}

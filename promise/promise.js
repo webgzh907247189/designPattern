@@ -527,6 +527,41 @@ new Promise((resolve,reject)=>{
 }
 
 
+
+/**
+ * 异步迭代器
+ */
+{
+	let promise = [
+		new Promise((res,rej)=>{
+			setTimeout(()=>{
+				res('111')
+			},7000)
+		}),
+		new Promise((res,rej)=>{
+			setTimeout(()=>{
+				res('222')
+			},1000)
+		}),
+		new Promise((res,rej)=>{
+			res('333')
+		}),
+	]
+
+	async function test(){
+		for await (let item of promise){
+			console.log(item)
+		}
+	}
+	test()
+}
+
+
+
+
+
+
+
 {
 
 	https://juejin.im/post/5b784baf51882542ed141a84?utm_source=gold_browser_extension
