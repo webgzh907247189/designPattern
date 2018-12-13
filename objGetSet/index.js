@@ -71,3 +71,40 @@
      * 在函数内用break让函数结束？？？   所以报错
      */
 }
+
+
+
+
+
+
+
+
+
+
+{
+    let obj = {a: 11,b: 22}
+
+    let o = {...obj,get a(){
+        throw new Error()
+    }}
+    
+    console.log(o)
+
+    // {
+    //     a: [Exception: Error at Object.get a [as a] (<anonymous>:5:15) at Object.remoteFunction (<anonymous>:2:14)],
+    //     b: 22
+    // }
+}
+
+
+{
+    let obj = {a: 11,b: 22}
+
+    let o = {...obj,...{get a(){
+        throw new Error()
+    }}}
+
+    /**
+     * 报错
+     */
+}
