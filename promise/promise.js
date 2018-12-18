@@ -559,6 +559,42 @@ new Promise((resolve,reject)=>{
 
 
 
+{
+	function* a(){
+		yield 'a'
+		yield 'b'
+		return 'c'
+	}
+	
+	let g = a()
+	for(let item of g){
+		console.log(item,'~~')
+	}
+	/** return 的不参与for  of 循环 */
+	/**
+	 * a ~~
+	 * b ~~
+	 */
+}
+
+{
+	function* a(){
+		yield 'a'
+		yield 'b'
+		return 'c'
+	}
+	
+	let g = a()
+	
+	let [one,two] = g
+	console.log(one,two)
+	/**
+	 * a
+	 * b
+	 */
+}
+
+
 
 
 
