@@ -155,3 +155,50 @@
  * 状态模式的关键是引入了一个抽象类来专门表示对象的状态，这个类我们叫做抽象状态类，而对象的每一种具体状态类都继承了该类，并在不同具体状态类中实现了不同状态的行为，包括各种状态之间的转换。
  *
  */
+
+
+
+
+
+
+ {
+	 class Context{
+		constructor(){
+			this.state = null
+		}
+
+		setState(state){
+			this.state = state
+		}
+
+		getState(){
+			console.log(`这个颜色是${this.state.color}`)
+			return this.state
+		}
+	 }
+
+	 class  Light{
+		 constructor(color){
+			this.color = color
+		 }
+
+		 handle(ctx){
+			ctx.setState(this)
+		 }
+	 }
+
+	 let ctx = new Context()
+
+	 let red = new Light('red')
+	 let yellow = new Light('yellow')
+	 let blue = new Light('blue')
+
+	 red.handle(ctx)
+	 ctx.getState()
+
+	 yellow.handle(ctx)
+	 ctx.getState()
+
+	 blue.handle(ctx)
+	 ctx.getState()
+ }
