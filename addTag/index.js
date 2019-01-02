@@ -11,7 +11,12 @@ function composeFn(...args){
 }
 
 function createTag([tagVersion,tagDes]){
-	let {code} = shell.exec(`git tag -a ${tagVersion} -m ${tagDes}`);
+	console.log(tagVersion,'?????????????',tagDes,'111111111')
+	// let {code} = shell.exec(`git tag -a ${tagVersion} -m ${tagDes}`);
+	
+	let {code} = shell.exec(`git tag -a tagVersion -m tagDes`);
+
+	console.log(code,'222')
 	return code
 }
 
