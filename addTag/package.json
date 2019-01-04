@@ -8,6 +8,9 @@
     "createTag": "node ./index.js",
     "testTag": "mocha ./tests/index.js"
   },
+  "bin": {
+    "createTag": "./index.js"
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
