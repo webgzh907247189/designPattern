@@ -1,3 +1,6 @@
+/**
+ *   https://www.cnblogs.com/qinmengjiao123-123/p/5603057.html
+ **/
 function composeFn(...args){
     return args.reverse().reduce((result,fn)=>{
         return (...relayArgs)=>{
