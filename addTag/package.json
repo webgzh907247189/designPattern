@@ -5,11 +5,19 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "createTag": "node ./index.js"
+    "createTag": "node ./index.js",
+    "testTag": "mocha ./tests/index.js"
+  },
+  "bin": {
+    "createTag": "./index.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
+  },
+  "dependencies": {
     "shelljs": "^0.8.2"
   }
 }

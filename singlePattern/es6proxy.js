@@ -1,4 +1,60 @@
 /**
+ * https://juejin.im/post/5c34a86a6fb9a049f81976d8
+ */
+
+{
+	let hobbies = ['code']
+	Object.defineProperty(hobbies, 'push', {
+		value () {
+			console.log(`Push ${arguments[0]} to ${this}`)
+			this[this.length] = arguments[0]
+		}
+	})
+
+	hobbies.push('play')
+	//Push play to code
+
+	console.log(hobbies)
+	// ["code", "play"]
+}
+
+
+
+{
+	let ironman = {
+		name: 'Tony Stark',
+		sex: 'male',
+		age: '35',
+		hobbies: ['girl', 'money', 'game']
+	}
+
+	let ironmanProxy = new Proxy(ironman.hobbies, {
+  		set (target, property, value) {
+			target[property] = value
+			console.log(property,'change....',value)
+			return true
+		}
+	})	
+
+	ironmanProxy.push('wine')
+	console.log(ironman.hobbies)
+
+	// --> 3 change.... wine
+	// --> length change.... 4
+	// --> [ 'girl', 'money', 'game', 'wine' ]
+
+	/**
+	 * 触发push()方法的时候，这个数组的 length属性 和 content内容 都被修改了，所以会引起两次变化。
+	 */
+}
+
+
+
+
+
+
+
+/**
  * https://zhangzhao.name/2018/01/18/%E5%A6%82%E4%BD%95%E8%AE%A9%20(a%20==%201%20&&%20a%20==%202%20&&%20a%20==%203)%20%E8%BF%94%E5%9B%9E%20true/
  * 
  * https://www.cnblogs.com/wwhhq/p/8196217.html
