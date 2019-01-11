@@ -5,7 +5,8 @@
   "main": "childrenProcess.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "startkoa": "nodemon ./testKoa.js"
+    "startkoa": "nodemon ./testKoa.js",
+    "testmiddleware": "node ./koaMiddleware.js"
   },
   "author": "",
   "license": "ISC",
