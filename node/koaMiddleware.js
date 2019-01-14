@@ -8,13 +8,29 @@
 }
 
 
+{
+    let obj = {
+        name: '11',
+        get sex(){
+            return 'zzz'
+        }
+    }
+
+    /**
+     * 这样写 简化使用  (可以在return 中写很多简化的东西)
+     */
+    console.log(obj.sex) // zzz
+}
+
 
 const Koa = require('koa');
 const app = new Koa();
 
 
 let mid1 = async (ctx,next) => {
-    console.log('开始执行中间件1')
+    let name = ctx.cookies.get("name")
+
+    console.log(name,'开始执行中间件1 打印cookie',ctx.cookies)    
     await next().then((d)=>{
         console.log('1111',d)
     })
@@ -33,11 +49,11 @@ app.use(mid1).use(async (ctx,next) => {
     console.log('执行中间件2执行完成')
 });
 
-app.use(function *(next){
-    console.log('generate 测试 前')
-    yield next
-    console.log('generate 测试 后')
-})
+// app.use(function *(next){
+//     console.log('generate 测试 前')
+//     yield next
+//     console.log('generate 测试 后')
+// })
 
 app.use(async (ctx,next) => {
     console.log('test  before')
