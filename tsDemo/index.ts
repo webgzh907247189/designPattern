@@ -94,12 +94,16 @@ let result = greeter(user)
     let num: Number
     let bool: boolean
     let str: void
+    let str1: null
 
-    num = null  //error
-    bool = undefined  //error
+    // num = null  //error
+    // bool = undefined  //error
 
-    str = null
+    // str = null
     str = undefined
+
+    // str1 = '123' //error
+    str1 = null
 }
 
 
@@ -123,7 +127,112 @@ loginfo('11')
 function test<T>(arg:T):T{
     return arg
 }
-test(1)
+test(1)  //(类型推论--即编译器会根据传入的参数自动的帮助我们确定T的类型)
+test<Number>(100)  //(传入所有的参数，包含类型参数)
 
 
 
+
+
+
+
+
+
+
+/**
+ *  使用泛型变量
+ */
+function list<T>(arg: T[]):T[]{
+    return arg
+}
+list([123])
+
+function listTest<T>(arg: Array<T>): Array<T>{
+    return arg
+}
+list(['123'])
+
+
+
+
+
+
+function listReverse<T>(arg: T[]): T[]{
+    return arg.reverse()
+}
+
+const sample = [1,2,3]
+let reversed = listReverse(sample)
+
+// reversed[0] = '1' // error
+// reversed = ['1', '2']; // Error
+reversed = [7,8,89]
+
+
+
+
+
+function listReverseTwo<T>(arg: T[]): T[]{
+    return arg.reverse()
+}
+
+const slist = [1,'2',3]
+let reversedList = listReverseTwo(slist)
+
+// reversedList = [7,8,false] // Error
+// reversedList[0] = true     // Error
+reversedList = [7,8,'123']
+
+
+
+
+{
+    /**
+     * 联合类型   (用|分隔每个类型)
+     */
+    let myFavoriteNumber: string | number;
+    myFavoriteNumber = 'seven'
+    myFavoriteNumber = 7
+    // myFavoriteNumber = true  //error
+}
+
+
+
+
+/**
+ * error  (length不是string和number的共有属性,所以会报错)
+ */
+// function getLength(something:string|number):number{
+//     return something.length
+// }
+
+function getLength(something:string|number):string{
+    return something.toString()
+}
+
+
+
+{   
+    /**
+     * 联合类型的变量在被赋值的时候，会根据类型推论的规则推断出一个类型
+     */
+    let myFavoriteNumber:string|number;
+    myFavoriteNumber = 'seven';
+    console.log(myFavoriteNumber.length)
+
+    myFavoriteNumber = 7
+    // console.log(myFavoriteNumber.length) // error 类型“number”上不存在属性“length”。
+}
+
+
+
+
+
+function format(cmd: string[] | string){
+    let line = ''
+    if(Array.isArray(cmd)){
+        line = cmd.join(' ').trim();
+    }else{
+        line = cmd.trim();
+    }
+}
