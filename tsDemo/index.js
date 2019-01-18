@@ -178,3 +178,7 @@ function format(cmd) {
         line = cmd.trim();
     }
 }
+function interfaceTest(obj) {
+    return obj.name;
+}
+var resultName = interfaceTest({ name: '111' });

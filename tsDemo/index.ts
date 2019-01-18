@@ -236,3 +236,16 @@ function format(cmd: string[] | string){
         line = cmd.trim();
     }
 }
+
+
+
+interface objInter{
+    name: string,
+    sex?: string
+}
+
+function interfaceTest(obj: objInter): string{
+    return obj.name
+}
+
+let resultName = interfaceTest({name: '111'})
