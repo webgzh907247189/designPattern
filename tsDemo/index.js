@@ -182,3 +182,7 @@ function interfaceTest(obj) {
     return obj.name;
 }
 var resultName = interfaceTest({ name: '111' });
+var resultFunc;
+resultFunc = function (name, sex) {
+    return name + " && " + sex;
+};

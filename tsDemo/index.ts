@@ -90,12 +90,16 @@ let result = greeter(user)
 
 
 
-{
+{   
+    /**
+     * tsconfig.json 的 strict  对下面的 error 有影响
+     */
     let num: Number
     let bool: boolean
     let str: void
     let str1: null
-
+    
+    
     // num = null  //error
     // bool = undefined  //error
 
@@ -249,3 +253,17 @@ function interfaceTest(obj: objInter): string{
 }
 
 let resultName = interfaceTest({name: '111'})
+
+
+
+
+interface funcDemo{
+    (name: string,sex: string): string
+}
+
+let resultFunc: funcDemo
+resultFunc = function(name: string,sex: string){
+    return `${name} && ${sex}`
+}
+
+resultFunc('张三','男')
