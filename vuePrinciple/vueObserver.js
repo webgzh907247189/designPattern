@@ -32,7 +32,7 @@
 /**
  * https://juejin.im/post/5b38527951882574a672615d
  * 
- * Object.getOwnPropertyNames(obj)  获取所有的keys  返回的是数组  与 Object.keys() 返回的也是数组
+ * Object.getOwnPropertyNames(obj)  获取所有的keys  返回的是数组(包含不可以枚举的属性)  与 Object.keys() 返回的也是数组
  *
  * Object.getOwnPropertyDescriptor(obj,item)  获取obj 的 key 属性值  返回的是对象
  */
