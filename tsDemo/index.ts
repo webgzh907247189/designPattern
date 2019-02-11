@@ -324,10 +324,10 @@ let ss: sq
 /**
  * 泛型
  */
-// function hello<H>(arg: H):H{
-//     return arg
-// }
-// hello<number>(100)
+function hellotest<H>(arg: H):H{
+    return arg
+}
+hellotest<number>(100)
 
 
 

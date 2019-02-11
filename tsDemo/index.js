@@ -205,10 +205,10 @@ var ss;
 /**
  * 泛型
  */
-// function hello<H>(arg: H):H{
-//     return arg
-// }
-// hello<number>(100)
+function hellotest(arg) {
+    return arg;
+}
+hellotest(100);
 function he(arg) {
     return arg;
 }
