@@ -90,12 +90,16 @@ let result = greeter(user)
 
 
 
-{
+{   
+    /**
+     * tsconfig.json 的 strict  对下面的 error 有影响
+     */
     let num: Number
     let bool: boolean
     let str: void
     let str1: null
-
+    
+    
     // num = null  //error
     // bool = undefined  //error
 
@@ -291,7 +295,7 @@ class Test implements classTest{
 
 
 /**
- * 接口进程 与 混合
+ * 接口继承 与 混合
  */
 interface shape{
     color: string
@@ -320,10 +324,10 @@ let ss: sq
 /**
  * 泛型
  */
-function hello<H>(arg: H):H{
-    return arg
-}
-hello<number>(100)
+// function hello<H>(arg: H):H{
+//     return arg
+// }
+// hello<number>(100)
 
 
 
@@ -336,3 +340,13 @@ let listTest1: Array<string> = he<string>(['2','44'])
 
 
 
+interface funcDemo{
+    (name: string,sex: string): string
+}
+
+let resultFunc: funcDemo
+resultFunc = function(name: string,sex: string){
+    return `${name} && ${sex}`
+}
+
+resultFunc('张三','男')

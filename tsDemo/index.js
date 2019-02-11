@@ -87,6 +87,9 @@ var result = greeter(user);
     str = false;
 }
 {
+    /**
+     * tsconfig.json 的 strict  对下面的 error 有影响
+     */
     var num = void 0;
     var bool = void 0;
     var str = void 0;
@@ -202,11 +205,16 @@ var ss;
 /**
  * 泛型
  */
-function hello(arg) {
-    return arg;
-}
-hello(100);
+// function hello<H>(arg: H):H{
+//     return arg
+// }
+// hello<number>(100)
 function he(arg) {
     return arg;
 }
 var listTest1 = he(['2', '44']);
+var resultFunc;
+resultFunc = function (name, sex) {
+    return name + " && " + sex;
+};
+resultFunc('张三', '男');
