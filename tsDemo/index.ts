@@ -249,3 +249,90 @@ function interfaceTest(obj: objInter): string{
 }
 
 let resultName = interfaceTest({name: '111'})
+
+
+
+
+/**
+ * 接口 的 数组类型
+ */
+interface stringArray{
+    [index:number]: string
+}
+let listArray:stringArray;
+listArray = ['1','2']
+
+
+
+
+/**
+ * 类 实现接口
+ * 
+ * 开启 strict -> true 严格检查
+ */
+interface classTest{
+    // time: Date;
+    // setTime(d: Date) //:void
+}
+class Test implements classTest{
+    // time: Date;
+    name: string
+
+    constructor(name: string){
+        this.name = name
+    }
+
+    setTime(d: Date){
+        console.log(d);
+    }
+}
+
+
+
+
+/**
+ * 接口进程 与 混合
+ */
+interface shape{
+    color: string
+}
+interface cricle{
+    penwidth: string
+}
+interface sq extends shape,cricle{
+    sideLength : string
+
+    resizeTo(): void
+}
+
+var s = <sq>{}
+s.color = 'red'
+s.sideLength = '100px'
+s.penwidth = '1000px'
+
+let ss: sq
+// ss.resizeTo() // error strict -> true 影响
+
+
+
+
+
+/**
+ * 泛型
+ */
+function hello<H>(arg: H):H{
+    return arg
+}
+hello<number>(100)
+
+
+
+
+
+function he<T>(arg: T[]): T[]{
+    return arg
+}
+let listTest1: Array<string> = he<string>(['2','44'])
+
+
+

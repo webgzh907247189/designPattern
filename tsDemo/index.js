@@ -182,3 +182,31 @@ function interfaceTest(obj) {
     return obj.name;
 }
 var resultName = interfaceTest({ name: '111' });
+var listArray;
+listArray = ['1', '2'];
+var Test = /** @class */ (function () {
+    function Test(name) {
+        this.name = name;
+    }
+    Test.prototype.setTime = function (d) {
+        console.log(d);
+    };
+    return Test;
+}());
+var s = {};
+s.color = 'red';
+s.sideLength = '100px';
+s.penwidth = '1000px';
+var ss;
+// ss.resizeTo() // error strict -> true 影响
+/**
+ * 泛型
+ */
+function hello(arg) {
+    return arg;
+}
+hello(100);
+function he(arg) {
+    return arg;
+}
+var listTest1 = he(['2', '44']);

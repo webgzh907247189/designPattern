@@ -58,7 +58,8 @@
     "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
   },
   "include": [
-    "./index.ts"
+    "./index.ts",
+    "./test.ts"
   ],
   "exclude": [
     "node_modules",
