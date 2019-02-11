@@ -115,8 +115,12 @@
 
 	let fn1 = function a(argument) {
 		// body...
+
+		// a()  // 内部可以调用，外部调用 会报错  外部无法调用
 	}
 	console.log(fn1.name)  //a
+
+	a() //报错 (无法调用，只有在 a 函数内部可以成功调用)
 }
 
 
@@ -260,4 +264,35 @@
 	for (let p of searchParams.values()) {
 		console.log(p); // URLUtils.searchParams
 	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+	const ages = [11, 33, 12, 54, 18, 96];
+
+	// 旧写法
+	const youngest = Math.min.apply(Math, ages);
+	const oldest = Math.max.apply(Math, ages);
+	const type = Object.prototype.toString.call(youngest);
+	console.log(youngest,oldest,type)  // 11 96 "[object Number]"
+
+	// 新写法
+	const youngestNew = Reflect.apply(Math.min, Math, ages);
+	const oldestNew = Reflect.apply(Math.max, Math, ages);
+	const typeNew = Reflect.apply(Object.prototype.toString, youngest, []);
+	console.log(youngestNew,oldestNew,typeNew)  // 11 96 "[object Number]"
 }
