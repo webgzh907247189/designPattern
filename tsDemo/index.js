@@ -209,10 +209,12 @@ function hellotest(arg) {
     return arg;
 }
 hellotest(100);
+hellotest(10);
 function he(arg) {
     return arg;
 }
 var listTest1 = he(['2', '44']);
+var listTest2 = he(['2', '44']);
 var resultFunc;
 resultFunc = function (name, sex) {
     return name + " && " + sex;
