@@ -328,6 +328,8 @@ function hellotest<H>(arg: H):H{
     return arg
 }
 hellotest<number>(100)
+hellotest(10)
+
 
 
 
@@ -337,9 +339,15 @@ function he<T>(arg: T[]): T[]{
     return arg
 }
 let listTest1: Array<string> = he<string>(['2','44'])
+let listTest2: Array<string> = he(['2','44'])
 
 
 
+
+
+/**
+ * 函数实现接口
+ */
 interface funcDemo{
     (name: string,sex: string): string
 }
