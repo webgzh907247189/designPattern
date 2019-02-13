@@ -28,6 +28,25 @@
 
 
 
+/**
+ * 精确到指定位数的小数
+ */
+
+{   
+    interface r {
+        (
+            num: number,
+            n?: number
+        ): string
+    }
+    let round: r
+    round = (num:number,n=2) => {
+        return (`${ `${num}e${n}` * 1 }e-${n}`)*1   // 注意，此处的 - 没有空格
+        // return `${ `${num}e${n}` * 1 }e-${n}` * 1
+        // return `${ `${num}e${n}`*1 }`e-`${n}`  
+    }
+
+}
 
 
 
@@ -99,4 +118,4 @@
     }
 
     cloneRegExp(/xyz/gim)
-}
+}   
