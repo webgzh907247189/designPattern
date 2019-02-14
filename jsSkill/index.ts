@@ -1,5 +1,64 @@
 // https://juejin.im/post/5c611c73f265da2d8f47159b (js小技巧)
 
+/**
+ * 代码复用 (组件)
+ */
+{  
+    interface validateInterface{
+        (
+            schema: Object,
+            val: Object    
+        ): boolean
+    }
+
+    let schema = {
+        name: {
+            required: true
+        },
+        sex: {
+            required: true
+        }
+    }
+
+    let validate: validateInterface
+    validate = function(schema: Object,val: Object){
+        for(let item of Object.keys(schema)){
+            if(schema[item]['required']){
+                if(!val[item]){
+                    return false
+                }
+            }
+        }
+
+        return true
+    }
+
+    let result1 = validate(schema,{name: 'xx',sex: 'zz'})
+    let result2 = validate(schema,{sex: 'xx'})
+    let result3 = validate(schema,{sex1: 'xx'})
+
+    console.log(`${result1},result1,${result2},result2,${result3},result3`)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * 数字补0操作
@@ -50,6 +109,19 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**
  * 判断奇偶数 
  */
@@ -82,6 +154,15 @@
     ~~-4.5        // -4
     Math.floor(-4.5)        // -5
 }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -160,6 +241,41 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // https://juejin.im/post/5c6247ebe51d45012c3cc6a7
 
 /**
@@ -197,20 +313,20 @@
     // => false
 }
 
-// {
-//     // lodash 的实现 clone 正则
-//     interface  regDemo{
-//         (regexp: RegExp): RegExp
-//     }
+{
+    // lodash 的实现 clone 正则
+    interface  regDemo{
+        (regexp: RegExp): RegExp
+    }
 
-//     const reFlags = /\w*$/
-//     let cloneRegExp: regDemo
+    const reFlags = /\w*$/
+    let cloneRegExp: regDemo
 
-//     cloneRegExp = function (regexp: RegExp) {
-//         const result = new regexp.constructor(regexp.source, reFlags.exec(regexp))
-//         result.lastIndex = regexp.lastIndex
-//         return result
-//     }
+    cloneRegExp = function (regexp: RegExp) {
+        const result = new (regexp as any).constructor(regexp.source, reFlags.exec(regexp as any))
+        result.lastIndex = regexp.lastIndex
+        return result
+    }
 
-//     cloneRegExp(/xyz/gim)
-// }   
+    cloneRegExp(/xyz/gim)
+}   
