@@ -42,7 +42,79 @@
 
 
 
+/**
+ * 校验规则 (传入的每个字段进行校验)
+ * 
+ * 当有一个校验失败，此字段不在校验，进行下一个字段校验
+ */
+{
+    interface validateInterface{
+        (
+            schema: Object,
+            val: Object    
+        ): string[]
+    }
 
+    let schema = {
+        name: [
+            {required: true,message: '姓名必填1'},
+            {
+                rule: (data)=>{ 
+                    // console.log(data,'data')
+                    return false 
+                },
+                message: '姓名校验2'
+            }
+        ],
+        sex: [
+            {required: true,message: '性别必填1'},
+            {rule: /^\d{2}$/,message: '性别校验2'},
+            {
+                rule: (data)=>{ 
+                    // console.log(data,'data')
+                    return true 
+                },
+                message: '姓名校验3'
+            }
+        ]
+    }
+
+    let validate: validateInterface
+    validate = function(schema: Object,val: Object){
+        return Object.keys(schema).reduce((resultList,item)=>{
+            let validateResult = schema[item].find((validateItem)=>{
+                let ruleType = Object.prototype.toString.call(validateItem.rule).slice(8,-1)
+
+                if(validateItem['required']){
+                    if(!val[item]){
+                        return validateItem
+                    }
+                }
+
+                if(ruleType === 'RegExp'){
+                    return validateItem.rule.test(val[item])? undefined : validateItem
+                }
+                if(ruleType === 'Function'){
+                    // Reflect.apply(validateItem.rule,null,[val])
+                    return validateItem.rule.apply(null,[val]) ? undefined : validateItem
+                }
+            })
+            if(validateResult){
+                resultList.push(validateResult)
+            }
+            return resultList
+        },[])
+    }
+
+    let result1 = validate(schema,{name: 'xx',sex: 'zz'})
+    let result2 = validate(schema,{sex: '12'})
+    let result3 = validate(schema,{sex1: '2'})
+
+    console.log(result1,'result1',result2,'result2',result3,'result3')
+    // result1 [{rule: ƒ, message: "姓名校验2"},{rule: /^\d{2}$/, message: "性别校验2"}]
+    // result2 [{required: true, message: "姓名必填1"}]
+    // result3 [{required: true, message: "姓名必填1"},{required: true, message: "性别必填1"}]
+}
 
 
 
@@ -89,6 +161,8 @@
 
 /**
  * 精确到指定位数的小数 (注意 as any 部分)
+ * 
+ * 第二个函数适合多种情况 (字符串取指定位数的小数)
  */
 
 {   
@@ -104,7 +178,19 @@
     }
 }
 
-
+{   
+    interface r {
+        (
+            num: string,
+            n?: number
+        ): number
+    }
+    let round: r
+    round = (num:string,n=2) => {
+        return `${Math.round(`${parseFloat(num)}e${n}` as any)}e-${n}` as any * 1 // 注意，此处的  e- 没有空格
+    }
+    //round('1.23123sadsad',2) =>  1.23
+}
 
 
 
@@ -155,7 +241,10 @@
     Math.floor(-4.5)        // -5
 }
 
-
+{
+    parseFloat('1.213asdsa')         // 1.213 (取数字部分)
+    parseFloat(-4.5 as any)          //-4.5
+}
 
 
 
@@ -231,6 +320,15 @@
     + undefined               // NaN
     + { valueOf: ()=>'3' }    // 3
 }
+
+
+
+
+
+
+
+
+
 
 
 

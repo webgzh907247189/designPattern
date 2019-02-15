@@ -1,5 +1,95 @@
 // https://juejin.im/post/5c611c73f265da2d8f47159b (js小技巧)
 /**
+ * 代码复用 (组件)
+ */
+{
+    var schema = {
+        name: {
+            required: true
+        },
+        sex: {
+            required: true
+        }
+    };
+    var validate = void 0;
+    validate = function (schema, val) {
+        for (var _i = 0, _a = Object.keys(schema); _i < _a.length; _i++) {
+            var item = _a[_i];
+            if (schema[item]['required']) {
+                if (!val[item]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
+    var result1 = validate(schema, { name: 'xx', sex: 'zz' });
+    var result2 = validate(schema, { sex: 'xx' });
+    var result3 = validate(schema, { sex1: 'xx' });
+    console.log(result1 + ",result1," + result2 + ",result2," + result3 + ",result3");
+}
+/**
+ * 校验规则 (传入的每个字段进行校验)
+ *
+ * 当有一个校验失败，此字段不在校验，进行下一个字段校验
+ */
+{
+    var schema = {
+        name: [
+            { required: true, message: '姓名必填1' },
+            {
+                rule: function (data) {
+                    // console.log(data,'data')
+                    return false;
+                },
+                message: '姓名校验2'
+            }
+        ],
+        sex: [
+            { required: true, message: '性别必填1' },
+            { rule: /^\d{2}$/, message: '性别校验2' },
+            {
+                rule: function (data) {
+                    // console.log(data,'data')
+                    return true;
+                },
+                message: '姓名校验3'
+            }
+        ]
+    };
+    var validate = void 0;
+    validate = function (schema, val) {
+        return Object.keys(schema).reduce(function (resultList, item) {
+            var validateResult = schema[item].find(function (validateItem) {
+                var ruleType = Object.prototype.toString.call(validateItem.rule).slice(8, -1);
+                if (validateItem['required']) {
+                    if (!val[item]) {
+                        return validateItem;
+                    }
+                }
+                if (ruleType === 'RegExp') {
+                    return validateItem.rule.test(val[item]) ? undefined : validateItem;
+                }
+                if (ruleType === 'Function') {
+                    // Reflect.apply(validateItem.rule,null,[val])
+                    return validateItem.rule.apply(null, [val]) ? undefined : validateItem;
+                }
+            });
+            if (validateResult) {
+                resultList.push(validateResult);
+            }
+            return resultList;
+        }, []);
+    };
+    var result1 = validate(schema, { name: 'xx', sex: 'zz' });
+    var result2 = validate(schema, { sex: '12' });
+    var result3 = validate(schema, { sex1: '2' });
+    console.log(result1, 'result1', result2, 'result2', result3, 'result3');
+    // result1 [{rule: ƒ, message: "姓名校验2"},{rule: /^\d{2}$/, message: "性别校验2"}]
+    // result2 [{required: true, message: "姓名必填1"}]
+    // result3 [{required: true, message: "姓名必填1"},{required: true, message: "性别必填1"}]
+}
+/**
  * 数字补0操作
  */
 {
@@ -20,6 +110,8 @@
 }
 /**
  * 精确到指定位数的小数 (注意 as any 部分)
+ *
+ * 第二个函数适合多种情况 (字符串取指定位数的小数)
  */
 {
     var round = void 0;
@@ -27,6 +119,14 @@
         if (n === void 0) { n = 2; }
         return (Math.round(num + "e" + n) + "e-" + n) * 1; // 注意，此处的  e- 没有空格
     };
+}
+{
+    var round = void 0;
+    round = function (num, n) {
+        if (n === void 0) { n = 2; }
+        return (Math.round(parseFloat(num) + "e" + n) + "e-" + n) * 1; // 注意，此处的  e- 没有空格
+    };
+    //round('1.23123sadsad',2) =>  1.23
 }
 /**
  * 判断奇偶数
@@ -55,6 +155,10 @@
     Math.floor(4.5); // 4
     ~~-4.5; // -4
     Math.floor(-4.5); // -5
+}
+{
+    parseFloat('1.213asdsa'); // 1.213 (取数字部分)
+    parseFloat(-4.5); //-4.5
 }
 /**
  * 使用Boolean过滤数组中的所有假值
@@ -131,17 +235,13 @@
     regexp.test("1");
     // => false
 }
-// {
-//     // lodash 的实现 clone 正则
-//     interface  regDemo{
-//         (regexp: RegExp): RegExp
-//     }
-//     const reFlags = /\w*$/
-//     let cloneRegExp: regDemo
-//     cloneRegExp = function (regexp: RegExp) {
-//         const result = new regexp.constructor(regexp.source, reFlags.exec(regexp))
-//         result.lastIndex = regexp.lastIndex
-//         return result
-//     }
-//     cloneRegExp(/xyz/gim)
-// }   
+{
+    var reFlags_1 = /\w*$/;
+    var cloneRegExp = void 0;
+    cloneRegExp = function (regexp) {
+        var result = new regexp.constructor(regexp.source, reFlags_1.exec(regexp));
+        result.lastIndex = regexp.lastIndex;
+        return result;
+    };
+    cloneRegExp(/xyz/gim);
+}
