@@ -1,3 +1,7 @@
+/**
+ * http://leeight.github.io/blog/2014/06/v8-full-codegen/   node 基础 (编译器)
+ */
+
 const http = require('http');
 const Koa = require('koa');
 const KoaRouter = require('koa-router');
