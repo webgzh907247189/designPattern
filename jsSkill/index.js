@@ -33,6 +33,7 @@
  *
  * 当有一个校验失败，此字段不在校验，进行下一个字段校验
  */
+// import "reflect-metadata";
 {
     var schema = {
         name: [
@@ -71,7 +72,7 @@
                     return validateItem.rule.test(val[item]) ? undefined : validateItem;
                 }
                 if (ruleType === 'Function') {
-                    // Reflect.apply(validateItem.rule,null,[val])
+                    // return (Reflect as any).apply(validateItem.rule,null,[val]) ? undefined : validateItem
                     return validateItem.rule.apply(null, [val]) ? undefined : validateItem;
                 }
             });
