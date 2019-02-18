@@ -1,4 +1,13 @@
 // https://juejin.im/post/5c611c73f265da2d8f47159b (js小技巧)
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 /**
  * 代码复用 (组件)
  */
@@ -210,6 +219,75 @@
         + null // 0
         + undefined // NaN
         + { valueOf: function () { return '3'; } }; // 3
+}
+/**
+ * 数组
+ */
+// import "reflect-metadata";
+{
+    var numbers = [10, 20, 30, 40];
+    var getList = void 0;
+    getList = function (arr) {
+        return arr.reduce(function (result, item) {
+            var newItem = item * 2;
+            if (newItem > 50) {
+                result = result.concat([newItem]);
+            }
+            return result;
+        }, []);
+    };
+    var r = getList(numbers);
+    console.log(r);
+}
+{
+    var cars = ['BMW', 'Benz', 'Benz', 'Tesla', 'BMW', 'Toyota'];
+    var countList = void 0;
+    countList = function (arr) {
+        return arr.reduce(function (result, item) {
+            // let isHave = (Reflect as any).has(result,item)
+            var isHave = item in result;
+            result[item] = isHave ? ++result[item] : 1;
+            return result;
+        }, Object.create(null));
+    };
+    var r2 = countList(cars);
+    console.log(r2);
+}
+// {
+//     flatten([1, [2], 3, 4]);                    		 // [1, 2, 3, 4]
+//     flatten([1, [2, [3, [4, 5], 6], 7], 8], 2);           // [1, 2, 3, [4, 5], 6, 7, 8]
+//     function flatten(arr: Array<T>, depth = 1: number): Array<T>{
+//         return 
+//     }
+// }
+{
+    var csvFileLine = '1997,John Doe,US,john@doe.com,New York';
+    var _a = csvFileLine.split(','), country = _a[2], email = _a[3];
+    console.log(country, email);
+}
+/**
+ * 对象
+ * 我们希望删除_internal和tooBig参数。我们可以把它们赋值给internal和tooBig变量，然后在cleanObject中存储剩下的属性以备后用。
+ */
+{
+    var _b = { el1: '1', _internal: "secret", tooBig: {}, el2: '2', el3: '3' }, _internal = _b._internal, tooBig = _b.tooBig, cleanObject = __rest(_b, ["_internal", "tooBig"]);
+    console.log(cleanObject); // {el1: '1', el2: '2', el3: '3'}
+}
+{
+    var car = {
+        model: 'bmw 2018',
+        engine: {
+            v6: true,
+            turbo: true,
+            vin: 12345
+        }
+    };
+    var modelAndVIN = void 0;
+    modelAndVIN = function (_a) {
+        var _b = _a === void 0 ? { model: model, engine: engine } : _a, _c = _b.model, model = _c === void 0 ? '1' : _c, _d = _b.engine, engine = _d === void 0 ? {} : _d;
+        // console.log(`model: ${model} vin: ${vin}`);
+    };
+    modelAndVIN(car); // => model: bmw 2018  vin: 12345
 }
 // https://juejin.im/post/5c6247ebe51d45012c3cc6a7
 /**

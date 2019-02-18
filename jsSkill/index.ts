@@ -329,18 +329,98 @@
 
 
 
+/**
+ * 数组
+ */
+// import "reflect-metadata";
+{
+    interface r {
+        (arr: Array<number>): Array<number>
+        // (arr: number[]): number[]
+    }
+
+    const numbers = [10, 20, 30, 40];
+    let getList:r
+    getList = function (arr){
+        return arr.reduce((result,item)=>{
+            let newItem = item * 2
+            if(newItem>50){
+                result = [...result,newItem]
+            }
+
+            return result
+        },[])
+    }
+
+    let r = getList(numbers)
+    console.log(r)
+}
+{
+    interface r {
+        (arr: Array<string>): Array<string>
+    }
+
+    let cars = ['BMW','Benz', 'Benz', 'Tesla', 'BMW', 'Toyota'];
+    let countList: r
+    countList = function(arr){
+        return arr.reduce((result,item)=>{
+            // let isHave = (Reflect as any).has(result,item)
+            let isHave = item in result
+
+            result[item] = isHave ? ++result[item] : 1
+            return result
+        },Object.create(null))
+    }
+
+    let r2 = countList(cars)
+    console.log(r2)
+}
+// {
+//     flatten([1, [2], 3, 4]);                    		 // [1, 2, 3, 4]
+//     flatten([1, [2, [3, [4, 5], 6], 7], 8], 2);           // [1, 2, 3, [4, 5], 6, 7, 8]
+
+//     function flatten(arr: Array<T>, depth = 1: number): Array<T>{
+//         return 
+//     }
+// }
+{
+    const csvFileLine = '1997,John Doe,US,john@doe.com,New York';
+    let {2:country,3: email} = csvFileLine.split(',')
+    console.log(country,email)
+}
 
 
 
 
 
+/**
+ * 对象
+ * 我们希望删除_internal和tooBig参数。我们可以把它们赋值给internal和tooBig变量，然后在cleanObject中存储剩下的属性以备后用。
+ */
+{
+    let {_internal, tooBig, ...cleanObject} = {el1: '1', _internal:"secret", tooBig:{}, el2: '2', el3: '3'};
+    console.log(cleanObject);                         // {el1: '1', el2: '2', el3: '3'}
+}
 
+{
+    interface r{
+        (obj?: Object | undefined): void
+    }
+    let car = {
+        model: 'bmw 2018',
+        engine: {
+            v6: true,
+            turbo: true,
+            vin: 12345
+        }
+    }
 
-
-
-
-
-
+    let modelAndVIN
+    modelAndVIN = ( {model='1',engine={}}: Object = {model,engine} ) => {
+        // console.log(`model: ${model} vin: ${vin}`);
+    }
+    modelAndVIN(car); // => model: bmw 2018  vin: 12345
+}
 
 
 
