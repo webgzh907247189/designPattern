@@ -1,4 +1,17 @@
 const crypto = require('crypto')
+const queryString = require('querystring');
+
+let cookie = "_ga=GA1.2.370496175.1512711491; PHPSESSID=web2~q8u988rtuf92dqt7g08rhlhdpv; _gid=GA1.2.1739138443.1550501906; Hm_lvt_e23800c454aa573c0ccb16b52665ac26=1550501906,1550501909,1550501910,1550501978; Hm_lpvt_e23800c454aa573c0ccb16b52665ac26=1550501978"
+let obj = queryString.parse(cookie,'; ','=')
+console.log(obj)
+//{ 
+//  _ga: 'GA1.2.370496175.1512711491',
+//  PHPSESSID: 'web2~q8u988rtuf92dqt7g08rhlhdpv',
+//  _gid: 'GA1.2.1739138443.1550501906',
+//  Hm_lvt_e23800c454aa573c0ccb16b52665ac26: '1550501906,1550501909,1550501910,1550501978',
+//  Hm_lpvt_e23800c454aa573c0ccb16b52665ac26: '1550501978' 
+//}
+
 
 function encrypt(data, key){
   let cipher = crypto.createCipher('aes192', key);
