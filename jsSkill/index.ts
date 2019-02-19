@@ -401,6 +401,10 @@
 
 
 
+
+
+
+
 /**
  * 对象
  * 我们希望删除_internal和tooBig参数。我们可以把它们赋值给internal和tooBig变量，然后在cleanObject中存储剩下的属性以备后用。
@@ -409,6 +413,7 @@
     let {_internal, tooBig, ...cleanObject} = {el1: '1', _internal:"secret", tooBig:{}, el2: '2', el3: '3'};
     console.log(cleanObject);                         // {el1: '1', el2: '2', el3: '3'}
 }
+
 
 {
     interface r{
@@ -429,6 +434,8 @@
     modelAndVIN = ( {model ,engine} :r = {} ):void => {
         console.log(`model: ${model} vin: ${(engine as any).vin}`);
     }
+
+
     let modelAndVINTest = ( {model = '1',engine:{vin = '1'} = {}} = {} ) => {
         console.log(`model: ${model} vin: ${vin}`);
     }
@@ -444,7 +451,66 @@
 
 
 
+{
+    interface r{
+        (obj?: Car | undefined): void
+    }
+    class Car {
+        model: string ='bmw 2018'
+        engine: Object = {
+            v6: true,
+            turbo: true,
+            vin: 12345
+        }
+    }
+    let car = new Car()
+    let modelAndVIN:r
 
+    modelAndVIN = ( {model ,engine } ) => {
+        console.log(model,(engine as any).vin)
+    }
+
+    modelAndVIN(car); // => model: bmw 2018  vin: 12345
+    modelAndVIN()
+
+    
+    let modelAndVINTest = ( {model = '1',engine:{vin = '1'} = {}} = {} ) => {
+        console.log(`model: ${model} vin: ${vin}`);
+    }
+}
+
+{
+    interface T{
+        (obj?: Car | undefined): void
+    }
+    class Car {
+        model: string ='bmw 2018'
+        engine: Engine = {
+            v6: true,
+            turbo: true,
+            vin: 12345
+        }
+    }
+    class Engine {
+        v6: boolean
+        turbo: boolean
+        vin: Number
+    }
+    let car = new Car()
+    let modelAndVIN:T
+
+    modelAndVIN = ( {model ,engine:{vin} } ) => {
+        console.log(model,vin)
+    }
+
+    modelAndVIN(car); // => model: bmw 2018  vin: 12345
+    modelAndVIN()
+
+    
+    let modelAndVINTest = ( {model = '1',engine:{vin = '1'} = {}} = {} ) => {
+        console.log(`model: ${model} vin: ${vin}`);
+    }
+}
 
 
 

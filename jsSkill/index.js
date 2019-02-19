@@ -303,6 +303,61 @@ var __rest = (this && this.__rest) || function (s, e) {
     modelAndVIN(car); // => model: bmw 2018  vin: 12345
     modelAndVIN();
 }
+{
+    var Car = /** @class */ (function () {
+        function Car() {
+            this.model = 'bmw 2018';
+            this.engine = {
+                v6: true,
+                turbo: true,
+                vin: 12345
+            };
+        }
+        return Car;
+    }());
+    var car = new Car();
+    var modelAndVIN = void 0;
+    modelAndVIN = function (_a) {
+        var model = _a.model, engine = _a.engine;
+        console.log(model, engine.vin);
+    };
+    modelAndVIN(car); // => model: bmw 2018  vin: 12345
+    modelAndVIN();
+    var modelAndVINTest = function (_a) {
+        var _b = _a === void 0 ? {} : _a, _c = _b.model, model = _c === void 0 ? '1' : _c, _d = _b.engine, _e = (_d === void 0 ? {} : _d).vin, vin = _e === void 0 ? '1' : _e;
+        console.log("model: " + model + " vin: " + vin);
+    };
+}
+{
+    var Car = /** @class */ (function () {
+        function Car() {
+            this.model = 'bmw 2018';
+            this.engine = {
+                v6: true,
+                turbo: true,
+                vin: 12345
+            };
+        }
+        return Car;
+    }());
+    var Engine = /** @class */ (function () {
+        function Engine() {
+        }
+        return Engine;
+    }());
+    var car = new Car();
+    var modelAndVIN = void 0;
+    modelAndVIN = function (_a) {
+        var model = _a.model, vin = _a.engine.vin;
+        console.log(model, vin);
+    };
+    modelAndVIN(car); // => model: bmw 2018  vin: 12345
+    modelAndVIN();
+    var modelAndVINTest = function (_a) {
+        var _b = _a === void 0 ? {} : _a, _c = _b.model, model = _c === void 0 ? '1' : _c, _d = _b.engine, _e = (_d === void 0 ? {} : _d).vin, vin = _e === void 0 ? '1' : _e;
+        console.log("model: " + model + " vin: " + vin);
+    };
+}
 // https://juejin.im/post/5c6247ebe51d45012c3cc6a7
 /**
  * 如何 clone 一个正则

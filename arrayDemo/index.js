@@ -68,3 +68,40 @@ var arr = ['codeZh', 'codeCn', 'taobao.cn', 'taobao.com'];
     }) 
     console.log(result)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * arguments对象，可以拿到全部实参
+ * 
+ * FunctionName.length 函数的形参个数
+ */
+
+{
+    function myFunction(a, b) {
+        console.log(arguments,myFunction.length);  // Arguments[1, 2, 3, 4, 5], 2
+        const args = Array.prototype.slice.call(arguments, myFunction.length);
+        console.log(args);   //[3, 4, 5]
+    }
+    myFunction(1, 2, 3, 4, 5); //[3, 4, 5]
+}
