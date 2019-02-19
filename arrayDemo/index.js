@@ -105,3 +105,8 @@ var arr = ['codeZh', 'codeCn', 'taobao.cn', 'taobao.com'];
     }
     myFunction(1, 2, 3, 4, 5); //[3, 4, 5]
 }
+
+
+// optional chaining还不是官方标准的一部分，但它是个stage-1的实验性功能。需要在babelrc中加入@babel/plugin-proposal-optional-chaining来启用它
+// let data = {name:{sex}}
+// let val = data?.name?.sex
