@@ -375,18 +375,26 @@
     let r2 = countList(cars)
     console.log(r2)
 }
-// {
-//     flatten([1, [2], 3, 4]);                    		 // [1, 2, 3, 4]
-//     flatten([1, [2, [3, [4, 5], 6], 7], 8], 2);           // [1, 2, 3, [4, 5], 6, 7, 8]
+{
+    flatten([1, [2], 3, 4]);                    		  // [1, 2, 3, 4]
+    flatten([1, [2, [3, [4, 5], 6], 7], 8], 2);           // [1, 2, 3, [4, 5], 6, 7, 8]
 
-//     function flatten(arr: Array<T>, depth = 1: number): Array<T>{
-//         return 
-//     }
-// }
+    function flattenOther(arr: any[], depth: number = 1): any[]{
+        return depth == 1 
+        ? 
+        arr.reduce((result,item)=> result.concat(item),[]) : arr.reduce((result,item)=> (Array.isArray(item) && result.concat(flatten(item,depth-1)) || result.concat(item)) ,[]) 
+    }
+
+    function flatten(arr: Array<any>, depth: number = 1): Array<any>{
+        return depth == 1 
+        ? 
+        arr.reduce((result,item)=> result.concat(item),[]) : arr.reduce((result,item)=> (Array.isArray(item) && result.concat(flatten(item,depth-1)) || result.concat(item)) ,[])
+    }
+}
 {
     const csvFileLine = '1997,John Doe,US,john@doe.com,New York';
-    let {2:country,3: email} = csvFileLine.split(',')
-    console.log(country,email)
+    let {2:country,3: email,length} = csvFileLine.split(',')
+    console.log(country,email,length)  // US  john@doe.com  5
 }
 
 
@@ -404,7 +412,9 @@
 
 {
     interface r{
-        (obj?: Object | undefined): void
+        model?: string,
+        engine?: Object
+        // vin: string
     }
     let car = {
         model: 'bmw 2018',
@@ -416,13 +426,17 @@
     }
 
     let modelAndVIN
-    modelAndVIN = ( {model='1',engine={}}: Object = {model,engine} ) => {
-        // console.log(`model: ${model} vin: ${vin}`);
+    modelAndVIN = ( {model ,engine} :r = {} ):void => {
+        console.log(`model: ${model} vin: ${(engine as any).vin}`);
     }
+    let modelAndVINTest = ( {model = '1',engine:{vin = '1'} = {}} = {} ) => {
+        console.log(`model: ${model} vin: ${vin}`);
+    }
+
     modelAndVIN(car); // => model: bmw 2018  vin: 12345
+
+    modelAndVIN()
 }
-
-
 
 
 
