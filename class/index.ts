@@ -100,7 +100,7 @@
         static TOKEN_KEY = 'geqwrgfboiadsad';
         
         // 在每次使用这个 class security 的时候 会调用 hasLogin() 来判断是否登录 
-        get hasLogin() {
+        get hasLogin(): string {
             return '11'
         }
         
@@ -120,11 +120,11 @@
  * set 属性
  */
 {
-    var language:Object = {
-        set current(name: string):void {
-            this.log.push(name);
-        },
-        log: []
+    var language = {
+        log: [],
+        set current(name: string) {
+            (this.log as any).push(name);
+        }
     }
 
     language.current = 'EN';
@@ -132,6 +132,20 @@
 
     console.log(language.log); // ["EN", "FA"]
 }
+{
+    var languageTest = {
+        log: new Array,
+        set current(name: string) {
+            this.log.push(name);
+        }
+    }
+
+    languageTest.current = 'EN';
+    languageTest.current = 'FA';
+
+    console.log(languageTest.log); // ["EN", "FA"]
+}
+
 
 
 /**
