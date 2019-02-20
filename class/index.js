@@ -16,6 +16,8 @@ var __extends = (this && this.__extends) || (function () {
  * https://juejin.im/post/5b320af251882574dd4ade81
  *
  * https://juejin.im/post/5c6a151f518825625e4ac830  (Taro)
+ *
+ * https://juejin.im/post/5c55512af265da2deb6a7dc8  (NodeJS Events模块源码学习)
  */
 {
     var Cat = /** @class */ (function () {
@@ -114,14 +116,25 @@ var __extends = (this && this.__extends) || (function () {
  */
 {
     var language = {
+        log: [],
         set current(name) {
             this.log.push(name);
-        },
-        log: []
+        }
     };
     language.current = 'EN';
     language.current = 'FA';
     console.log(language.log); // ["EN", "FA"]
+}
+{
+    var languageTest = {
+        log: new Array,
+        set current(name) {
+            this.log.push(name);
+        }
+    };
+    languageTest.current = 'EN';
+    languageTest.current = 'FA';
+    console.log(languageTest.log); // ["EN", "FA"]
 }
 /**
  * 删除对象属性
