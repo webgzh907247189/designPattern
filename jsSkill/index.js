@@ -1,4 +1,17 @@
 // https://juejin.im/post/5c611c73f265da2d8f47159b (js小技巧)
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -357,6 +370,80 @@ var __rest = (this && this.__rest) || function (s, e) {
         var _b = _a === void 0 ? {} : _a, _c = _b.model, model = _c === void 0 ? '1' : _c, _d = _b.engine, _e = (_d === void 0 ? {} : _d).vin, vin = _e === void 0 ? '1' : _e;
         console.log("model: " + model + " vin: " + vin);
     };
+}
+/**
+ * interface
+ */
+{
+    function speak(food) {
+        console.log("Our " + food.name + " has " + food.calories + " calories.");
+    }
+    speak({ name: '123' });
+}
+/**
+ * class
+ */
+{
+    var Menu = /** @class */ (function () {
+        // 构造函数
+        function Menu(item_list, total_pages) {
+            // 这里的关键词是强制的
+            this.items = item_list;
+            this.pages = total_pages;
+        }
+        // 方法
+        Menu.prototype.list = function () {
+            console.log("Our menu for today:");
+            for (var i = 0; i < this.items.length; i++) {
+                console.log(this.items[i]);
+            }
+        };
+        return Menu;
+    }());
+    // 创建一个新的‘菜单’类实例
+    var sundayMenu = new Menu(["pancakes", "waffles", "orange juice"], 1);
+    // 执行list方法
+    sundayMenu.list();
+    var HappyMeal = /** @class */ (function (_super) {
+        __extends(HappyMeal, _super);
+        // 父类属性将会被继承
+        // 需要定义一个新的构造函数
+        function HappyMeal(item_list, total_pages) {
+            // 在这个例子中，我们希望和父类有同样的构造函数
+            // 为了更方便额度复制父类的构造函数，这里使用了super函数-引用了父类的构造函数
+            return _super.call(this, item_list, total_pages) || this;
+        }
+        // 和属性一样，父类函数也会被继承
+        // 当然我们也可以重写list()函数覆盖父类中的方法
+        HappyMeal.prototype.list = function () {
+            console.log("Our special menu for children:");
+            for (var i = 0; i < this.items.length; i++) {
+                console.log(this.items[i]);
+            }
+        };
+        return HappyMeal;
+    }(Menu));
+    var menu_for_children = new HappyMeal(["candy", "drink", "toy"], 1);
+    menu_for_children.list();
+}
+/**
+ * 泛型
+ */
+{
+    function test(args) {
+        var arr = [];
+        arr.push(args);
+        return arr;
+    }
+    var arrayFromString = test("beep");
+    console.log(arrayFromString[0]); // "beep"
+    console.log(typeof arrayFromString[0]); // String
+    /**
+     * 不需要手动的传入的参数的类型（string），因为编译器可以识别到传递了什么参数，并自动决定什么类型最适合它
+     */
+    var arrayFromNumber = test(42);
+    console.log(arrayFromNumber[0]); // 42
+    console.log(typeof arrayFromNumber[0]); // number
 }
 // https://juejin.im/post/5c6247ebe51d45012c3cc6a7
 /**

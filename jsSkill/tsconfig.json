@@ -59,7 +59,9 @@
   },
   "include": [
     "./index.ts",
-    "./reflect.ts"
+    "./reflect.ts",
+    "./testExport.ts",
+    "./testImport.ts"
   ],
   "exclude": [
     "node_modules",

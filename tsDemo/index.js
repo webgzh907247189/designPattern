@@ -103,7 +103,7 @@ var result = greeter(user);
 }
 /**
  *
- * 使用 :void来表示一个函数没有一个返回值
+ * 使用 :void来表示一个函数没有返回值
  */
 function loginfo(message) {
     console.log(message);

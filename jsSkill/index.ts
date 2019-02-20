@@ -527,7 +527,102 @@
 
 
 
+/**
+ * interface
+ */
+{
+    interface Food {
+        name: string;
+        calories?: number;
+    }
+    
+    function speak(food: Food): void {
+        console.log("Our " + food.name + " has " + food.calories + " calories.");
+    }
 
+    speak({name: '123'})
+}
+
+/**
+ * class
+ */
+{
+    class Menu {
+        // 类中的属性:
+        // 默认的，它们是public的，也可以是private 或者 protected
+        items: Array<string>; // 在菜单中的项目，一个strings类型的数组
+        pages: number; // 菜单有多少页面，一个数字
+        
+        // 构造函数
+        constructor(item_list: Array<string>, total_pages: number) {
+            // 这里的关键词是强制的
+            this.items = item_list;
+            this.pages = total_pages;
+        }
+        
+        // 方法
+        list(): void {
+            console.log("Our menu for today:");
+            for(var i=0; i<this.items.length; i++) {
+                console.log(this.items[i]);
+            }
+        }
+        
+    }
+        
+    // 创建一个新的‘菜单’类实例
+    var sundayMenu = new Menu(["pancakes","waffles","orange juice"], 1);
+    // 执行list方法
+    sundayMenu.list();
+
+
+
+    class HappyMeal extends Menu {
+        // 父类属性将会被继承
+        // 需要定义一个新的构造函数
+        
+        constructor(item_list: Array<string>, total_pages: number) {
+            // 在这个例子中，我们希望和父类有同样的构造函数
+            // 为了更方便额度复制父类的构造函数，这里使用了super函数-引用了父类的构造函数
+            super(item_list, total_pages);
+        }
+        
+        // 和属性一样，父类函数也会被继承
+        // 当然我们也可以重写list()函数覆盖父类中的方法
+        list(): void{
+            console.log("Our special menu for children:");
+            for(var i=0; i<this.items.length; i++) {
+                console.log(this.items[i]);
+            }
+        }
+    }
+        
+    var menu_for_children = new HappyMeal(["candy","drink","toy"], 1);
+    menu_for_children.list();
+}
+
+
+/**
+ * 泛型
+ */
+{
+    function test<T>(args: T): T[]{
+        let arr :T[] = []
+        arr.push(args)
+        return arr
+    }
+
+    var arrayFromString = test<string>("beep");
+    console.log(arrayFromString[0]); // "beep"
+    console.log(typeof arrayFromString[0]) // String
+
+    /**
+     * 不需要手动的传入的参数的类型（string），因为编译器可以识别到传递了什么参数，并自动决定什么类型最适合它
+     */
+    var arrayFromNumber = test(42);
+    console.log(arrayFromNumber[0]); // 42
+    console.log(typeof arrayFromNumber[0]) // number
+}
 
 
 
