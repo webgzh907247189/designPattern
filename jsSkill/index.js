@@ -253,17 +253,26 @@ var __rest = (this && this.__rest) || function (s, e) {
     var r2 = countList(cars);
     console.log(r2);
 }
-// {
-//     flatten([1, [2], 3, 4]);                    		 // [1, 2, 3, 4]
-//     flatten([1, [2, [3, [4, 5], 6], 7], 8], 2);           // [1, 2, 3, [4, 5], 6, 7, 8]
-//     function flatten(arr: Array<T>, depth = 1: number): Array<T>{
-//         return 
-//     }
-// }
+{
+    flatten([1, [2], 3, 4]); // [1, 2, 3, 4]
+    flatten([1, [2, [3, [4, 5], 6], 7], 8], 2); // [1, 2, 3, [4, 5], 6, 7, 8]
+    function flattenOther(arr, depth) {
+        if (depth === void 0) { depth = 1; }
+        return depth == 1
+            ?
+                arr.reduce(function (result, item) { return result.concat(item); }, []) : arr.reduce(function (result, item) { return (Array.isArray(item) && result.concat(flatten(item, depth - 1)) || result.concat(item)); }, []);
+    }
+    function flatten(arr, depth) {
+        if (depth === void 0) { depth = 1; }
+        return depth == 1
+            ?
+                arr.reduce(function (result, item) { return result.concat(item); }, []) : arr.reduce(function (result, item) { return (Array.isArray(item) && result.concat(flatten(item, depth - 1)) || result.concat(item)); }, []);
+    }
+}
 {
     var csvFileLine = '1997,John Doe,US,john@doe.com,New York';
-    var _a = csvFileLine.split(','), country = _a[2], email = _a[3];
-    console.log(country, email);
+    var _a = csvFileLine.split(','), country = _a[2], email = _a[3], length_1 = _a.length;
+    console.log(country, email, length_1); // US  john@doe.com  5
 }
 /**
  * 对象
@@ -284,10 +293,70 @@ var __rest = (this && this.__rest) || function (s, e) {
     };
     var modelAndVIN = void 0;
     modelAndVIN = function (_a) {
-        var _b = _a === void 0 ? { model: model, engine: engine } : _a, _c = _b.model, model = _c === void 0 ? '1' : _c, _d = _b.engine, engine = _d === void 0 ? {} : _d;
-        // console.log(`model: ${model} vin: ${vin}`);
+        var _b = _a === void 0 ? {} : _a, model = _b.model, engine = _b.engine;
+        console.log("model: " + model + " vin: " + engine.vin);
+    };
+    var modelAndVINTest = function (_a) {
+        var _b = _a === void 0 ? {} : _a, _c = _b.model, model = _c === void 0 ? '1' : _c, _d = _b.engine, _e = (_d === void 0 ? {} : _d).vin, vin = _e === void 0 ? '1' : _e;
+        console.log("model: " + model + " vin: " + vin);
     };
     modelAndVIN(car); // => model: bmw 2018  vin: 12345
+    modelAndVIN();
+}
+{
+    var Car = /** @class */ (function () {
+        function Car() {
+            this.model = 'bmw 2018';
+            this.engine = {
+                v6: true,
+                turbo: true,
+                vin: 12345
+            };
+        }
+        return Car;
+    }());
+    var car = new Car();
+    var modelAndVIN = void 0;
+    modelAndVIN = function (_a) {
+        var model = _a.model, engine = _a.engine;
+        console.log(model, engine.vin);
+    };
+    modelAndVIN(car); // => model: bmw 2018  vin: 12345
+    modelAndVIN();
+    var modelAndVINTest = function (_a) {
+        var _b = _a === void 0 ? {} : _a, _c = _b.model, model = _c === void 0 ? '1' : _c, _d = _b.engine, _e = (_d === void 0 ? {} : _d).vin, vin = _e === void 0 ? '1' : _e;
+        console.log("model: " + model + " vin: " + vin);
+    };
+}
+{
+    var Car = /** @class */ (function () {
+        function Car() {
+            this.model = 'bmw 2018';
+            this.engine = {
+                v6: true,
+                turbo: true,
+                vin: 12345
+            };
+        }
+        return Car;
+    }());
+    var Engine = /** @class */ (function () {
+        function Engine() {
+        }
+        return Engine;
+    }());
+    var car = new Car();
+    var modelAndVIN = void 0;
+    modelAndVIN = function (_a) {
+        var model = _a.model, vin = _a.engine.vin;
+        console.log(model, vin);
+    };
+    modelAndVIN(car); // => model: bmw 2018  vin: 12345
+    modelAndVIN();
+    var modelAndVINTest = function (_a) {
+        var _b = _a === void 0 ? {} : _a, _c = _b.model, model = _c === void 0 ? '1' : _c, _d = _b.engine, _e = (_d === void 0 ? {} : _d).vin, vin = _e === void 0 ? '1' : _e;
+        console.log("model: " + model + " vin: " + vin);
+    };
 }
 // https://juejin.im/post/5c6247ebe51d45012c3cc6a7
 /**
