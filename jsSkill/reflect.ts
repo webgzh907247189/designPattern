@@ -11,3 +11,10 @@ getString([{name: 'sadsad'}])
 
 // Reflect.apply(JSON.stringify,null, [ [{name: '2132'},{sex: '2132'}] ])   (数组多一个数组包裹)
 // "[{"name":"2132"},{"sex":"2132"}]"
+
+
+{
+    let obj: Object = {name: '1',sex: '男'}
+    let result: boolean = (Reflect as any).deleteProperty(obj,'name')
+    console.log(result)
+}
