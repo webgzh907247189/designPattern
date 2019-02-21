@@ -189,3 +189,20 @@
     (o as any).b = 10;
     console.log(o.a) // 5
 }
+
+
+
+
+
+
+/**
+ * 参数校验
+ */
+function one(arg: any = checkFn()): void{
+    console.log('传参了')
+}
+function checkFn(): void{
+    throw new Error('没有传参')
+}
+
+one('1')

@@ -304,3 +304,31 @@ getD()
 	}
 	boss2.returnThis() // boss2
 }
+
+
+
+
+/**
+ * 函数组合 
+ */
+{
+	function after(count,fn){
+		let obj = Object.create(null)
+		return function(key,data){
+			obj[key] = data
+
+			if(Object.keys(obj).length == count){
+				fn(obj)
+			}
+		}
+	}
+
+	function fn(r){
+		console.log('r',r)
+	}
+
+	let out = after(2,fn)
+
+	out('name','xxx')
+	out('sex','男')
+}
