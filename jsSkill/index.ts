@@ -684,7 +684,24 @@
 }
 
 
-
+/**
+ * JSON.stringify()
+ * 
+ * toJSON()
+ */
+{
+    var obj = {
+        name: '111',
+        sex: '22',
+        toJSON(){
+            return {
+                a: '1'
+            }
+        }
+    }
+    let r = JSON.stringify(obj)
+    console.log(r)
+}
 
 
 
