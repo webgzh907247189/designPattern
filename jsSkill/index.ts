@@ -630,6 +630,74 @@
 
 
 
+
+/**
+ * https://juejin.im/post/5c6e48865188250f1c358eab
+ * 
+ * 连等的思考
+ */
+{
+    let obj: object = {name: '1'}
+
+    let objNew = obj;
+    (obj as any).m = obj = {sex: '11'}
+    
+    console.log(obj,objNew)
+    // {sex: "11"}  {name: "1",m: {sex: "11"}}
+
+    objNew = {a: '222'}
+    console.log(obj,objNew)
+    // {a: "222"} {a: "222"}
+}
+
+
+
+/**
+ * this
+ */
+{
+    function testone(): Function{
+        console.log(this,'1') // {c: 1}
+        return function() {
+            console.log(this)
+        }
+    }
+    
+    var result = testone.call({c: 1})
+
+    result() // window
+    result.call({r: 1}) // {r: 1}
+}
+
+{
+    function testtwo(): Function{
+        console.log(this,'1') // {c: 1}
+        return () => {
+            console.log(this)
+        }
+    }
+    
+    var result = testtwo.call({c: 1})
+
+    result() // {c: 1}
+    result.call({r: 1}) // {c: 1}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // https://juejin.im/post/5c6247ebe51d45012c3cc6a7
 
 /**
