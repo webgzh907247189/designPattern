@@ -61,7 +61,8 @@
     "./index.ts",
     "./reflect.ts",
     "./testExport.ts",
-    "./testImport.ts"
+    "./testImport.ts",
+    "./function.ts"
   ],
   "exclude": [
     "node_modules",
