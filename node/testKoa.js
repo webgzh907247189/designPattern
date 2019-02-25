@@ -19,7 +19,10 @@ const app = new Koa();
 const router = new KoaRouter();
 router.use(views(__dirname + '/view'));
 
-
+/**
+ * { subdomainOffset: 2, proxy: false, env: 'development' } 
+ */
+console.log(app.inspect(),'11')
 
 /**
  * 执行这个,以后的路由访问  不会在被执行
