@@ -23,6 +23,19 @@
 }
 
 
+
+
+
+
+/*
+ * ctx.state 推荐的命名空间，用于通过中间件传递信息和你的前端视图。
+ * ctx.state.user = await User.find(id);
+ */
+
+
+
+
+
 const Koa = require('koa');
 const app = new Koa();
 
@@ -35,8 +48,15 @@ let mid1 = async (ctx,next) => {
         console.log('1111',d)
     })
 
+    /**
+     * response 直接被挂在到ctx上面，所以 可以直接ctx 访问 request 的属性
+     */
+    ctx.response.type = 'text/html';
+    // 设置response的内容:
+    // ctx.response.body = '<h1>Hello, koa2!</h1>';
     ctx.body = '检查应用是否存活';
-    console.log('执行中间件1执行完成')
+
+    console.log('执行中间件1执行完成',ctx.state)  // ctx的state 已经被挂载属性, 在此可以直接被访问
 }
 
 /**
@@ -57,6 +77,8 @@ app.use(mid1).use(async (ctx,next) => {
 
 app.use(async (ctx,next) => {
     console.log('test  before')
+    ctx.state.test = '我是第三个midddleware'
+
     await next()
     console.log('test  end')
 })
