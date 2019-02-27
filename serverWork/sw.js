@@ -5,6 +5,7 @@ let cacheFiles = [
   ]
   let __version__ = 'cache-v2'
   // 文件缓存
+
   self.addEventListener('install', e => {
     // 强制更新sw
     self.skipWaiting()
@@ -14,6 +15,8 @@ let cacheFiles = [
       })
     )
   })
+
+
   // 缓存更新
   self.addEventListener('activate', e => {
     e.waitUntil(
@@ -28,12 +31,15 @@ let cacheFiles = [
       })
     )
   })
+
+
   // 请求代理
   self.addEventListener('fetch', function (event) {
     console.log('Handling fetch event for', event.request.url)
     if (event.request.url.match('sockjs')) return
     event.respondWith(
       caches.match(event.request).then(function (response) {
+        console.log(response,'response11111111111111')
         if (response) {
           console.log('Found response in cache:', response)
   

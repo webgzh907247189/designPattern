@@ -18,6 +18,7 @@ if (navigator.serviceWorker) {
         console.log('当前状态为: activating', serviceWorker)
       }
       if (serviceWorker) {
+        
         serviceWorker.addEventListener('statechange', e => {
           console.log('当前状态变化为: ', e.target.state)
         })
