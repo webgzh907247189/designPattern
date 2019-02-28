@@ -16,7 +16,15 @@ const serve = require("koa-static");
 
 
 const app = new Koa();
-const router = new KoaRouter();
+
+/**
+ * koa-router 做了兼容处理 可以不 new 
+ */
+// const router = new KoaRouter();
+const router = KoaRouter();
+
+
+
 router.use(views(__dirname + '/view'));
 
 /**
