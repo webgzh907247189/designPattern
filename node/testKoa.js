@@ -1,5 +1,7 @@
 /**
  * http://leeight.github.io/blog/2014/06/v8-full-codegen/   node 基础 (编译器)
+ * 
+ * https://segmentfault.com/a/1190000007468233   koa-router 源码解析
  */
 
 const http = require('http');
@@ -41,6 +43,9 @@ console.log(app.inspect(),'11')
 
 
 
+
+
+
 // router.get('/', (ctx) => {
 // 	console.log('11111111')
 // 	ctx.body = '检查应用是否存活';
@@ -49,6 +54,17 @@ router.get('/',  function *(ctx){
 	console.log('11111111')
 	yield ctx.render('test.html')
 })
+router.register('/f', ['get'], [function(ctx, next){
+	console.log('register')
+	ctx.body = '路由使用register方法';
+}])
+router.register('/ff', ['get'], function(ctx, next){
+	console.log('register222222222')
+	ctx.body = '路由使用register方法2222222';
+})
+
+
+
 
 
 // router.get('/a',(req,res,next)=>{
