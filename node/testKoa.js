@@ -12,7 +12,6 @@ const ejs = require('ejs');
 const serve = require("koa-static");
 
 
-//  koa redirect之后,下面的代码还会走吗
 //  / 路径下 render不对
 //  https://www.chrisyue.com/please-dont-put-script-tag-at-the-end-of-body.html
 
@@ -46,14 +45,17 @@ console.log(app.inspect(),'11')
 
 
 
-// router.get('/', (ctx) => {
+// 最新的 koa-router 不支持 generate 写法
+// router.get('/',  function *(ctx,next){
 // 	console.log('11111111')
-// 	ctx.body = '检查应用是否存活';
+// 	yield ctx.render('test.html')
 // })
-router.get('/',  function *(ctx){
+
+router.get('/',  async(ctx) => {
 	console.log('11111111')
-	yield ctx.render('test.html')
+	await ctx.render('test.html')
 })
+
 router.register('/f', ['get'], [function(ctx, next){
 	console.log('register')
 	ctx.body = '路由使用register方法';
@@ -64,15 +66,6 @@ router.register('/ff', ['get'], function(ctx, next){
 })
 
 
-
-
-
-// router.get('/a',(req,res,next)=>{
-// 	console.log('start')
-// 	next()
-// 	res.redirect('/b');
-// 	console.log('end')
-// })
 
 router.get('/c', async (ctx)=> {
 	console.log('222222')	
