@@ -1,6 +1,7 @@
 /**
  * http://leeight.github.io/blog/2014/06/v8-full-codegen/   node 基础 (编译器)
  * 
+ * http://www.php.cn/js-tutorial-407895.html     koa-router 源码解析 (未读完)
  * https://segmentfault.com/a/1190000007468233   koa-router 源码解析
  */
 
@@ -20,9 +21,16 @@ const app = new Koa();
 
 /**
  * koa-router 做了兼容处理 可以不 new 
+ * 
+ * 在koa-router实例化的时候，是可以传递一个配置项参数作为初始化的配置信息的
+ * 如果prefix以/结尾，则路由的注册就可以省去前缀的/了，不然会出现/重复的情况
+ * 
+ * 直接访问 / 没有(找不到) -> 默认返回 index.html  ?
+ * 
+ * sensitive   是否严格匹配大小写  ->  在Router({sensitive})  配置
  */
 // const router = new KoaRouter();
-const router = KoaRouter();
+const router = KoaRouter({prefix: '/test'});
 
 
 
@@ -53,7 +61,7 @@ console.log(app.inspect(),'11')
 
 router.get('/',  async(ctx) => {
 	console.log('11111111')
-	await ctx.render('test.html')
+	await ctx.render('test1.html')
 })
 
 router.register('/f', ['get'], [function(ctx, next){

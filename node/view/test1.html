@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>redirect test</title>
+
+	<!-- https情况下设置这个，为了 DNS prefetching  (DNS的预解析) -->
+	<meta http-equiv="x-dns-prefetch-control" content="on">
+	 <!-- DNS的预解析 -->
+	<link rel="dns-prefetch" href="//example.com">
+
+
+	<!-- 资源预拉取”的性能优化的技术
+	一共有两部分：一部分是资源的预取；还有一部分是DNS的预解析 -->
+	
+	<!-- 以前这种实践也被称为“prebrowsing”，但这并不是一种单一的技术，实际上可以拆分成很多小点：dns-prefetch, preconnect, prefetch, subresource, prerender等等。 -->
+    <!-- 而“DNS prefetching”就是DNS的预解析的一小部分。 -->
+</head>
+<body>
+	<div>
+		我是test1.html
+	</div>
+</body>
+</html>
