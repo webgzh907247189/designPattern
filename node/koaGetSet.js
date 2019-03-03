@@ -77,7 +77,7 @@ petShop.bar();
  */
 {
     function access (proto, target) {
-        Object.keys(target).forEach((item)=>{
+        Object.getOwnPropertyNames(target).forEach((item)=>{
             Object.defineProperty(proto, item, {
                 get () {
                     return target[item]
