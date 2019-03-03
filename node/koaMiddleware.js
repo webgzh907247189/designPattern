@@ -24,12 +24,20 @@
 
 
 
-
+// https://juejin.im/post/5c1631eff265da615f772b59    koa 与 express 的中间件区别 
 
 
 /*
  * ctx.state 推荐的命名空间，用于通过中间件传递信息和你的前端视图。
- * ctx.state.user = await User.find(id);
+ * ctx.state.user = await User.find(id);  用 state 来记录信息
+ * 
+ * 
+ * Koa这样处理error，在catch方法中发送error事件(ctx 的 onerror emit 错误 -> this.app.emit('error', err, this))，以便开发者自定义异常处理逻辑。
+ * 在 application.js 的 handleRequest() catch 错误，且调用ctx的 onerror方法
+ * 
+ * 
+ * Koa中res.end由中间件执行完成之后自动调用，这样避免在connect忘记调用res.end导致用户得不到任何反馈。 
+ * (handleRequest -> fnMiddleware(ctx).then(handleResponse).catch(onerror) -> handleResponse -> respond(ctx))
  */
 
 
