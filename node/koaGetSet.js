@@ -47,9 +47,53 @@ petShop.bar();
 // 'bar!'
 
 
+/**
+ * delegates 原理
+ */
+{
+    let obj = {}
+    let objTest = {name: '11',sex: '22'}
+    function proxy(obj,objTest){
+        Object.keys(objTest).forEach((key)=>{
+            obj.__defineGetter__(key, function(){
+                return objTest[key];
+            });
+        })
+    }
+    proxy(obj,objTest)
+    // obj.name -> 11    obj.sex -> 22
+}
 
 
 
+
+
+
+
+
+
+/**
+ * 使用 Object.defineProperty 实现属性的代理
+ */
+{
+    function access (proto, target) {
+        Object.keys(target).forEach((item)=>{
+            Object.defineProperty(proto, item, {
+                get () {
+                    return target[item]
+                },
+                set (value) {
+                    target[item] = value
+                }
+            })
+        })
+    }
+
+    var obj = {}
+    var objTest = {name: '11',sex: '22'}
+    access(obj, objTest)
+    // obj.name -> 11    obj.sex -> 22
+}
 
 
 
