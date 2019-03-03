@@ -37,6 +37,16 @@ let util = require('./util')
 
 
 
+/**
+ * https://juejin.im/post/5c1631eff265da615f772b59 express 与 koa 的异同点
+ * connect中间件设计的核心要点
+ * 
+ * 通过use方法注册中间件；
+ * 中间件的顺序执行是通过next方法衔接的并且需要手动调用，在next中会进行路由匹配，从而过滤掉部分中间件；
+ * 当中间件的执行过程中发生异常，则next会携带异常过滤掉非错误处理中间件，也是为什么错误中间件会比其他中间件多一个error参数；
+ * 在请求处理的周期中，需要手动调用res.end()来结束响应；
+ */
+
 let express = require('express')
 let path = require('path')
 let bodyParser = require('body-parser')
