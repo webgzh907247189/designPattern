@@ -245,8 +245,26 @@
 }
 
 
+
+{
+	// 效率更高的从数组中去除一个元素 (同位赋值 替换)
+	function spliceOne(list, index) {
+		for (; index + 1 < list.length; index++){
+			list[index] = list[index + 1];
+		}
+		list.pop();
+	}
+		
+	let arr = [1,4,5,'z','f',{name:'zz'}]
+	spliceOne(arr,1)
+}
+
+
+
 /**
  * https://www.cnblogs.com/tugenhua0707/p/4687947.html
  * 
  * https://juejin.im/post/5b125ad3e51d450688133f22  (node的events模块)
+ * 
+ * https://juejin.im/post/5c55512af265da2deb6a7dc8  (NodeJS Events模块源码学习)
  */
