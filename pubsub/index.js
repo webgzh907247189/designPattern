@@ -158,9 +158,18 @@
 				return
 			}
 
-			for(let itemFn of listFns){
+			let resultList = this.arrayClone(listFns,listFns.length)
+			for(let itemFn of resultList){
 				itemFn.apply(this,args)
 			}
+		},
+
+		arrayClone(arr, i) {
+			let copy = new Array(i);
+			while (i--){
+			  copy[i] = arr[i];
+			}
+			return copy;
 		},
 
 		// 监听一次
