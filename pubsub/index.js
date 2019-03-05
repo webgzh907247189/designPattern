@@ -240,6 +240,7 @@
 	/**
 	 *	今晚的晚餐是全家
 	 * 	我只会监听一次...  参数是全家 {list: Array(0), listener: ƒ, trigger: ƒ, once: ƒ, removeListener: ƒ}
+	 *  once测试
 	 *  晚上喝的是椰子水
 	 */
 }
@@ -260,6 +261,120 @@
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * 单次监听器 的 另一种 实现方式
+ */
+{
+	let obj = {
+	   	list: [],
+
+	   	// 订阅
+	   	listener: function (key,fn) {
+			this.list[key] = [...(this.list[key] || []),fn]
+	   	},
+
+	   	//发布
+	   	trigger: function(){
+			let [key,...args] = [...arguments]
+
+		   	let listFns = this.list[key]
+		   	if(listFns.length == 0 || !listFns){
+			   return
+		   	}
+
+		   	for(let itemFn of listFns){
+				itemFn.apply(this,args)
+		   	}
+	   	},
+
+	   	// 监听一次
+	   	once: function(key,fn){
+			this.listener(key, _onceWrap(this, key, fn))
+
+			function _onceWrap(target, type, listener) {
+				// 拓展this  ->   { fired: 标识位，是否应当移除此监听器,  wrapFn: 包装后的函数，用于移除监听器 }
+
+				let state = { fired: false, wrapFn: undefined, target, type, listener };
+				let wrapped = onceWrapper.bind(state);
+
+				// 真正的监听器
+				wrapped.listener = listener;
+				state.wrapFn = wrapped;
+				// 返回包装后的函数
+				return wrapped;
+			}
+
+			function onceWrapper(...args) {
+				if (!this.fired) {
+					// 监听器会先被移除，然后再调用
+					this.target.removeListener(this.type, this.wrapFn);
+					this.fired = true;
+					Reflect.apply(this.listener, this.target, args);
+				}
+		    }
+	   	},
+
+	   	//取消订阅
+	  	removeListener: function(){
+			let [key,fn] = Array.from(arguments)
+		   	let fns = this.list[key]
+
+		   	if(!fns){
+				return;
+		   	}
+		   
+		   	if(!fn){
+				fns.length = 0
+		   	}else{
+				this.list[key] = fns.filter(itemFn => fn !== itemFn && fn !== itemFn.listen)
+		   	}
+	   	}
+   	}
+
+   	function fn1(food){
+		console.log(`晚上吃的是${food}`)
+   	}
+
+    function fn3(food){
+	    console.log(`我只会监听一次... 参数是${food}`,this)
+    }
+
+    function fn4(food){
+	    console.log(`once测试`,)
+    }
+
+    obj.listener('eat',fn1)
+    obj.listener('eat',(foods)=>{
+	    console.log(`今晚的晚餐是${foods}`)
+    })
+
+    obj.once('eat',fn3)
+    obj.once('eat',fn4)
+
+    obj.removeListener('eat',fn1)
+    obj.trigger('eat','全家')
+
+
+   /**
+	*	今晚的晚餐是全家
+	* 	我只会监听一次...  参数是全家 {list: Array(0), listener: ƒ, trigger: ƒ, once: ƒ, removeListener: ƒ}
+	*  晚上喝的是椰子水
+	*/
+}
 
 /**
  * https://www.cnblogs.com/tugenhua0707/p/4687947.html
