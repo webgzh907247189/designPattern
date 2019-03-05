@@ -377,6 +377,8 @@
 }
 
 /**
+ * https://cnodejs.org/topic/571e0c445a26c4a841ecbcf1  (通过源码解析 Node.js 中 events 模块里的优化小细节)
+ * 
  * https://www.cnblogs.com/tugenhua0707/p/4687947.html
  * 
  * https://juejin.im/post/5b125ad3e51d450688133f22  (node的events模块)
