@@ -1,5 +1,8 @@
-import { Controller, Get, Res, Req, Param, All, HttpCode, Header, Query, Body, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Res, Req, Param, All, HttpCode, Header, Query, Body, HttpStatus, Post } from '@nestjs/common';
 import { AppService } from './app.service';
+
+import {CreateCatDto} from './interface/app.interface'
+console.log(CreateCatDto,'zzz')
 
 /**
  * 控制器的目的是接收应用的特定请求。路由机制控制哪个控制器接收哪些请求。通常，每个控制器有多个路由，不同的路由可以执行不同的操作。
@@ -29,7 +32,10 @@ export class AppController {
   // 要指定自定义响应头，可以使用 @header() 修饰器或类库特有的响应对象
   // @Header('Cache-Control', 'none')
   getJsonC(@Res() res): void {
-    res.status(HttpStatus.CREATED).json({name: `res 测试`});
+
+    // 添加 http header
+    // res.status(HttpStatus.CREATED).json({name: `res 测试`});
+    res.json({name: `res 测试`});
   }
 
 
@@ -73,6 +79,17 @@ export class AppController {
 
 
   // 请求负载
+  /**
+   * 我们需要确定 DTO (数据传输对象) 架构。DTO 是一个定义如何通过网络发送数据的对象
+   * 可以使用 TypeScript 接口或简单的类来完成。建议在这里使用类
+   * 
+   * 这些类是 JavaScript ES6 标准的一部分, 所以它们只是简单的函数另一方面,
+   * TypeScript 接口在编译过程中被删除, Nest 不能引用它们
+   * 这一点很重要, 因为管道等特性能够在访问变量的元类型时提供更多的可能性
+   */
 
-
+  @Post()
+  async create(@Body() createCatDto: CreateCatDto) {
+    return 'This action adds a new cat';
+  }
 }
