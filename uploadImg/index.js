@@ -60,3 +60,40 @@ let composeResultQrCode = composeFn(getDownImg,getBlob,dataURLtoBlob)
 	    }
 	})
 }
+
+
+
+
+
+/**
+ * compose 传递参数的问题
+ */
+{
+    function composeFn(...args){
+        return args.reverse().reduce((result,fn)=>{
+            return (...relayArgs)=>{
+                return fn.call(null,result.apply(null,relayArgs))
+            }
+        },args.shift())
+    }
+    
+    function a(){
+      return '1111'
+    }
+
+    function b(str){
+      return `${str}zzzzz${str}`
+    }
+    
+    function c(fn,obj){
+        return function(){
+            let r = fn(...arguments)
+            
+            return 'ssssssss' + r + 'obj.name' + obj.name
+        }
+    }
+    
+    var d = c(b,{name: 'xxx'})
+    var result =  composeFn(d,a)
+    result()
+}
