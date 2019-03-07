@@ -1,8 +1,9 @@
 import { Controller, Get, Res, Req, Param, All, HttpCode, Header, Query, Body, HttpStatus, Post } from '@nestjs/common';
 import { AppService } from './app.service';
+import { Observable,of } from 'rxjs';
 
-import {CreateCatDto} from './interface/app.interface'
-console.log(CreateCatDto,'zzz')
+// import {CreateCatDto} from './interface/app.interface'
+// console.log(CreateCatDto,'zzz')
 
 /**
  * 控制器的目的是接收应用的特定请求。路由机制控制哪个控制器接收哪些请求。通常，每个控制器有多个路由，不同的路由可以执行不同的操作。
@@ -30,11 +31,16 @@ export class AppController {
 
   @Get('c')
   // 要指定自定义响应头，可以使用 @header() 修饰器或类库特有的响应对象
+  // 对于自定义 的 response 需要注意  @Header 的使用
   // @Header('Cache-Control', 'none')
+  
   getJsonC(@Res() res): void {
 
     // 添加 http header
     // res.status(HttpStatus.CREATED).json({name: `res 测试`});
+
+    // 自定义的 response 需要这样处理
+    res.setHeader('Cache-Control', 'noneTest')
     res.json({name: `res 测试`});
   }
 
@@ -53,15 +59,6 @@ export class AppController {
     console.log(query,'query')
     return {name: 'testC'};
   }
-
-  
-  @Get(':id')
-  findOne(@Param() params) {
-  
-  //为了获取特定的参数，只需在括号中传入其参数名
-  // findOne(@Param('id') id) {
-    return `路由参数 -> ${params.id}`;
-  }
   
 
   // 每个异步函数都必须返回 Promise。这意味着您可以返回延迟值, 而 Nest 将自行解析它。
@@ -72,10 +69,11 @@ export class AppController {
   
 
   // 此外, Nest 路由处理程序更强大。它可以返回一个 Rxjs observable 流，Nest 将自动订阅下面的源并获取最后发出的值（在流完成后）
-  // @Get('findAllObservable')
-  // findObservable(): Observable<any[]> {
-  //   return of([]);
-  // }
+  @Get('findAllObservable')
+  @Header('Cache-Control', 'none')
+  findObservable(): Observable<any[]> {
+    return of(['rx','Observable']);
+  }
 
 
   // 请求负载
@@ -88,8 +86,18 @@ export class AppController {
    * 这一点很重要, 因为管道等特性能够在访问变量的元类型时提供更多的可能性
    */
 
-  @Post()
-  async create(@Body() createCatDto: CreateCatDto) {
-    return 'This action adds a new cat';
+  // @Post()
+  // async create(@Body() createCatDto: CreateCatDto) {
+  //   return 'This action adds a new cat';
+  // }
+
+  
+
+  @Get(':id')
+  findOne(@Param() params) {
+  
+  //为了获取特定的参数，只需在括号中传入其参数名
+  // findOne(@Param('id') id) {
+    return `路由参数 -> ${params.id}`;
   }
 }
