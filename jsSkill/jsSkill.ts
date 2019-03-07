@@ -33,3 +33,12 @@ import "reflect-metadata";
     console.log(val1 === val2, val1, val3)
     // true  "aa"  "aa"  "aa"
 }
+
+
+
+
+
+/**
+ * Reflect 和 Proxy
+ * https://juejin.im/post/5c7e6857e51d4542194f8c6f
+ */
