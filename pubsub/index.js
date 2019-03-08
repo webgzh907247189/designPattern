@@ -265,10 +265,15 @@
 		list.pop();
 	}
 		
-	let arr = [1,4,5,'z','f',{name:'zz'}]
+	let arr = [1,4,5,'z','f',{name: 'zz'}]
 	spliceOne(arr,1)
 }
-
+{
+	let arr = [1,4,5,'z','f',{name: 'zz'}]
+	let popItem = arr.copyWithin(1,2).pop()
+	console.log(arr,'result',popItem)
+	// [1, 5, "z", "f", {name: 'zzz'}]         "result"       {name: "zz"}
+}
 
 
 
