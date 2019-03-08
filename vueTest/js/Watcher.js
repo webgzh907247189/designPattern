@@ -79,6 +79,15 @@ class Watcher {
 
     update () {
         console.log('watch' + this.id + ' update');
+
+        // 1. 判断 has {}  是否 包含这个 watch.id
+        // 2. 把 watch push 进 queue 数组
+        // 3. nextTick(flushSchedulerQueue)  进行 批量 更新
+
+        // 4. nextTick(cb)  ->  callbacks.push(cb) ->  setTimeout(flushCallbacks, 0)
+        // 5. flushCallbacks()  ->  深拷贝 callbacks[]  得到 copies  ->  copies[i]()  (cb 开始执行) 
+
+        // 6. flushSchedulerQueue   循环 queue 队列 -> 找到每个 watch  ->  找到 watch.id  ->  清空  has[id] = null  ->  执行 watch.run()
         queueWatcher(this);
     }
 
@@ -95,6 +104,8 @@ class Watcher {
         }
     }
 }
+
+
 
 let callbacks = [];  // 存放 批量 更新函数  flushSchedulerQueue
 let pending = false;
@@ -125,9 +136,28 @@ function flushCallbacks () {
     }
 }
 
+
+
+
+
+
 let has = {};    // 标识这个 watch 有没有被 queue push 进去
 let queue = [];  // 存放 watch 的数组
 let waiting = false;
+
+function queueWatcher(watcher) {
+    const id = watcher.id;
+    if (has[id] == null) {
+        has[id] = true;
+        queue.push(watcher);
+
+        if (!waiting) {
+            waiting = true;
+            // nextTick是Vue实现的微任务机制（在不支持微任务的情况下，回退到宏任务）,flushSchedulerQueue 则是用来执行queue中的观察者,并清空queue
+            nextTick(flushSchedulerQueue); 
+        }
+    }
+}
 
 function flushSchedulerQueue () {
     let watcher, id;
@@ -142,22 +172,6 @@ function flushSchedulerQueue () {
 
     waiting = false;
 }
-
-function queueWatcher(watcher) {
-    const id = watcher.id;
-    if (has[id] == null) {
-        has[id] = true;
-        queue.push(watcher);
-
-        if (!waiting) {
-            waiting = true;
-            // nextTick是Vue实现的微任务机制（在不支持微任务的情况下，回退到宏任务）,flushSchedulerQueue 则是用来执行queue中的观察者,并清空queue：
-            nextTick(flushSchedulerQueue); 
-        }
-    }
-}
-
-
 
 
 /**
