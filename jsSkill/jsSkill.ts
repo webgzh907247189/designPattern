@@ -41,7 +41,6 @@ import "reflect-metadata";
 /**
  * Reflect 和 Proxy
  * https://juejin.im/post/5c7e6857e51d4542194f8c6f
- * https://juejin.im/post/5c204ce36fb9a049d975363d
  */
 {
     function A(name){
@@ -52,4 +51,63 @@ import "reflect-metadata";
     let b = Reflect.construct(A,['zzz'])
     console.log(a,b)
     // {name: "test"} , {name: "zzz"}
+}
+
+
+
+// Proxy
+{
+    // apply方法拦截函数的调用、call和apply操作。
+    var target = function () { return 'I am the target'; };
+    var handler = {
+    apply: function () {
+        return 'I am the proxy';
+    }
+    };
+
+    var p = new Proxy(target, handler);
+
+    p()
+    // "I am the proxy"
+}
+
+
+
+
+{
+    // defineProperty方法拦截了Object.defineProperty操作。
+    var handler1 = {
+        defineProperty (target, key, descriptor) {
+          return false;
+        }
+    };
+    var target1: Object = {};
+    var proxy = new Proxy(target1, handler1);
+    proxy.foo = 'bar' // 不会生效
+    // defineProperty 方法返回 false，导致添加新属性总是无效。
+      
+}
+
+// this指向
+{
+    const target = new Date();
+    const handler = {};
+    const proxy = new Proxy(target, handler);
+
+    proxy.getDate();  // error
+}
+
+{
+    const target = new Date('2015-01-01');
+    const handler = {
+    get(target, prop) {
+        if (prop === 'getDate') {
+        return target.getDate.bind(target);
+        }
+        return Reflect.get(target, prop);
+    }
+    };
+    const proxy = new Proxy(target, handler);
+
+    proxy.getDate() // 1
 }
