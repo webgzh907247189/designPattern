@@ -43,3 +43,13 @@ import "reflect-metadata";
  * https://juejin.im/post/5c7e6857e51d4542194f8c6f
  * https://juejin.im/post/5c204ce36fb9a049d975363d
  */
+{
+    function A(name){
+        this.name = name
+    }
+
+    let a = new A('test')
+    let b = Reflect.construct(A,['zzz'])
+    console.log(a,b)
+    // {name: "test"} , {name: "zzz"}
+}
