@@ -96,7 +96,7 @@ class Watcher {
     }
 }
 
-let callbacks = [];
+let callbacks = [];  // 存放 批量 更新函数  flushSchedulerQueue
 let pending = false;
 
 function nextTick (cb) {
@@ -114,16 +114,19 @@ function nextTick (cb) {
 function flushCallbacks () {
     console.log(queue,'queue333')
     pending = false;
+
+    // 复制 callbacks(存放 批量 更新函数  flushSchedulerQueue)   数组
     const copies = callbacks.slice(0);
     callbacks.length = 0;
+
     for (let i = 0; i < copies.length; i++) {
         console.log(i,'flushCallbacks 的 i')
         copies[i]();
     }
 }
 
-let has = {};
-let queue = [];
+let has = {};    // 标识这个 watch 有没有被 queue push 进去
+let queue = [];  // 存放 watch 的数组
 let waiting = false;
 
 function flushSchedulerQueue () {
@@ -148,7 +151,17 @@ function queueWatcher(watcher) {
 
         if (!waiting) {
             waiting = true;
-            nextTick(flushSchedulerQueue);
+            // nextTick是Vue实现的微任务机制（在不支持微任务的情况下，回退到宏任务）,flushSchedulerQueue 则是用来执行queue中的观察者,并清空queue：
+            nextTick(flushSchedulerQueue); 
         }
     }
 }
+
+
+
+
+/**
+ * https://juejin.im/post/5c204ce36fb9a049d975363d
+ * 
+ * vue 解析
+ */
