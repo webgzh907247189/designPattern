@@ -134,10 +134,25 @@
         ctx.fn = this
         let args = [...arguments][1]
 
+        // undefind  就 直接运行  ->  此处应该写冗余了
         if(!args){
             return ctx.fn()
         }
         let result = ctx.fn(args)
+        Reflect.deleteProperty(ctx,'fn')
+        return result
+    }
+}
+
+// 使用 Symbol 实现 唯一的 key, 防止 ctx也出现fn这个key
+{
+    Function.prototype.myApply = function(ctx){
+        ctx = ctx ? Object(ctx) : window
+
+        const fn = Symbol('fn')
+        ctx[fn] = this
+        let args = [...arguments].slice(1)
+        let result = ctx[fn](args)
         Reflect.deleteProperty(ctx,'fn')
         return result
     }
