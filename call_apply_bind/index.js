@@ -80,6 +80,17 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 /**
  * call原理
  * 
@@ -92,6 +103,20 @@
         ctx.fn = this
         let args = [...arguments].slice(1)
         let result = ctx.fn(args)
+        Reflect.deleteProperty(ctx,'fn')
+        return result
+    }
+}
+
+// 使用 Symbol 实现 唯一的 key, 防止 ctx也出现fn这个key
+{
+    Function.prototype.myCall = function(ctx){
+        ctx = ctx ? Object(ctx) : window
+
+        const fn = Symbol('fn')
+        ctx[fn] = this
+        let args = [...arguments].slice(1)
+        let result = ctx[fn](args)
         Reflect.deleteProperty(ctx,'fn')
         return result
     }
