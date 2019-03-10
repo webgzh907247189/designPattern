@@ -234,3 +234,52 @@
     var result = fn.myBind(obj)
     result() // {name: "joker"}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * https://juejin.im/post/5c7e9ff35188251b94065adf
+ * 
+ * WeakMap
+ * 
+ * WeakSet对象允许你将弱保持对象存储在一个集合中   它和Map类似，但有两点不同：
+ * 1. WeakSet对象中只能存放对象引用, 不能存放值, 而Set对象都可以。
+ * 2. WeakSet对象中存储的对象值都是被弱引用的, 如果没有其他的变量或属性引用这个对象值, 则这个对象值会被当成垃圾回收掉.
+ *  正因为这样, WeakSet对象是无法被枚举的, 没有办法拿到它包含的所有元素.
+ */
+{
+    let myElement = document.getElementById('logo');
+    let myWeakmap = new WeakMap();
+
+    myWeakmap.set(myElement, {timesClicked: 0});
+
+    myElement.addEventListener('click', function() {
+    let logoData = myWeakmap.get(myElement);
+    logoData.timesClicked++;
+    }, false);
+}
