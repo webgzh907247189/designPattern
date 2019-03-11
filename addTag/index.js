@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 let shell = require('shelljs');
 
 /**
