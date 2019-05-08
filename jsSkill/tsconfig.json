@@ -63,7 +63,8 @@
     "./testExport.ts",
     "./testImport.ts",
     "./function.ts",
-    "./jsSkill.ts"
+    "./jsSkill.ts",
+    "./test.ts"
   ],
   "exclude": [
     "node_modules",
