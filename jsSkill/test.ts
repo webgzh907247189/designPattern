@@ -13,7 +13,7 @@ let t = new Test('name')
 
 
 class Test1{
-    constructor(public name: string){
+    constructor(private name: string){
     }
 
     eat(){
