@@ -7,26 +7,28 @@
 <div id="log"></div>
 <input type="text" name="" id="txt">
 <button id="get">get</button>
-<button id="set">set</button>
+<!-- <button id="set">set</button> -->
 <script>
   var worker = new SharedWorker('./shared.js');
   var get = document.getElementById('get');
-  var set = document.getElementById('set');
-  var txt = document.getElementById('txt');
-  var log = document.getElementById('log');
+//   var set = document.getElementById('set');
+//   var txt = document.getElementById('txt');
+//   var log = document.getElementById('log');
 
   worker.port.addEventListener('message', function(e) {
     log.innerText = e.data;
   }, false);
   worker.port.start(); // note: need this when using addEventListener
 
-  set.addEventListener('click',function(e){
-      worker.port.postMessage(txt.value);
-  },false);
+//   set.addEventListener('click',function(e){
+//       worker.port.postMessage(txt.value);
+//   },false);
 
-  get.addEventListener('click',function(e){
-      worker.port.postMessage('get');
-  },false);
+//   get.addEventListener('click',function(e){
+    setInterval(()=>{
+        worker.port.postMessage('get');
+    },1000)
+//   },false);
 </script>
 </body>
 </html>

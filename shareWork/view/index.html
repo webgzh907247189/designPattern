@@ -6,14 +6,14 @@
 <body>
 <div id="log"></div>
 <input type="text" name="" id="txt">
-<button id="get">get</button>
+<!-- <button id="get">get</button> -->
 <button id="set">set</button>
 <script>
   var worker = new SharedWorker('./shared.js');
-  var get = document.getElementById('get');
+//   var get = document.getElementById('get');
   var set = document.getElementById('set');
-  var txt = document.getElementById('txt');
-  var log = document.getElementById('log');
+//   var txt = document.getElementById('txt');
+//   var log = document.getElementById('log');
 
   worker.port.addEventListener('message', function(e) {
     log.innerText = e.data;
@@ -24,9 +24,9 @@
       worker.port.postMessage(txt.value);
   },false);
 
-  get.addEventListener('click',function(e){
-      worker.port.postMessage('get');
-  },false);
+//   get.addEventListener('click',function(e){
+//       worker.port.postMessage('get');
+//   },false);
 </script>
 </body>
 </html>
