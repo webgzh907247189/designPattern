@@ -1,2 +1,4 @@
 
-mediatorModel/node_modules/.bin/babylon.cmd
+mediatorModel
+/node_modules/
+.bin/babylon.cmd

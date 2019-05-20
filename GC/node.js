@@ -34,6 +34,7 @@ global.gc();
 let count = 0
 let time = setInterval(function() {
 	count++
+	console.log(temp,'!!!',Array.isArray(temp))
   	temp.push(test()); //把函数保存起来，里面的函数 里面的eval 随时可能用到 a ，所以不敢回收
   	//test()();// 会被回收
   	global.gc();
@@ -55,8 +56,12 @@ let time2 = setInterval(()=>{
 
 setInterval(()=>{
 	clearInterval(time2)
-	temp = null
+	// temp = null
 	global.gc();
 	mem = process.memoryUsage(); // 重新获取内存使用情况 对象
 	console.log('即将关闭111111 -》 运行代码后-已使用堆大小 heapUsed：' + format(mem.heapUsed));
-},60000)
+
+	let obj = {}
+	let weakmap = new WeakMap()
+	weakmap.set(obj,'11')
+},6000)

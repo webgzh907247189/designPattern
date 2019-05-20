@@ -11,38 +11,48 @@ function composeFn(...args){
 
 
 
+/**
+ * https://www.kancloud.cn/xiaoxiaoqc/web/188133
+ */
 function getDataURL(canvas){
-  return canvas.toDataURL()
+    return canvas.toDataURL()
 }
 
 function dataURLtoBlob(dataurl) {
-  let [type,content] = dataurl.split(',')
-  let mime = type.match(/:(.*?);/)[1]
+    let [type,content] = dataurl.split(',')
+    let mime = type.match(/:(.*?);/)[1]
 
-  let bstr = atob(content)
-  let length = bstr.length
-  let u8arr = new Uint8Array(length)
-  while (length--) {
-      u8arr[length] = bstr.charCodeAt(length);
-  }
-  return new Blob([u8arr], { type: mime });
+    let bstr = atob(content)
+    let length = bstr.length
+    let u8arr = new Uint8Array(length)
+    while (length--) {
+        u8arr[length] = bstr.charCodeAt(length);
+    }
+    return new Blob([u8arr], { type: mime });
 }
 
 function getBlob(blob){
-  return window.URL.createObjectURL(blob)
+    return window.URL.createObjectURL(blob)
+}
+ 
+function getDownImg(url,name= 'code.jpeg'){
+    let link = document.createElement("a");
+    link.style.display = "none";
+    link.href = url;
+    link.setAttribute('download',name);
+    document.body.appendChild(link);
+    link.click();
 }
 
-function getDownImg(url){
-  let link = document.createElement("a");
-  link.style.display = "none";
-  link.href = url;
-  link.setAttribute('download','code.jpeg');
-  document.body.appendChild(link);
-  link.click();
+function getResultDownImg(name){
+    return function(url){
+        getDownImg(url,name)
+    }
 }
+let resultImg = getResultDownImg('下载图片')
 
-let composeResult = composeFn(getDownImg,getBlob,dataURLtoBlob,getDataURL)
-let composeResultQrCode = composeFn(getDownImg,getBlob,dataURLtoBlob)
+let composeResult = composeFn(resultImg,getBlob,dataURLtoBlob,getDataURL)
+let composeResultQrCode = composeFn(resultImg,getBlob,dataURLtoBlob)
 
 
 {	
