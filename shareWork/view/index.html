@@ -15,10 +15,10 @@
 //   var txt = document.getElementById('txt');
 //   var log = document.getElementById('log');
 
-  worker.port.addEventListener('message', function(e) {
-    log.innerText = e.data;
-  }, false);
-  worker.port.start(); // note: need this when using addEventListener
+//   worker.port.addEventListener('message', function(e) {
+//     log.innerText = e.data;
+//   }, false);
+//   worker.port.start(); // note: need this when using addEventListener
 
   set.addEventListener('click',function(e){
       worker.port.postMessage(txt.value);
