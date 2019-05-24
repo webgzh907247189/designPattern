@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "startkoa": "nodemon ./testKoa.js",
-    "testmiddleware": "node ./koaMiddleware.js"
+    "testmiddleware": "node ./koaMiddleware.js",
+    "excel": "nodemon ./excel.js"
   },
   "author": "",
   "license": "ISC",
@@ -23,6 +24,8 @@
     "request": "^2.88.0"
   },
   "devDependencies": {
+    "excel-parser": "^0.2.2",
+    "node-xlsx": "^0.15.0",
     "nodemon": "^1.17.5"
   }
 }
