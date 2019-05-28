@@ -29,22 +29,6 @@ list.forEach((item)=>{
     }
 })
 
-// let f = sheetData.reduce((resultConcat,item)=>{
-//     resultConcat = resultConcat.concat(item)
-
-//     // let flag = result.find( key => item === key)
-//     // if(flag){
-//     //     result.push('')
-//     // }else{
-//     //     result.push(item)
-//     // }
-
-//     return resultConcat
-// },[])
-// console.log(f.length)
-
-
-
 
 let len = result.length
 let lineNum = len % sheetDataLength  === 0 ? len / sheetDataLength : Math.floor( (len / sheetDataLength) + 1 );
