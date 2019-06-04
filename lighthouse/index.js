@@ -6,5 +6,11 @@
  * 掘金小册 (前端性能优化原理与实践)
  */
 
-npm install -g lighthouse
-lighthouse https://juejin.im/books --view
+// npm install -g lighthouse
+// lighthouse https://juejin.im/books --view
+
+
+let fs = require('fs')
+fs.readdir('./',function(err,files){
+    console.log(files)
+})
