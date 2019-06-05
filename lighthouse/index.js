@@ -25,6 +25,9 @@
 浏览器的GPU加速功能是将需要进行动画的元素提升到一个独立的层，这样就可以避免浏览器进行重新布局和绘制，所以能大大提高网页的性能。
 
 
+
+
+
 {
     npm install的时候首先会下载对应资源包的压缩包放在用户目录下的.npm文件夹下，然后解压到项目的node_modules中，并且提取依赖包中指定的bin文件，在linux下会创建一条软连接，
     所以在linux下我们真正执行的是.bin文件夹下文件指向的文件
@@ -33,9 +36,10 @@
 
 
 
-
+// https://juejin.im/post/5c6a732151882528735f2d33
+// https://juejin.im/post/5c337ae06fb9a049bc4cd218
 {
-    浏览器与Node的事件循环(Event Loop)区别  -> // https://juejin.im/post/5c337ae06fb9a049bc4cd218
+    浏览器与Node的事件循环(Event Loop)区别
     一个浏览器通常由以下常驻线程组成：
         GUI 渲染线程  (，解析HTML、CSS，构建DOM树，布局和绘制等)
         JavaScript引擎线程  (责处理 JavaScript脚本，执行代码。该线程与 GUI渲染线程互斥，当 JS引擎线程执行 JavaScript脚本时间过长，将导致页面渲染的阻塞)
