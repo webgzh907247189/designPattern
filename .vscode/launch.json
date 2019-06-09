@@ -7,6 +7,12 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "222",
+            "program": "${workspaceFolder}/myco/index.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "111",
             "program": "${workspaceFolder}/node/koaMiddleware.js"
         }
