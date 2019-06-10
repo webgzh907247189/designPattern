@@ -1,18 +1,22 @@
 let co = require('co')
 
-// {
-//     function *ge() {
-//         var result = yield Promise.resolve(true);
-//         return result;
-//     }
+{
+    function *ge() {
+        var result = yield Promise.resolve(true);
+        return result;
+    }
 
-//     let r = ge()
-//     let a = r.next()
-//     let b = r.next('参数2')
+    let r = ge()
+    let type = Object.prototype.toString.call(r)
+    let typefn = Object.prototype.toString.call(ge)
+    console.log(type,typefn) //[object Generator]     [object GeneratorFunction]
 
-//     console.log(a)
-//     console.log(b)
-// }
+    let a = r.next()
+    let b = r.next('参数2')
+
+    console.log(a)
+    console.log(b)
+}
 
 
 
