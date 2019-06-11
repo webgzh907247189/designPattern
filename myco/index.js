@@ -34,6 +34,25 @@ let co = require('co')
     });
 }
 
+{
+    let myCo = require('./myCo')
+    function* ge() {
+        let result = yield Promise.resolve(true);
+        let r = yield Promise.resolve(111);
+        return r;
+    }
+
+    myCo(ge).then(function (value) {
+        console.log(value, 'co -> myco');
+    }, function (err) {
+        console.error(err.stack, 'co error');
+    });
+}
+
+
+
+
+
 
 
 
