@@ -613,3 +613,39 @@ new Promise((resolve,reject)=>{
 	https://juejin.im/post/5b06f44b6fb9a07abc2a53c1
 	https://juejin.im/post/5af38e0c518825670c45ef6e
 }	
+
+
+{
+    class Schedure{
+        async add(p){
+            // Schedure.arr.push(p)
+            // console.log(Schedure.arr)
+
+            // Promise.resolve('1').then(()=>{
+            //     Promise.race(Schedure.arr[0](),Schedure.arr[1]()).then(()=>{
+            //         console.log(d,'ddd')
+            //     })
+            // })
+            // return new Promise((resolve,reject)=>{resolve('1')})
+            await Schedure.arr.push(p)
+        }
+        static arr = []
+    }
+
+    const timeout = (time) => new Promise(resolve => {
+        setTimeout(resolve,time)
+    })
+
+    const schedure = new Schedure()
+    const addTask = (time,order) => {
+        schedure.add(() => timeout(time)).then(() => console.log(order))
+    }
+
+    addTask(1000,'1')
+    addTask(500,'2')
+    addTask(300,'3')
+    addTask(400,'4')
+    console.log(Schedure.arr)
+
+    //2314
+}
