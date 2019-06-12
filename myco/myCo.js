@@ -22,6 +22,4 @@ function myCo(fn){
     })
 }
 
-
-
 module.exports = myCo
