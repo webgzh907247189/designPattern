@@ -3,11 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Vuex</title>
+    <script src="https://cdn.bootcss.com/vue/2.6.8/vue.js"></script>
 </head>
 <body>
     <div id="app">
+        {{name}}
     </div>
-
-    <script src="https://cdn.bootcss.com/vue/2.6.8/vue.js"></script>
 </body>
+<script src="./index.js"></script>
+<script>
+    let store = new Vuex.Store({
+        state: {
+            count: 0
+        }
+    }, Vue);
+
+
+    new Vue({
+        el: '#app',
+        data(){
+            return {
+                name: '11'
+            }
+        },
+        store
+    })
+</script>
 </html>
