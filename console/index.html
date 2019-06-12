@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vuex</title>
+</head>
+<body>
+    <div id="app" @click = "add">
+        {{message}}
+        {{aaa}}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+</body>
+<script>
+        let vm = new Vue({
+            el: '#app',
+            data(){
+                // debugger
+                return {
+                    message: 'hello world!',
+                    arr: ['1'],
+                    obj: {name: '1'}
+                }
+            },
+            computed: {
+                aaa(){
+                    window.aaa = this.arr
+                    window.bbb = this.message
+                    window.ccc = this.obj
+                    return this.arr
+                }
+            },
+            methods: {
+                add(){
+                    this.$set(this.arr,4,'111')
+                }
+            },
+            watch: {
+                arr(val){
+                    console.log(val,'1')
+                }
+            }
+        });
+
+        vm.$watch(function(){
+            return this.arr + this.message
+        },function(val){
+            console.log(val,'2')
+        })
+</script>
+</html>
