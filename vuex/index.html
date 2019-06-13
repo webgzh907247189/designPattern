@@ -12,9 +12,15 @@
 </body>
 <script src="./index.js"></script>
 <script>
+    Vue.use(Vuex)
     let store = new Vuex.Store({
         state: {
             count: 0
+        },
+        getters: {
+            getStatePlusOne(state) {
+                return state.count + 1
+            }
         }
     }, Vue);
 
@@ -28,6 +34,7 @@
         },
         created() {
             console.log('打印出this.$store.state.count的结果',this.$store.state.count);
+            console.log('打印出this.$store.getters.getStatePlusOne的结果',this.$store.getters.getStatePlusOne);
         },
         store
     })

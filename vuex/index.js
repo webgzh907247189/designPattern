@@ -16,13 +16,33 @@
 class Store {
     constructor(options = {}, Vue) {
         this.options = options;
+        this.getters = {}
+        forEachValue(options.getters,(fn,key) => {
+            registerGetter(this,key,fn)
+            // this.getters[key] = fn(this.options.state)
+        })
+
         Vue.mixin({ beforeCreate: vuexInit });
     }
+
     get state () {
         return this.options.state;
-    }
+    }   
 }
 
+function registerGetter(target,key,fn){
+    Object.defineProperty(target.getters,key,{
+        get(){
+            return fn(target.state)
+        }
+    })
+}
+
+function forEachValue(obj,cb){
+    Object.keys(obj).forEach(item => {
+        cb(obj[item],item)
+    })
+}
 
 function vuexInit () {
     const options = this.$options
