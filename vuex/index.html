@@ -17,6 +17,11 @@
         state: {
             count: 0
         },
+        mutations: {
+            incrementFive(state) {
+                state.count = state.count + 5;
+            }
+        },
         getters: {
             getStatePlusOne(state) {
                 return state.count + 1
@@ -31,6 +36,12 @@
             return {
                 name: '11'
             }
+        },
+        mounted() {
+            setTimeout(() => {
+                this.$store.commit('incrementFive');
+                console.log('store state自增5后的结果', this.$store.state.count);
+            }, 2000);
         },
         created() {
             console.log('打印出this.$store.state.count的结果',this.$store.state.count);

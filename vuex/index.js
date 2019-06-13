@@ -13,13 +13,25 @@
  * 六.实现：Vue.use(Vuex)
  */
 
+
+// this.$store 是 new Vuex.Store 的 实例
 class Store {
     constructor(options = {}, Vue) {
         this.options = options;
         this.getters = {}
+        this.mutations = {}
+
+        this.commit = (type) => {
+            return commit.call(this, type);
+        }
+
         forEachValue(options.getters,(fn,key) => {
             registerGetter(this,key,fn)
-            // this.getters[key] = fn(this.options.state)
+            // this.getters[key] = fn(this.options.state) // 也可以这样得到 gtters
+        })
+
+        forEachValue(options.mutations,(fn,key) => {
+            registerMutations(this,key,fn)
         })
 
         Vue.mixin({ beforeCreate: vuexInit });
@@ -30,12 +42,22 @@ class Store {
     }   
 }
 
+function commit(type){
+    this.mutations[type]()
+}
+
 function registerGetter(target,key,fn){
     Object.defineProperty(target.getters,key,{
         get(){
             return fn(target.state)
         }
     })
+}
+
+function registerMutations(target,key,fn){
+    target.mutations[key] = function(){
+        fn.call(target,target.state)
+    }
 }
 
 function forEachValue(obj,cb){
