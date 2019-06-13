@@ -59,7 +59,10 @@
     node中的事件循环的顺序：
         外部输入数据-->轮询阶段(poll)-->检查阶段(check)-->关闭事件回调阶段(close callback)-->定时器检测阶段(timer)-->
         I/O事件回调阶段(I/O callbacks)-->闲置阶段(idle, prepare)-->轮询阶段（按照该顺序反复运行）
-    
+        
+        1.update_time
+        //在事件循环的开头，这一步的作用实际上是为了获取一下系统时间，以保证之后的timer有个计时的标准。这个动作会在每次事件循环的时候都发生，确保了之后timer触发的准确性。（其实也不太准确....)
+        
         timers 阶段：这个阶段执行timer（setTimeout、setInterval）的回调
         I/O callbacks 阶段：处理一些上一轮循环中的少数未执行的 I/O 回调
         idle, prepare 阶段：仅node内部使用
