@@ -17,9 +17,17 @@
         state: {
             count: 0
         },
+        actions: {
+            countPlusSix(context) {
+                context.commit('plusSix');
+            }
+        },
         mutations: {
             incrementFive(state) {
                 state.count = state.count + 5;
+            },
+            plusSix(state) {
+                state.count = state.count + 6;
             }
         },
         getters: {
@@ -42,6 +50,12 @@
                 this.$store.commit('incrementFive');
                 console.log('store state自增5后的结果', this.$store.state.count);
             }, 2000);
+
+            setTimeout(() => {
+                this.$store.dispatch('countPlusSix');
+                console.log('store dispatch自增6后的结果', this.$store.state.count);
+            }, 3000);
+
         },
         created() {
             console.log('打印出this.$store.state.count的结果',this.$store.state.count);

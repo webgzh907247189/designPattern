@@ -17,12 +17,20 @@
 // this.$store 是 new Vuex.Store 的 实例
 class Store {
     constructor(options = {}, Vue) {
+        Vue.mixin({ beforeCreate: vuexInit });
         this.options = options;
         this.getters = {}
         this.mutations = {}
+        this.actions = {}
+
+        // const { dispatch, commit } = this; // ????????????
 
         this.commit = (type) => {
             return commit.call(this, type);
+        }
+
+        this.dispatch = (action) => {
+            return dispatch.call(this, action)
         }
 
         forEachValue(options.getters,(fn,key) => {
@@ -34,12 +42,25 @@ class Store {
             registerMutations(this,key,fn)
         })
 
-        Vue.mixin({ beforeCreate: vuexInit });
+        forEachValue(options.actions,(fn,key) => {
+            registerActions(this,key,fn)
+        })
+
+        this._vm = new Vue({  // 为state 服务
+            data: {
+                state: options.state
+            }
+        });
     }
 
     get state () {
+        // return this._vm._data.state; // 无法完成页面中的双向绑定，所以改用this._vm的形式
         return this.options.state;
     }   
+}
+
+function dispatch(type){
+    this.actions[type]()
 }
 
 function commit(type){
@@ -57,6 +78,12 @@ function registerGetter(target,key,fn){
 function registerMutations(target,key,fn){
     target.mutations[key] = function(){
         fn.call(target,target.state)
+    }
+}
+
+function registerActions(target,key,fn){
+    target.actions[key] = function(){
+        fn.call(target,target)
     }
 }
 
