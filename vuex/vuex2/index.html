@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vuex</title>
+    <script src="https://cdn.bootcss.com/vue/2.6.8/vue.js"></script>
+    <script src="./index2.js"></script>
+    <script>
+        Vue.component('page-a', {
+            template: `
+                <div id="test">
+                    页面A被加载
+                </div>
+            `,
+            mounted() {
+                setTimeout(() => {
+                    this.$store.dispatch('incrementAAction');
+                    console.log('store dispatch自增1后的结果', this.$store.state.a.count);
+                }, 5000)
+            }
+        })
+    </script>
+</head>
+<body>
+    <div id="app">
+        {{name}}
+        <page-a></page-a>
+    </div>
+</body>
+
+<script>
+    const pageA = {
+        state: {
+            count: 100
+        },
+        mutations: {
+            incrementA(state) {
+                state.count++;
+            }
+        },
+        actions: {
+            incrementAAction(context) {
+                context.commit('incrementA');
+            }
+        }
+    }
+
+    Vue.use(Vuex)
+    
+    let store = new Vuex.Store({
+        modules: {
+            a: pageA
+        },
+        state: {
+            count: 0
+        },
+        actions: {
+            countPlusSix(context) {
+                context.commit('plusSix');
+            }
+        },
+        mutations: {
+            incrementFive(state) {
+                state.count = state.count + 5;
+            },
+            plusSix(state) {
+                state.count = state.count + 6;
+            }
+        },
+        getters: {
+            getStatePlusOne(state) {
+                return state.count + 1
+            }
+        }
+    }, Vue);
+
+
+    new Vue({
+        el: '#app',
+        data(){
+            return {
+                name: '11'
+            }
+        },
+        mounted() {
+            setTimeout(() => {
+                this.$store.commit('incrementFive');
+                console.log('store state自增5后的结果', this.$store.state.count);
+            }, 2000);
+
+            setTimeout(() => {
+                this.$store.dispatch('countPlusSix');
+                console.log('store dispatch自增6后的结果', this.$store.state.count);
+            }, 3000);
+
+        },
+        created() {
+            console.log('打印出this.$store.state.count的结果',this.$store.state.count);
+            console.log('打印出this.$store.getters.getStatePlusOne的结果',this.$store.getters.getStatePlusOne);
+        },
+        store
+    })
+</script>
+</html>
