@@ -54,7 +54,56 @@
 
 
 
+{
+    let obj = {name: '11'}
+    let s = Object.getOwnPropertyDescriptor(obj, 'name')
+    var sarr = Object.getOwnPropertyNames(obj)
+    console.log(s,sarr) // name 的描述符
+}
+{
+    const obj = {
+        foo: 123,
+        get bar() { return 'abc' }
+    };
+      
+    let s = Object.getOwnPropertyDescriptors(obj)
+    console.log(s) // obj 对象 的描述符
 
+
+    const target2 = {};
+    Object.defineProperties(target2, Object.getOwnPropertyDescriptors(obj));
+    let des = Object.getOwnPropertyDescriptor(target2, 'bar')
+    console.log(des,target2) // get方法被成功拷贝
+}
+
+//Object.getOwnPropertyDescriptors() 配合Object.create()方法，将对象属性克隆到一个新对象。这属于浅拷贝。
+{   
+    const obj = {
+        foo: 123,
+        get bar() { return 'abc' }
+    }; 
+    const clone = Object.create(Object.getPrototypeOf(obj),Object.getOwnPropertyDescriptors(obj));
+    console.log(clone, clone === obj)   // clone 跟 obj 属性一样
+    console.log(Object.getOwnPropertyDescriptors(clone))
+}
+{
+    let prot = {}
+    const obj = Object.create(
+        prot,
+        Object.getOwnPropertyDescriptors({
+          foo: 123,
+        })
+    );
+    console.log(obj,prot)
+
+    console.log(Object.getOwnPropertyDescriptors(obj))
+}
+
+
+
+
+
+//ES6 规定__proto__只有浏览器要部署，其他环境不用部署。
 {
 	let obj = {
 		eat(){
