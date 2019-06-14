@@ -14,7 +14,7 @@
  */
 
 
-// this.$store 是 new Vuex.Store 的 实例
+// this.$store 是 new Vuex.Store 的 实例, 代表store里面的this
 class Store {
     constructor(options = {}, Vue) {
         Vue.mixin({ beforeCreate: vuexInit });
