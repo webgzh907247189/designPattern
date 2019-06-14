@@ -8,8 +8,10 @@ class Store {
         this._wrappedGetters = {};
         this._actions = {};
 
-        console.log(options, 'options')
+        // 初始化 module
         this._modules = new ModuleCollection(options)
+        console.log( this._modules , 'options')
+
         const { dispatch, commit } = this;
         this.commit = (type) => {
             return commit.call(this, type);
