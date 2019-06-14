@@ -77,6 +77,8 @@ function installModule(store, rootState, path, module) {
         dispatch: store.dispatch,
         commit: store.commit,
     }
+
+    // local 的 getters 和 state 的 enumerable configurable 都为 false
     const local = Object.defineProperties(context, {
         getters: {
             get: () => store.getters
@@ -88,6 +90,7 @@ function installModule(store, rootState, path, module) {
             }
         }
     })
+
     if (module._rawModule.actions) {
         forEachValue(module._rawModule.actions, (actionFn, actionName) => {
             registerAction(store, actionName, actionFn, local);

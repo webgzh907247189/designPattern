@@ -15,7 +15,8 @@
             mounted() {
                 setTimeout(() => {
                     this.$store.dispatch('incrementAAction');
-                    console.log('store dispatch自增1后的结果', this.$store.state.a.count);
+                    this.$store.dispatch('countPlusSix');
+                    console.log('store dispatch自增1后的结果', this.$store.state.a.count, this.$store.state.count);
                 }, 5000)
             }
         })
@@ -41,6 +42,9 @@
         actions: {
             incrementAAction(context) {
                 context.commit('incrementA');
+            },
+            countPlusSix(context) {
+                context.commit('plusSix');
             }
         }
     }
