@@ -9,6 +9,11 @@ class Store {
         this._actions = {};
 
         // 初始化 module
+        // this._modules.root = {
+        //     _children: {},
+        //     _rawModule: rawModule,
+        //     state: rawModule.state
+        // }
         this._modules = new ModuleCollection(options)
         console.log( this._modules , 'options')
 
