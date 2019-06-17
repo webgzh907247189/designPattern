@@ -1,5 +1,7 @@
 class HistoryRoute{
-
+    constructor(){
+        this.current = null
+    }
 }
 
 class VueRouter{
@@ -8,9 +10,9 @@ class VueRouter{
         this.mode = options.mode || 'hash'
         this.routes = options.routes || []
         this.routesMaps = this.createMap(this.routes)
-        console.log(this.routesMaps,'this.routesMaps')
 
-        this.history = {current: null}
+        this.history = new HistoryRoute()
+        this.init()
     }
 
     createMap(list){
@@ -19,11 +21,109 @@ class VueRouter{
             return result
         },Object.create(null))
     }
+
+    hashLoad(){
+        window.addEventListener('load',()=>{
+            // console.log('zzz')
+            this.history.current = location.hash.slice(1)
+        })
+    }
+
+    hashChange(){
+        window.addEventListener('hashchange',()=>{
+            this.history.current = location.hash.slice(1)
+        })
+    }
+
+    pathLoad(){
+        window.addEventListener('load',()=>{
+            this.history.current = location.pathname
+        })
+    }
+    go(){
+        window.addEventListener('popstate',()=>{
+            this.history.current = location.pathname
+        })
+    }
+
+    init(){
+        if(this.mode == 'hash'){
+            //判断用户打开时有没有hash，没有跳到/#/
+            location.hash ? '' : location.hash = '#/'
+            this.hashLoad()
+            this.hashChange()
+        }else{
+            location.pathname ? '' : location.pathname = '/'
+            this.pathLoad()
+            this.go()
+        }
+    }
 }
 
  // 使用vue.use()  会调用install 方法
  VueRouter.install = function(Vue){
+    // 每个组件都有 this.$router 和 this.$route
+    Vue.mixin({
+        beforeCreate(){
 
+            // vue组件渲染顺序 ->  先序深度遍历 渲染
+            if(this.$options && this.$options.router){ //根组件
+                this._root = this
+                this._router = this.$options.router
+
+                // console.log(this._router.history,'this.$router')
+                // 深度监控
+                Vue.util.defineReactive(this,'xx',this._router.history)
+            }else{
+                this._root = this.$parent._root
+            }
+
+            Object.defineProperty(this,'$router',{
+                get(){
+                    return this._root._router
+                }
+            })
+
+            Object.defineProperty(this,'$route',{
+                get(){
+                    return this._root._router.history.current
+                }
+            })
+        }
+    })
+
+    Vue.component('router-link',{
+        props: {
+            to: String,
+            tag: {
+                default: 'a',
+                type: String
+            }
+        },
+        methods: {
+            handleClick(){
+                // href={mode === 'hash' ? `#${this.to}`: this.to}
+            }
+        },
+        render(h){
+            let mode = this._self._root._router.mode
+            let Tag = this.tag
+            return (<Tag on-click={this.handleClick}  href={mode === 'hash' ? `#${this.to}`: this.to}>{this.$slots.default}</Tag>)
+        }
+    })
+
+    Vue.component('router-view',{
+        // render 方法 里面的 this_self 指向 组件
+        // this._self._root 指向 根组件
+        // this._self._root._router 指向 根组件的 router 实例
+        render(h){
+            let current = this._self._root._router.history.current
+
+            let routersMap = this._self._root._router.routesMaps
+            console.log(current,'current')
+            return h(routersMap[current])
+        }
+    })
  }
 
  export default VueRouter
