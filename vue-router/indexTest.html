@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0, user-scalable=no">
+    <title>vuedemo</title>
+    <script src="https://cdn.bootcss.com/vue/2.6.8/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+    </div>
+
+    <!-- hash -->
+    <a href="#/home">home</a>
+    <a href="#/about">about</a>
+
+</body>
+<!-- hash -->
+<script>
+window.addEventListener('load',()=>{
+    console.log('load')
+    app.innerHTML = location.hash.slice(1)   
+})
+
+window.addEventListener('hashchange',()=>{
+    console.log('hash变化')
+    app.innerHTML = location.hash.slice(1)   
+})
+</script>
+</html>
