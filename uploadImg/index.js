@@ -14,6 +14,39 @@ function composeFn(...args){
 /**
  * https://www.kancloud.cn/xiaoxiaoqc/web/188133
  */
+function createXhr(imgSrc,cb){
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', imgSrc, true);
+    xhr.responseType = 'arraybuffer';
+
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            cb(xhr)
+        }
+    }
+    xhr.send();
+}
+
+
+function createBse64(xhr){
+    let uInt8Array = new Uint8Array(xhr.response);
+    let i = uInt8Array.length;
+    let binaryString = new Array(i);
+    while (i--) {
+      binaryString[i] = String.fromCharCode(uInt8Array[i]);
+    }
+    let data = binaryString.join('');
+    return window.btoa(data);
+}
+
+function getBase64(base64,outputFormat){
+    let dataUrl = `data: ${outputFormat || "image/png"};base64,${base64}`;
+    return dataUrl
+}
+
+
+
+
 function getDataURL(canvas){
     return canvas.toDataURL()
 }
@@ -106,4 +139,41 @@ let composeResultQrCode = composeFn(resultImg,getBlob,dataURLtoBlob)
     var d = c(b,{name: 'xxx'})
     var result =  composeFn(d,a)
     result()
+}
+
+
+
+
+{
+    let paramsString = "https://juejin.im/post/5d08d3d3f265da1b7e103a4d#heading-43?q=URLUtils.searchParams&topic=api"
+    let searchParams = new URLSearchParams(paramsString);
+
+    for (let p of searchParams) {
+        console.log(p);
+    }
+
+    console.log(searchParams.has("topic") === true); // true
+    console.log(searchParams.get("topic") === "api"); // true
+    console.log(searchParams.getAll("topic")); // ["api"]
+    console.log(searchParams.get("foo") === ""); // false
+
+    searchParams.append("topic", "webdev");
+    console.log(searchParams.toString()); // "q=URLUtils.searchParams&topic=api&topic=webdev"
+
+    searchParams.set("topic", "More webdev");
+    console.log(searchParams.toString()); // "q=URLUtils.searchParams&topic=More+webdev"
+
+    searchParams.delete("topic");
+    console.log(searchParams.toString()); // "q=URLUtils.searchParams"
+}
+
+
+{
+    // base64
+    // http://verymuch.site/2017/12/14/Data-URL%E7%AE%80%E4%BB%8B%E4%B8%8E%E4%BD%BF%E7%94%A8/
+    // http://verymuch.site/2019/06/17/base64%E5%8E%9F%E7%90%86%E6%B5%85%E6%9E%90/#more?nsukey=9AyW%2F12%2B719qV588x%2FM7G6ujshMi7T5LJVvxw3VrGapKECR9OQD2Am7LY%2B5yBNJda5nXLS9A06Tgj6PoYFi8dpVNN%2FFUJZVNaGkkrAf1L13tB8g1sr%2FrkK3ot7S0UTMENmv4ZAUiBHPJ7kQK%2B5SNOSBJR47oPxhU%2FAvc51xjNSO%2BGJ4nTpS17iUFowOhfr%2BH
+
+
+    // Blob 对象表示一个不可变、原始数据的类文件对象。Blob 表示的不一定是JavaScript原生格式的数据。File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+    // URL.createObjectURL() 静态方法会创建一个 DOMString，其中包含一个表示参数中给出的对象的URL。这个 URL 的生命周期和创建它的窗口中的 document 绑定。这个新的URL 对象表示指定的 File 对象或 Blob 对象。
 }
