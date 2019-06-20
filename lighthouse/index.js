@@ -28,14 +28,6 @@
 
 
 
-{
-    npm install的时候首先会下载对应资源包的压缩包放在用户目录下的.npm文件夹下，然后解压到项目的node_modules中，并且提取依赖包中指定的bin文件，在linux下会创建一条软连接，
-    所以在linux下我们真正执行的是.bin文件夹下文件指向的文件
-}
-
-
-
-
 // https://juejin.im/post/5c6a732151882528735f2d33
 // https://juejin.im/post/5c337ae06fb9a049bc4cd218
 {
@@ -69,4 +61,21 @@
         poll 阶段：获取新的I/O事件, 适当的条件下node将阻塞在这里
         check 阶段：执行 setImmediate() 的回调
         close callbacks 阶段：执行 socket 的 close 事件回调   
+}
+
+
+
+
+
+{
+    npm install的时候首先会下载对应资源包的压缩包放在用户目录下的.npm文件夹下，然后解压到项目的node_modules中，并且提取依赖包中指定的bin文件，在linux下会创建一条软连接，
+    所以在linux下我们真正执行的是.bin文件夹下文件指向的文件
+}
+{
+    npm i nrm -g //nrm 测试速度的包
+    nrm ls
+    nrm test 测试 速度
+}
+{
+    npm shrinkwrap 锁包   
 }
