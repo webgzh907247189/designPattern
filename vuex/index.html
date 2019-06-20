@@ -64,4 +64,76 @@
         store
     })
 </script>
+
+<script>
+{
+    const deepAttr = { a: [ {b: { c: 15 }}, {b1: { c1: 15 }} ] };
+
+    function getValue(target,key){    
+
+        // key = key.replace('[',function(){
+        //     return '.'
+        // }).replace(']',function(){
+        //     return ''
+        // })
+
+        // key =  key.replace(/\[(.*)\]/g, function (str, p1) {
+        //     return '.' + p1
+        // })
+
+        // key = key.replace(/\[([^\.]*)\]/g, '.$1')
+
+        key = key.replace(/\[([^\.]*)\]/g, function(a,b,c,d){
+            console.log(a,b,c,d)// [8]  8  1  a[8].b1.c1
+            return '.'+b
+        })
+
+        let obj = new Proxy(target,{
+            get(target,key){
+                return key.split('.').reduce((result,item)=>{
+					return result && (result = result[item]) ||  new Error(`${item} not found`)
+                },target)
+            }
+        })
+        return obj[key]
+    }
+    var value = getValue(deepAttr,"a[1].b1.c1");
+    console.log(value) //15
+
+    const obj = {a: {c: {d: 'zz'}}}
+    var value2 = getValue(obj,"a.c.d");
+    console.log(value2) //zz
+}
+
+{
+    const deepAttr = { a: [ {b: { c: 15 }}, {b1: { c1: 15 }} ] };
+    function fn(){}
+    fn.get = function (obj,key){
+        var tempFn = new Function('obj','return obj.'+key)
+        var s = tempFn(deepAttr)
+		console.log(s) //15
+    }
+    fn.get(deepAttr,'a[1].b1.c1')
+}
+{
+    const deepAttr = { a: [ {b: { c: 15 }}, {b1: { c1: 15 }} ] };
+    function get(obj,key){
+        var fn = new Function('obj','return obj.'+key)
+        var s = fn(deepAttr)
+		console.log(s) //15
+    }
+    get(deepAttr,'a[1].b1.c1')
+}
+
+
+
+{
+    const camelizeRE = /-(\w)/g
+    const camelize = (str) => {
+        return str.replace(camelizeRE, (_, c) => c ? c.toUpperCase() : '')
+    }
+    var ss = camelize('aa-bb') 
+    console.log(ss)// aaBb
+}
+</script>
 </html>
