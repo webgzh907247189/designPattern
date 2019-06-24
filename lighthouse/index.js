@@ -78,3 +78,183 @@
 {
     npm shrinkwrap 锁包   
 }
+
+
+
+
+
+
+
+
+
+
+
+{
+    // 子类必须在 constructor 方法中调用 super 方法，否则新建实例时会报错。这是因为子类没有自己的 this 对象，而是继承父类的 this 对象，然后对其进行加工。
+    // 只有调用 super 之后，才可以使用 this 关键字，否则会报错。这是因为子类实例的构建，是基于对父类实例加工，只有 super 方法才能返回父类实例。
+    class A{}
+    var a = new A
+
+    console.log(a instanceof A, A.prototype.isPrototypeOf(a), a.__proto__.isPrototypeOf(a)) // true true true
+
+    // ES5 的继承，实质是先创造子类的实例对象 this，然后再将父类的方法添加到 this 上面（ Parent.apply(this)）
+    // ES6 的继承机制完全不同，实质是先创造父类的实例对象 this （所以必须先调用 super() 方法），然后再用子类的构造函数修改 this
+}
+
+{
+    let r = add(2)(3)(4)() //9
+    console.log(r, 'r')
+
+    function add(...args){
+        let sum = 0 + args[0]
+
+        function fn(...args){
+            if(args.length) {
+                sum += args[0]
+                return fn
+            }else {
+                return sum
+            }
+        }
+
+        return fn
+    }
+}
+
+{
+    // https://mp.weixin.qq.com/s/wXpAi3P5Zo6D2smKALO4nQ
+    // 《Effective JavaScript》P11：当 +用在连接字符串时，当一个对象既有 toString方法又有 valueOf方法时候，JS通过盲目使用 valueOf方法来解决这种含糊
+
+    '' + { toString: () => 'S',valueOf: () => 'J'} // J
+} 
+
+{
+    // 取整 |0
+    1.3 | 0 // 1
+    -1.9 | 0 // -1
+
+
+    // 对一个数字 &1 可以判断奇偶数，负数也同样适用， num&1
+    const num = 3
+    !!(num &1)  // true
+    !!(num %2)  // true
+
+
+    // 要返回多行语句（例如对象文本），需要使用 ()而不是 {}来包裹函数体。这样可以确保代码以单个语句的形式进行求值。
+    const a = (diameter) => (
+        Math.PI * diameter
+    )
+
+    let r = a(1)
+    console.log(r)
+
+
+    // 数字补0操作
+    const addZero1 = (num,len = 2) => (`0${num}`).slice(-len)
+    const addZero2 = (num,len = 2) => (`${num}`).padStart(len,'0')
+
+    addZero1(3)// 03
+    addZero2(32,4) // 0032
+
+    
+    // 统计重复次数
+    let cars = ['BMW', 'Benz','Benz','Tesla','BMW','Toyota'];
+    let carsObj = cars.reduce(function(obj, name){
+        obj[name] = obj[name] ? ++obj[name] : 1;
+        return obj;
+    },Object.create(null));
+
+    console.log(carsObj)
+    // => { BMW: 2, Benz: 2, Tesla: 1, Toyota: 1 }
+
+    let carsObj = [{id: 1},{id: 2},{id: 4},{id: 2}];
+    let carsObjResult = carsObj.reduce(function(result, item, index){
+        // result[item] = obj[name] ? ++obj[name] : 1;
+        // result[index] = [item, ]
+
+        // console.log(item,result.get(item))
+        let ss = mapEach(result,item)
+        result.set(item, ss ? 2 : 1)
+        return result;
+    },new Map);
+
+    function mapEach(map,value){
+        for(let item of map){
+            if(item.id === value.id){
+                return true
+            }
+        }
+        return false
+    }
+
+    console.log(carsObjResult)
+    
+
+
+    // 删除元素 
+    let arrTest = ['a','b','c','d']
+    function deleteItem(arr,index){
+        arr.copyWithin(index, index + 1).pop()
+        return arr
+    }
+    console.log(deleteItem(arrTest, 1))
+
+    let arrTest1 = ['a','b','c','d']
+    function spliceOne(list, index) {
+		for (; index + 1 < list.length; index++){
+			list[index] = list[index + 1];
+		}
+        list.pop();
+        
+        return list
+    }
+    console.log(spliceOne(arrTest1, 1))
+
+
+    // id 判断校验 ???????????????
+
+    // 数组解构 拿值
+    let {2: item} = ['a', 'b', 'c']
+    console.log(item) // c
+}
+
+{
+    function validate(values){
+        if (!values.first){
+            return false;
+        }
+        
+        if (!values.last){
+            return false;
+        }
+
+        return true;
+    }
+
+    console.log(validate({first: 'Bruce',last: 'Wayne'})); // true
+
+
+
+    const schema ={
+        first: { 
+            required: true
+        },
+        last : {
+            required: true
+        }
+    }
+    
+    const validate = (schema, values) => {
+        for (field in schema){
+            if (schema[field].required){
+                if (!values[field]){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    console.log(validate(schema,{first: 'Bruce'})); // false
+    console.log(validate(schema,{first: 'Bruce',last: 'Wayne'})); // true
+}
