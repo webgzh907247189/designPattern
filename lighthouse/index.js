@@ -82,7 +82,10 @@
 
 
 
-
+{
+    JavaScript 内存调试技巧与泄露分析 -> https://github.com/andycall/master-of-javascript-memory
+    算法 ->  https://github.com/wangzheng0822/algo/tree/master/javascript
+}
 
 
 
@@ -167,27 +170,23 @@
     console.log(carsObj)
     // => { BMW: 2, Benz: 2, Tesla: 1, Toyota: 1 }
 
-    let carsObj = [{id: 1},{id: 2},{id: 4},{id: 2}];
-    let carsObjResult = carsObj.reduce(function(result, item, index){
-        // result[item] = obj[name] ? ++obj[name] : 1;
-        // result[index] = [item, ]
+    let carsObj = [{id: 1},{id: 2},{id: 4},{id: 2},{id: 2},{id: 1}];
+    let carsObjResult = carsObj.reduce(function(result, item){
+        
+        let [equalItem,count] = [...result].find(([ele,value]) => {
+            return ele.id === item.id
+        }) || []
 
-        // console.log(item,result.get(item))
-        let ss = mapEach(result,item)
-        result.set(item, ss ? 2 : 1)
+        if(equalItem){
+            result.set(equalItem, ++count)
+        }else{
+            result.set(item, 1)
+        }
+
         return result;
     },new Map);
 
-    function mapEach(map,value){
-        for(let item of map){
-            if(item.id === value.id){
-                return true
-            }
-        }
-        return false
-    }
-
-    console.log(carsObjResult)
+    console.log(carsObjResult) //Map { { id: 1 } => 2, { id: 2 } => 3, { id: 4 } => 1 }
     
 
 
@@ -211,7 +210,7 @@
     console.log(spliceOne(arrTest1, 1))
 
 
-    // id 判断校验 ???????????????
+    // 判断校验 ???????????????
 
     // 数组解构 拿值
     let {2: item} = ['a', 'b', 'c']
