@@ -173,7 +173,7 @@
     let carsObj = [{id: 1},{id: 2},{id: 4},{id: 2},{id: 2},{id: 1}];
     let carsObjResult = carsObj.reduce(function(result, item){
         
-        let [equalItem,count] = [...result].find(([ele,value]) => {
+        let [equalItem,count] = [...result].find(([ele]) => {
             return ele.id === item.id
         }) || []
 
@@ -256,4 +256,21 @@
     
     console.log(validate(schema,{first: 'Bruce'})); // false
     console.log(validate(schema,{first: 'Bruce',last: 'Wayne'})); // true
+}
+
+{
+    var length = 10
+    function fn(){
+        console.log(this.length)
+    }
+
+    var obj = {
+        length: 5,
+        methods: function(fn){
+            console.log(this)
+            fn()
+            arguments[0]()
+        }
+    }
+    obj.methods(fn,1)
 }
