@@ -78,6 +78,7 @@ https://my.oschina.net/susouth/blog/2877935
 
 {
     自律使得我们更自由
+    纸上得来终觉浅，绝知此事要躬行。
 
 https://www.rails365.net/    学习网站    speed plugin(大的loader用)
 http://leeight.github.io/blog/2014/06/v8-full-codegen/   node 基础
