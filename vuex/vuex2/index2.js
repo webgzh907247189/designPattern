@@ -2,7 +2,9 @@ let _Vue;
 class Store {
     constructor(options = {}, Vue) {
         _Vue = Vue
-        Vue.mixin({ beforeCreate: vuexInit })
+        Vue.mixin({
+            beforeCreate: vuexInit
+        })
         this.getters = {};
         this._mutations = {}; // 在私有属性前加_
         this._wrappedGetters = {};
@@ -15,9 +17,12 @@ class Store {
         //     state: rawModule.state
         // }
         this._modules = new ModuleCollection(options)
-        console.log( this._modules , 'options')
+        console.log(this._modules, 'options')
 
-        const { dispatch, commit } = this;
+        const {
+            dispatch,
+            commit
+        } = this;
         this.commit = (type) => {
             return commit.call(this, type);
         }
@@ -167,3 +172,66 @@ function vuexInit() {
 var Vuex = {
     Store
 }
+
+
+
+// {
+//     +function(){
+//         alert(a)
+//         a()
+
+//         var a = function (){
+//             console.log(1)
+//         }
+
+//         function a(){
+//             console.log(2)
+//         }
+
+//         alert(a)
+//         a()
+
+//         var c = d = a
+//     }();
+
+//     alert(d)
+//     alert(c)
+// }
+
+
+class Scheduler {
+    constructor() {
+        this.tasks = [];
+        this.concurrent = 0;
+    }
+    add(promiseCreator) {
+        return new Promise(resolve => {
+            this.tasks.push(() => promiseCreator().then(resolve));
+            this.runTask();
+        });
+    }
+    runTask() {
+        if (this.concurrent >= 2) return;
+        let currentTask = this.tasks.shift();
+        if (currentTask) {
+            this.concurrent++;
+            currentTask().then(() => {
+                this.concurrent -= 1;
+                this.runTask();
+            });
+        }
+    }
+}
+const timeout = timer => new Promise(resolve => setTimeout(resolve, timer));
+const scheduler = new Scheduler();
+const addTask = (time, order) => {
+    scheduler.add(() => timeout(time)).then(() => {
+        console.log(order);
+    });
+};
+addTask(1000, "1");
+addTask(500, "2");
+addTask(300, "3");
+addTask(400, "4");
+
+// output: 2 3 1 4
