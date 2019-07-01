@@ -4,6 +4,8 @@ const compose = require('./compose')
 const request = require('./request')
 const response = require('./response')
 const context = require('./context')
+const stream = require('stream')
+
 
 class Application extends Event{
     constructor(){
@@ -40,18 +42,37 @@ class Application extends Event{
     }
 
     handleRquest(ctx,middlewaresFn){
-        let s = middlewaresFn(ctx)
+        let res = ctx.res
+        res.statusCode = 404
+
         // handleResponse = () => respond(ctx)
-        // console.log(s)
-        return s.then(()=>{
-            ctx.res.end('123213')
-            ctx.body = 'zzzz'
-        }).catch(this.onError)
+        return middlewaresFn(ctx).then(()=>{
+
+            if(!ctx.body){
+                return res.end('Not Found')
+            }
+            
+            if(stream.prototype.isPrototypeOf(ctx.body)){
+                res.setHeader('Content-type','application/octet-stream')
+                res.setHeader('Content-Disposition',`attachment;filename=${encodeURIComponent('下载')}`)
+                
+                return ctx.body.pipe(res)
+            }
+
+            if(typeof ctx.body == 'object'){
+                res.setHeader('Content-type','application/json')
+                return res.end(JSON.stringify(res.body))
+            }
+            res.end(ctx.body)
+        }).catch((err)=>{
+            this.emit('error',err,ctx)
+        })
     }
 
-    onError(err){
+    onError(err,ctx){
         // promise error
         console.log(err)
+        this.emit('error',err,ctx)
     }
 
     listen(...args){

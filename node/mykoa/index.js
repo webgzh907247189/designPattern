@@ -1,4 +1,6 @@
 const koa = require('./src/application')
+const fs = require('fs')
+const path = require('path')
 
 let app = new koa()
 
@@ -16,8 +18,17 @@ app.use(async (ctx,next)=>{
     console.log('2')
     await next()
     console.log('3')
+}).use((ctx)=>{
+    // ctx.body = fs.createReadStream(path.join(__dirname,'./src/application.js'))
+    // throw new Error('zzz')
+    // 测试
 })
 
 app.listen(4000,()=>{
     console.log('我启动了...')
+})
+
+app.on('error',(err,ctx)=>{
+    console.log(err)
+    ctx.res.end('error!')
 })
