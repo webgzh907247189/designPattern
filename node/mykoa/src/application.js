@@ -1,11 +1,17 @@
 const Event = require('events')
 const http = require('http')
 const compose = require('./compose')
+const request = require('./request')
+const response = require('./response')
+const context = require('./context')
 
 class Application extends Event{
     constructor(){
         super()
         this.middlewares = []
+        this.context = Object.create(context)
+        this.request = Object.create(request)
+        this.response = Object.create(response)
     }
 
     use(fn){
@@ -14,10 +20,15 @@ class Application extends Event{
     }
 
     createContext(req,res){
-        return {
-            req,
-            res
-        }
+        let ctx = this.context
+        ctx.request = this.request
+        ctx.response = this.response
+
+        ctx.req = ctx.request.req  = req
+        ctx.res = ctx.response.res = res
+
+        ctx.state = {}
+        return ctx
     }
 
     callback(){
@@ -34,6 +45,7 @@ class Application extends Event{
         // console.log(s)
         return s.then(()=>{
             ctx.res.end('123213')
+            ctx.body = 'zzzz'
         }).catch(this.onError)
     }
 

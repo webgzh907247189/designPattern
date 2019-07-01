@@ -7,11 +7,11 @@ function compose(middlewares){
         if (typeof itemFn !== 'function') throw new TypeError('Middleware must be composed of functions!')
     }
 
-    return (ctx) => {   // context, next  多一个next参数 ？？？？？？？？？？？？？
-        return dispatch(0)
-        
+    return (ctx) => {   // context, next  多一个next参数 ？？？？？？？？？？？？？    
         // 控制一个中间件只能调用一次 next
         let index = -1
+
+        return dispatch(0)
         function dispatch(i){
             if (i <= index) return Promise.reject(new Error('next() called multiple times'))
             index = i
@@ -22,7 +22,6 @@ function compose(middlewares){
                 return Promise.resolve()
             }
             
-
             try{
                 return Promise.resolve(fn( ctx, () => dispatch(i+1) ))
             }catch(err){
