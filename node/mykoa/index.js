@@ -20,8 +20,9 @@ app.use(async (ctx,next)=>{
     console.log('3')
 }).use((ctx)=>{
     // ctx.body = fs.createReadStream(path.join(__dirname,'./src/application.js'))
-    // throw new Error('zzz')
+    throw new Error('zzz')
     // 测试
+    ctx.body = '11'
 })
 
 app.listen(4000,()=>{
