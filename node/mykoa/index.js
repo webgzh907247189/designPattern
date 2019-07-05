@@ -33,3 +33,5 @@ app.on('error',(err,ctx)=>{
     console.log(err)
     ctx.res.end('error!')
 })
+
+console.log(this === module.exports,this === exports,'...') // true, true
