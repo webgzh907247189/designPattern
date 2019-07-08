@@ -179,7 +179,7 @@
                 fn.apply(this,[...arguments]);
                 this.removeListener(key, wrap);
             }
-            // 自定义属性
+            // 自定义属性 为了删除
             wrap.listen = fn;
             this.listener(key, wrap);
 		},
