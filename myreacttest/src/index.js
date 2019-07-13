@@ -65,7 +65,7 @@ class Clock1 extends React.component{
     }
 
     render(){
-        return <div>class test{this.props.value}</div>
+        return <div>class test -> {this.props.value}</div>
     }
 }
 
