@@ -62,6 +62,25 @@ class Clock1 extends React.component{
         // 但是在constructor访问 this.props 是没有值的
         super()
         console.log(this.props) // undefined
+        this.state = {num: 1}
+    }
+
+    handleClick = () => {
+        // 异步的 setState
+        this.setState({num: this.state.num+1})
+        // console.log(this.state.num)
+
+        // 同步更新
+        setTimeout(()=>{
+            this.setState({num: this.state.num+1})
+            console.log(this.state.num,'setTimeout')
+        },0)
+
+        // 同步更新
+        Promise.resolve().then(()=>{
+            this.setState({num: this.state.num+1})
+            console.log(this.state.num,'setTimeout')
+        })
     }
 
     render(){
