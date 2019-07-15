@@ -122,6 +122,7 @@ let ele2 = React.createElement('h1',{
 // var ss = new A()
 // var f = ss.a
 // f()   undefined? ??????
+// vue的批量更新也是这个？
 
 ReactDOM.render(ele2, document.getElementById('root'));
 
