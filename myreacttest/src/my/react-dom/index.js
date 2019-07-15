@@ -1,7 +1,7 @@
 function render(eleObj,container){
     if(typeof eleObj === 'number' || typeof eleObj === 'string'){
         
-        // 文本节点
+        // 文本节点  ->  先创建，在插入。。。文本节点
         return container.appendChild(document.createTextNode(eleObj))
     }
 

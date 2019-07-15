@@ -95,6 +95,14 @@ let ele2 = React.createElement('h1',{
 // babel 使用哪个plugin完成jsx到js的转化 ？？？ transform-react-jsx？
 // 卡住了，给个回车？？？编译
 // replace 的 arguments[1] ???
+// class A{
+// 	a(){
+// 		console.log(this)
+// 	}
+// }
+// var ss = new A()
+// var f = ss.a
+// f()   undefined? ??????
 
 ReactDOM.render(ele2, document.getElementById('root'));
 
