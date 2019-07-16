@@ -21,7 +21,12 @@ class Updater{
 
         // 如果是批量更新 ，组件存到批量更新里面，如果不是，直接更新组件状态(updateComponent)
         if(isBatching.isBatchingUpdate){
-            isBatching.dirtyComponents.push(this.component)
+            // isBatching.dirtyComponents.push(this.component)
+
+            // 优化 isBatching.dirtyComponents 的存贮 components ，已经存在的话，不需要在次放入里面
+            if(isBatching.dirtyComponents.indexOf(this.component) == -1){
+                isBatching.dirtyComponents.push(this.component)
+            }
         }else{
             this.component.updateComponent()
         }
@@ -61,6 +66,10 @@ class Component{
         this.$updater.peddingStates.forEach((newState)=>{
             this.state = {...this.state,...newState}
         })
+        
+        // 清空peddingStates，上一次状态已经完成转变
+        this.$updater.peddingStates.length = 0; 
+        
         let oldEle = this.ele
         let newEle = this.createDomFromStr()
         // console.log(newEle,'newEle')
@@ -160,7 +169,7 @@ function fn(e,eventName){
     // isBatching.isBatchingUpdate = true
     // e.target.component[eventName].call(e.target.component)
     // isBatching.isBatchingUpdate = false
-    
+
     // 更新组件
     isBatching.batchUpdate()
 }
