@@ -111,15 +111,56 @@ class Button extends Component{
     }
 }
 
+// react事物
+class Transaction{
+    constructor(wrappers){
+        this.wrappers = wrappers
+    }
+
+    perform(anyFunc){
+        this.wrappers.forEach((wrapper)=>{
+            wrapper.initailize()
+        })
+
+        anyFunc()
+
+        this.wrappers.forEach((wrapper)=>{
+            wrapper.close()
+        })
+    }
+}
+
 function fn(e,eventName){
     // 找到点击哪个组件的 this，通过 e.target.component
     // console.log(e.target.component)
 
     // 函数调用之前开启批量更新，调用完成之后关闭批量更新
-    isBatching.isBatchingUpdate = true
-    e.target.component[eventName].call(e.target.component)
-    isBatching.isBatchingUpdate = false
+    let transaction = new Transaction([
+        {
+            initailize(){
+                isBatching.isBatchingUpdate = true
+            },
+            close(){
+                isBatching.isBatchingUpdate = false
+            }
+        },
+        {
+            initailize(){
+                console.log('initailize 测试')
+            },
+            close(){
+                console.log('Transaction 测试')
+            }
+        }
+    ])
+    
+    transaction.perform(e.target.component[eventName].bind(e.target.component))
 
+    // 使用 Transaction 优化组件调用
+    // isBatching.isBatchingUpdate = true
+    // e.target.component[eventName].call(e.target.component)
+    // isBatching.isBatchingUpdate = false
+    
     // 更新组件
     isBatching.batchUpdate()
 }
