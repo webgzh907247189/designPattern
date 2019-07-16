@@ -81,6 +81,16 @@ class Clock1 extends React.component{
             this.setState({num: this.state.num+1})
             console.log(this.state.num,'setTimeout')
         })
+
+
+        // 下面的setState -> 具有呼吸依赖
+        // this.setState(prevState => ({num: this.state.num+1}))
+        // this.setState(prevState => ({num: this.state.num+1}))
+
+        // 意义同上， 回掉形式
+        // this.setState({num: this.state.num+1},()=>{
+        //     this.setState({num: this.state.num+1})
+        // })
     }
 
     render(){
