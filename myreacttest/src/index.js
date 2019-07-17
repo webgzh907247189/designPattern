@@ -1,5 +1,6 @@
 // import React from 'react';
 // import ReactDOM from 'react-dom';
+// import Demo from './reactDemo'
 
 import React from './my/react';
 import ReactDOM from './my/react-dom';
@@ -56,7 +57,7 @@ function Clock(props){
     return <div>{new Date().toLocaleDateString()}</div>
 }
 
-class Clock1 extends React.component{
+class Clock1 extends React.Component{
     constructor(props){
         // props 可以不传，render正常访问 this.props
         // 但是在constructor访问 this.props 是没有值的
@@ -134,6 +135,7 @@ let ele2 = React.createElement('h1',{
 // f()   undefined? ??????
 // vue的批量更新也是这个？
 
+{/* <Demo></Demo> */}
 ReactDOM.render(ele2, document.getElementById('root'));
 
 

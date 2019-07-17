@@ -15,7 +15,7 @@ function createElement(type, config={}, children){
     }
 }
 
-class component{
+class Component{
     // 标示class组件
     static isClassComponent = true
     constructor(props){
@@ -24,4 +24,4 @@ class component{
     }
 }
 
-export default {createElement,component}
+export default {createElement,Component}
