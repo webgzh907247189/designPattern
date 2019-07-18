@@ -1,9 +1,9 @@
-// import React from 'react';
-// import ReactDOM from 'react-dom';
-// import Demo from './reactDemo'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Demo from './reactDemo'
 
-import React from './my/react';
-import ReactDOM from './my/react-dom';
+// import React from './my/react';
+// import ReactDOM from './my/react-dom';
 
 
 // 使用babel 把jsx转为 React.createElement的语法
@@ -134,9 +134,11 @@ let ele2 = React.createElement('h1',{
 // var f = ss.a
 // f()   undefined? ??????
 // vue的批量更新也是这个？
+// Object.freeze,Object.seal ???
 
-{/* <Demo></Demo> */}
-ReactDOM.render(ele2, document.getElementById('root'));
+{/* <Demo></Demo> */  }
+// ele2
+ReactDOM.render(<Demo></Demo>, document.getElementById('root'));
 
 
 
