@@ -1,8 +1,9 @@
 import createStore from './createStore'
 import bindActionCreators from './bindActionCreators'
+import combineReducers from './combineReducers'
 
-export {createStore,bindActionCreators}
-export default {createStore,bindActionCreators}
+export {createStore,bindActionCreators,combineReducers}
+export default {createStore,bindActionCreators,combineReducers}
 
 
 // export {

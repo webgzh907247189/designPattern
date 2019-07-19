@@ -1,5 +1,5 @@
 import React from 'react'
-import {createStore,bindActionCreators} from './my/redux'
+import {createStore,bindActionCreators,combineReducers} from './my/redux'
 
 let ADD = 'add'
 let MINUS = 'minus'
@@ -24,7 +24,13 @@ let actions = {
     }
 }
 
-let store = createStore(reducer,{count: 10})
+let reducers = combineReducers({
+    reducer
+})
+
+// 使用 combineReducers 之后，必须使用下面的传递默认state，因为state存在key (warning)
+let store = createStore(reducers,{count: 10})
+// let store = createStore(reducers,{reducer: {count: 10}})
 console.log(store.getState(),'zz')
 
 
@@ -52,7 +58,7 @@ let actionObj = bindActionCreators(actions,store.dispatch)
 
 class ReduxDemo extends React.Component{
     state = {
-        count: store.getState().count
+        count: store.getState().reducer.count
     }
 
     componentDidMount(){
@@ -60,7 +66,7 @@ class ReduxDemo extends React.Component{
         // 只要执行了 dispatch，就会执行这个cb
         this.unSub = store.subscribe(()=>{
             this.setState({
-                count: store.getState().count
+                count: store.getState().reducer.count
             })
         })
     }
