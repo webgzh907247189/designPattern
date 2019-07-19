@@ -1,6 +1,8 @@
 import React from 'react'
 import Ctx from './context'
 import MyCtx from './myContext'
+import './redux'
+import ReduxDemo from './reduxDemo'
 
 /**
  * 通过 ref 访问到组件实例
@@ -102,6 +104,11 @@ class Comment extends React.PureComponent{
                 <p>~~~~~~</p>
                 <MyCtx/>
             </div>
+            <div>
+                <button id="redux_add">加</button>
+                <button id="redux_mins">减</button>
+            </div>
+            <ReduxDemo/>
         </div>
     }
 }
