@@ -136,6 +136,7 @@ let ele2 = React.createElement('h1',{
 // vue的批量更新也是这个？
 // Object.freeze,Object.seal ???
 
+
 {/* <Demo></Demo> */  }
 // ele2
 ReactDOM.render(<Demo></Demo>, document.getElementById('root'));
@@ -158,3 +159,12 @@ class B extends A{
 
 let b = new B
 console.log(B.staticParame) //true 
+
+
+
+
+
+
+
+// react里面，避免在componentDidMount() 写同步代码，因为会 重新render 一次
+// 同步代码写在 constructor，不应该写在 componentWillMount()里面 ,会被废弃
