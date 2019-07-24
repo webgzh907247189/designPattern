@@ -31,8 +31,18 @@ let reducers = combineReducers({
 // 使用 combineReducers 之后，必须使用下面的传递默认state，因为state存在key (warning)
 let store = createStore(reducers,{count: 10})
 // let store = createStore(reducers,{reducer: {count: 10}})
-console.log(store.getState(),'zz')
 
+
+// 直接修改 store.getState的返回值 并不会对state产生影响，因为它是 createStore内部返回state的引用
+// 如果想要保护 store.getState的返回值，使用 JSON.parse(JSON.Stringify())
+console.log(store.getState(),'zz')
+let state1 = store.getState()
+state1 = null
+
+// redux 没有对数据做保护，直接这样修改，可以修改数据， 使用 JSON.parse(JSON.Stringify()) 保护数据
+// state1.reducer.count = 10;
+
+console.log(state1,'zz1')
 
 function bindActionCreator(action,dispatch){
     return (...args)=>{

@@ -3,6 +3,10 @@ function createStore(reducer,initState){
     let listeners = []
 
     function getState(){
+        // 此方法是保护数据的
+        // return JSON.parse(JSON.stringify(state))
+
+        // 源码直接这样返回
         return state
     }
 
