@@ -63,7 +63,7 @@ class Demo extends React.Component{
         this.setState({hasError: true})
     }
 
-     // 捕获错误 同上
+    // 捕获错误 同上 (捕获子组件的错误)
     // static getDerivedStateFromError(){
     //     return {hasError: true}
     // }
@@ -80,7 +80,7 @@ class Test extends React.Component{
     // 必须有返回值
     static getDerivedStateFromProps(){
         console.log('child--getDerivedStateFromProps')
-        return {}
+        return {stateFromProps: 'test'}
     }
 
     // componentWillReceiveProps(newProps){
@@ -98,7 +98,9 @@ class Test extends React.Component{
     }
     render(){
         console.log('child--render',this.props)
-        return <div onClick={this.click}>test 组件 -> {this.props.num}</div>
+        return <div onClick={this.click}>test 组件 -> {this.props.num}
+            <span>来自getDerivedStateFromProps的返回状态值 -> {this.state.stateFromProps}</span>
+        </div>
     }
     componentDidMount(){
         console.log('child--componentDidMount')
@@ -109,8 +111,8 @@ class Test extends React.Component{
         console.log('child--getSnapshotBeforeUpdate')
         return 100
     }
-    componentDidUpdate(prevProps,prevState,Snapshot){
-        console.log('child--componentDidUpdate',prevProps,prevState,Snapshot)
+    componentDidUpdate(oldProps,oldState,snapshotResult){
+        console.log('child--componentDidUpdate',oldProps,oldState,snapshotResult)
     }
 
     componentWillUnmount(){
