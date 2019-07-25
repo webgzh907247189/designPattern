@@ -37,6 +37,7 @@ class ContextChildren1 extends React.PureComponent{
     // 类组件无需使用 context.Consumer,使用 contextType 直接挂载
     // 只要把 context(上下文) 挂载 到静态属性 contextType 上面，react内部把其挂载到 this.context上面
     static contextType = ctxContainer
+    // this.context = ContextChildren1.contextType.ctxContainer.Provider.value (类似与这种实现)
 
     render(){
         let {name,handle} = this.context

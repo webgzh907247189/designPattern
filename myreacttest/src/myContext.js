@@ -109,7 +109,7 @@ function createContext(){
             stateTest: 'test'
         }
 
-        // 两个参数 ->  一个是props，一个是自己的state
+        // 两个参数 ->  一个是props，一个是自己的state (没加之前，props变化，没有重新赋值，目的 -> 通过props修改state)
         static getDerivedStateFromProps(newProps,ownState){
             Provider.value = newProps.value
             return {}
