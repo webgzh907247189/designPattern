@@ -1,5 +1,6 @@
 import React from 'react';
 import Comment from './ref'
+import Hoc from './hoc'
 
 // 改写shouldComponentUpdate方法，数据发送变化才去render，否则不会重新渲染 (浅比较，比较第一层，比较引用地址)
 // class Demo extends React.PureComponent{
@@ -36,6 +37,10 @@ class Demo extends React.Component{
             {this.state.num%2 == 0 ? <Test {...this.state}></Test> : null }
             {this.state.hasError ? <div>Test1组件出错了，使用componentDidCatch捕获</div> : <Test1/>}
             <Comment/>
+            <div style={{border: '1px solid red'}}>
+                <div>hoc</div>
+                <Hoc/>
+            </div>
         </div>
     }
 
