@@ -23,6 +23,26 @@ class Form extends React.Component{
         return <>
             <UserName></UserName>
             <Pwd></Pwd>
+            <MouseEvent>
+                {
+                    (state) => {
+                        return <div>
+                            <p>x -> {state.x}</p>
+                            <p>y -> {state.y}</p>
+                        </div>
+                    }
+                }
+            </MouseEvent>
+            <MouseEvent render={
+                (state) => {
+                    return <div>
+                        <p>x -> {state.x}</p>
+                        <p>y -> {state.y}</p>
+                    </div>
+                }
+            }>
+            </MouseEvent>
+            <Panel {...{name: 'hoc多数据来源'}}/>
         </>
     }
 }
@@ -110,4 +130,66 @@ function getUserMessage(Component){
     }
 }
 
+
+
+/**
+ * render props  (类似于 vue的slot)
+ * 1. 组件之间复用的一种方式
+ * 2. react路由会使用
+ */
+
+ class MouseEvent extends React.Component{
+     state = {
+         x:0,
+         y:0
+     }
+
+     handleOver = (event) => {
+        // ????
+        event.persist()
+        // console.log(event.clientX,'??')
+
+        this.setState({
+            x: event.clientX,
+            y: event.clientY
+        })
+     }
+
+     render(){
+        let renderCom = this.props.render ? this.props.render : this.props.children
+         return <React.Fragment>
+            <div onMouseMove={this.handleOver}>
+                <p>我的坐标 (render props)</p>
+                {
+                    renderCom(this.state)
+                }
+            </div>
+         </React.Fragment>
+     }
+ }
+
 export default Form
+
+
+
+
+
+
+function withMouseEvent(Component){
+    return (props) => {
+        return <MouseEvent render={
+            (params) => {
+                return <Component {...params} {...props}/>
+            }
+        }/>
+    }
+}
+
+function Panel(props){
+    return <div>
+        <p>数据聚合 -> 多数据来源，来自多个组件组合 <span style={{color: 'red'}}>{props.name}</span></p>
+        <p>x -> {props.x}</p>
+        <p>y -> {props.y}</p>
+    </div>
+}
+Panel = withMouseEvent(Panel)
