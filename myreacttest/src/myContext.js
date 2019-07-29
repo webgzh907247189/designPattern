@@ -143,6 +143,7 @@ function memo(FnComponent){
 // React.PureComponent 比较 -> 
 // 1.对应的值(内存的地址)   2.属性的个数
 class PureComponent extends React.Component{
+    static isPureComponent = true
     //没有render，改写 shouldComponentUpdate
     shouldComponentUpdate(nextProps,nextState){
         return !(shallow(nextProps,this.props) && shallow(nextState,this.state))

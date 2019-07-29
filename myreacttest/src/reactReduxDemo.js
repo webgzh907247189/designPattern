@@ -59,10 +59,23 @@ class ReactReduxDemo extends React.Component{
 /**
  * 把状态映射为属性对象 
  * 1. 使用起来更简单
- * 2. 减少无用渲染(因为这个组件依赖的state大大减少，只进行必要渲染)
+ * 2. 减少无用渲染(因为这个组件依赖的state大大减少，只进行必要渲染),结合pureComponent 更明显，因为存在数据比较(没有mapStateToprops，按照大的state进行对比)
  */
 let mapStateToprops = state => state.reducer
-ReactReduxDemo = connect(mapStateToprops,actions)(ReactReduxDemo)
+// ReactReduxDemo = connect(mapStateToprops,actions)(ReactReduxDemo)
+
+
+let mapDispatchToProps = (dispatch,ownprops) => ({
+    // 新增ownprops
+    add(num){
+        dispatch({type: ADD,num: ownprops.amount || num})
+    },
+    minus(num){
+        dispatch({type: MINUS,num})
+    }
+})
+ReactReduxDemo = connect(mapStateToprops,mapDispatchToProps)(ReactReduxDemo)
+
 
 // 不这样设计的原因 -> 函数柯里化(不然需要做 参数判断)
 // ReactReduxDemo = connect(mapStateToprops,actions,ReactReduxDemo)
@@ -70,7 +83,7 @@ ReactReduxDemo = connect(mapStateToprops,actions)(ReactReduxDemo)
 
 function TestReactReduxDemo(){
     return <Provider store={store}>
-        <ReactReduxDemo/>
+        <ReactReduxDemo amount={2}/>
     </Provider> 
 }
 

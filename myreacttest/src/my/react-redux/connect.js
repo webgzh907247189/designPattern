@@ -15,6 +15,22 @@ export default function(mapStateToprops,action){
             constructor(props,context){
                 super(props)
                 this.state = mapStateToprops(context.store.getState())
+
+                if(typeof action == 'function'){
+                    this.boundAction = action(context.store.dispatch,props)
+                    // {
+                    //     xxx: add(){
+                    //         dispatch({type: ADD})
+                    //     }
+                    // }
+                }else{
+                    this.boundAction = bindActionCreators(action,context.store.dispatch)
+                    // {
+                    //     xxx: ()=>{
+                    //         dispatch(action[xxx]())
+                    //     }
+                    // }
+                }
             }
     
             componentDidMount(){
@@ -30,8 +46,9 @@ export default function(mapStateToprops,action){
             }
     
             render(){
-                let boundAction = bindActionCreators(action,this.context.store.dispatch)
-                return <WarppendCom {...this.state} {...boundAction}/>
+                // 在这里，每次render 都会重新计算
+                // let boundAction = bindActionCreators(action,this.context.store.dispatch)
+                return <WarppendCom {...this.state} {...this.boundAction}/>
             }
         }
     }
