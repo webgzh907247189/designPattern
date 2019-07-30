@@ -4,6 +4,7 @@ import MyCtx from './myContext'
 import './redux'
 import ReduxDemo from './reduxDemo'
 import TestReactReduxDemo from './reactReduxDemo'
+import TestReactReduxMiddlerareDemo from './middlerare'
 
 /**
  * 通过 ref 访问到组件实例
@@ -111,6 +112,7 @@ class Comment extends React.PureComponent{
             </div>
             <ReduxDemo/>
             <TestReactReduxDemo/>
+            <TestReactReduxMiddlerareDemo/>
         </div>
     }
 }
