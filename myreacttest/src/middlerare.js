@@ -1,6 +1,7 @@
 import React from 'react'
 import {createStore,combineReducers} from 'redux'
 import {connect,Provider} from './my/react-redux'
+import {applyMiddleware} from './my/redux'
 
 
 let ADD = 'add'
@@ -45,19 +46,7 @@ let actions = {
 }
 
 
-function compose(...fns){
-    if(fns.length == 0){
-        return args => args
-    }
 
-    if(fns.length == 1){
-        return (args) => fns[0](args)
-    }
-
-    return fns.reduce((a,b)=>{
-        return (...args) => a(b(...args))
-    })
-}
 
 function isPromise(fn){
     return typeof fn.then === 'function'
@@ -127,31 +116,6 @@ function logger({getState,dispatch}){
 //         }
 //     }
 // }
-
-
-function applyMiddleware(...middlerares){
-    return function(createStore){
-        return function(...args){
-            let store = createStore(...args)
-            
-            let dispatch
-            let middlerareAPI = {
-                dispatch: (...args) => dispatch(...args),
-                getState: store.getState
-            }
-            let fns = middlerares.map((middlerare)=>{
-                return middlerare(middlerareAPI)
-            })
-
-            dispatch = compose(...fns)(store.dispatch)
-            return {
-                ...store,
-                dispatch
-            }
-        }
-    }
-}
-
 
 
 let reducers = combineReducers({
