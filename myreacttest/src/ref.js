@@ -6,6 +6,7 @@ import ReduxDemo from './reduxDemo'
 import TestReactReduxDemo from './reactReduxDemo'
 import TestReactReduxMiddlerareDemo from './middlerare'
 import TestReduxActionsDemo from './reduxActionsDemo'
+import TestReactReduxImmutableDemo from './immutableDemo'
 
 /**
  * 通过 ref 访问到组件实例
@@ -115,6 +116,7 @@ class Comment extends React.PureComponent{
             <TestReactReduxDemo/>
             <TestReactReduxMiddlerareDemo/>
             <TestReduxActionsDemo/>
+            <TestReactReduxImmutableDemo/>
         </div>
     }
 }
