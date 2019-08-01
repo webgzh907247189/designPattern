@@ -3,6 +3,7 @@ import {createStore,combineReducers} from 'redux'
 import {connect,Provider} from './my/react-redux'
 import {applyMiddleware} from './my/redux'
 import {createActions,handleActions} from './my/redux-actions'
+import createSelect from './my/reselect'
 
 
 let ADD = 'add'
@@ -120,7 +121,14 @@ class ReduxActionsDemo extends React.Component{
  * 1. 使用起来更简单
  * 2. 减少无用渲染(因为这个组件依赖的state大大减少，只进行必要渲染),结合pureComponent 更明显，因为存在数据比较(没有mapStateToprops，按照大的state进行对比)
  */
-let mapStateToprops = state => state.reducer
+// let mapStateToprops = state => state.reducer
+
+let select = createSelect((state)=>{
+    return state.reducer
+},(stateOne)=>{
+    return stateOne
+})
+let mapStateToprops = state => select(state)
 ReduxActionsDemo = connect(mapStateToprops,actions)(ReduxActionsDemo)
 
 
