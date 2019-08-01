@@ -130,7 +130,7 @@ class ReactImmutableDemo extends React.Component{
         console.log('render')
         return <div>
             {/* this.props.reducer.count  -> 不使用mapStateToprops的情况下，这样写*/}
-            <div>immutable -> {this.props.count.toJS().num}</div>
+            <div>immutable -> {this.props.count.get('num')}</div>
             <input ref={ num => this.num = num} />
             <button onClick={this.add}>加</button>
         </div>
