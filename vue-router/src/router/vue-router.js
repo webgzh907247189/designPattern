@@ -1,3 +1,6 @@
+/**
+ * history.length 最大为50 有大小限制
+ */
 class HistoryRoute{
     constructor(){
         this.current = null
@@ -41,6 +44,7 @@ class VueRouter{
         })
     }
     go(){
+        // 只有前进后退才能触发popstate，pushState不会触发popstate
         window.addEventListener('popstate',()=>{
             this.history.current = location.pathname
         })
