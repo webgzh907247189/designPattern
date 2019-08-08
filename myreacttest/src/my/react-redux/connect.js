@@ -26,8 +26,8 @@ export default function(mapStateToprops,action){
                 }else{
                     this.boundAction = bindActionCreators(action,context.store.dispatch)
                     // {
-                    //     xxx: ()=>{
-                    //         dispatch(action[xxx]())
+                    //     xxx: (...args)=>{
+                    //         dispatch(action[xxx](args))
                     //     }
                     // }
                 }

@@ -53,40 +53,48 @@ function isPromise(fn){
     return typeof fn.then === 'function'
 }
 function promise({getState,dispatch}){
-    return function(next){
+    return function(next){ // next就是真正的 store.dispatch
+        console.log('1111')
         return function(action){
+            console.log('dispatch 333 start')
             isPromise(action.num) ? action.num.then(d=>{
                 dispatch({...action,num: d})
             }) : next(action) 
+            console.log('dispatch 333 end')
         }
     }
 }
 
 function thunk({getState,dispatch}){
-    return function(next){ // next就是原生的dispatch
+    return function(next){ // next就是logger返回的增强的dispatch
+        console.log('333')
         return function(action){ // 这个函数相当于 dispatch，但是增强了真正的dispatch的能力(next才是dispatch)
+            console.log('dispatch 111 start')
             // 传递actions给connect，传到组件里面的是 {...this.boundAction},类似下面的
             // {
             //     xxx: (...args)=>{
             //         dispatch(action(...args))
             //     }
             // }
-
             // action 是 actions中的函数运行的返回值
             if(typeof action === 'function'){
                 action(dispatch)
             }else{
                 next(action)
             }
+            console.log('dispatch 111 end')
         }
     } 
 }
 
 function logger({getState,dispatch}){
-    return function(next){ // next就是原生的dispatch
+    return function(next){ // next就是原生的promise 返回的增强dispatch
+        console.log('222')
         return function(action){ // 这个函数相当于 dispatch，但是增强了真正的dispatch的能力(next才是dispatch)
+            console.log('dispatch 222 start')
             console.log(`老状态${JSON.stringify(getState())}`)
             next(action)
+            console.log('dispatch 222 end')
             console.log(`新状态${JSON.stringify(getState())}`)
         }
     }
@@ -124,10 +132,14 @@ let reducers = combineReducers({
 })
 
 // let store = createStore(reducers,{count: 10})
-// 中间件的顺序是有关系的
+
+// 中间件的顺序是有关系的  （promise先运行，logger，thunk最后运行）
 let store = applyMiddleware(thunk,logger,promise)(createStore)(reducers)
+// 运行顺序  dispatch 被反复增强，每个中间件都在增强 dispatch 的能力，最初传入(最后一个中间件接收的next)才是 真正的  store.dispatch 
+// s = (...args) => thunk(logger(...args)) -> args 是 58行到64行
+// (...args) => s(promise(...args)) -> args 就是 store.dispatch
 
-
+// applyMiddleware 中的 dispatch 就是 71-86 行，最后改写真正的 store.dispatch 为 此函数
 
 
 class ReactMiddlerareDemo extends React.Component{
