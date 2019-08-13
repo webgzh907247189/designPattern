@@ -16,6 +16,7 @@ function createStore(reducer,initState){
         listeners.forEach((item)=>{
             item()
         })
+        return action
     }
     // 默认状态 -> 初始化调用
     dispatch({type: '@@REDUX/INIT'})
