@@ -2,12 +2,14 @@ let express = require('express')
 
 // Vdom 需要react，因为是依赖 React.createElement()
 import React from 'react' 
-import MyCtx from '../src/myContext'
+import SsrTest from '../src/ssr/test'
 import {renderToString} from 'react-dom/server'
 
 let app = express()
+app.use(express.static('static'))
 app.get('/',function(req,res){
-    let html = renderToString(<MyCtx/>)
+    let html = renderToString(<SsrTest/>)
+
     res.send(`
         <!DOCTYPE html>
         <html lang="en">
@@ -16,6 +18,7 @@ app.get('/',function(req,res){
         </head>
         <body>
             <div id="root">${html}</div>
+            <script src="indexssr.js"></script>
         </body>
         </html>
     `)

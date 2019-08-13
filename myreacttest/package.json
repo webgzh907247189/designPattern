@@ -18,9 +18,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "ssr:build": "webpack --config webpack.dev.js --watch",
+    "ssr:build-client": "webpack --config webpack.client.js --watch",
+    "ssr:build-server": "webpack --config webpack.server.js --watch",
     "ssr:server": "node ./buildSsr/server.js",
-    "ssrdev": "npm-run-all --parallel ssr:build ssr:server"
+    "ssrdev": "npm-run-all --parallel ssr:*"
   },
   "eslintConfig": {
     "extends": "react-app"

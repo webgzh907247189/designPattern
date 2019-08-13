@@ -10,6 +10,7 @@ yarn-error.log*
 /test/e2e/reports/
 selenium-debug.log
 /buildSsr/
+/static/
 
 # Editor directories and files
 .idea
