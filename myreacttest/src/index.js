@@ -136,6 +136,11 @@ let ele2 = React.createElement('h1',{
 // vue的批量更新也是这个？
 // Object.freeze,Object.seal ???
 
+// redux入门到精通  四期react react源码 react reactssr
+// node express
+// 可带领团队，可辅助团队 技术调研 & 技术深入
+// 普通组件有push 路由重新看，push？location.state
+// e。preventDefault 
 
 {/* <Demo></Demo> */  }
 // ele2
