@@ -5,7 +5,7 @@ import SsrTest from '../ssr/test'
 import SsrTest1 from '../ssr/test1'
 import routers from '../../server/router'
 import Header from '../ssr/header'
-import {BrowserRouter} from 'react-router-dom'
+import {BrowserRouter,Route} from 'react-router-dom'
 import {Provider} from 'react-redux'
 import {getClientStore} from '../store'
 
@@ -16,7 +16,9 @@ ReactDom.hydrate(
     <BrowserRouter>
         <Header/>
         {
-            routers
+             routers.map(router => (
+                <Route {...router}/>
+            ))
         }
     </BrowserRouter>
 </Provider>

@@ -12,7 +12,9 @@ function getServerStore(){
 }
 
 function getClientStore(){
-    return createStore(reducers,applyMiddleware(thunk,logger))
+    console.log(window.context,'window.context')
+    let initState = window.context.state
+    return createStore(reducers,initState,applyMiddleware(thunk,logger))
 }
 
 export {getServerStore,getClientStore}

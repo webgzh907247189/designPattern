@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "ssr:build-client": "webpack --config webpack.client.js --watch",
     "ssr:build-server": "webpack --config webpack.server.js --watch",
+    "pre-ssr:server": "nodemon ./server/serverJson.js",
     "ssr:server": "nodemon ./buildSsr/server.js",
     "ssrdev": "npm-run-all --parallel ssr:*"
   },
@@ -17,7 +18,9 @@
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
+    "axios": "^0.19.0",
     "babel-loader": "^8.0.6",
+    "cors": "^2.8.5",
     "nodemon": "^1.19.1",
     "react-router-dom": "^5.0.1",
     "webpack": "^4.39.1",

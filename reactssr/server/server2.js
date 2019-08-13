@@ -2,7 +2,7 @@ let express = require('express')
 
 // Vdom 需要react，因为是依赖 React.createElement()
 import React from 'react' 
-import {StaticRouter} from 'react-router-dom'
+import {StaticRouter,Route,matchPath} from 'react-router-dom'
 import {renderToString} from 'react-dom/server'
 import {Provider} from 'react-redux'
 import routers from './router'
@@ -15,29 +15,47 @@ let store = getServerStore()
 app.use(express.static('static'))
 app.get('*',function(req,res){
     let context = {name: '11'}
-    let html = renderToString(
-        <Provider store={store}>
-            <StaticRouter context={ context } location={req.path}>
-                <Header/>
-                {
-                    routers
-                }
-            </StaticRouter>
-        </Provider>
-    )
 
-    res.send(`
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <title>React App</title>
-        </head>
-        <body>
-            <div id="root">${html}</div>
-            <script src="indexssr.js"></script>
-        </body>
-        </html>
-    `)
+    let matchRouters = routers.filter(router => matchPath(req.path,router))
+    let getData = matchRouters.reduce((result,item)=>{
+        if(item.loadData){
+            result.push(item.loadData(store))
+        }
+        return result
+    },[])
+
+    Promise.all(getData).then((resultList)=>{
+        let html = renderToString(
+            <Provider store={store}>
+                <StaticRouter context={ context } location={req.path}>
+                    <Header/>
+                    {
+                        routers.map(router => (
+                            <Route {...router}/>
+                        ))
+                    }
+                </StaticRouter>
+            </Provider>
+        )
+    
+        res.send(`
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <title>React App</title>
+            </head>
+            <body>
+                <div id="root">${html}</div>
+                <script>
+                    window.context = {
+                        state: ${JSON.stringify(store.getState())}
+                    }
+                </script>
+                <script src="indexssr.js"></script>
+            </body>
+            </html>
+        `)
+    })
 })
 
 app.listen(3000,function(){

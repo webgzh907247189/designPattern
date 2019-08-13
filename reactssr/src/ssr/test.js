@@ -7,22 +7,36 @@ class SsrTest extends React.Component{
         this.props.add()
     }
 
+    handleMinus = () => {
+        this.props.minus()
+    }
+
     render(){
         return <div style={ {color: 'red'} }>
             <button onClick={this.handle}>增加</button>
+            <button onClick={this.handleMinus}>异步减少</button>
             <div>{this.props.number}</div>
         </div>
     }
 }
 
 // export default connect((state)=>{
-//     console.log(state)
 //     return state.counter
 // },{
 //     add(number = 1){
 //         return {
 //             type: 'add',
 //             number
+//         }
+//     },
+//     minus(number = 1){
+//         return (dispatch)=>{
+//             setTimeout(()=>{
+//                 dispatch({
+//                     type: 'minus',
+//                     number
+//                 })
+//             },2000)
 //         }
 //     }
 // })(SsrTest)
@@ -33,6 +47,14 @@ export default connect((state)=>{
     return {
         add(number = 1){
             dispatch({type: 'add',number})
+        },
+        minus(number = 1){
+            setTimeout(()=>{
+                dispatch({
+                    type: 'minus',
+                    number
+                })
+            },2000)
         }
     }
 })(SsrTest)
