@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "express": "^4.17.1",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.15",
     "react": "^16.8.6",
@@ -16,7 +17,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "ssr:server": "nodemon ./buildSsr/server.js",
+    "ssr:build": "webpack --config webpack.dev.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -34,7 +37,13 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "babel-loader": "^8.0.6",
+    "nodemon": "^1.19.1",
     "path-to-regexp": "^3.0.0",
-    "react-router-dom": "^5.0.1"
+    "react-router-dom": "^5.0.1",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6",
+    "webpack-node-externals": "^1.7.2"
   }
 }
