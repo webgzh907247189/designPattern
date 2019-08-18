@@ -28,13 +28,21 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "css-loader": "^3.2.0",
     "express": "^4.17.1",
+    "express-http-proxy": "^1.5.1",
+    "express-session": "^1.16.2",
+    "isomorphic-loader": "^2.1.1",
+    "isomorphic-style-loader": "^5.1.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-redux": "^7.1.0",
     "react-router": "^5.0.1",
+    "react-router-config": "^4.4.0-beta.8",
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "style-loader": "^1.0.0"
   }
 }

@@ -28,6 +28,19 @@ module.exports = {
                         "@babel/plugin-proposal-class-properties"
                     ]
                 }
+            },
+            // 无法与client 公用loader，因为没有dom，style-loader是动态创建插入link
+            {
+                test: /\.css$/,
+                use: [
+                    'isomorphic-style-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: true
+                        }
+                    }
+                ]
             }
         ]
     }

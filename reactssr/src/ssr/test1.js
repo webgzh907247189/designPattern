@@ -27,8 +27,8 @@ class SsrTest1 extends React.Component{
 
 let actions = {
     getData(){
-        return (dispatch,getState)=>{
-            return axios.get(`http://localhost:4000/`).then((result)=>{
+        return (dispatch,getState,request)=>{
+            return request.get(`/api`).then((result)=>{
                 dispatch({
                     type: 'set_home_list',
                     payload: result.data
