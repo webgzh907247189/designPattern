@@ -37,7 +37,7 @@ export default [
         component: App,
         key: 'app',
         loadData: App.loadData,
-        components: [
+        routes: [
             {
                 path: '/',
                 component: SsrTest,

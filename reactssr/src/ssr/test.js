@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import style from '../app.css'
 
 class SsrTest extends React.Component{
 
@@ -15,7 +16,7 @@ class SsrTest extends React.Component{
         return <div style={ {color: 'red'} }>
             <button onClick={this.handle}>增加</button>
             <button onClick={this.handleMinus}>异步减少</button>
-            <div>{this.props.number}</div>
+            <div className={style.font}>{this.props.number}</div>
         </div>
     }
 }

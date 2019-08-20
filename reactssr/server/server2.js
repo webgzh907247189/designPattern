@@ -3,7 +3,7 @@ let express = require('express')
 // Vdom 需要react，因为是依赖 React.createElement()
 import React from 'react' 
 import {StaticRouter,Route,matchPath} from 'react-router-dom'
-import {renderToString} from 'react-dom/server'
+import {renderToString,renderToNodeStream} from 'react-dom/server'
 import {renderRoutes,matchRoutes} from 'react-router-config'
 import {Provider} from 'react-redux'
 import proxy from 'express-http-proxy'
@@ -29,9 +29,9 @@ app.get('*',function(req,res){
     // let matchRouters = routers.filter(router => matchPath(req.path,router))
     let matchRouters = matchRoutes(routers,req.path)
 
-    // console.log(matchRouters,'matchRouters')
+    console.log(matchRouters,'matchRouters')
     let getData = matchRouters.reduce((result,item)=>{
-        console.log(item.route,'itemitemitem')
+        // console.log(item.route,'itemitemitem')
         if(item.route.loadData){
             // result.push(item.route.loadData(store))
 

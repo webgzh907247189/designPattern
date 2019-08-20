@@ -8,7 +8,7 @@ class Header extends React.Component{
     }
 
     render(){
-        return <div style={ {color: 'red'} }>
+        return <div>
             <Link to="/test1">
                 <div style={{width: '100px',display: 'inline-block'}}>home</div>
             </Link>

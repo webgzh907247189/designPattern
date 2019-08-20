@@ -8,7 +8,7 @@ import withStyle from './withStyle'
 
 class App extends React.Component{
     render(){
-        // console.log(this.props.route.components,'111')
+        // console.log(this.props.route.routes,'111')
         return <React.Fragment>
                 <div className={style.header}>css test</div>
 
@@ -20,7 +20,7 @@ class App extends React.Component{
                 } */}
 
                 {
-                    renderRoutes(this.props.route.components)
+                    renderRoutes(this.props.route.routes)
                 }
         </React.Fragment>
     }
