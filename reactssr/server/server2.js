@@ -37,7 +37,8 @@ app.get('*',function(req,res){
 
             // 保证每个promise已经是成功状态，promise.all 一定会成功
             result.push(new Promise((resolve,reject)=>{
-                return item.route.loadData(store).then(resolve,resolve)
+                // return item.route.loadData(store).then(resolve,resolve)
+                item.route.loadData(store).then(resolve,resolve)
             }))
         }
         return result
