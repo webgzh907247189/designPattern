@@ -10,9 +10,8 @@ class App extends React.Component{
     render(){
         // console.log(this.props.route.components,'111')
         return <React.Fragment>
-                <div className={style.header}>213123</div>
+                <div className={style.header}>css test</div>
 
-                
                 <Header className={style.font} staticContext={this.props.staticContext}/>
                 {/* {
                     routers.map(router => (

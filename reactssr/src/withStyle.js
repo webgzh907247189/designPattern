@@ -1,6 +1,8 @@
 import React from 'react'
+import hoistNonReactStatics from 'hoist-non-react-statics'
+
 export default function (Cpmponent,style){
-    return class extends React.Component{
+    class WithStyle extends React.Component{
         componentWillMount(){
             if(this.props.staticContext){
                 this.props.staticContext.csses.push(style._getCss())
@@ -11,4 +13,6 @@ export default function (Cpmponent,style){
             return <Cpmponent {...this.props}/>
         }
     }
+
+    return hoistNonReactStatics(WithStyle, Cpmponent);
 }
