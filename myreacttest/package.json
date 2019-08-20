@@ -5,6 +5,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "immutable": "^4.0.0-rc.12",
+    "jquery": "^3.4.1",
     "lodash": "^4.17.15",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
