@@ -35,6 +35,57 @@ function MyUseState(){
     </>
 }
 
+
+/** hooks  useState(单链表结构) 
+ *  每一个节点都是一个对象，当前对象有两个key，一个key是保存当前的值，另一个key是 next，next 指向下一个对象，由此组成单链表 
+ */
+console.log(new Date().getTime() === Date.now()) //true
+
+let dataStructureFirst = {next: null,memoizedState: null}
+let dataStructureUseState = {
+    firstWorkInProgressHook: dataStructureFirst,
+    workInProgressHook: dataStructureFirst,
+    useState(initialState){
+        console.log('1111',this.workInProgressHook)
+
+        let currentHook = this.workInProgressHook.next ? this.workInProgressHook.next : {memoizedState: initialState,next: null}
+        let setState = (newState) => {
+            currentHook.memoizedState = newState
+            
+            render(()=>{
+                // 链表回源 (回到最开始的地方)
+                this.workInProgressHook = this.firstWorkInProgressHook
+            })
+        }
+
+        if(this.workInProgressHook.next){
+            // 找到当前的 state
+            this.workInProgressHook = this.workInProgressHook.next
+        }else{
+            // 链表 挂载完成，形成链式
+            this.workInProgressHook.next = currentHook
+            // workInProgressHook 向后移一步
+            this.workInProgressHook = currentHook
+        }
+        // 返回当前state
+        return [currentHook.memoizedState,setState]
+    }
+}
+
+function DataStructureUseState(){
+    let [name,setName] = dataStructureUseState.useState('计算器')
+    let [state,add] = dataStructureUseState.useState(0)
+    return <>
+        <div>
+            12312
+            <span>使用单链表的UseStateMore -> {state}: {name}</span>
+            <button onClick={() => {setName(`改名字${Date.now()}`)}}>改名字</button>
+            <button onClick={() => {add(state + 1)}}>UseStateMore +</button>
+        </div>
+    </>
+}
+
+
 function UseState(){
     let [state,add] = React.useState(0)
     console.log('UseState render')
@@ -300,6 +351,7 @@ function Hooks(){
     return <>
         <div style={{border: '1px solid red'}}>
             <UseState/>
+            <DataStructureUseState/>
             <MyUseState/>
             <UseReducerToChangeUseState/>
         </div>
