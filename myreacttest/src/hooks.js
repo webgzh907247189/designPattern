@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom';
+import UseStateDetail from './useStateDetail'
 
 let ctxContainer = React.createContext()
 class Ctx extends React.Component{
@@ -51,7 +52,7 @@ let dataStructureUseState = {
         let currentHook = this.workInProgressHook.next ? this.workInProgressHook.next : {memoizedState: initialState,next: null}
         let setState = (newState) => {
             currentHook.memoizedState = newState
-            
+
             render(()=>{
                 // 链表回源 (回到最开始的地方)
                 this.workInProgressHook = this.firstWorkInProgressHook
@@ -261,6 +262,18 @@ function UseEffect(){
         console.log('useEffect',state)
     },[name])
 
+    // 
+    React.useEffect(()=>{
+        const timeer = setInterval(()=>{
+            add(state + 1)
+        },1000)
+        // 副作用的函数可以返回一个函数，用来清除副作用 
+        // 防止内存泄露，清除函数会在组件卸载之前调用。如果多次渲染，则在下一个effect之前，清除上个effect
+        return ()=>{
+            clearInterval(timeer)
+        }
+    })
+
     return <>
         <div>
             <span>useEffect -> {state}: {name}</span>
@@ -373,6 +386,10 @@ function Hooks(){
             <UseEffect/>
         </div>
 
+        <div style={{border: '1px solid blue',marginTop: '30px'}}>
+            <UseStateDetail/>
+        </div>
+
         <Ctx/>
     </>
 }
@@ -398,7 +415,8 @@ export default render
  * hoc 组件 复用性 差
  * 
  * 在函数主体中，不能写有副作用的逻辑(订阅，设置定时器，修改dom) 
- * useEffect 添加副作用逻辑 (类似didMount，didupdate) 
+ * useEffect 添加副作用逻辑 (类似didMount，didupdate) 每次重新render之后，在指向effect的回调函数
+ * 每次渲染重新产生新的 useEffect
  */
 
 
