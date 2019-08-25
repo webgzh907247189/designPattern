@@ -152,6 +152,31 @@ function UseRefSafeChildren(props,ref){
 }
 
 
+function useMyHooks(){
+    let [state,setState] = React.useState(()=>{
+        return {number: 0}
+    })
+
+    React.useEffect(()=>{
+        setInterval(()=>{
+            setState(state => ({number: state.number + 1}))
+
+            // 下面这样写是错误的，因为更新要拿最新的状态进行更新
+            // setState({number: state.number + 1})
+        },1000)
+    },[])
+
+    return [state,setState]
+}
+
+function MyHooks(){
+    let [state,setState] = useMyHooks()
+
+    return <>
+        <span>自定义hooks</span>
+        <div onClick={() => setState({number: state.number + 1})}>hooks ->{state.number}</div>
+    </>
+}
 
 
 function UselayoutEffect(){
@@ -198,6 +223,10 @@ function Render(){
 
         <div style={{border: '1px solid red',marginTop: '30px'}}>
             <UselayoutEffect/>
+        </div>
+
+        <div style={{border: '1px solid red',marginTop: '30px'}}>
+            <MyHooks/>
         </div>
     </>
 }

@@ -409,7 +409,7 @@ export default render
  * useReducer 是 useState 的内部实现， useState依赖 useReducer
  * 
  * hooks 在最外层调用，不要在循环，判断，子函数调用hooks (链表维护 数组维护的状态，可能下标出现问题，不能一一对应)
- * 
+ * 只能在函数组件内部调用hooks
  * 
  * class 组件性能差，需要保持实列
  * hoc 组件 复用性 差
