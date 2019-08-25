@@ -50,6 +50,9 @@ function UseStateLazy(){
     </>
 }
 
+
+
+
 // 渲染优化
 function MemoUseCallbackUseMemo(props){
     console.log('MemoUseCallbackUseMemo render')
@@ -86,6 +89,96 @@ function SubCounter({data,onClick}){
 
 
 
+function UseRef(){
+    let ref = React.useRef()
+    function getFocus(){
+        // 可以直接在父组件操作子组件的value(不安全)
+        ref.current.value = '父组件操作的value'
+        ref.current.focus()
+    }
+
+    return <>
+        <UseRefChildren ref={ref}/>
+        <button onClick={getFocus}>获得焦点</button>
+    </>
+}
+
+UseRefChildren = React.forwardRef(UseRefChildren)
+function UseRefChildren(props,ref){
+    return <>
+        <input ref={ref}/>
+    </>
+}
+
+
+
+function UseRefSafe(){
+    let parentRef = React.useRef()
+    function getFocus(){
+        // 可以直接在父组件操作子组件的value，只能调用 通过useImperativeHandle() 暴漏的api 
+        parentRef.current.focus()
+
+        // 值无法赋值成功
+        parentRef.current.value = '父组件操作的value????'
+
+        parentRef.current.changeText('通过暴露的api完成赋值')
+    }
+
+    return <div>
+        <UseRefSafeChildren ref={parentRef}/>
+        <button onClick={getFocus}>获得焦点</button>
+    </div>
+}
+
+UseRefSafeChildren = React.forwardRef(UseRefSafeChildren)
+function UseRefSafeChildren(props,ref){
+    let childrenRef = React.useRef()
+    let childrenInputRef = React.useRef()
+    React.useImperativeHandle(ref,()=>{
+        return {
+            focus(){
+                childrenRef.current.focus()
+            },
+            changeText(text){
+                childrenInputRef.current.value = text
+            }
+        }
+    })
+
+    return <>
+        <input ref={childrenRef}/>
+        <input ref={childrenInputRef}/>
+    </>
+}
+
+
+
+
+function UselayoutEffect(){
+    let [color,setColor] = React.useState('red')
+    
+    // 同步的 (更快的 修改dom)
+    // 可以用来读取dom布局，并且同步触发渲染 
+    React.useLayoutEffect(()=>{
+        console.log('UselayoutEffect -> ' + color)
+
+        // 此处修改 background 页面不会闪烁
+        // document.getElementById('color').style.background = 'pink'
+    })
+    // 异步
+    React.useEffect(()=>{
+        console.log('useEffect',color)
+
+        // 此处修改 background 页面会闪烁
+        // document.getElementById('color').style.background = 'pink'
+    })
+    return <>
+        <div id="color" style={{background: color}}>颜色</div>
+        <button onClick={()=> {setColor('red')}}>红色</button>
+        <button onClick={()=> {setColor('yellow')}}>黄色</button>
+        <button onClick={()=> {setColor('blue')}}>蓝色</button>
+    </>
+}
 
 function Render(){
     return <>
@@ -96,6 +189,15 @@ function Render(){
      
         <div style={{border: '1px solid red',marginTop: '30px'}}>
             <MemoUseCallbackUseMemo/>
+        </div>
+
+        <div style={{border: '1px solid block',marginTop: '30px'}}>
+            <UseRef/>
+            <UseRefSafe/>
+        </div>
+
+        <div style={{border: '1px solid red',marginTop: '30px'}}>
+            <UselayoutEffect/>
         </div>
     </>
 }

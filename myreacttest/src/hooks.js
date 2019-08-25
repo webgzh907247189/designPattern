@@ -417,6 +417,9 @@ export default render
  * 在函数主体中，不能写有副作用的逻辑(订阅，设置定时器，修改dom) 
  * useEffect 添加副作用逻辑 (类似didMount，didupdate) 每次重新render之后，在指向effect的回调函数
  * 每次渲染重新产生新的 useEffect
+ * 
+ * 
+ * hooks 特点 可以用在函数组件，并且可以在函数组件的多次渲染保持不变
  */
 
 
