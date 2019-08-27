@@ -75,14 +75,14 @@ class VueRouter{
             // vue组件渲染顺序 ->  先序深度遍历 渲染
             if(this.$options && this.$options.router){ //根组件
                 this._root = this
-                this._router = this.$options.router
+                this._router = this.$options && this.$options.router
 
                 // console.log(this._router.history,'this.$router')
                 // 深度监控 (服务于  router-view的current)
                 Vue.util.defineReactive(this,'xx',this._router.history)
             }else{
                 // 深度先续遍历
-                this._root = this.$parent._root
+                this._root = this.$parent && this.$parent._root
             }
 
             Object.defineProperty(this,'$router',{
