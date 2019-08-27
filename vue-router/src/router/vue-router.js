@@ -12,6 +12,8 @@ class VueRouter{
         this.options = options
         this.mode = options.mode || 'hash'
         this.routes = options.routes || []
+
+        // 收敛数组
         this.routesMaps = this.createMap(this.routes)
 
         this.history = new HistoryRoute()
@@ -76,21 +78,26 @@ class VueRouter{
                 this._router = this.$options.router
 
                 // console.log(this._router.history,'this.$router')
-                // 深度监控
+                // 深度监控 (服务于  router-view的current)
                 Vue.util.defineReactive(this,'xx',this._router.history)
             }else{
+                // 深度先续遍历
                 this._root = this.$parent._root
             }
 
             Object.defineProperty(this,'$router',{
                 get(){
+                    // 唯一的路由实列 得到 VueRouter 的实列(所以 this.$router 有go方法)
                     return this._root._router
                 }
             })
 
             Object.defineProperty(this,'$route',{
                 get(){
-                    return this._root._router.history.current
+                    // this._root._router.history 是 HistoryRoute 的实列
+                    return {
+                        current: this._root._router.history.current
+                    }
                 }
             })
         }
@@ -117,9 +124,10 @@ class VueRouter{
     })
 
     Vue.component('router-view',{
+        // this._self 当前的组件
         // render 方法 里面的 this_self 指向 组件
         // this._self._root 指向 根组件
-        // this._self._root._router 指向 根组件的 router 实例
+        // this._self._root._router 指向 根组件的 HistoryRoute 实例
         render(h){
             let current = this._self._root._router.history.current
 
