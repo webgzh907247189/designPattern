@@ -4,3 +4,5 @@ mediatorModel
 .bin/babylon.cmd
 /.cache-loader/
 .cache-loader/
+cache-loader/
+dist/
