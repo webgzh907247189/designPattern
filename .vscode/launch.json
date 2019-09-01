@@ -29,6 +29,12 @@
             "request": "launch",
             "name": "express",
             "program": "${workspaceFolder}/express-source/test-3/index.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "render",
+            "program": "${workspaceFolder}/express-source/test-3/render.js"
         }
     ]
 }

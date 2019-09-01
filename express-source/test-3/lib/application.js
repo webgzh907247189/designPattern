@@ -5,7 +5,29 @@ const Router = require('./router/index')
 
 function Application(){
     // this.lazyRouter()
+    this.settings = {} //保存参数
+    this.engines = {} //保存文件扩展名(每种模版引擎render方法不一样)
 }
+// 两个参数表示设置，一个参数表示获取
+Application.prototype.set = function(key,val){
+    if(arguments.length === 1){
+        return this.settings[key]
+    }
+    this.settings[key] = val
+}
+// 什么文件用什么方法渲染
+Application.prototype.engine = function(ext,render){
+    ext.includes('.') ? ext : `.${ext}`
+    // 设置渲染函数
+    this.engines[ext] = render
+}
+
+Application.prototype.param = function(name,handle){
+    this.lazyRouter()
+    this._router.param.apply(this._router,arguments)
+}
+
+
 
 // 路由懒加载(不调用方法，不需要执行初始化代码)
 Application.prototype.lazyRouter = function(){
@@ -13,8 +35,15 @@ Application.prototype.lazyRouter = function(){
         this._router = new Router()
     }
 }
+
 methods.forEach((method)=>{
     Application.prototype[method] = function(path,handler){
+        // 获取变量
+        if(method === 'get' && arguments.length === 1){
+            return this.set(arguments[0])
+        }
+
+
         this.lazyRouter()
         // 可以支持多个处理函数
         this._router[method].apply(this._router,Array.prototype.slice.call(arguments))

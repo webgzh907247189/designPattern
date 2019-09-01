@@ -2,6 +2,7 @@ const Route = require('./route')
 const Layer = require('./layer')
 const url = require('url')
 const methods = require('methods')
+const init = require('../middlerare/init')
 
 function Router(){
     function router(req,res,next){
@@ -9,6 +10,8 @@ function Router(){
     }
     Object.setPrototypeOf(router,proto)
     router.stack = []
+
+    router.use(init)
     return router
 }
 
@@ -24,6 +27,10 @@ methods.forEach((method)=>{
         route[method].apply(route,Array.prototype.slice.call(arguments,1))
     }
 })
+
+proto.param = function(name,handler){
+    // todo ???
+}
 
 proto.use = function(path,handler){
 
