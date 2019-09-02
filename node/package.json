@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "startkoa": "nodemon ./testKoa.js",
     "testmiddleware": "node ./koaMiddleware.js",
-    "excel": "nodemon ./excel.js"
+    "excel": "nodemon ./excel.js",
+    "testargs": "nodemon ./testargs.js --color red --name testargs"
   },
   "author": "",
   "license": "ISC",
@@ -15,16 +16,18 @@
     "delegates": "^1.0.0",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
-    "koa": "^2.6.2",
+    "koa": "^2.7.0",
     "koa-route": "^3.2.0",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
     "koa-views": "^6.1.4",
     "querystring": "^0.2.0",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "excel-parser": "^0.2.2",
+    "mime": "^2.4.4",
     "node-xlsx": "^0.15.0",
     "nodemon": "^1.17.5"
   }
