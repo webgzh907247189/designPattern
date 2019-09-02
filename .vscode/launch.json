@@ -6,6 +6,7 @@
     "configurations": [
 
 
+
         {
             "type": "node",
             "request": "launch",
@@ -35,6 +36,12 @@
             "request": "launch",
             "name": "render",
             "program": "${workspaceFolder}/express-source/test-3/render.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "router",
+            "program": "${workspaceFolder}/node/router.js"
         }
     ]
 }
