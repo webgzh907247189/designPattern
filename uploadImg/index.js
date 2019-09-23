@@ -221,3 +221,30 @@ let composeResultQrCode = composeFn(resultImg,getBlob,dataURLtoBlob)
     // Blob 对象表示一个不可变、原始数据的类文件对象。Blob 表示的不一定是JavaScript原生格式的数据。File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
     // URL.createObjectURL() 静态方法会创建一个 DOMString，其中包含一个表示参数中给出的对象的URL。这个 URL 的生命周期和创建它的窗口中的 document 绑定。这个新的URL 对象表示指定的 File 对象或 Blob 对象。
 }
+
+
+// async 捕获错误
+{
+    (async () => {
+        const fetchData = () => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve('fetch data is me')
+                }, 1000)
+            })
+        }
+    
+        // 抽离成公共方法
+        const awaitWrap = (promise) => {
+            return promise
+                .then(data => [null, data])
+                .catch(err => [err, null])
+        }
+    
+        const [err, data] = await awaitWrap(fetchData())
+        console.log('err', err)
+        console.log('data', data)
+        // err null
+        // data fetch data is me
+    })()
+}
