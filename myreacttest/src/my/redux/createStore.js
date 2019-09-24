@@ -79,10 +79,18 @@ function createStore(reducer,initState){
         }
     }
 
+    function replaceReducer(nextReducer) {
+        reducer = nextReducer
+        
+        /*刷新一遍 state 的值，新来的 reducer 把自己的默认状态放到 state 树上去*/
+        dispatch({ type: Symbol() })
+    }
+
     return {
         getState,
         dispatch,
-        subscribe
+        subscribe,
+        replaceReducer
     }
 }
 
