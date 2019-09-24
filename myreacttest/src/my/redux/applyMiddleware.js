@@ -5,6 +5,8 @@ function applyMiddleware(...middlerares){
             let store = createStore(...args)
             
             let dispatch
+
+            // 没有直接传入store，因为遵循  最小开放策略，只放开需要的 方法
             let middlerareAPI = {
                 dispatch: (...args) => {
                     // debugger;
