@@ -25,13 +25,28 @@ let actions = {
 }
 
 let reducers = combineReducers({
-    reducer
+    // reducer
 })
 
 // 使用 combineReducers 之后，必须使用下面的传递默认state，因为state存在key (warning)
-let store = createStore(reducers,{count: 10})
+// let store = createStore(reducers,{count: 10})
+
+// 使用 replaceReducer 动态加载 reducer
+// store.replaceReducer(combineReducers({
+//     reducer
+// }))
+
+
+//*******************************************************//
+// 不使用 replaceReducer 的版本
 // let store = createStore(reducers,{reducer: {count: 10}})
 
+// 使用 replaceReducer 版本,存在问题 ？？？ initState 会丢失
+let store = createStore(reducers,{reducer: {count: 10}})
+store.replaceReducer(combineReducers({
+    reducer
+}))
+//*******************************************************//
 
 // 直接修改 store.getState的返回值 并不会对state产生影响，因为它是 createStore内部返回state的引用
 // 如果想要保护 store.getState的返回值，使用 JSON.parse(JSON.Stringify())
@@ -102,7 +117,7 @@ class ReduxDemo extends React.Component{
 
     render(){
         return <div>
-            <div>{this.state.count}</div>
+            <div>使用redux的replaceReducer{this.state.count}</div>
             <button onClick={this.add}>加</button>
             <button onClick={this.minus}>减</button>
             <button onClick={this.combine}>加10</button>
