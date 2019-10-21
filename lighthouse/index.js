@@ -1,4 +1,12 @@
 /**
+ * 当前分支是maser分支，我想讲paytest分支上的代码完全覆盖master分支，首先切换到master分支。
+ * git reset --hard origin/paytest 
+ * 执行上面的命令后master分支上的代码就完全被paytest分支上的代码覆盖了（本地分支），然后将本地分支强行推到远程分支。
+ * 
+ * git push -f
+ */
+
+/**
  * 生成站点报告
  * 
  * https://juejin.im/book/5b936540f265da0a9624b04b/section/5bb6218ee51d450e7762f873
