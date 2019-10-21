@@ -1,9 +1,20 @@
 /**
+ * 强制提交：
  * 当前分支是maser分支，我想讲paytest分支上的代码完全覆盖master分支，首先切换到master分支。
  * git reset --hard origin/paytest 
  * 执行上面的命令后master分支上的代码就完全被paytest分支上的代码覆盖了（本地分支），然后将本地分支强行推到远程分支。
  * 
  * git push -f
+ * 
+ * https://www.2cto.com/kf/201808/767084.html
+ * 合并之后回滚：
+ *  执行 git reset --soft xxid_2之后:
+ *  commit3被撤销了，commit1和commit2还存在,commit3 出现在暂存区
+ * 
+ * 执行 git reset --hard xxid_2之后:
+ * commit3被撤销了，commit1和commit2还存在,commit3彻底消失
+ * 
+ * git push origin xx -f 强制提交
  */
 
 /**
