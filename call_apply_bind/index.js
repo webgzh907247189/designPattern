@@ -283,3 +283,28 @@
         logoData.timesClicked++;
     }, false);
 }
+
+
+
+
+function test(arr) {
+    return function () {
+        if(arguments.length){
+            arr = [...arr, ...Array.from(arguments)]
+            return test(arr)
+        }else {
+            return arr.reduce((result,item)=>{
+                result += item;
+                return result
+            },0)
+        }
+    }
+}
+function sum() {
+    let arr = Array.from(arguments)
+    return test(arr)
+}
+
+console.log(sum(3)())
+console.log(sum(1)(2)())
+console.log(sum(3)(4)())
