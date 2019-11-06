@@ -42,6 +42,12 @@
             "request": "launch",
             "name": "router",
             "program": "${workspaceFolder}/node/router.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "connect",
+            "program": "${workspaceFolder}/node/connect.js"
         }
     ]
 }

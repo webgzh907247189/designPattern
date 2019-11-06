@@ -14,7 +14,8 @@ let sub_app = connect();
 // 因为此时header已经发送到客户端了
 // 是http协议约定的
 app.use('/', function (req,res,next) {
-    // res.setHeader('a','1')
+    res.setHeader('Access-Control-Allow-Origin','*')
+    res.setHeader("Access-Control-Allow-Methods","*")
     res.write('oh2, ');
     console.log('use 带路由的中间件')
     next()
@@ -25,7 +26,11 @@ app.use(function (req,res,next) {
     res.write('oh3, ');
     next()
     // 加上这句，使得res提前结束
-    res.end('hello')
+    let url = req.url.slice(1)
+    if(url === 'query/ads'){
+        res.end(JSON.stringify({name: '11'}))
+    }
+    // res.end('hello')
 })
 
 app.use('/', sub_app);
@@ -34,6 +39,6 @@ sub_app.use('/', function (req,res,next) {
     next()
 })
 console.log(sub_app.length)
-app.listen('3000',function() {
+app.listen('3002',function() {
     console.log('connect 已经启动')
 })
