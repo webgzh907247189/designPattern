@@ -48,7 +48,7 @@ let testT40: T40 = 'updatePart'
 // 字符串字面量类型允许你指定字符串必须的固定值。在实际应用中，字符串字面量类型可以与联合类型，类型保护和类型别名很好的配合。
 type str1 = 'x' | 'y' | 'z'
 type A = Exclude<'x' | 'a', str1>
-
+// type MyExclude<T,U> = 
 
 
 
@@ -147,6 +147,11 @@ type nullVal = NonNullable<null | undefined | string>
 let nullVal1: nullVal = '1'
 
 
+// typeof -- 获取变量的类型
+let obj = {name: '1',sex: 2}
+type a = typeof getType // 注意看返回值， 所以需要ReturnType
+type aa = typeof obj
+
 
 // ReturnType
 function getType(){
@@ -154,6 +159,43 @@ function getType(){
 }
 type userReturnType = ReturnType<typeof getType>
 let userReturnTypeVal: userReturnType = {name: '1',sex: 2}
+
+
+// keyof - 获取类型的键
+const data = {
+  a: 3,
+  hello: 'world'
+}
+function get<T extends object, K extends keyof T>(o: T, name: K): T[K] {
+  return o[name]
+}
+get(data, 'a') // 3
+// get(data, 'b') // Error
+
+
+// keyof & typeof
+const colors = {
+  red: 'red',
+  blue: 'blue'
+}
+type Colors = keyof typeof colors
+
+let color: Colors // 'red' | 'blue'
+color = 'red' // ok
+color = 'blue' // ok
+// color = 'anythingElse' // Error
+
+
+
+// in - 遍历键名
+interface Square {
+  kind: 'square'
+  size: number
+}
+
+// type res = (radius: number) => { kind: 'square'; size: number }
+type res = (radius: number) => { [T in keyof Square]: Square[T] }
+
 
 
 
@@ -214,13 +256,19 @@ if (padder1 instanceof StringPadder) {
 
 
 
-
-
-
-
-
-
-
+// 嵌套接口类型
+interface Play {
+  name: string
+  type: string
+}
+interface Plays {
+  [key: string]: Play
+}
+let plays: Plays = {
+  'hamlet': { name: 'Hamlet', type: 'tragedy' },
+  'as-like': { name: 'As You Like It', type: 'comedy' },
+  'othello': { name: 'Othello', type: 'tragedy' }
+}
 
 
 
@@ -316,7 +364,78 @@ function isFish1(pet: Fish | Bird): boolean {
 
 
 
+// 条件类型
+type isBool<T> = T extends boolean ? true : false
+// type t1 = false
+type t1 = isBool<number>
+// type t2 = true
+type t2 = isBool<false>
 
 
 
 
+// 字典类型
+interface Dictionary<T> {
+  [index: string]: T
+}
+const data1: Dictionary<number> = {
+  a: 3,
+  b: 4,
+}
+
+
+
+
+// const enum 维护常量列表 // 常量枚举与普通枚举是不一样的，看编译后的结果
+const enum STATUS {
+  TODO = 'TODO',
+  DONE = 'DONE',
+  DOING = 'DOING'
+}
+function todos(status: STATUS) {
+  console.log(status)
+}
+todos(STATUS.TODO)
+
+
+
+
+
+
+
+type promiseVal<T> = (list: number[]) => Promise<T>
+let fun1: promiseVal<number> = (args) => new Promise((r,j) => {
+  return r(args[0])
+})
+console.log(fun1([1]))
+
+
+
+
+
+{
+  async function stringPromise() {
+    return "string promise";
+  }
+  
+  async function numberPromise() {
+    return 1;
+  }
+  
+  interface Person {
+    name: string;
+    age: number;
+  }
+  
+  async function personPromise() {
+    return { name: "Wayou", age: 999 } as Person;
+  }
+  
+  type UnPromisify<T> = T extends (args: any) => Promise<infer R> ? R : never; 
+
+  type extractStringPromise = UnPromisify<typeof stringPromise>; // string
+  
+  type extractNumberPromise = UnPromisify<typeof numberPromise>; // number
+  
+  type extractPersonPromise = UnPromisify<typeof personPromise>; // Person
+}
