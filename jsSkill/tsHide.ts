@@ -438,4 +438,17 @@ console.log(fun1([1]))
   type extractNumberPromise = UnPromisify<typeof numberPromise>; // number
   
   type extractPersonPromise = UnPromisify<typeof personPromise>; // Person
+
 }
+
+
+type VariadicFn<A extends any[]> = (...args: A) => any;
+type ArgsType<T> = T extends VariadicFn<infer A> ? A : never;
+ 
+type Fn = (a: number, b: string) => string;
+type Fn2Args = ArgsType<Fn>; // [number, string]
+
+const fn1: Fn = (a, b) => {
+  return a+b
+} 
+fn1(1, '2')
