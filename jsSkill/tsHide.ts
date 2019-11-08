@@ -412,7 +412,7 @@ console.log(fun1([1]))
 
 
 
-
+// infer 延迟推断
 {
   async function stringPromise() {
     return "string promise";
@@ -444,11 +444,15 @@ console.log(fun1([1]))
 
 type VariadicFn<A extends any[]> = (...args: A) => any;
 type ArgsType<T> = T extends VariadicFn<infer A> ? A : never;
+type ArgsType1<T> = T extends (...args: infer A) => any ? A : never;
  
 type Fn = (a: number, b: string) => string;
 type Fn2Args = ArgsType<Fn>; // [number, string]
+type Fn2Args1 = ArgsType1<Fn>; // [number, string]
+
 
 const fn1: Fn = (a, b) => {
   return a+b
 } 
-fn1(1, '2')
+fn1(1, '1')
+
