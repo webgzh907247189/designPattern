@@ -74,7 +74,7 @@ type userInfo = Pick<Part, 'id' | 'name'>
 
 
 
-// Omit & Pick
+// Omit & Pick // 删除omit
 type Omit<T, K extends string> = Pick<T, Exclude<keyof T, K>>
 type Omit1<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>
 
@@ -456,3 +456,65 @@ const fn1: Fn = (a, b) => {
 } 
 fn1(1, '1')
 
+
+
+//infer
+type ParamType<T> = T extends (param: infer P) => any ? P : T
+interface User {
+  name: string
+  age: number
+}
+type Func = (user: User) => void
+
+type Param = ParamType<Func> // Param = User
+type AA = ParamType<string> // string
+
+
+
+// infer
+type ElementOf<T> = T extends Array<infer E> ? E : never
+type TTuple = [string, number]
+type ToUnion = ElementOf<TTuple> // string | number
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// <注意点>
+{
+  interface ConfigFn {
+    <T>(val: T): T
+  }
+
+  let getData: ConfigFn = function<T>(val: T): T{
+    return val
+  }
+  getData<string>('1')
+  getData<number>(1)
+
+
+
+  // 一旦定义了任意属性，那么已经确定属性和可选属性的类型都必须是他的子集
+
+  // 报错 -> 因为任意属性子集关系
+  interface Person {
+    name: string
+    age?: number
+    [propName: string]: string
+  }
+}
