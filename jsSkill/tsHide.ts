@@ -26,6 +26,8 @@ type typeAttr2 = MyRecord<attrStr, string>
 
 
 // nerver
+type FunctionPropertyNames1<T> = { [K in keyof T]: T[K] extends Function ? K : never }
+
 type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T]
 
 type NonFunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? never : K }[keyof T]
@@ -37,10 +39,72 @@ interface Part {
   updatePart(newName: string): void
 }
 
+
+// 巧用never
 type T40 = FunctionPropertyNames<Part>  // 'updatePart'
+type T401 = FunctionPropertyNames1<Part>
+type T402 = FunctionPropertyNames1<Part>[keyof Part]
+type T403 = never | string | number | never
+
+
+
 type T41 = NonFunctionPropertyNames<Part>  // 'id' | 'name' | 'subparts'
 
 let testT40: T40 = 'updatePart'
+
+
+
+
+
+
+// mixins
+// 所有 mixins 都需要
+type Constructor<T = {}> = new (...args: any[]) => T
+
+// 添加属性的混合例子
+function TimesTamped<TBase extends Constructor>(Base: TBase) {
+  return class extends Base {
+    timestamp = Date.now()
+  }
+}
+
+type isConstructor = typeof User extends Constructor ? true : false // true
+
+// 添加属性和方法的混合例子
+function Activatable<TBase extends Constructor>(Base: TBase) {
+  return class extends Base {
+    isActivated = false
+    activate() {
+      this.isActivated = true
+    }
+    deactivate() {
+      this.isActivated = false
+    }
+  }
+}
+
+// 简单的类
+class User {
+  name = ''
+}
+
+// 添加 TimesTamped 的 User
+const TimestampedUser = TimesTamped(User)
+// 使用组合类
+const timestampedUserExample = new TimestampedUser()
+console.log(timestampedUserExample.timestamp)
+
+
+// 添加 TimesTamped 和 Activatable 的类
+const TimestampedActivatableUser = TimesTamped(Activatable(User))
+// 使用组合类
+const timestampedActivatableUserExample = new TimestampedActivatableUser()
+console.log(timestampedActivatableUserExample.timestamp)
+console.log(timestampedActivatableUserExample.isActivated)
+
+
+
+
 
 
 
@@ -149,8 +213,12 @@ let nullVal1: nullVal = '1'
 
 // typeof -- 获取变量的类型
 let obj = {name: '1',sex: 2}
+class TestType {
+  name: string = 'test'
+}
 type a = typeof getType // 注意看返回值， 所以需要ReturnType
 type aa = typeof obj
+type testType = typeof TestType
 
 
 // ReturnType
@@ -487,6 +555,82 @@ type ToUnion = ElementOf<TTuple> // string | number
 
 
 
+
+
+
+{
+  interface Action<T> {
+    payload?: T
+    type: string
+  }
+  
+  class EffectModule {
+    count = 1
+    message = 'hello!'
+    delay(input: Promise<number>) {
+      return input.then(i => ({
+        payload: `hello ${i}!`,
+        type: 'delay'
+      }))
+    }
+    setMessage(action: Action<Date>) {
+      return {
+        payload: action.payload.getMilliseconds(),
+        type: 'set-message'
+      }
+    }
+  }
+
+  const connect: Connect2 = _m => ({
+    delay: (input: number) => ({
+      type: 'delay',
+      payload: `hello ${input}`
+    }),
+    setMessage: (input: Date) => ({
+      type: 'set-message',
+      payload: input.getMilliseconds()
+    })
+  })
+  
+  type Connected = {
+    delay(input: number): Action<string>
+    setMessage(action: Date): Action<number>
+  }
+  
+  const connected: Connected = connect(new EffectModule())
+
+  // 在调用 connect 函数之后，返回的新对象只包含 EffectModule 的同名方法，并且方法的类型签名改变了：
+  // type FuncName<T> = { [P in keyof T]: T[P] extends Function ? P : never }[keyof T]
+
+  // type Middle = { [T in FuncName<EffectModule>]: EffectModule[T] }
+  
+  // type Transfer<T> = {
+  //   [P in keyof T]: T[P] extends (input: Promise<infer J>) => Promise<infer K>
+  //   ? (input: J) => K
+  //   : T[P] extends (action: Action<infer J>) => infer K
+  //   ? (input: J) => K
+  //   : never
+  // }
+  
+  // type Connect1 = (module: EffectModule) => { [T in keyof Transfer<Middle>]: Transfer<Middle>[T] }
+
+
+  
+
+  type Connect2 = (module: EffectModule) => {
+    [T in keyof fn]: fn[T] extends (input: Promise<infer J>) => Promise<infer K> ? (input: J) => K
+    :
+    fn[T] extends (action: Action<infer J>) => infer K ? (input: J) => K : never
+  }
+  
+  type FnName<K> = {
+    [T in keyof K]: K[T] extends Function ? T : never
+  }[keyof K]
+
+  type fn = {
+    [K in FnName<EffectModule>]: EffectModule[K]
+  }
+}
 
 
 
