@@ -1,6 +1,6 @@
-function createElement(type,props,...children) {
+function createElement(type,props = {},...children) {
     props.children = children || [];
-    return new Element(type.props)
+    return new Element(type,props)
 }
 
 class Element{
