@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import {Element} from './element'
+
 // 基类
 class Unit{
     constructor(element){
@@ -24,14 +25,15 @@ class NativeUnit extends Unit{
     getMarkUp(reactid){
         this._reactid = reactid;
         const {type, props} = this._currentElement;
-        let tagStart = `<${type}`
+        // 初始化绑定
+        let tagStart = `<${type} data-reactid=${this._reactid}`
         const tagEnd = `${type}>`
         let childStr = '';
         for(let propName in props){
             if(/^on[A-Z]/.test(propName)){
                 // 事件代理
                 const eventName = propName.slice(2).toLowerCase();
-                $(document).delegate(`[data-reactid=${this._reactid}]`, `${eventName}.${this._reactid}`, props[propName])
+                $(document).delegate(`[data-reactid="${this._reactid}"]`, `${eventName}.${this._reactid}`, props[propName])
             }else if(propName === 'style'){
                 const style = props[propName]
 
@@ -43,17 +45,48 @@ class NativeUnit extends Unit{
                     result += `${key}: ${style[item]};`
                     return result
                 }, '')
-                tagStart += `style="${styleStr}"`;
+                tagStart += ` style="${styleStr}"`;
 
             }else if(propName === 'className'){
                 tagStart += ` class=${props['className']} `
             }else if(propName === 'children'){
+                let children = props.children
+
+                // 递归，处理children
+                children.forEach((child,index)=>{
+                    let childUnit = createUnit(child)
+                    let childMarkUp = childUnit.getMarkUp(`${this._reactid}.${index}`)
+                    childStr += childMarkUp;
+                })
 
             }else{
                 tagStart += ` ${propName}="${props[propName]}" `
             }
         }
         return tagStart + '>' + childStr + '</' +tagEnd
+    }
+}
+
+// 组件节点
+class CompositeUnit extends Unit{
+    getMarkUp(reactid){
+        this._reactid = reactid;
+        const {type: Component, props} = this._currentElement;
+
+        let componentInstance = this._componentInstance = new Component(props)
+        // 组件实列的currentUnit属性等于当前的unit
+        componentInstance.currentUnit = this;
+
+        componentInstance.componentWillMount && componentInstance.componentWillMount()
+        let renderEle = componentInstance.render()
+
+        let renderUnitInstance = this._renderUnitInstance = createUnit(renderEle)
+
+        // 在最终渲染完成，才执行 componentDidMount
+        $(document).on('mounted',()=>{
+            componentInstance.componentDidMount && componentInstance.componentDidMount()
+        })
+        return renderUnitInstance.getMarkUp(this._reactid)
     }
 }
 
@@ -66,6 +99,11 @@ function createUnit(element) {
     // if(element.type === 'string' && element instanceof Element){
     if(typeof element.type === 'string' && Object.getPrototypeOf(element) === Element.prototype){
         return new NativeUnit(element)
+    }
+
+    // 传入的是组件
+    if(typeof element.type === 'function' && Object.getPrototypeOf(element) === Element.prototype){
+        return new CompositeUnit(element)
     }
 }
 export {TextUnit, createUnit}
