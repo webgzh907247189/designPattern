@@ -18,6 +18,17 @@ class TextUnit extends Unit{
         this._reactid = reactid;
         return `<span data-reactid=${reactid}>${this._currentElement}</span>`
     }
+
+    update(nextElement){
+        // this._currentElement = nextElement
+        // $(`[data-reactid="${this._reactid}"]`).html(nextElement)
+
+        // 优化
+        if(this._currentElement !== nextElement){
+            this._currentElement = nextElement
+            $(`[data-reactid="${this._reactid}"]`).html(nextElement)
+        }
+    }
 }
 
 // native 节点
@@ -69,13 +80,46 @@ class NativeUnit extends Unit{
 
 // 组件节点
 class CompositeUnit extends Unit{
+    update(nextElement,partialState){
+        //获取到新元素
+        this._currentElement = nextElement || this._currentElement;
+
+        // 获取新状态 (不管要不要更新组件 -> shouldComponentUpdate, 组件的状态一定会修改的 ->  this._componentInstance.state)
+        // 先变更state
+        let nextState = this._componentInstance.state = Object.assign(this._componentInstance.state,partialState)
+
+        // 新的属性
+        let nextProps = this._currentElement.props
+        if(this._componentInstance.shouldComponentUpdate && !this._componentInstance.shouldComponentUpdate(nextProps,nextState)){
+            return;
+        }
+
+        // 上次渲染的单元
+        let prevRenderUnitInstance = this._renderUnitInstance
+        // 上次的element
+        let prevRenderElement = prevRenderUnitInstance._currentElement;
+
+        // 本次的element
+        let nextRenderElement = this._componentInstance.render()
+
+        // 如果新旧元素一样，可以进行深度比较，否则的话，干掉老的，新建新的元素
+        if(shouldDeepCompare(prevRenderElement,nextRenderElement)){
+            prevRenderUnitInstance.update(nextRenderElement)
+            this._componentInstance.componentDidUpdate && this._componentInstance.componentDidUpdate()
+        }else{
+            this._renderUnitInstance = createUnit(nextRenderElement)
+            let nextMarkUp = this._renderUnitInstance.getMarkUp(this._reactid)
+            $(`[data-reactid="${this._reactid}"]`).replaceWith(nextMarkUp)
+        }
+    }
+
     getMarkUp(reactid){
         this._reactid = reactid;
         const {type: Component, props} = this._currentElement;
 
         let componentInstance = this._componentInstance = new Component(props)
         // 组件实列的currentUnit属性等于当前的unit
-        componentInstance.currentUnit = this;
+        componentInstance._currentUnit = this;
 
         componentInstance.componentWillMount && componentInstance.componentWillMount()
         let renderEle = componentInstance.render()
@@ -104,6 +148,20 @@ function createUnit(element) {
     // 传入的是组件
     if(typeof element.type === 'function' && Object.getPrototypeOf(element) === Element.prototype){
         return new CompositeUnit(element)
+    }
+}
+
+function shouldDeepCompare(oldElement,newElement) {
+    if(oldElement !== null && newElement !== null){
+        let oldType = typeof oldElement
+        let newType = typeof newElement
+        if((oldType === 'string' || oldType === 'number') && (newType === 'string' || newType === 'number')){
+            return true
+        }
+
+        if(Object.getPrototypeOf(newType) === Element.prototype && Object.getPrototypeOf(oldType) === Element.prototype){
+            return oldElement.type === oldElement.type
+        }
     }
 }
 export {TextUnit, createUnit}

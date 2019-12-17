@@ -43,17 +43,30 @@ class Counter extends React.Component{
 
     componentDidMount(){
         console.log('挂载完成')
+        setInterval(()=>{
+            this.setState({number: this.state.number + 1})
+        }, 3000)
+    }
+    
+    shouldComponentUpdate(nextprops,nextState){
+        return true
     }
 
     onCrement = () => {
         this.setState({number: this.state.number + 1})
     }
 
+    componentDidUpdate(){
+        console.log('～～componentDidUpdate～～')
+    }
+
     render(){
         console.log('render')
-        let p = React.createElement('p', {style: {color: 'red',backgroundColor: '#ddd'}}, this.state.number, this.props.name)
-        let button = React.createElement('button', {onClick: this.onCrement}, '+')
-        return React.createElement('div', {id: 'container'}, p, button)
+        // let p = React.createElement('p', {style: {color: 'red',backgroundColor: '#ddd'}}, this.state.number, this.props.name)
+        // let button = React.createElement('button', {onClick: this.onCrement}, '+')
+        // return React.createElement('div', {id: 'container'}, p, button)
+
+        return this.state.number
     }
 }
 

@@ -10,6 +10,11 @@ const React = {
         constructor(props){
             this.props = props;
         }
+
+        setState(partialState){
+            // 组件更新， 对应的 unit 的update去更新
+            this._currentUnit.update(null,partialState)
+        }
     }
 }
 
