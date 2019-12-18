@@ -33,6 +33,10 @@ class TextUnit extends Unit{
 
 // native 节点
 class NativeUnit extends Unit{
+    update(nextElement,partialState){
+        console.log('1111')
+    }
+
     getMarkUp(reactid){
         this._reactid = reactid;
         const {type, props} = this._currentElement;
@@ -161,7 +165,7 @@ function shouldDeepCompare(oldElement,newElement) {
             return true
         }
 
-        if(Object.getPrototypeOf(newType) === Element.prototype && Object.getPrototypeOf(oldType) === Element.prototype){
+        if(Object.getPrototypeOf(oldElement) === Element.prototype && Object.getPrototypeOf(newElement) === Element.prototype){
             return oldElement.type === oldElement.type
         }
     }

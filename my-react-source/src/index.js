@@ -43,9 +43,12 @@ class Counter extends React.Component{
 
     componentDidMount(){
         console.log('挂载完成')
-        setInterval(()=>{
-            this.setState({number: this.state.number + 1})
-        }, 3000)
+
+        // 测试TextUnit 的更新
+        // setInterval(()=>{
+        //     this.setState({number: this.state.number + 1})
+        // }, 3000)
+        // return this.state.number
     }
     
     shouldComponentUpdate(nextprops,nextState){
@@ -62,11 +65,9 @@ class Counter extends React.Component{
 
     render(){
         console.log('render')
-        // let p = React.createElement('p', {style: {color: 'red',backgroundColor: '#ddd'}}, this.state.number, this.props.name)
-        // let button = React.createElement('button', {onClick: this.onCrement}, '+')
-        // return React.createElement('div', {id: 'container'}, p, button)
-
-        return this.state.number
+        let p = React.createElement('p', {style: {color: 'red',backgroundColor: '#ddd'}}, this.state.number, this.props.name)
+        let button = React.createElement('button', {onClick: this.onCrement}, '+')
+        return React.createElement('div', {id: 'container',style: {backgroundColor: this.state.number % 2 === 0 ? 'red' : '#000'}}, p, button)
     }
 }
 
