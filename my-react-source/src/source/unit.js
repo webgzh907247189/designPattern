@@ -117,6 +117,8 @@ class CompositeUnit extends Unit{
         this._reactid = reactid;
         const {type: Component, props} = this._currentElement;
 
+        // Unit类 和 Component类 互相引用
+        // (unit._componentInstance = new Component && new Component._currentUnit = new Unit)
         let componentInstance = this._componentInstance = new Component(props)
         // 组件实列的currentUnit属性等于当前的unit
         componentInstance._currentUnit = this;
