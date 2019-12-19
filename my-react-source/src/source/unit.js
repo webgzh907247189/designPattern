@@ -1,5 +1,7 @@
 import $ from 'jquery';
 import {Element} from './element'
+let diffQueue; // 差异队列(记住差异，最后同意更新，不是发现差异，就更新)
+let updateDepth = 0; //更新的级别(层级)
 
 // 基类
 class Unit{
@@ -34,7 +36,55 @@ class TextUnit extends Unit{
 // native 节点
 class NativeUnit extends Unit{
     update(nextElement,partialState){
-        console.log('1111')
+        // console.log(nextElement, '1111', partialState)
+        let oldProps = this._currentElement.props
+        let newProps = nextElement.props
+
+        // 对比dom属性，进行diff
+        this.updateDOMProperties(oldProps,newProps)
+
+        // 对比children，进行diff
+        this.updateDOMChildren(nextElement.props.children)
+    }
+
+    // 把新的Children传过来，跟老的Children进行对比，找出差异，进行修改dom
+    updateDOMChildren(newChildrenElements){
+        this.diff(diffQueue,newChildrenElements)
+    }
+
+    diff(diffQueue,newChildrenElements){
+
+    }
+
+    updateDOMProperties(oldProps,newProps){
+        for(let propName in oldProps){
+            if(!Reflect.has(newProps,propName)){
+                $(`[data-reactid="${this._reactid}"]`).removeAttr(propName)
+            }
+
+            if(/^on[A-Z]/.test(propName)){
+                $(document).undelegate(`.${this._reactid}`)
+            }
+        }
+
+        for(let newPropName in newProps){
+            if(newPropName === 'children'){
+                continue;
+            }else if(/^on[A-Z]/.test(newPropName)){
+                const eventName = newPropName.slice(2).toLowerCase();
+                $(document).delegate(`[data-reactid="${this._reactid}"]`, `${eventName}.${this._reactid}`, newProps[newPropName])
+            }else if(newPropName === 'style'){
+                const styleObj = newProps[newPropName]
+                Object.entries(styleObj).map(([key,value])=>{
+                    $(`[data-reactid="${this._reactid}"]`).css(key,value)
+                    return
+                })
+            }else if(newPropName === 'className'){
+                $(`[data-reactid="${this._reactid}"]`).attr('class',newProps[newPropName])
+            }else{
+                $(`[data-reactid="${this._reactid}"]`).css(newPropName,newProps[newPropName])
+            }
+        }
     }
 
     getMarkUp(reactid){
