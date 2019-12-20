@@ -53,7 +53,53 @@ class NativeUnit extends Unit{
     }
 
     diff(diffQueue,newChildrenElements){
+        let oldChildrenUnitMap = this.oldChildrenUnitMap(this._renderChildrenUnits);
 
+        // 先找老的集合，看有没有能用的，尽量复用老的 -> 构建新的unit数组
+        let newChildren = this.getNewChildren(oldChildrenUnitMap,newChildrenElements);
+
+        // console.log(newChildren, 'newChildren')
+    }
+
+    oldChildrenUnitMap(renderChildrenUnits = []){
+        // console.log(renderChildrenUnits)
+        let map = {}
+        for(let i= 0; i<renderChildrenUnits.length; i++){
+            let unit = renderChildrenUnits[i]
+            let key = (unit._currentElement && unit._currentElement.props && unit._currentElement.props.key) || i.toString();
+            map[key] = unit
+        }
+        return map
+    }
+
+    getNewChildren(oldChildrenUnitMap,newChildrenElements){
+        let newChildren = [];
+        // 最终返回的是新的 -> 用newChildrenElements 去构建，尽量复用oldChildrenUnitMap
+        newChildrenElements.forEach((newElement,index)=>{
+            let newElementCurrentElement = newElement._currentElement;
+            let newKey = (newElementCurrentElement && newElementCurrentElement.props && newElementCurrentElement.props.key) || index.toString();
+            
+            // 老的unit
+            let oldUnit = oldChildrenUnitMap[newKey]
+            // 老的元素
+            let oldElement = oldUnit && oldUnit._currentElement
+
+            // 判断老的element 与 新的 element的type -> 看能不能复用
+            if(shouldDeepCompare(oldElement,newElement)){
+                // console.log(oldUnit,newElement)
+                // 类型一样 -> 更新
+                oldUnit.update(newElement)
+                // 更新之后， oldUnit 变成新的
+                newChildren.push(oldUnit)
+            }else{
+                let nextUnit = createUnit(newElement)
+                newChildren.push(nextUnit)
+            }
+
+            // console.log(newElement,oldElement)
+        })
+
+        return newChildren;
     }
 
     updateDOMProperties(oldProps,newProps){
@@ -94,6 +140,9 @@ class NativeUnit extends Unit{
         let tagStart = `<${type} data-reactid=${this._reactid}`
         const tagEnd = `${type}>`
         let childStr = '';
+
+        // 记录childrenUnits(旧的记录children)
+        this._renderChildrenUnits = []
         for(let propName in props){
             if(/^on[A-Z]/.test(propName)){
                 // 事件代理
@@ -120,6 +169,7 @@ class NativeUnit extends Unit{
                 // 递归，处理children
                 children.forEach((child,index)=>{
                     let childUnit = createUnit(child)
+                    this._renderChildrenUnits.push(childUnit)
                     let childMarkUp = childUnit.getMarkUp(`${this._reactid}.${index}`)
                     childStr += childMarkUp;
                 })
