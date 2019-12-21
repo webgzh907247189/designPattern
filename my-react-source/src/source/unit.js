@@ -1,5 +1,7 @@
 import $ from 'jquery';
 import {Element} from './element'
+import types from './type';
+
 let diffQueue; // 差异队列(记住差异，最后同意更新，不是发现差异，就更新)
 let updateDepth = 0; //更新的级别(层级)
 
@@ -53,11 +55,27 @@ class NativeUnit extends Unit{
     }
 
     diff(diffQueue,newChildrenElements){
+        // 生成一个map，key=老的unit
         let oldChildrenUnitMap = this.oldChildrenUnitMap(this._renderChildrenUnits);
 
         // 先找老的集合，看有没有能用的，尽量复用老的 -> 构建新的unit数组
-        let newChildren = this.getNewChildren(oldChildrenUnitMap,newChildrenElements);
+        let newChildrenUnits = this.getNewChildren(oldChildrenUnitMap,newChildrenElements);
 
+        // 上一个已经确定位置的索引
+        let lastIndex = 0
+
+        for(let i=0; i<newChildrenUnits.length; i++){
+            let newUnit = newChildrenUnits[i]
+
+            // 第一个拿到的newkey = A
+            let newKey = (newUnit._currentElement.props && newUnit._currentElement.props.key) || i.toString()
+            let oldChilrenUnit = oldChildrenUnitMap[newKey]
+
+            // 新老一致，可复用老节点
+            // if(oldChilrenUnit === newUnit){
+
+            // }
+        }
         // console.log(newChildren, 'newChildren')
     }
 
