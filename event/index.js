@@ -28,3 +28,27 @@ setTimeout(() => {
 });
 
 
+let box = document.getElementById('box')
+let observable = new IntersectionObserver((entries)=>{
+  // console.log(entries, 'entries')
+
+  // entries 当前已监听 并且 发生交叉的目标集合
+  entries.forEach((entrie) => {
+
+    // isIntersecting 是否正在交叉  ->  判断元素是否可见
+    let tips = entrie.isIntersecting ? '进入了内部' : '离开了内部'
+    console.log(tips,entrie)
+  })
+}) // 指定父元素，默认为视窗
+
+// 监听的目标元素
+observable.observe(box)
+
+
+new IntersectionObserver((entries) => {
+  console.log(entries, 'entries')
+  let item = entries[0]
+  if(item.isIntersecting){
+    console.log('滚动到了底部')
+  }
+}).observe(document.querySelector('.reference'))
