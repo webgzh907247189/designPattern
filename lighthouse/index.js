@@ -44,7 +44,7 @@
     
 
     Node.js的运行机制如下:
-        V8引擎解析JavaScript脚本。
+        V8引擎解析JavaScript脚本。词法分析，语法分析
         解析后的代码，调用Node API。
         libuv库负责Node API的执行。它将不同的任务分配给不同的线程，形成一个Event Loop（事件循环），以异步的方式将任务的执行结果返回给V8引擎。
         V8引擎再将结果返回给用户。
@@ -74,6 +74,8 @@
     npm install的时候首先会下载对应资源包的压缩包放在用户目录下的.npm文件夹下，然后解压到项目的node_modules中，并且提取依赖包中指定的bin文件，在linux下会创建一条软连接，
     所以在linux下我们真正执行的是.bin文件夹下文件指向的文件
 }
+
+// nrm 其实是设置 global 的 .npmrc, 项目下的 .npmrc 肯定优先级更高
 {
     npm i nrm -g //nrm 测试速度的包
     nrm ls
