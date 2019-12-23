@@ -64,7 +64,8 @@
     "./testImport.ts",
     "./function.ts",
     "./jsSkill.ts",
-    "./test.ts"
+    "./test.ts",
+    "./tsHide.ts"
   ],
   "exclude": [
     "node_modules",

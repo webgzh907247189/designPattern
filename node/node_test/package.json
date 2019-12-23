@@ -1,0 +1,20 @@
+{
+  "name": "node_test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sum": "node ./index.js 10",
+    "test": "mocha ./test.js",
+    "coverage": "istanbul cover _mocha",
+    "makeTest": "make test",
+    "makeCoverage": "make coverage"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "istanbul": "^0.4.5",
+    "mocha": "^6.2.2",
+    "should": "^13.2.3"
+  }
+}
