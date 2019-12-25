@@ -248,3 +248,56 @@ let composeResultQrCode = composeFn(resultImg,getBlob,dataURLtoBlob)
         // data fetch data is me
     })()
 }
+
+
+
+
+{
+    // https://juejin.im/post/5dfc6136e51d4557ee3a48e3
+    function compose (middleware) {
+        return function (context, next) {
+            return dispatch(0)
+            function dispatch (i) {
+                let fn = middleware[i]
+                return fn(context, dispatch.bind(null, i + 1));
+            }
+        }
+    }
+    
+    var checkIsLuckUser = function(ctx, next) {
+        if (ctx.checkIsLuck) {
+            console.log('得到200元优惠券');
+        } else {
+            return next();
+        }
+    };
+    
+    var pay500 = function(ctx, next) {
+        if (ctx.type === 1 && ctx.pay) {
+            console.log('得到100元优惠券');
+        } else {
+            return next();
+        }
+    };
+    
+    var pay200 = function(ctx, next) {
+        if (ctx.type === 2 && ctx.pay) {
+            console.log('得到50元优惠券');
+        } else {
+            return next();
+        }
+    };
+    
+    var normal = function(ctx, next) {
+        console.log('无优惠券');
+        return 1111
+    };
+    
+    var composed = compose([checkIsLuckUser, pay500, pay200, normal]);
+    
+    composed({
+        checkIsLuck: false,
+        type: 1,
+        pay: true,
+    });
+}
