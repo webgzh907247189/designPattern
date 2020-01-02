@@ -1,4 +1,9 @@
-import React from './source/react';
+// import React from './source/react';
+
+// immer.js
+import React from 'react';
+import ImmerApp from './immer/index';
+
 import ReactDOM from 'react-dom';
 import App from './App';
 
@@ -107,5 +112,8 @@ class Counter1 extends React.Component{
     }
 }
 //<Counter {name: '计数器'}/>
-React.render(React.createElement(Counter, {name: '计数器'}), document.getElementById('root'));
+// React.render(React.createElement(Counter, {name: '计数器'}), document.getElementById('root'));
 /*********渲染组件***********/
+
+
+ReactDOM.render(<ImmerApp/>, document.getElementById('root'));
