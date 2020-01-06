@@ -92,7 +92,7 @@ const state = {
       }
     }
   },
-  data: [1]
+  data: [1, {name: '11'},{sex: '男'}]
 }
 
 const data = produce(state, draftState => {
