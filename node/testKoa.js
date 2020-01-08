@@ -12,12 +12,21 @@ const views = require('koa-views');
 const ejs = require('ejs');
 const serve = require("koa-static");
 
+let cors = require('koa-cors')
 
 //  / 路径下 render不对
 //  https://www.chrisyue.com/please-dont-put-script-tag-at-the-end-of-body.html
 
 
 const app = new Koa();
+
+app.use(async (ctx, next) => {
+	ctx.set('Access-Control-Allow-Origin', ctx.get('origin'));
+	ctx.set('Access-Control-Allow-Credentials', 'true');
+	// ctx.set('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+  	// ctx.set('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+	await next();
+})
 
 /**
  * koa-router 做了兼容处理 可以不 new 
@@ -58,6 +67,15 @@ console.log(app.inspect(),'11')
 // 	console.log('11111111')
 // 	yield ctx.render('test.html')
 // })
+
+
+
+router.get('/api/data',  async(ctx) => {
+	ctx.cookies.set('name','test')
+	ctx.body = {
+		name: 'zzz'
+	}
+})
 
 router.get('/',  async(ctx) => {
 	console.log('11111111')
