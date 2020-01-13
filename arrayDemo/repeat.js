@@ -162,3 +162,33 @@ function add(a) {
         return s;
     }
 }
+
+
+
+
+
+
+
+
+
+var aa = [{id:1, parentId: 0}, {id:113, parentId:2},{id:'zzz', parentId:2},{id:'ffff', parentId:3},{id:2, parentId:1},{id:3, parentId:1}];
+
+var a = aa.sort((aaa,bbb)=> aaa.parentId-bbb.parentId);
+
+function zz(arr){
+    return arr.reduce((result,item)=>{
+        item.parentId === 0 ? result.push({...item,children: []}) : getArr(result,item);
+        return result;
+    },[])
+}
+
+function getArr(result,item){
+    return result.find(i => {
+        if(item.parentId === i.id){
+            return  i.children.push({...item,children: []})
+        }else {
+            getArr(i.children,item)
+        }
+    })
+};
+zz(a)
