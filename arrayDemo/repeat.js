@@ -192,3 +192,39 @@ function getArr(result,item){
     })
 };
 zz(a)
+
+
+
+{
+    var list = [
+        {id:1, parentId: 0}, 
+        {id:113, parentId:2},
+        {id:'zzz', parentId:2},
+        {id:'ffff', parentId:3},
+        {id:2, parentId:1},
+        {id:3, parentId:1}
+    ];
+
+    function listToTree(data) {
+        const obj = Object.create(null)
+        return data.reduce((result,item) => {
+            const id = item['id']
+            obj[id] = obj[id] || [];
+            item['children'] = obj[id]
+
+            const parentId = item['parentId']
+
+            if (parentId !== 0) {
+                obj[parentId] = obj[parentId] || [];
+                obj[parentId].push(item)
+            } else {
+                result.push(item)
+            }
+
+            return result
+        },[])
+    }
+
+    var resultList = listToTree(list)
+    console.log(resultList)
+}
