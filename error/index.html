@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <head>
+       <meta charset="utf-8">
+
+       <!-- https://segmentfault.com/a/1190000002407912  https://www.jianshu.com/p/739d7ce9c6fe  http://blog.csdn.net/rogerjava/article/details/17123593 https://www.zhihu.com/question/22431667-->
+
+       <!-- 控制状态栏显示样式 -->
+       <meta content="black" name="apple-mobile-web-app-status-bar-style">
+
+       <!-- 删除默认的苹果工具栏和菜单栏,默认就是显示工具栏和菜单栏 (伪装app，离线应用)-->
+       <meta content="yes" name="apple-mobile-web-app-capable">
+
+       <!-- "添加到主屏幕“后，全屏显示(苹果特有) -->
+       <meta content="yes" name="apple-touch-fullscreen">
+
+       <!-- 去除默认的数字做为点好号码的设置 -->
+       <meta content="telephone=no,email=no" name="format-detection">
+
+       <!-- iOS上的Safari和Windows Phone上的IE在内的一些移动端浏览器会在超链接元素被触摸（tap）的时候显示一个半透明的高亮背景，来给用户一个附加的反馈。然而，很多网站想要禁用这种默认的行为来更好地控制自己站点的外观和体验。 -->
+       <meta name="msapplication-tap-highlight" content="no">
+
+       <!-- 禁止浏览器从本地计算机的缓存中访问页面内容 -->
+       <!-- <meta http-equiv="Pragma" content="no-cache"> -->
+
+       <!-- 用百度打开网页可能会对其进行转码（比如贴广告），避免转码可添加如下meta -->
+       <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+       <link rel="shortcut icon" type="image/x-icon" href="bai.ico" />
+
+       <!-- 添加到主屏后的标题 -->
+       <meta name="apple-mobile-web-app-title" content="测试项目">
+       <!-- IOS (将网站添加到iPhone的主屏幕上,且添加指定的图片作为桌面icon)-->
+       <link rel="apple-touch-icon" href="/custom_icon.png"/>
+       <link rel="apple-touch-icon" sizes="72x72" href="/custom_icon.png" />
+       <link rel="apple-touch-icon" sizes="114x114" href="/custom_icon.png" />
+       <!-- iOS将图标添加高光效果 -->
+       <link rel="apple-touch-icon-precomposed" href="/custom_icon.png"/>
+
+       <!-- 添加智能 App 广告条 Smart App Banner：告诉浏览器这个网站对应的app
+       https://developer.apple.com/library/content/documentation/AppleApplications/Reference/SafariWebContent/PromotingAppswithAppBanners/PromotingAppswithAppBanners.html -->
+       <!-- <meta name="apple-itunes-app" content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">  -->
+
+       <meta name="screen-orientation" content="portrait">
+       <meta name="x5-orientation" content="portrait">
+
+       <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"> -->
+    </head>
+    <body>
+       <div>
+          <div id="one">
+            无setTimeout<input type="text"/>
+             <span></span>
+          </div>
+
+          <div id="second">
+            setTimeout<input type="text"/>
+            <span></span>
+         </div>
+       </div>
+      <script>
+         /**  https://mp.weixin.qq.com/s/3gWHVEjhYUznj_JU6TUenw
+          * 当你往两个表单输入内容时，你会发现未使用setTimeout函数的只会获取到输入前的内容，而使用setTimeout函数的则会获取到输入的内容。
+          * 
+          * 当按下按键的时候，JavaScript 引擎需要执行 keydown 的事件处理程序，然后更新文本框的 value 值，
+          * 这两个任务也需要按顺序来，事件处理程序执行时，更新 value值（是在keypress后）的任务则进入队列等待，
+          * 所以我们在 keydown 的事件处理程序里是无法得到更新后的value的，而利用 setTimeout(fn, 0)，
+          * 我们把取 value 的操作放入队列，放在更新 value 值以后，这样便可获取出文本框的值。
+          * 
+          * 
+          * 未使用setTimeout函数，执行顺序是：onkeydown => onkeypress => onkeyup
+          * 使用setTimeout函数，执行顺序是：onkeydown => onkeypress => function => onkeyup
+          * 
+          * 虽然我们可以使用keyup来替代keydown，不过有一些问题，那就是长按时，keyup并不会触发。
+          * 长按时，keydown、keypress、keyup的调用顺序：
+          * keydown -> keypress -> keydown -> keypress -> keyup
+          * 
+          * 也就是说keyup只会触发一次，所以你无法用keyup来实时获取值。
+         */
+         document.querySelector('#one input').onkeydown = function() {   
+            console.log('1')
+            document.querySelector('#one span').innerHTML = this.value;   
+         }; 
+         document.querySelector('#one input').onkeypress = function() {   
+            console.log('2')
+         }; 
+         document.querySelector('#one input').onkeyup = function() {   
+            console.log('3')
+         };   
+         
+         document.querySelector('#second input').onkeydown = function() {   
+            console.log('setTimeout--1',this.value)
+            setTimeout(function() {   
+               console.log('setTimeout--3')
+               document.querySelector('#second span').innerHTML = document.querySelector('#second input').value;
+            }, 0);
+         };
+
+         document.querySelector('#second input').onkeypress = function() {   
+            console.log('setTimeout--2')
+         }; 
+         document.querySelector('#second input').onkeyup = function() {   
+            console.log('setTimeout--4')
+         };
+         /**
+          * 浏览器的内核是多线程的，它们在内核控制下相互配合以保持同步，
+          * 一个浏览器至少实现三个常驻线程：JavaScript引擎线程，GUI渲染线程，浏览器事件触发线程
+          * 
+          * 
+          * JavaScript引擎是基于事件驱动单线程执行的，JavaScript引擎一直等待着任务队列中任务的到来，
+          * 然后加以处理，浏览器无论什么时候都只有一个JavaScript线程在运行JavaScript程序。
+          * 
+          * GUI渲染线程负责渲染浏览器界面，当界面需要重绘（Repaint）或由于某种操作引发回流(Reflow)时，该线程就会执行。
+          * 但需要注意，GUI渲染线程与JavaScript引擎是互斥的，当JavaScript引擎执行时GUI线程会被挂起，
+          * GUI更新会被保存在一个队列中等到JavaScript引擎空闲时立即被执行。
+          * 
+          * 事件触发线程，当一个事件被触发时，该线程会把事件添加到待处理队列的队尾，等待JavaScript引擎的处理。
+          * 这些事件可来自JavaScript引擎当前执行的代码块如setTimeout、也可来自浏览器内核的其他线程如鼠标点击、Ajax异步请求等，
+          * 但由于JavaScript的单线程关系，所有这些事件都得排队等待JavaScript引擎处理
+          * （当线程中没有执行任何同步代码的前提下才会执行异步代码）。
+          */
+      </script>
+      <script src="./index.js"></script>
+    </body>
+</html>
