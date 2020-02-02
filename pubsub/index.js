@@ -292,7 +292,53 @@
 }
 
 
+{
+	let gards = [[70,71,72,73],[90,92],[89,90,91]]
+	function getAverage(arr){
+		let sum = 0;
+		let itemAverage = []
+		for(let i = 0; i < arr.length; i++){
+			let itemArr = arr[i];
+			for(let k = 0; k < itemArr.length; k++){
+				sum += itemArr[k]
+			}
+			itemAverage.push(sum / itemArr.length)
+			sum = 0
+		}
 
+		return itemAverage;
+	}
+	console.log(getAverage(gards));
+
+
+	{
+		console.log(Reflect.apply(Object.prototype.toString, '1', []));
+		console.log(Object.prototype.toString.call('1'))
+	}
+
+	let gards1 = [[70,71,72,73],[90,92],[89,90,91]]
+	function getCount(arr){
+		// let getMaxLength = Math.max.apply(null, arr.reduce((result,item) => [...result, item.length], [arr.length]))
+		let getMaxLength = Reflect.apply(Math.max, Math, arr.reduce((result,item) => [...result, item.length], [arr.length]))
+		// Reflect.apply(func, thisArg, args)
+
+		let sum = 0;
+		let itemAverage = []
+		for(let i = 0; i < getMaxLength; i++){
+			let itemList = []
+			for(let k = 0; k < getMaxLength; k++){
+				(arr[k] || [])[i] && itemList.push(arr[k][i]);
+				sum += (arr[k] || [])[i] || 0;
+			}
+			itemAverage.push(sum / itemList.length)
+			sum = 0
+			itemList = []
+		}
+
+		return itemAverage;
+	}
+	console.log(getCount(gards1));
+}
 
 
 
