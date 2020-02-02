@@ -278,7 +278,18 @@
 }
 
 
+{
+	// 代替 unshift 操作
+	let arr = [1,4,5,'z','f',{name: 'zz'}]
+	let arrLength = arr.length;
 
+	for(let i = arrLength; i>= 0; i--){
+		arr[i] = arr[i - 1]
+	}
+	console.log(arr)
+	arr[0] = '代替 unshift 操作'
+	console.log(arr,arr.length)
+}
 
 
 
