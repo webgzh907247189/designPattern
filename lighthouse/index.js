@@ -221,7 +221,8 @@
         arr.copyWithin(index, index + 1).pop()
         return arr
     }
-    console.log(deleteItem(arrTest, 1))
+    let result = deleteItem(arrTest, 1)
+    console.log(arrTest === result, result)
 
     let arrTest1 = ['a','b','c','d']
     function spliceOne(list, index) {
