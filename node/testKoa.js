@@ -79,7 +79,7 @@ router.get('/api/data',  async(ctx) => {
 
 router.get('/',  async(ctx) => {
 	console.log('11111111')
-	await ctx.render('test1.html')
+	await ctx.render('test1.html');
 })
 
 router.register('/f', ['get'], [function(ctx, next){
