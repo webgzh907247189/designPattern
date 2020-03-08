@@ -7,6 +7,8 @@
 
  /**
   * https://mp.weixin.qq.com/s/PpR1Lvg8pk3dRWHmVtaBYw
+  * https://github.com/Q-Angelo/project-training/blob/master/algorithm/bst.js
+  * 
   * https://juejin.im/post/5bec223f5188250c102116b5
   * 
   * constructor()：构造函数，初始化一个二叉搜索树
@@ -175,12 +177,58 @@
         }
 
         // 删除节点
-        removeNode(){
+        removeNode(value){
             this.root = this[REMOVE_NODE_RECUSIVE](this.root, value);
         }
 
         [REMOVE_NODE_RECUSIVE](node, value) {
+            // 未查找到直接返回 null
+            if(node === null){
+                return node;
+            }
 
+            if(value < node.value){
+                node.left = this[REMOVE_NODE_RECUSIVE](node.left,value);
+                // return node;
+            }
+
+            if(value > node.value){
+                node.right = this[REMOVE_NODE_RECUSIVE](node.right,value);
+                // return node;
+            }
+
+            //找到了节点
+            if(node.left === null && node.right === null){
+                node = null;
+                this.count--;
+                return node;
+            }
+
+            // 没有左节点，修改右节点,，就证明它有右侧节点，将当前节点的引用改为右侧节点的引用，返回更新之后的值
+            if(node.left === null){
+                node = node.right;
+                this.count--;
+                return node;
+            }
+
+            if(node.right === null){
+                node = node.left;
+                this.count--;
+                return node;
+            }
+
+            if(node.left !== null && node.right !== null){
+                const newNode = new this.CopyNode(this.minNode(node.right));
+                newNode.left = node.left
+                newNode.right = this[REMOVE_NODE_RECUSIVE](node.right,newNode.value);
+
+                // 新增节点，++
+                this.count++;
+                node = null;
+                // 删除节点，--
+                this.count--;
+                return newNode;
+            }
         }
   }
 
@@ -221,3 +269,4 @@ console.log(searchTree.minNodeValue()); // 20
 console.log(searchTree.maxNode()) // { value: 40, count: 1, left: null, right: null }
 
 
+console.log(searchTree.removeNode(30));
