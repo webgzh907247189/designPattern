@@ -233,19 +233,44 @@ class SearchTree {
     }
 
     isSymmetric(rootNode){
-        let root = [rootNode || this.root];
-        let result = false;
-        if(!node){
+        let root = rootNode || this.root;
+        let result = true;
+        if(!root){
             result = true;
             return result
         }
-        
-        while(root){
-            let leftNode = root.shift();
-            let leftNode = root.shift();
-            // if(){
 
-            // }
+        let leftNode = root.left;
+        let rightNode = root.right;
+        const stack = [leftNode,rightNode];
+
+        while(stack){
+            let leftNode = stack.shift();
+            let rightNode = stack.shift();
+
+            if(!leftNode || !rightNode){
+                break;
+            }
+            
+            if(!leftNode && rightNode){
+                result = false;
+                break;
+            }
+
+            if(leftNode && !rightNode){
+                result = false;
+                break;
+            }
+
+            if(leftNode && rightNode){
+                if(leftNode.value === rightNode.value){
+                    stack.push(leftNode.left,rightNode.right);
+                    stack.push(leftNode.right,rightNode.left);
+                }else {
+                    result = false;
+                    break;
+                }
+            }
         }
 
         return result;
@@ -283,3 +308,11 @@ console.log(searchTree.isValidBST({
     left: {value: 2,left: { value: 7}},
     right: {value: 5}
 })); // false
+
+
+console.log(searchTree.isSymmetric(), 'isSymmetric') // false
+console.log(searchTree.isSymmetric({
+    value: 4,
+    left: {value: 2,left: { value: 13},right: {value: 17}},
+    right: {value: 2,left: { value: 17},right: {value: 13}}
+}), 'isSymmetric'); // false
