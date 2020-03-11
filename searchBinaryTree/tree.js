@@ -208,6 +208,48 @@ class SearchTree {
 
         return flag;
     }
+
+    // 合法的二叉树
+    isValidBST(rootNode){
+        let root = rootNode || this.root;
+        let val = -Number.MAX_VALUE;
+        let result = false;
+
+        function checkBST(node){
+            if(node){
+                checkBST(node.left)
+                    
+                result = node.value > val;
+                if(!result){
+                    return result;
+                }
+                val = node.value;
+        
+                checkBST(node.right)
+            }
+        }
+        checkBST(root)
+        return result;
+    }
+
+    isSymmetric(rootNode){
+        let root = [rootNode || this.root];
+        let result = false;
+        if(!node){
+            result = true;
+            return result
+        }
+        
+        while(root){
+            let leftNode = root.shift();
+            let leftNode = root.shift();
+            // if(){
+
+            // }
+        }
+
+        return result;
+    }
 }
 const searchTree = new SearchTree();
 
@@ -228,4 +270,16 @@ console.log(searchTree.postOrderTraverse()); // [20, 28, 25, 32, 40, 36, 30]
 console.log(searchTree.levelOrder());  // [30, 25, 36, 20, 28, 32, 40]
 
 console.log(searchTree.maxDepth());  // 3
-console.log(searchTree.hasPathSum(98));
+console.log(searchTree.hasPathSum(98)); // true
+console.log(searchTree.isValidBST()); // true
+console.log(searchTree.isValidBST({
+    value: 1,
+    left: {value: 2},
+    right: {value: 3}
+})); // false
+
+console.log(searchTree.isValidBST({
+    value: 4,
+    left: {value: 2,left: { value: 7}},
+    right: {value: 5}
+})); // false
