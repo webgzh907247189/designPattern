@@ -248,28 +248,21 @@ class SearchTree {
             let leftNode = stack.shift();
             let rightNode = stack.shift();
 
-            if(!leftNode || !rightNode){
+            if(leftNode == null && rightNode == null){
                 break;
             }
             
-            if(!leftNode && rightNode){
+            if(leftNode == null || rightNode == null){
                 result = false;
                 break;
             }
 
-            if(leftNode && !rightNode){
+            if(leftNode.value === rightNode.value){
+                stack.push(leftNode.left,rightNode.right);
+                stack.push(leftNode.right,rightNode.left);
+            }else {
                 result = false;
                 break;
-            }
-
-            if(leftNode && rightNode){
-                if(leftNode.value === rightNode.value){
-                    stack.push(leftNode.left,rightNode.right);
-                    stack.push(leftNode.right,rightNode.left);
-                }else {
-                    result = false;
-                    break;
-                }
             }
         }
 
@@ -315,4 +308,4 @@ console.log(searchTree.isSymmetric({
     value: 4,
     left: {value: 2,left: { value: 13},right: {value: 17}},
     right: {value: 2,left: { value: 17},right: {value: 13}}
-}), 'isSymmetric'); // false
+}), 'isSymmetric'); // true
