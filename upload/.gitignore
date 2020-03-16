@@ -1,0 +1,6 @@
+
+mediatorModel/
+node_modules/
+img/
+.bin/
+babylon.cmd

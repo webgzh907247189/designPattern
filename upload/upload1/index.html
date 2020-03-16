@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+</head>
+
+<body>
+	<input type="file" id="fileInp" accept="image/*">
+	<br>
+	<img src="" alt="" id="serverImg">
+
+	<script src="./md5.min.js"></script>
+	<script src="./ajax.js"></script>
+	<script>
+		let limitType = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'],
+			limitMax = 100 * 1024;
+
+		fileInp.onchange = async function () {
+			let file = fileInp.files[0];
+			if (!file) return;
+
+			// if (!limitType.includes(file.type)) {
+			// 	alert('必须是xxx格式！');
+			// 	fileInp.value = "";
+			// 	return;
+			// }
+
+			// if (file.size > limitMax) {
+			// 	alert('最大只能上传100KB！');
+				
+			// 	// 清空操作是必要的 -> 清空value的值
+			// 	fileInp.value = "";
+			// 	return;
+			// }
+
+			// 遇到的图片是跨域的，流文件的处理，在放在canvas处理
+			// fetch 转为bolb ，直接使用 window.URL.createObjectURL(blob)
+
+			let formData = new FormData();
+			// Content-Type：multipart/form-data
+			formData.append('chunk', file);
+			formData.append('filename', $formatFileName(file.name).fileName);
+			let result = await $ajax({
+				url: 'http://127.0.0.1:5678/single',
+				data: formData
+			});
+
+			if (result.code == 0) {
+				serverImg.src = result.path;
+			}
+		};
+	</script>
+</body>
+
+</html>
