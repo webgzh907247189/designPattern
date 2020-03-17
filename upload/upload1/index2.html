@@ -34,7 +34,7 @@
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded'
 				},
-				data: `chunk=${encodeURIComponent(base64)}&filename=${$formatFileName(file.name).filename}`
+				data: `chunk=${encodeURIComponent(base64)}&filename=${$formatFileName(file.name).fileName}`
 			});
 			if (result.code == 0) {
 				serverImg.src = result.path;

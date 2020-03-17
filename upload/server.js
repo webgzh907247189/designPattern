@@ -71,6 +71,12 @@ app.post('/single2', (req, res) => {
 		chunk,
 		filename
 	} = req.body;
+
+	if (!fs.existsSync(upload_dir)) {
+		// 不存在目录就创建一个
+		fs.mkdirSync(upload_dir);
+	}
+
 	let chunk_dir = `${upload_dir}/${filename}`;
 	chunk = decodeURIComponent(chunk).replace(/^data:image\/\w+;base64,/, "");
 	chunk = Buffer.from(chunk, 'base64');
@@ -78,7 +84,7 @@ app.post('/single2', (req, res) => {
 	res.send({
 		code: 0,
 		codeText: '',
-		path: `http://127.0.0.1:${CONFIG.PORT}/upload/${filename}`
+		path: `http://127.0.0.1:${CONFIG.PORT}/img/${filename}`
 	});
 });
 
