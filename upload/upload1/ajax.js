@@ -5,7 +5,8 @@ function $ajax(options){
         data: null,
         headers: {
 
-        }
+        },
+        progress: Function.prototype,
     },options)
 
     return new Promise((resolve,reject) => {
@@ -23,6 +24,8 @@ function $ajax(options){
                 }
             }
         }
+
+        xhr.upload.onprogress = options.progress;
         xhr.send(options.data);
     })
 }

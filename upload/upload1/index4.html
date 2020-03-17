@@ -37,7 +37,7 @@
 
 			let formData = new FormData();
 			formData.append('chunk', file);
-			formData.append('filename', $formatFileName(file.name).filename);
+			formData.append('filename', $formatFileName(file.name).fileName);
 			let result = await $ajax({
 				url: 'http://127.0.0.1:5678/single',
 				data: formData,
