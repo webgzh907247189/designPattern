@@ -8,7 +8,7 @@
 </head>
 
 <body>
-	<input type="file" id="fileInp" accept="image/*">
+	<input type="file" id="fileInp">
 	<span id="progress">0%</span>
 	<br>
 	<img src="" alt="" id="serverImg">
@@ -42,7 +42,7 @@
 			let {
 				hash,
 				suffix,
-				filename
+				fileName
 			} = $formatFileName(file.name);
 			while (i < 5) {
 				partList.push({
@@ -72,17 +72,12 @@
 
 			// 合并切片
 			await Promise.all(partList);
-			/* await new Promise(resolve => {
-				setTimeout(_ => {
-					resolve();
-				}, 100);
-			}); */
 			let result = await $ajax({
 				url: 'http://127.0.0.1:5678/merge',
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded'
 				},
-				data: `filename=${filename}`
+				data: `filename=${fileName}`
 			});
 			if (result.code == 0) {
 				serverImg.src = result.path;

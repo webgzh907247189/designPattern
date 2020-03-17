@@ -101,10 +101,18 @@ app.post('/chunk', (req, res) => {
             [filename] = fields.filename;
 		let filepath = filename.substring(0, filename.indexOf('-')),
 			chunk_dir = `${upload_dir}/${filepath}`;
-		if (!fs.existsSync(chunk_dir)) {
-			// 不存在目录就创建一个
-			fs.mkdirSync(chunk_dir);
-        }
+		
+		// 递归创建文件夹
+		const dirList = [upload_dir,chunk_dir];
+		dirList.forEach((item) => {
+			if (!fs.existsSync(item)) {
+				fs.mkdirSync(path.resolve(__dirname,item));
+			}
+		})
+		// if (!fs.existsSync(chunk_dir)) {
+		// 	// 不存在目录就创建一个
+		// 	fs.mkdirSync(chunk_dir);
+		// }
 		chunk_dir = `${upload_dir}/${filepath}/${filename}`;
 		let readStream = fs.createReadStream(chunk.path),
             writeStream = fs.createWriteStream(chunk_dir);
@@ -136,7 +144,7 @@ app.post('/merge', (req, res) => {
 	res.send({
 		code: 0,
 		codeText: '',
-		path: `http://127.0.0.1:${CONFIG.PORT}/upload/${filename}`
+		path: `http://127.0.0.1:${CONFIG.PORT}/img/${filename}`
 	});
 });
 
