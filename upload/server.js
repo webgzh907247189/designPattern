@@ -2,7 +2,8 @@ const CONFIG = require('./config'),
 	bodyParser = require('body-parser'),
 	multiparty = require('multiparty'),
 	fs = require('fs'),
-	path = require('path');
+    path = require('path');
+const fsPromises = fs.promises
 
 /*-CREATE SERVER-*/
 const express = require('express'),
@@ -29,6 +30,7 @@ app.use(bodyParser.urlencoded({
 	extended: false,
 	limit: '1024mb'
 }));
+app.use(bodyParser.json());
 
 /*-API-*/
 const upload_dir = path.resolve(__dirname,"img");
@@ -146,6 +148,30 @@ app.post('/merge', (req, res) => {
 		codeText: '',
 		path: `http://127.0.0.1:${CONFIG.PORT}/img/${filename}`
 	});
+});
+
+app.post('/verify', async (req, res) => {
+	let {
+        fileName,
+        fileHash
+	} = req.body;
+
+    let chunk_dir = `${upload_dir}/${fileName}`;
+
+    let flag = false;
+    try{
+        const stat = await fsPromises.stat(chunk_dir)
+        if(stat.isFile()){
+            flag = true;
+        }
+    }catch {
+        flag = false;
+    }
+
+    res.send({
+        code: flag ? 0 : -1,
+        shouldUpload: flag ? true : false,
+    })
 });
 
 app.use(express.static('./'));

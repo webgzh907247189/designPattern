@@ -30,14 +30,40 @@
 			}
 		});
 
+
+		function verifyUpload(fileName, fileHash) {
+	       	return $ajax({
+	         	url: "http://localhost:5678/verify",
+	         	headers: {
+	           		"content-type": "application/json"
+	         	},
+	         	data: JSON.stringify({
+                    fileName,
+	           		fileHash
+	         	})
+	       });
+        }
+         
 		fileInp.onchange = async function () {
 			let file = fileInp.files[0];
 			if (!file) return;
 			progress.innerHTML = "0%";
 
+            const { hash, fileName, suffix} = $getMd5(file.name);
 			let formData = new FormData();
 			formData.append('chunk', file);
-			formData.append('filename', $formatFileName(file.name).fileName);
+            formData.append('filename', fileName);
+            
+            const { shouldUpload } = await verifyUpload(
+                fileName,
+		        hash
+            );
+            
+		    if (shouldUpload) {
+               alert('秒传：上传成功')
+		       return;
+            }
+            
 			let result = await $ajax({
 				url: 'http://127.0.0.1:5678/single',
 				data: formData,

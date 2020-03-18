@@ -31,12 +31,22 @@ function $ajax(options){
 }
 
 function $formatFileName(fileName){
+    const {hash,suffix,fileName} = $getMd5(fileName)
+    name = hash + new Date().getTime();
+    return {
+        hash: name,
+        suffix,
+        fileName: `${name}.${suffix}`
+    };
+
+}
+
+function $getMd5(fileName){
     let dotIndex = fileName.lastIndexOf('.'),
         name = fileName.substring(0, dotIndex),
         suffix = fileName.substring(dotIndex + 1);
 
-        // new Date().getTime() === +new Date();
-    name = md5(name) + new Date().getTime();
+    name = md5(name);
     return {
         hash: name,
         suffix,
