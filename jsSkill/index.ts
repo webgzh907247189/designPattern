@@ -176,6 +176,7 @@
     let round: r
     round = (num:number,n=2) => {
         return `${Math.round(`${num}e${n}` as any)}e-${n}` as any * 1 // 注意，此处的  e- 没有空格
+        // `${Math.round(`${parseFloat(val)}e${num}`)}e-${num}` * 1
     }
 }
 
