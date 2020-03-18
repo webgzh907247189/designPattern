@@ -31,7 +31,7 @@ function $ajax(options){
 }
 
 function $formatFileName(fileName){
-    const {hash,suffix,fileName} = $getMd5(fileName)
+    const {hash,suffix} = $getMd5(fileName)
     name = hash + new Date().getTime();
     return {
         hash: name,
