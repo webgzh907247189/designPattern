@@ -7,6 +7,7 @@ function $ajax(options){
 
         },
         progress: Function.prototype,
+        requestList: [],
     },options)
 
     return new Promise((resolve,reject) => {
@@ -14,8 +15,16 @@ function $ajax(options){
         xhr.open(options.method,options.url);
         Object.keys(options.headers).forEach((item) => {
             xhr.setRequestHeader(item,options.headers[item])
-        })
+        });
+
+        options.requestList?.push(xhr);
+        
         xhr.onreadystatechange = function(){
+            if (options.requestList) {
+                const xhrIndex = options.requestList.findIndex(item => item === xhr);
+                options.requestList.splice(xhrIndex, 1);
+            }
+
             if(xhr.readyState === 4){
                 if(/^(2|3)\d{2}$/.test(xhr.status)){
                     resolve(JSON.parse(xhr.responseText));

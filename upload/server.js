@@ -158,19 +158,23 @@ app.post('/verify', async (req, res) => {
 
     let chunk_dir = `${upload_dir}/${fileName}`;
 
-    let flag = false;
+	let flag = false;
+	let uploadedList = [];
     try{
         const stat = await fsPromises.stat(chunk_dir)
         if(stat.isFile()){
             flag = true;
         }
     }catch {
-        flag = false;
+		flag = false;
+		const resultPath = path.resolve(upload_dir,fileHash)
+		uploadedList = fs.existsSync(resultPath) ? fs.readdirSync(resultPath) : [];
     }
 
     res.send({
         code: flag ? 0 : -1,
-        shouldUpload: flag ? true : false,
+		shouldUpload: flag ? true : false,
+		uploadedList,
     })
 });
 
