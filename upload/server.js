@@ -161,15 +161,15 @@ app.post('/verify', async (req, res) => {
 	let flag = false;
 	let uploadedList = [];
     try{
-        const stat = await fsPromises.stat(chunk_dir)
+		const stat = await fsPromises.stat(chunk_dir)
         if(stat.isFile()){
             flag = true;
         }
     }catch {
 		flag = false;
-		const resultPath = path.resolve(upload_dir,fileHash)
-		uploadedList = fs.existsSync(resultPath) ? fs.readdirSync(resultPath) : [];
-    }
+	}
+	const resultPath = path.resolve(upload_dir,fileHash)
+	uploadedList = fs.existsSync(resultPath) ? fs.readdirSync(resultPath) : [];
 
     res.send({
         code: flag ? 0 : -1,

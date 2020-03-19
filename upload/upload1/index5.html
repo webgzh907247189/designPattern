@@ -134,7 +134,11 @@
 		        _that.hash
             );
             const partListRequest = partList.filter(({filename}) => (uploadedList.includes(filename)));
-            uploadChunks(partListRequest, _that.fileName);
+			const result = await uploadChunks(uploadedList, fileName);
+			if (result.code == 0) {
+				serverImg.src = result.path;
+            }
+            fileInp.value = '';
         }
 
 		function verifyUpload(fileName, fileHash) {
