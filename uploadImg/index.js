@@ -249,7 +249,22 @@ let composeResultQrCode = composeFn(resultImg,getBlob,dataURLtoBlob)
     })()
 }
 
+{
+    let awaitWrap = (promise) => promise.then((data) => [null, data]).catch((err) => [err, null]);
 
+    let compose = (...fns) => fns.reduce((a,b)=>{
+        return (...args) => a(b(...args))
+    })
+
+    let getErr = async (promiseList) => { 
+        let [err] = await promiseList;
+        console.log(err)
+        return err
+    };
+
+    let result = compose(getErr,awaitWrap,(s) => {return Promise.reject(s)})
+    console.log(result('111')); // 111
+}
 
 
 {
