@@ -46,7 +46,7 @@
 			let partSize = file.size / 5,
 				cur = 0,
 				i = 0;
-            let { hash, fileName, suffix} = $getMd5(file.name);
+            let { hash, fileName, suffix} = await getHash(file);
             _that.fileName = fileName;
             _that.hash = hash;
 
@@ -90,6 +90,17 @@
 	           		fileHash
 	         	})
 	       });
+		}
+
+		async function getHash(file){
+			let worker = new Worker('./work.js')
+			worker.postMessage({ name: file.name });
+
+			return new Promise((resolve) => {
+				worker.onmessage = e => {
+					resolve(e.data)
+				}
+			})
 		}
 		
 		async function uploadChunks(fileName, hash, partList){

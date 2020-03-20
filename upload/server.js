@@ -2,12 +2,19 @@ const CONFIG = require('./config'),
 	bodyParser = require('body-parser'),
 	multiparty = require('multiparty'),
 	fs = require('fs'),
-    path = require('path');
+	path = require('path'),
+	ejs = require('ejs');
 const fsPromises = fs.promises
 
 /*-CREATE SERVER-*/
 const express = require('express'),
 	app = express();
+
+app.use(express.static(path.resolve(__dirname,'./upload1')))
+app.engine('html', ejs.__express) // 使用EJS模板，不用配置该项。html模板需要配置
+app.set('view engine','html')     // 调用render函数时能自动为我们加上’.html’ 后缀,若没设置，在render时需要手动补充完整文件名(detail.html)
+app.set('views', path.join(__dirname, './upload1'));
+
 app.listen(CONFIG.PORT, () => {
 	console.log(`SERVICE IS OK ===> ${CONFIG.PORT}`);
 });
