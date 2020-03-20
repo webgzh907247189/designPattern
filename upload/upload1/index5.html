@@ -58,20 +58,53 @@
 				cur += partSize;
 				i++;
             }
-            
-            const { shouldUpload, uploadedList } = await verifyUpload(
+			
+			const result = await uploadChunks(fileName, hash, partList);
+			if (result.code == 0) {
+				serverImg.src = result.path;
+            }
+            fileInp.value = '';
+        };
+
+		abort.onclick = function(){
+			requestList.forEach(xhr => xhr?.abort());
+    		requestList = [];
+        }
+    
+        recovery.onclick = async function(){
+			const result = await uploadChunks(_that.fileName, _that.hash, partList);
+			if (result.code == 0) {
+				serverImg.src = result.path;
+            }
+            fileInp.value = '';
+        }
+
+		function verifyUpload(fileName, fileHash) {
+	       	return $ajax({
+	         	url: "http://localhost:5678/verify",
+	         	headers: {
+	           		"content-type": "application/json"
+	         	},
+	         	data: JSON.stringify({
+                    fileName,
+	           		fileHash
+	         	})
+	       });
+		}
+		
+		async function uploadChunks(fileName, hash, partList){
+			const { shouldUpload, uploadedList } = await verifyUpload(
                 fileName,
 		        hash
-            );
-            
-		    // if (shouldUpload) {
-            //    alert('秒传：上传成功')
-            //    fileInp.value = '';
-		    //    return;
-            // }
+			);
 
-			//并发切片请求
-			const partListRequest = partList.map(item => {
+			if (shouldUpload) {
+               alert('秒传：上传成功')
+               fileInp.value = '';
+		       return;
+			}
+			
+			const list = partList.map(item => {
 				let formData = new FormData();
 				formData.append('chunk', item.chunk);
                 formData.append('filename', item.filename);
@@ -91,28 +124,20 @@
 					}
 					return Promise.reject(result);
 				});
-            })
+			})
 
-            
-            // setTimeout(()=>{
-            //     +function(){
-            //         console.log(requestList);
-            //         requestList.forEach(xhr => xhr?.abort());
-            //         requestList = [];
-            //     }();
-            // },420);
+			if(!uploadedList.length){
+				setTimeout(()=>{
+					+function(){
+						console.log(requestList);
+						requestList.forEach(xhr => xhr?.abort());
+						requestList = [];
+					}();
+				},0);
+			}
 
-            // 合并切片
-			const result = await uploadChunks(uploadedList, fileName);
-			console.log(result, 'result')
-			if (result.code == 0) {
-				serverImg.src = result.path;
-            }
-            fileInp.value = '';
-        };
-        
-        async function uploadChunks(partListRequest, fileName){
-			await Promise.all(partListRequest)
+			await Promise.all(list)
+			
 			const result = await $ajax({
 				url: 'http://127.0.0.1:5678/merge',
 				headers: {
@@ -122,38 +147,6 @@
 			});
 			return result;
         }
-
-		abort.onclick = function(){
-			requestList.forEach(xhr => xhr?.abort());
-    		requestList = [];
-        }
-    
-        recovery.onclick = async function(){
-            const { shouldUpload, uploadedList } = await verifyUpload(
-                _that.fileName,
-		        _that.hash
-            );
-            const partListRequest = partList.filter(({filename}) => (uploadedList.includes(filename)));
-			const result = await uploadChunks(uploadedList, fileName);
-			if (result.code == 0) {
-				serverImg.src = result.path;
-            }
-            fileInp.value = '';
-        }
-
-		function verifyUpload(fileName, fileHash) {
-	       	return $ajax({
-	         	url: "http://localhost:5678/verify",
-	         	headers: {
-	           		"content-type": "application/json"
-	         	},
-	         	data: JSON.stringify({
-                    fileName,
-	           		fileHash
-	         	})
-	       });
-        }
-         
 	</script>
 </body>
 
