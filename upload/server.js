@@ -1,3 +1,7 @@
+/**
+ * https://juejin.im/post/5dff8a26e51d4558105420ed
+ */
+
 const CONFIG = require('./config'),
 	bodyParser = require('body-parser'),
 	multiparty = require('multiparty'),
