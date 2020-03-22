@@ -15,7 +15,6 @@
     <button id="abort">取消上传</button>
     <button id="recovery">恢复上传</button>
 
-	<script src="./md5.min.js"></script>
 	<script src="./ajax.js"></script>
 	<script>
         let requestList = [];
@@ -99,6 +98,10 @@
 			return new Promise((resolve) => {
 				worker.onmessage = e => {
 					resolve(e.data)
+					// 终止掉这个线程，可以调用在主线程 Worker 的 terminate 方法 或者在相应的线程中调用 close 方法
+					// worker.terminate();
+					// self.close();
+					worker.terminate();
 				}
 			})
 		}
