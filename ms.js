@@ -1,5 +1,8 @@
 1. target="_blank" 也有一个安全漏洞。新的页面可以通过 window.opener 访问旧的窗口对象，甚至可以使用 window.opener.location = newURL 将旧页面导航至不同的网址。
-
+2. $borderCast $dispatch 简化流程
+3. provider inject 带来的问题，非响应式，使用函数获取最新的值
+4. 调整生产的缓存策略 善于去发现问题，思考问题
+5. 阅读源码，带来了什么？只是秀还是在业务中使用
 
 {
     function user(obj){
