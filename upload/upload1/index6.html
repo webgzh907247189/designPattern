@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+</head>
+
+<body>
+	<input type="file" id="fileInp">
+	<span id="progress">0%</span>
+	<br>
+	<img src="" alt="" id="serverImg">
+    <button id="abort">取消上传</button>
+    <button id="recovery">恢复上传</button>
+
+	<script src="./ajax.js"></script>
+	<script>
+        let requestList = [];
+        this.fileName = '';
+        this.hash = ''
+        let partList = [];
+
+		let _data = new Proxy({
+			total: 0
+		}, {
+			set(target, key, value) {
+				target[key] = value;
+				if (_data.total >= 100) {
+					progress.innerHTML = '上传完成';
+					return;
+				}
+				progress.innerHTML = `${_data.total}%`;
+			}
+		});
+
+        const _that = this;
+		fileInp.onchange = async function () {
+			let file = fileInp.files[0];
+			if (!file) return;
+			progress.innerHTML = "0%";
+
+			// 把一个文件切成五个切片（固定切片数量 也可以固定切片大小）
+			let partSize = file.size / 5,
+				cur = 0,
+				i = 0;
+            let { hash, fileName, suffix} = await getHash(file);
+            _that.fileName = fileName;
+            _that.hash = hash;
+
+			while (i < 5) {
+				partList.push({
+					chunk: file.slice(cur, cur + partSize),
+					filename: `${hash}-${i}.${suffix}`
+				});
+				cur += partSize;
+				i++;
+            }
+			
+			const result = await uploadChunks(fileName, hash, partList);
+			if (result.code == 0) {
+				serverImg.src = result.path;
+            }
+            fileInp.value = '';
+        };
+
+		abort.onclick = function(){
+			requestList.forEach(xhr => xhr?.abort());
+    		requestList = [];
+        }
+    
+        recovery.onclick = async function(){
+			const result = await uploadChunks(_that.fileName, _that.hash, partList);
+			if (result.code == 0) {
+				serverImg.src = result.path;
+            }
+            fileInp.value = '';
+        }
+
+		function verifyUpload(fileName, fileHash) {
+	       	return $ajax({
+	         	url: "http://localhost:5678/verify",
+	         	headers: {
+	           		"content-type": "application/json"
+	         	},
+	         	data: JSON.stringify({
+                    fileName,
+	           		fileHash
+	         	})
+	       });
+		}
+
+		async function getHash(file){
+			let worker = new Worker('./work.js')
+			worker.postMessage({ name: file.name });
+
+			return new Promise((resolve) => {
+				worker.onmessage = e => {
+					resolve(e.data)
+					// 终止掉这个线程，可以调用在主线程 Worker 的 terminate 方法 或者在相应的线程中调用 close 方法
+					// worker.terminate();
+					// self.close();
+					worker.terminate();
+				}
+			})
+		}
+
+		function sendRequest(list,maxRequest){
+			return new Promise((resolve,reject)=>{
+				let listLength = list.length;
+				let idx = 0;
+				let counter = 0;
+
+				function start(){
+					while(idx < listLength && maxRequest > 0){
+						const item = list[idx]
+						maxRequest-- // 占用通道
+						idx++;
+						$ajax({
+							url: 'http://127.0.0.1:5678/chunk',
+							data: item,
+							requestList,
+						}).then(result => {
+							maxRequest++ // 释放通道
+							counter++
+							if (counter === listLength) {
+								resolve();
+							} else {
+				            	start();
+				          	}
+						});
+					}
+				}
+				start()
+			})
+		}
+		
+		async function uploadChunks(fileName, hash, partList){
+			const { shouldUpload, uploadedList } = await verifyUpload(
+                fileName,
+		        hash
+			);
+
+			if (shouldUpload) {
+               alert('秒传：上传成功')
+               fileInp.value = '';
+		       return;
+			}
+			
+			const list = partList.map(item => {
+				let formData = new FormData();
+				formData.append('chunk', item.chunk);
+                formData.append('filename', item.filename);
+                return formData
+			}).filter((formData) => {
+                const {filename} = Object.fromEntries([...formData.entries()]);
+                return !uploadedList.includes(filename);
+            }).map((formData)=>{
+                return $ajax({
+					url: 'http://127.0.0.1:5678/chunk',
+                    data: formData,
+                    requestList, 
+				}).then(result => {
+					if (result.code == 0) {
+						_data.total += 20;
+						return Promise.resolve(result);
+					}
+					return Promise.reject(result);
+				});
+			})
+
+			if(!uploadedList.length){
+				setTimeout(()=>{
+					+function(){
+						console.log(requestList);
+						requestList.forEach(xhr => xhr?.abort());
+						requestList = [];
+					}();
+				},0);
+			}
+
+			await Promise.all(list)
+			
+			const result = await $ajax({
+				url: 'http://127.0.0.1:5678/merge',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				data: `filename=${fileName}`
+			});
+			return result;
+        }
+	</script>
+</body>
+
+</html>
