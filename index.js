@@ -21,7 +21,7 @@ selectedMap.get(selectedList) === categoryData，有的话，直接返回selecte
 
 16. fetch相关操作，进度，取消，流？？？？
 17. 同步版本好号使用流去操作 ？？？？
-18. 怎么看帧数 看回流 重绘 ？？？？
+18. 怎么看帧数 看回流 重绘 ？？？？ 
 
 
 3. 缓存的课程复习 + 资料
