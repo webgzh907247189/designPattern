@@ -410,3 +410,32 @@
 	  	action.forEach(([key,value])=>value.call(this))
 	}
 }
+
+
+
+{
+	function compose(...fns){
+		return fns.reduce((a,b)=> (...args)=> a(b(...args)));
+	}
+
+	function curry(fn,...args){
+		if(args.length >= fn.length){
+			return fn(...args)
+		} 
+
+		const realArgs = args.length > 1 ? args.reverse() : args;
+		return (...args1) =>{
+			return curry(fn,...args1,...realArgs);
+		}
+	};
+	
+	let greeting = (firstName, lastName) => ` hello, ${firstName} ${lastName}`;
+	let toUpper = str => str.toUpperCase();
+	let trim = str => str.trim()
+	let test = (str1,str2,str3) => `${str1} + 1 + ${str2} + 2 + ${str3}`
+
+	test = curry(test)('--222--')('--333--')
+	let fns = compose(trim, toUpper, test, greeting)
+	let result = fns('  jack', 'smith')
+	console.log(result)
+}
