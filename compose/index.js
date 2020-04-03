@@ -434,7 +434,8 @@
 	let trim = str => str.trim()
 	let test = (str1,str2,str3) => `${str1} + 1 + ${str2} + 2 + ${str3}`
 
-	test = curry(test)('--222--')('--333--')
+	test = curry(test, '--222--')('--333--')
+	// test = curry(test)('--222--')('--333--')
 	let fns = compose(trim, toUpper, test, greeting)
 	let result = fns('  jack', 'smith')
 	console.log(result)
