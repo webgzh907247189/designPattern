@@ -24,6 +24,20 @@ function asyncGetRouter(name) {
 	return (resolve) => require([`@/component/${name}.vue`], resolve)
 }
 
+function getRoute(){
+    const pathList = require.context('./module', false, /\.js$/);
+
+    const pathKeysList = pathList.keys();
+    return pathKeysList.reduce((result, itemPath) => {
+        const resultPathObj = result;
+
+        const itemModule = itemPath.slice(2, -3);
+        resultPathObj[itemModule] = pathList(itemPath).default || {};
+        return resultPathObj;
+    }, Object.create(null));
+}
+const routerObj = getRoute();
+
 import Home from '@/component/home'
 import About from '@/component/about'
 export default new Router1({
