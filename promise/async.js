@@ -119,6 +119,7 @@ getD()
 {
 	[1, 2, 3].reduce((accumulator, item) => accumulator + item, 0)  //6
 
+	// 因为result 是一个 promise， 所以使用 result，要先 await 一下
 	await [1, 2, 3].reduce(async (accumulator, item) => await accumulator + item, 0)  
 	//6
 }
