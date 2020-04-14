@@ -418,15 +418,13 @@
 		return fns.reduce((a,b)=> (...args)=> a(b(...args)));
 	}
 
-	function curry(fn,...args){
-		if(args.length >= fn.length){
-			return fn(...args)
-		} 
-
-		const realArgs = args.length > 1 ? args.reverse() : args;
-		return (...args1) =>{
-			return curry(fn,...args1,...realArgs);
+	function curry (fn, ...args) {
+		if (args.length >= fn.length) {
+			const realArgs = args.pop();
+			return fn(realArgs, ...args);
 		}
+	
+		return (...runArgs) => curry(fn, ...args, ...runArgs);
 	};
 	
 	let greeting = (firstName, lastName) => ` hello, ${firstName} ${lastName}`;
@@ -434,9 +432,21 @@
 	let trim = str => str.trim()
 	let test = (str1,str2,str3) => `${str1} + 1 + ${str2} + 2 + ${str3}`
 
-	test = curry(test, '--222--')('--333--')
+	test = curry(test, '--222--','--333--')
 	// test = curry(test)('--222--')('--333--')
 	let fns = compose(trim, toUpper, test, greeting)
 	let result = fns('  jack', 'smith')
 	console.log(result)
+
+	const importAll = (requireContext) => requireContext.keys();
+
+	const getRequireObj = (pathList, sliceStart, sliceEnd, reqCtxPathList) => {
+		return pathList.reduce((resultObj, itemPath) => {
+			const objCombine = resultObj;
+			const itemModule = itemPath.slice(sliceStart, sliceEnd);
+
+			objCombine[itemModule] = reqCtxPathList(itemPath).default ?? {};
+			return objCombine;
+		}, Object.create(null));
+	};
 }
