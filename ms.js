@@ -7,6 +7,11 @@
 7. 使用中间件简化if判断
 8. 指定要返回数组的长度   let temp = "1-2-3-4-5";let split2 =temp.split("-", 2); // [1,2]
 9. [].map(a,b,c) c的指向为map回掉函数的this，vue的jsx
+10. Vue.observable 响应式数据
+11. requeire.context() webpack 批量引入功能
+12. webpack 的 mainFileds 加速匹配
+13. 加速快发体验，优化开发中的问题，package.json 经常变更问题，批量引入问题
+14. 替换qs，用单元测试驱动，保持基本功能一样
 
 {
     function user(obj){
