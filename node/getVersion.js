@@ -6,7 +6,7 @@ const child_process = require('child_process');
 const url = 'https://npm.shmiao.net/-/verdaccio/sidebar/@shm/interface';
 const package = '@shm/interface';
 const packagePath = path.resolve(__dirname, '../package.json');
-const version = path.resolve(__dirname, './version.json');
+const diffLocalVersion = path.resolve(__dirname, './version.json');
 const nodeModulesInterface = path.resolve(__dirname, `../node_modules/@shm/interface/package.json`);
 
 function getSHMInterface(options, cb) {
@@ -39,19 +39,28 @@ getSHMInterface({ url }, function(error, response, body) {
     if (flag) {
         const data = fs.readFileSync(packagePath, 'utf8');
         const resultData = JSON.parse(data);
-        const itemPackage = `"${package}": "${resultData.dependencies[package]}"`;
+        const localPackage = `"${package}": "${resultData.dependencies[package]}"`;
 
-        const resultStr = data.replace(itemPackage, (targetStr, idx, source) => {
+        const resultStr = data.replace(localPackage, (targetStr, idx, source) => {
             return `"${package}": "^${version}"`;
         });
 
         fs.writeFile(packagePath, resultStr, (err) => {
             if (!err) {
-                const historyVersion = fs.readFileSync(nodeModulesInterface);
-                const newVersionBuf = Buffer.from(`"version": "${version}"`);
-                const isUpdate = historyVersion.indexOf(newVersionBuf);
+                const historyNodeModulesVersion = fs.readFileSync(nodeModulesInterface);
 
-                if (!~isUpdate) {
+                const newVersionBuf = Buffer.from(`"version": "${version}"`);
+
+                // node_modules 下面的 '@shm/interface' 是不是最新的
+                const isUpdateNodeModules = historyNodeModulesVersion.indexOf(newVersionBuf);
+
+                // package.json 下面的 '@shm/interface' 是不是最新的
+                const isUpdatePackage = data.indexOf(`"${package}": "^${version}"`);
+
+                // 有一个不是最新的，就触发 update更新  -> 此处也可以改变判定条件
+                // 本地的 packeage-lock.json 的 '@shm/interface' 版本号 与 historyNodeModulesVersion 进行对比，
+                // 考虑到 packeage-lock.json 文件体积较大，又要在读取一次，所以采用两个变量控制更新策略
+                if (!~isUpdateNodeModules || !~isUpdatePackage) {
                     const str = `npm install ${package}`;
                     const grep = child_process.exec(str, { stdio: 'inherit' }, function(error, stdout, stderr) {
                         // console.log('子进程被kill')
@@ -67,4 +76,4 @@ getSHMInterface({ url }, function(error, response, body) {
     } else {
         throw new Error('版本号异常！！！');
     }
-}).pipe(fs.createWriteStream(version));
+}).pipe(fs.createWriteStream(diffLocalVersion));
