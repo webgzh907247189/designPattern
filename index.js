@@ -4,6 +4,8 @@
 5. 切片上传 -> 秒传，暂停上传，恢复上传，切片上传，hash计算
 6. abortCOntroller 取消 
 3. 小数的使用  `${Math.round(`${parseFloat(val)}e${num}`)}e-${num}` * 1 round() 方法可把一个数字舍入为最接近的整数
+科学计算法 2e-2 ===  2 * 10 -2 次方   Number(4.81 * 100)
+
 8. vue 不更新， v-if 修改key 使其强制渲染
 9. vue 数据问题，使用$set
 10. http1 最多6个tcp连接  http2 最多20个tcp连接
