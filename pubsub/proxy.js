@@ -45,6 +45,8 @@
 }
 
 
+
+
 {
     // 实现一个sleep函数
     function sleep(delay) {
@@ -61,15 +63,33 @@
     console.log('222')
 }
 
+
+
 {
     // let和var的区别
     // let没有变量提升，存在暂时性死区，必须等let声明完以后，变量才能使用
     // let变量不能重复声明
     // let声明的变量只在let代码块有效
+
+    var ss = '1aaa'
+    {
+        let ss = '???'
+        console.log(ss) // ??
+    }
+    console.log(ss) // 1aaa
 }
 
 
 
+
+/**
+ * Object.defineProperty 可以监听数组的变化，
+ * Object.defineProperty 无法对 push、shift、pop、unshift 等方法进行响应
+ * 
+ * 对于新增加的数组项，Object.defineProperty 依旧无法监听到。
+ * 因此，在 Mobx 中为了监听数组的变化，默认将数组长度设置为1000，监听 0-999 的属性变化。
+ * 如果想要监听到 push、shift、pop、unshift等方法，该怎么做呢？在 Vue 和 Mobx 中都是通过重写原型实现的
+ */
 {
     const arr = ['ss', 'ff'];
 
@@ -80,13 +100,46 @@
                 return item
             },
             set(value){
-                console.log('set')
-                arr[index] = value
+                console.log('set', value)
+                item = value
             }
         })
     })
 
     console.log(arr[1])
     arr[0] = 'gg'
-    console.log(arr[0])
+    console.log(arr[0], arr)
+    // get
+    // ff
+    // set gg
+    // get
+    // gg ['gg','ff']
+
+    arr[3] = 10; // 只有 Proxy 生效
+    // arr.push(10); // 只有 Proxy 生效
+    console.log(arr) // [(...), (...), empty, 10] -> ['gg','ff', empty, 10]
+
+    // 对于新增加的数组项，Object.defineProperty 依旧无法监听到。
+    // 因此，在 Mobx 中为了监听数组的变化，默认将数组长度设置为1000，监听 0-999 的属性变化。
+    // 如果想要监听到 push、shift、pop、unshift等方法，该怎么做呢？在 Vue 和 Mobx 中都是通过重写原型实现的。
+
+
+    {
+        const arrayProto = Array.prototype;
+        const subArrProto = Object.create(arrayProto);
+        const methods = ['pop', 'shift', 'unshift', 'sort', 'reverse', 'splice', 'push'];
+        methods.forEach(method => {
+          /* 重写原型方法 */
+          subArrProto[method] = function() {
+            arrayProto[method].call(this, ...arguments);
+          };
+          /* 监听这些方法 */
+          Object.defineProperty(subArrProto, method, {
+            set() {},
+            get() {}
+          })
+        })
+    }
 }
+
+
