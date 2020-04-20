@@ -5,6 +5,8 @@ class Store {
         Vue.mixin({
             beforeCreate: vuexInit
         })
+
+        this._committing = false
         this.getters = {};
         this._mutations = {}; // 在私有属性前加_
         this._wrappedGetters = {};
@@ -24,7 +26,13 @@ class Store {
             commit
         } = this;
         this.commit = (type) => {
-            return commit.call(this, type);
+            // 区分state是mutation修改还是外部修改的
+            const committing = this._committing
+            this._committing = true
+            const value = commit.call(this, type);
+            this._committing = committing // this._committing 为false
+
+            return value;
         }
         this.dispatch = (type) => {
             return dispatch.call(this, type);
