@@ -224,6 +224,36 @@ function throttle(fn,wait) {
 }
 
 {
+    export const compose = (...fns) => fns.reduce((a, b) => (...args) => a(b(...args)));
+
+    export const curry = (fn, ...args) => {
+        if (args.length >= fn.length) {
+            const realArgs = args.pop();
+            return fn(realArgs, ...args);
+        }
+
+        return (...runArgs) => curry(fn, ...args, ...runArgs);
+    };
+
+    export const unCurring = (fn) => {
+        return (...args) => {
+            return fn.call(...args);
+        };
+    };
+
+    export const getTypeToString = Object.prototype.toString;
+    export const unCurringGetTypeFn = unCurring(getTypeToString);
+
+    export const strSlice = (str, start, end) => str.slice(start, end);
+    export const equal = (str) => (strTarget) => str === strTarget;
+
+    export const isObject = getTypeFn('Object');
+    export const isArray = compose(equal('Array'), curry(strSlice, 8, -1), unCurringGetTypeFn); 
+    export const isArray11 = getTypeFn('Array');
+    export const isUndefined = getTypeFn('Undefined');
+}
+
+{
     function test(arr) {
         return function () {
             if(arguments.length){
