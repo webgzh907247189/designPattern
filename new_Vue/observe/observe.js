@@ -1,4 +1,5 @@
 import { observe } from './index'
+import { arrayMethods } from './array'
 
 export function defineReactive(data,key,value){
     observe(value)
@@ -9,6 +10,7 @@ export function defineReactive(data,key,value){
         },
         set(newValue){
             if(newValue === value) return
+            observe(newValue)
             value = newValue
         }
     })
@@ -16,7 +18,13 @@ export function defineReactive(data,key,value){
 
 export default class Observe {
     constructor(data){
-        this.walk(data)
+        if(Array.isArray(data)){
+            // data.__proto__ = arrayMethods;
+            Object.setPrototypeOf(data,arrayMethods)
+            observableArray(data)
+        }else{
+            this.walk(data)
+        }
     }
 
     walk(data){
