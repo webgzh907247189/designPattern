@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<div>
+	</div>
+</body>
+<script>
+	// 睡眠函数
+	function sleep(delay){
+		let d = Date.now();
+		let now = d;
+		while(now - d < delay){
+			now = Date.now();
+		}
+	}
+
+	const workers = [
+		() => {
+			console.log('第1个任务开始')
+			sleep(20)
+			console.log('第1个任务结束')
+		},
+		() => {
+			console.log('第2个任务开始')
+			sleep(20)
+			console.log('第2个任务结束')
+		},
+		() => {
+			console.log('第3个任务开始')
+			sleep(20)
+			console.log('第3个任务结束')
+		}
+	]
+
+	requestIdleCallback(workLoop, { timeout: 1000 })
+
+	function workLoop(deadline){
+		// didTimeout -> 是否超时触发（只读）
+		// timeRemaining -> 该帧剩余可用时间  deadline.timeRemaining可以得到的最长时间，也是50ms
+
+		// 此帧的剩余时间超过0，或者已经超时
+		// 如果没有剩余时间，放弃任务执行权，执行权交还给浏览器
+
+		console.log('本帧剩余时间', deadline.timeRemaining())
+		while((deadline.timeRemaining() > 0 || deadline.didTimeout) && workers.length > 0){
+			performUnitOfWork()
+		}
+
+		// length > 0  说明还有未完成的任务，需要重新调度
+		if(workers.length > 0){
+			requestIdleCallback(workLoop, { timeout: 1000 })
+		}
+	}
+
+	function performUnitOfWork(){
+		workers.shift()();
+	}
+</script>
+</html>

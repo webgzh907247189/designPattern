@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<div>
+	</div>
+</body>
+<script>
+	// 每个节点
+	class Update{
+		constructor(payload,nextUpdate){
+			this.payload = payload
+			this.nextUpdate = nextUpdate // 指向下一个指针
+		}
+	}
+
+	class UpdateQueue{
+		constructor(){
+			this.baseState = null
+			this.firstUpdate = null
+			this.lastUpdate = null
+		}
+
+		// 构建链表
+		enqueueUpdate(update){
+
+			// 将元素放进 链表
+			if(this.firstUpdate === null){
+				this.firstUpdate = this.lastUpdate = update
+			}else {
+				this.lastUpdate.nextUpdate = update
+				this.lastUpdate = update
+			}
+		}
+
+		forceUpdate(){
+			let currentState = this.baseState ?? {};
+			let currentUpdate = this.firstUpdate
+
+			// 代表链表不为空
+			while(currentUpdate){
+				// 判断 currentUpdate.payload 类型 -> 把初始状态传递给 currentUpdate.payload
+				let nextState = typeof currentUpdate.payload === 'function' ? currentUpdate.payload(currentState) : currentUpdate.payload
+
+				// 合并状态
+				currentState = {...currentState, ...nextState}
+
+				// 找下一个节点
+				currentUpdate = currentUpdate.nextUpdate
+			}
+
+			// 合并完成 清空链表
+			this.firstUpdate = this.lastUpdate = null
+			this.baseState = currentState
+			return currentState
+		}
+	}
+
+	let queue = new UpdateQueue()
+	queue.enqueueUpdate(new Update({ name: 'test'}))
+	queue.enqueueUpdate(new Update({ number: 0}))
+	queue.enqueueUpdate(new Update((state) => ({ number: state.number + 1 })))
+	queue.enqueueUpdate(new Update((state) => ({ number: state.number + 1 })))
+
+	queue.forceUpdate()
+
+	console.log(queue.baseState) // {name: "test", number: 2}	 
+</script>
+</html>

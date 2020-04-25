@@ -13,8 +13,8 @@
 var requestId = requestIdleCallback(myNonEssentialWork,{
     timeout : 100
 });
-function myNonEssentialWork({ timeRemaining,didTimeout}){
-    console.log(timeRemaining(), '??',didTimeout)
+function myNonEssentialWork(deadline){ // 解构赋值 报错
+    console.log(deadline.timeRemaining(), '??',deadline.didTimeout)
 }
 
 

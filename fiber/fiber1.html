@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<div>
+		<div id="process" style="background: lightblue; width: 0px; height: 20px;">
+		</div>
+		<button id="btn">开始</button>
+	</div>
+</body>
+<script>
+	let btn = document.getElementById('btn')
+	let odiv = document.getElementById('process')
+
+	let start;
+	btn.addEventListener('click', () => {
+		odiv.style.width = 0;
+
+		let current = Date.now()
+		start = current;
+
+		requestAnimationFrame(processFn)
+	})
+
+	function processFn(){
+		odiv.style.width = odiv.offsetWidth + 1 + 'px'
+		odiv.innerHTML = odiv.offsetWidth + '%'; // 修改文本位百分比
+
+		if(odiv.offsetWidth < 100){
+			let current = Date.now()
+
+			// 点击的当前帧就开始执行了，所以第一次打印的值小于 16 (小很多)
+			// 基本上每帧间隔都是16ms
+			console.log(current - start) // 开始准备执行的时间 到 真正执行的时间的时间差
+
+			start = current
+			requestAnimationFrame(processFn)
+		}
+	}
+</script>
+</html>
