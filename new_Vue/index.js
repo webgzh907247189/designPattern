@@ -62,7 +62,7 @@ Vue.prototype._update = function(){
     compile(node,vm)
     el.appendChild(node)
     // 需要使用 {{}} 的方式进行替换
-    
+
 }
 
 Vue.prototype.$mount = function(){
@@ -85,3 +85,27 @@ function query(el){
     return typeof el === 'string' ? document.querySelector(el) : el;
 }
 export default Vue;
+
+
+
+
+<script>
+const withRequest = function withRequest(wrapped, requestFn) {
+    return {
+        mounted() {
+            this.getData();
+        },
+        methods: {
+            getData() {
+                return requestFn();
+            },
+        },
+        render(h) {
+            console.log(h(wrapped));
+            return <div>123213123</div>;
+        },
+    };
+};
+
+export default withRequest;
+</script>
