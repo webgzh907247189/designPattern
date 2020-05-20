@@ -9,6 +9,14 @@ function compose(middlewares){
 
     return (ctx) => {   // context, next  多一个next参数 ？？？？？？？？？？？？？    
         // 控制一个中间件只能调用一次 next
+        // i 在每个 dispatch 里面(同一个作用域里面) i 一直固定， index 随着 中间件运行次数而增加
+        // 第一个中间件里面 i = 0， 第二个 i = 1
+
+        // 第一次 1. index = i = 0 
+        // 第二次 2. index = i = 1
+
+        // 第二个中间件运行完毕，回到第一个中间件，此时 i = 0， 又一次触发 next 
+        // i = 1， index = 1 所以，报错 (防止一个中间件里面多次运行 next)
         let index = -1
 
         return dispatch(0)
@@ -32,3 +40,21 @@ function compose(middlewares){
 }
 
 module.exports = compose
+
+
+// async function a(ctx,next){
+//     console.log('111')
+//     await next()
+//     await next()
+//     console.log('222')
+// }
+
+// async function b(ctx,next){
+//     console.log('333')
+// }
+
+// compose([a,b])
+
+
+// 1. index = i = 0 
+// 2. index = i = 1
