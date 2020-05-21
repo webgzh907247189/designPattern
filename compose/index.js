@@ -414,10 +414,23 @@
 
 
 {
+	// function compose(...funcs) {
+	// 	return args => funcs.reduceRight((result, f) => f(result), args);
+	// }
+
+
+
 	function compose(...fns){
 		return fns.reduce((a,b)=> (...args)=> a(b(...args)));
 	}
 
+	// var s = () => trim(toUpper())
+	// var f = () => s(test())
+	// var d = () => f(greeting())
+
+	// () => trim(toUpper(test(greeting())))
+	// () => greeting() => test() => toUpper() => trim() 调用顺序
+	
 	function curry (fn, ...args) {
 		if (args.length >= fn.length) {
 			const realArgs = args.pop();
