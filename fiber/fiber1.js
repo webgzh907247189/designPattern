@@ -7,7 +7,7 @@
 // 每一帧 执行顺序 (空闲阶段 -> 执行queuestIdleCallback 任务)
 // input Events -> js -> begin frame(开始帧) 
 // -> requestAnimationFrame -> 需要渲染的文档， 执行 IntersectionObserver 的回调  -> layout(布局) -> paint(绘制) 
-// -> queuestIdleCallback
+// -> queuestIdleCallback -> Display:将像素发送给GPU，展示在页面上。（这一步其实还有很多内容，比如会在GPU将多个合成层合并为同一个层，并展示在页面中。而css3硬件加速的原理则是新建合成层）
 
 // 每一帧 执行任务时间长了，会阻塞同一帧后面的任务(layout，paint)
 
