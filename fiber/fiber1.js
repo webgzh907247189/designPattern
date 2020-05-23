@@ -12,7 +12,7 @@
 // 每一帧 执行任务时间长了，会阻塞同一帧后面的任务(layout，paint)
 
 
-
+// https://segmentfault.com/a/1190000008589736
 // https://mp.weixin.qq.com/s/Bh-nveCyLqkEDGQXri-8fg
 // 1. 从任务队列中取出一个宏任务并执行。
 
