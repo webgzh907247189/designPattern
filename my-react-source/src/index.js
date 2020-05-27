@@ -1,8 +1,8 @@
-// import React from './source/react';
+import React from './source/react';
 
 // immer.js
-import React from 'react';
-import ImmerApp from './immer/index';
+// import React from 'react';
+// import ImmerApp from './immer/index';
 
 import ReactDOM from 'react-dom';
 import App from './App';
@@ -87,8 +87,8 @@ class Counter1 extends React.Component{
     }
 
     componentDidMount(){
-        setTimeout(()=>{
-            this.setState({odd: !this.state.number})
+        setTimeout(() => {
+            this.setState({odd: !this.state.odd})
         }, 3000)
     }
 
@@ -99,6 +99,7 @@ class Counter1 extends React.Component{
                 React.createElement('li',{key: 'B'}, 'B'),
                 React.createElement('li',{key: 'C'}, 'C'),
                 React.createElement('li',{key: 'D'}, 'D'),
+                React.createElement('li',{key: 'Z'}, String(this.state.odd)),
             )
         }
         
@@ -108,12 +109,13 @@ class Counter1 extends React.Component{
             React.createElement('li',{key: 'B'}, 'B1'),
             React.createElement('li',{key: 'E'}, 'E1'),
             React.createElement('li',{key: 'F'}, 'F1'),
+            React.createElement('li',{key: 'Z'}, String(this.state.odd)),
         )
     }
 }
 //<Counter {name: '计数器'}/>
-// React.render(React.createElement(Counter, {name: '计数器'}), document.getElementById('root'));
+React.render(React.createElement(Counter1, {name: '计数器'}), document.getElementById('root'));
 /*********渲染组件***********/
 
 
-ReactDOM.render(<ImmerApp/>, document.getElementById('root'));
+// ReactDOM.render(<ImmerApp/>, document.getElementById('root'));

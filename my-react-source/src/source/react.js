@@ -14,12 +14,14 @@ const React = {
         setState(partialState){
             // 组件更新， 对应的 unit 的update去更新
             this._currentUnit.update(null,partialState)
+            // console.log(partialState, 'partialStatepartialStatepartialState')
         }
     }
 }
 
 function render(element,container) {
     const unit = createUnit(element)
+    console.log(unit, 'element', element);
     const markUp = unit.getMarkUp(React.RootIndex);
     $(container).html(markUp);
     $(document).trigger('mounted');

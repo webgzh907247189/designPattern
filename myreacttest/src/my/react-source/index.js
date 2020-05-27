@@ -9,6 +9,7 @@ let React = {
         let markUp = util.getmarkUp(React.rootIndex)
 
         $(container).html(markUp)
+        $(document).trigger('mounted')
     },
     rootIndex: 0,
     createElement,
