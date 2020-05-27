@@ -37,7 +37,7 @@ Vue.prototype._update = function(){
     compile(node,vm)
     el.appendChild(node)
     // 需要使用 {{}} 的方式进行替换
-    
+
 }
 
 Vue.prototype.$mount = function(){
@@ -60,3 +60,111 @@ function query(el){
     return typeof el === 'string' ? document.querySelector(el) : el;
 }
 export default Vue;
+
+
+
+
+<script>
+<script>
+import { withRequest } from '@/service/utils';
+
+const padding = styled.span`
+    padding: 0 6px;
+`;
+
+const ss1 = {
+    render(){
+        console.log(this.props);
+        return <div>
+            2222
+        </div>
+    }
+}
+
+const ss = {
+    methods: {
+        aa() {
+            return {props: {name: 'gzh'}}
+        },
+    },
+    render(h) {
+        const test = withRequest(ss1, this.aa);
+        const obj = this.aa();
+
+        return <div>
+            111???1
+            {
+                h(test, obj)
+            }
+        </div>;
+    },
+};
+
+
+export default {
+    name: 'platformCheck',
+    components: {
+        categoryLeftCom,
+        padding,
+        ss,
+    },
+    computed: {
+        ...mapGetters({
+            getChannelList: GET_CHANNEL_LIST,
+        }),
+    },
+    data() {
+        return {
+            checkList: [],
+        };
+    },
+    methods: {
+        onChange() {
+            const resultObj = this.checkList.reduce((result, item) => {
+                const obj = result;
+                if (item.type === 'forecast') {
+                    obj[item.type] = item.value;
+                } else {
+                    obj[item.type] = obj[item.type] ? [...obj[item.type], item.value] : [item.value];
+                }
+                return result;
+            }, Object.create(null));
+
+            this.$borderCast('platformCheckChannel', resultObj);
+        },
+    },
+    render() {
+        return (
+            <div>
+                <ss />
+                <el-checkbox-group v-model={this.checkList} onChange={this.onChange}>
+                    {this.getChannelList.map(item => (
+                        <padding>
+                            <el-checkbox label={item}>{item.name}</el-checkbox>
+                        </padding>
+                    ))}
+                </el-checkbox-group>
+            </div>
+        );
+    },
+    created() {
+        this.$store.dispatch(GET_CHANNEL_LIST);
+    },
+};
+</script>
+<style scoped lang="scss">
+.order {
+    background: #ececec;
+}
+
+/deep/ .el-checkbox__input.is-checked + .el-checkbox__label {
+    color: #ff6d6e;
+}
+
+/deep/ .el-checkbox__input.is-checked .el-checkbox__inner {
+    background-color: #ff6d6e;
+    border-color: #ff6d6e;
+}
+</style>
+
+</script>

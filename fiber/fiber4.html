@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<div>
+	</div>
+</body>
+<script>
+	// fiber 解决了执行栈不能中断的问题
+	
+	// 每个fiber节点有三个指针
+	// children 指向第一个子节点 return 指向他的父节点  sibling 指向他的弟弟
+
+	// 每次渲染有两个阶段 协调(reconciler)和提交(commit)
+	// commit 不能被打断
+
+	// 一个 vdom 是一个链表节点，也是一个单元
+	let root = {
+		key: 'A1',
+		children : [
+			{
+				key: 'B1',
+				children: [
+					{
+						key: 'C1', children: []
+					},
+					{
+						key: 'C2', children: []
+					}
+				]
+			},
+			{
+				key: 'B2',
+				children: []
+			}
+		]
+	}
+	
+	// 深度优先遍历
+	function walk(vdom){
+		doWork(vdom)
+
+		// 深度 -> 先遍历children
+		vdom.children.forEach(item => {
+			walk(item)
+		});
+	}
+
+	function doWork(vdom){
+		console.log(vdom.key)
+	}
+</script>
+</html>

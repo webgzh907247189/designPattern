@@ -412,12 +412,50 @@
 }
 
 
+{
+	// 尾递归优化过的 Fibonacci 数列实现如下
+	function Fibonacci2 (n , ac1 = 1 , ac2 = 1) {
+		if( n <= 1 ) {return ac2};
+	
+		return Fibonacci2 (n - 1, ac2, ac1 + ac2);
+	}
+	
+	// Fibonacci2(100) // 573147844013817200000
+	// Fibonacci2(1000) // 7.0330367711422765e+208
+
+
+	// 非尾递归的 Fibonacci  容易爆栈
+	function Fibonacci (n) {
+		if ( n <= 1 ) {return 1};
+	
+		return Fibonacci(n - 1) + Fibonacci(n - 2);
+	}
+	
+	// Fibonacci(10) // 89
+	// Fibonacci(100) // 超时
+	// Fibonacci(500) // 超时
+}
+
+
 
 {
+	// function compose(...funcs) {
+	// 	return args => funcs.reduceRight((result, f) => f(result), args);
+	// }
+
+
+
 	function compose(...fns){
 		return fns.reduce((a,b)=> (...args)=> a(b(...args)));
 	}
 
+	// var s = () => trim(toUpper())
+	// var f = () => s(test())
+	// var d = () => f(greeting())
+
+	// () => trim(toUpper(test(greeting())))
+	// () => greeting() => test() => toUpper() => trim() 调用顺序
+	
 	function curry (fn, ...args) {
 		if (args.length >= fn.length) {
 			const realArgs = args.pop();

@@ -1,3 +1,12 @@
+/**
+ * https://juejin.im/post/5ec488adf265da771b2fcded
+ * 
+ * koa-router 原理
+ * 
+ * 多个相同的路由，采用 method，path 进行过滤出来 routers() 使用的 stack
+ * 在 compose 里面 对 stack 进行 循环处理，每次传入 next，进入下一个路由系统 -> 匹配不到进行 next 操作，控制权交给下一个中间件
+ */
+
 class Router{
     constructor(){
         this.stack = []
@@ -44,24 +53,29 @@ let app = new koa()
 let router = new Router()
 
 router.get('/',async(ctx,next)=>{
-    ctx.body = '11'
+    console.log('2')
+    ctx.body += '11'
     next()
+    console.log('6')
 })
 router.get('/',async(ctx,next)=>{
-    ctx.body = '222'
+    console.log('3')
+    ctx.body += '222'
     next()
+    console.log('5')
 })
 
 app.use((ctx,next)=>{
-    ctx.body = 'router没走'
     console.log('1')
+    ctx.body = 'router没走'
     next()
+    console.log('7')
 })
 // 装载路由
 app.use(router.routers())
 
 app.use((ctx,next)=>{
-    console.log('??')
+    console.log('4')
 })
 
 app.listen(3001,()=>{

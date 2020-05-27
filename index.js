@@ -20,11 +20,43 @@ selectedMap.get(selectedList) === categoryData，有的话，直接返回selecte
 
 14. window.URL.createObjectURL(blob);  window.URL.revokeObjectURL(url); 释放数据
 15. 下载图片(跨域的不跨域的，使用canvas，使用fetch的 res.blob())
+16. 使用 patch-package 完成 修改源码
+
+17. React 绑定事件有几种方法，有什么区别  -> https://juejin.im/post/5eb7961a6fb9a0436d41a8a9
+class Animal { sayName = () => {throw new Error('你应该自己实现这个方法')}}
+class Pig extends Animal {sayName() {console.log('I am a Pig')}}
+var s = new Pig()
+// s.sayName() -> 你应该自己实现这个方法
+
+18. try catch 能捕获到哪些 JS 异常 -> 能捕捉到的异常，必须是线程执行已经进入 try catch 但 try catch 未执行完的时候抛出来的。
+// 无法捕获异常
+// try{ a.}catch(e){    console.log("error",e);}// outputUncaught SyntaxError: Unexpected token '}'
+// 语法异常（syntaxError），因为语法异常是在语法检查阶段就报错了，线程执行尚未进入 try catch 代码块，自然就无法捕获到异常。
+
+// 可以捕获异常
+// function a(){ return new Promise((resolve, reject) => { setTimeout(() => { reject(1); })    })}
+// try{ await a();}catch(e){ console.log('error',e);}console.log(111);//outputerror 1111
+// 报错的时候( setTimeout 里面的 reject )，线程执行已经进入 try catch 代码块，但是并未执行完成，这样的话当然可以捕获到异常。await 将代码执行停留在 try catch 代码块里面的缘故。
+
+
+19. 
+https://juejin.im/post/5ec508b1e51d4578671681c8?utm_source=gold_browser_extension
+https://juejin.im/post/5ec3f4a0e51d45788619b2b2?utm_source=gold_browser_extension
+
+https://juejin.im/post/5ec49161e51d4578615acbb9?utm_source=gold_browser_extension
+https://juejin.im/post/5ec358126fb9a0432a3c49e6?utm_source=gold_browser_extension
+
+https://juejin.im/post/5ec225e26fb9a043761ce4d8?utm_source=gold_browser_extension
+https://juejin.im/post/5ec220bfe51d454de44339a6?utm_source=gold_browser_extension
+https://juejin.im/post/5ec34b495188256d3b6c9ea4?utm_source=gold_browser_extension
+https://juejin.im/post/5eb8f5cdf265da7bd44254b4?utm_source=gold_browser_extension
+https://juejin.im/post/5ec227b7e51d4528af0584ed?utm_source=gold_browser_extension
+
 
 16. fetch相关操作，进度，取消，流？？？？
 17. 同步版本好号使用流去操作 ？？？？
 18. 怎么看帧数 看回流 重绘 ？？？？ 
-
+19. cms 防抖截流问题 全局变量 webpack 打包
 
 3. 缓存的课程复习 + 资料
 4. 动态加载问题 ？？？掘金 静态分割 动态分割 参考cms项目id查询模块

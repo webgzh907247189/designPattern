@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<div>
+	</div>
+</body>
+<script>
+	// fiber 解决了执行栈不能中断的问题
+
+	function sleep(delay){
+
+		const startTime = Date.now()
+		while(Date.now() - startTime < delay){
+		}
+	}
+
+	// 每个fiber节点有三个指针
+	// children 指向第一个子节点 return 指向他的父节点  sibling 指向他的弟弟
+
+	// 每次渲染有两个阶段 协调(reconciler)和提交(commit)
+	// commit 不能被打断
+
+	let A1 = { type: 'div', key: 'A1' }
+	let B1 = { type: 'div', key: 'B1', return: A1 }
+	let B2 = { type: 'div', key: 'B2', return: A1 }
+	let C1 = { type: 'div', key: 'C1', return: B1 }
+	let C2 = { type: 'div', key: 'C2', return: B1 }
+
+	A1.child = B1
+	B1.slibling = B2
+	B1.child = C1
+	C1.slibling = C2
+
+	// 从顶点开始遍历 
+	// 先儿子 后弟弟  在叔叔
+	// 节点顺序
+	/**
+	 *    A1
+	 *    B1           B2
+	 *    C1   C2
+	 */
+	
+	let nextUnitOfWork = null
+	
+	let startTime = Date.now();
+	function workLoop(deadline){
+		//  时间片
+		while((deadline.timeRemaining() > 0 || deadline.didTimeout) && nextUnitOfWork){ // 如果有执行单元待执行，就执行 然后返回下一个  ->  待执行待单元
+			nextUnitOfWork = performUnitOfWork(nextUnitOfWork)
+		}
+
+		if(!nextUnitOfWork){
+			console.log('render 阶段结束了', Date.now() - startTime)
+		} else {
+			// 进入else 代表 阻塞了 上一帧，从新进入下一帧
+			// 不加 else 偶尔会出现 A1链(EffectList 链表) 没执行完的情况
+			window.requestIdleCallback(workLoop, { timeout: 1000 })
+		}
+	}
+
+	function performUnitOfWork(fiber){
+		// 处理此fiber -> 单元 fiber
+		beiginWork(fiber)
+
+		// 处理 fiber.child
+		if(fiber.child){
+			return fiber.child
+		}
+
+		// fiber.child 完成了 child， 找他的弟弟
+		while(fiber){
+			complateUnitOfWork(fiber)
+			if(fiber.slibling){
+				return fiber.slibling
+			}
+
+			fiber = fiber.return
+		}
+	}
+
+	function beiginWork(fiber){
+		console.log('开始' + fiber.key)
+		sleep(20)
+	}
+
+	function complateUnitOfWork(fiber){
+		console.log('结束' + fiber.key)
+	}
+
+	nextUnitOfWork = A1
+	window.requestIdleCallback(workLoop, { timeout: 1000 })
+
+	// 开始A1
+	// 开始B1
+	// 开始C1
+	// 结束C1
+	// 开始C2
+	// 结束C2
+	// 结束B1
+	// 开始B2
+	// 结束B2
+	// 结束A1
+	// render 阶段结束了
+</script>
+</html>
