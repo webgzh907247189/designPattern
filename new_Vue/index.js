@@ -1,5 +1,6 @@
 import { initState } from './observe/index'
 import Watcher from './observe/watcher'
+import compile from './util';
 
 function Vue(options){
     this._init(options)
@@ -19,33 +20,7 @@ Vue.prototype._init = function(options){
     }
 }
 
-// ?: 匹配不捕获
-// var s = /\{\{([^}]+)\}\}/g
-const defaultRe = /\{\{((?:.|\r?\n)+?)\}\}/g;
-const util = {
-    getValue(vm,expr){
-        return expr.split('.').reduce((memo,current) => {
-            memo = memo[current]
-            return memo;
-        },vm)
-    },
-    compileText(node,vm){
-        node.textContent = node.textContent.replace(defaultRe,function(...args){
-            return util.getValue(vm,args[1])
-        }) 
-    }
-}
-function compile(node,vm){
-    let childNodes = node.childNodes
 
-    Array.from(childNodes).forEach(child => {
-        if(child.nodeType === 1){ // 1 -> 元素   3 -> 文本
-            compile(child,vm) // 递归边缘
-        }else if(child.nodeType === 3){
-            util.compileText(child,vm)
-        }
-    });
-}
 
 Vue.prototype._update = function(){
     // 用户传入的数据去更新试图
