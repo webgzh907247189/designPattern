@@ -333,3 +333,59 @@ getD()
 	out('name','xxx')
 	out('sex','男')
 }
+
+
+{
+	const list = [1, 2, 3]
+	const square = num => {
+	  	return new Promise((resolve, reject) => {
+			setTimeout(() => {
+		  	resolve(num * num)
+			}, 1000)
+	  	})
+	}
+	
+	let promise = Promise.resolve()
+	function test(i = 0) {
+	  	if (i === list.length) return
+	  	promise = promise.then(() => square(list[i])).then(res => console.log(res))
+	  	test(i + 1)
+	}
+	test()
+}
+
+{
+	const list = [1, 2, 3]
+	const square = num => {
+	  	return new Promise((resolve, reject) => {
+			setTimeout(() => {
+		  	resolve(num * num)
+			}, 1000)
+	  	})
+	}
+	
+	list.reduce(async (_, x) => {
+		await _
+		const res = await square(x)
+		console.log(res)
+	}, undefined)
+}
+
+
+{
+	const list = [1, 2, 3]
+	const square = num => {
+	  	return new Promise((resolve, reject) => {
+			setTimeout(() => {
+		  	resolve(num * num)
+			}, 1000)
+	  	})
+	}
+	
+	list.reduce(async (result, x) => {
+		await result
+		const res = await square(x)
+		console.log(res)
+		return result;
+	}, Promise.resolve())
+}
