@@ -389,3 +389,24 @@ getD()
 		return result;
 	}, Promise.resolve())
 }
+
+{
+	const list = [1, 2, 3]
+	const square = num => {
+	  	return new Promise((resolve, reject) => {
+			setTimeout(() => {
+		  	resolve(num * num)
+			}, 1000)
+	  	})
+	}
+	
+	list.reduce((result, x) => {
+		 return result.then(()=>{
+            const res =  square(x)
+            return res;
+        }).then((d)=>{
+            console.log(d);
+        });
+
+	}, Promise.resolve())
+}
