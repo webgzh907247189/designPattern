@@ -410,3 +410,32 @@ getD()
 
 	}, Promise.resolve())
 }
+
+
+// 取消一个promise
+{
+	function cancelWarp(promise){
+		const obj = Object.create(null);
+
+		let p1 = new Promise((resolve,reject) => {
+			obj.resolve = resolve
+			obj.reject = reject
+		})
+
+		obj.promise = Promise.race([promise, p1])
+		return obj;
+	}
+
+	const p2 = new Promise((resolve)=>{
+		setTimeout(()=>{
+			resolve('111')
+		},2000)
+	})
+
+	const cancelWarpPromise = cancelWarp(p2)
+	cancelWarpPromise.promise.then((res) => {
+		console.log('res', res)
+	})
+
+	cancelWarpPromise.resolve('拦截promise')
+}
