@@ -109,6 +109,23 @@
     }
 }
 
+{
+    // 经典， apply与之一样
+    Function.prototype.myCall = function(context, ...args) {
+        if (!context || context === null) {
+          context = window;
+        }
+
+        // 创造唯一的key值  作为我们构造的context内部方法名
+        // Symbol key 保证唯一性
+        let fn = Symbol();
+
+        context[fn] = this; //this指向调用call的函数
+        // 执行函数并返回结果 相当于把自身作为传入的context的方法进行调用了
+        return context[fn](...args);
+    };
+}
+
 // 使用 Symbol 实现 唯一的 key, 防止 ctx也出现fn这个key
 {
     Function.prototype.myCall = function(ctx){
