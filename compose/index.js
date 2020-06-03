@@ -512,3 +512,42 @@
 		}, Object.create(null));
 	};
 }
+
+{
+
+	function a(value){
+		 return value + '111'
+	}
+
+	function aa(value){
+		 return value + '???'
+	}
+
+	 function aaa(value){
+		 return value + '!!'
+	}
+	 
+	function compose(...fns){
+//             debugger
+		 return fns.reduce((a,b) => (...args) => a(b(...args)));
+	 }
+
+	 const pipe = (value) => {
+		 const fnStack = [];
+		 const proxyPipe = new Proxy({}, {
+			 get(target, key) {
+				 if (key.toLocaleLowerCase() === 'get') {
+					 debugger
+					 return compose(...fnStack)(value);
+				 }
+				 fnStack.push(window[key]);
+				 return proxyPipe;
+			 },
+		 });
+
+		 return proxyPipe;
+	 };
+
+	 console.log(pipe(333).aaa.aa.a.get);
+
+}
