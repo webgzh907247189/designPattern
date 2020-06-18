@@ -1,3 +1,4 @@
+// https://juejin.im/post/5df0cef76fb9a0165936e06a
 function createSelect(selector,reduce){
     let lastState
     let lastResult
