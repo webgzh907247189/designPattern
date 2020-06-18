@@ -157,7 +157,7 @@
 			if(listFns.length == 0 || !listFns){
 				return
 			}
-			// 防止在一个事件监听器中监听同一个事件，接而导致死循环
+			// 防止在一个事件监听器中监听同一个事件，接而导致死循环 ？？？？
 			// 同一个事件监听同一个事件，造成这个数组对应的key的数组
 			// 每执行一次，数组增加一次，所以数组会持续的增加
 			let resultList = this.arrayClone(listFns,listFns.length)
