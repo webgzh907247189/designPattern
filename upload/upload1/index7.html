@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+</head>
+
+<body>
+    <button id="recovery">btn</button>
+    <script type="module" src="./test/index.js">
+        console.log(throttle)
+    </script>
+    <script type="module">
+        import { throttle } from './test/index.js'
+
+        recovery.onclick= function(){
+            throttle(()=>{
+                console.log('3333')
+            },5000)();
+        }
+    </script>
+</body>
+
+</html>
