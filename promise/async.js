@@ -333,3 +333,109 @@ getD()
 	out('name','xxx')
 	out('sex','男')
 }
+
+
+{
+	const list = [1, 2, 3]
+	const square = num => {
+	  	return new Promise((resolve, reject) => {
+			setTimeout(() => {
+		  	resolve(num * num)
+			}, 1000)
+	  	})
+	}
+	
+	let promise = Promise.resolve()
+	function test(i = 0) {
+	  	if (i === list.length) return
+	  	promise = promise.then(() => square(list[i])).then(res => console.log(res))
+	  	test(i + 1)
+	}
+	test()
+}
+
+{
+	const list = [1, 2, 3]
+	const square = num => {
+	  	return new Promise((resolve, reject) => {
+			setTimeout(() => {
+		  	resolve(num * num)
+			}, 1000)
+	  	})
+	}
+	
+	list.reduce(async (_, x) => {
+		await _
+		const res = await square(x)
+		console.log(res)
+	}, undefined)
+}
+
+
+{
+	const list = [1, 2, 3]
+	const square = num => {
+	  	return new Promise((resolve, reject) => {
+			setTimeout(() => {
+		  	resolve(num * num)
+			}, 1000)
+	  	})
+	}
+	
+	list.reduce(async (result, x) => {
+		await result
+		const res = await square(x)
+		console.log(res)
+		return result;
+	}, Promise.resolve())
+}
+
+{
+	const list = [1, 2, 3]
+	const square = num => {
+	  	return new Promise((resolve, reject) => {
+			setTimeout(() => {
+		  	resolve(num * num)
+			}, 1000)
+	  	})
+	}
+	
+	list.reduce((result, x) => {
+		 return result.then(()=>{
+            const res =  square(x)
+            return res;
+        }).then((d)=>{
+            console.log(d);
+        });
+
+	}, Promise.resolve())
+}
+
+
+// 取消一个promise
+{
+	function cancelWarp(promise){
+		const obj = Object.create(null);
+
+		let p1 = new Promise((resolve,reject) => {
+			obj.resolve = resolve
+			obj.reject = reject
+		})
+
+		obj.promise = Promise.race([promise, p1])
+		return obj;
+	}
+
+	const p2 = new Promise((resolve)=>{
+		setTimeout(()=>{
+			resolve('111')
+		},2000)
+	})
+
+	const cancelWarpPromise = cancelWarp(p2)
+	cancelWarpPromise.promise.then((res) => {
+		console.log('res', res)
+	})
+
+	cancelWarpPromise.resolve('拦截promise')
+}

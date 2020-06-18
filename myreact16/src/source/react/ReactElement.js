@@ -73,7 +73,7 @@ export function createElement(type,config,children){
 
 function ReactElement(type,key,ref,self,source,owner,props) {
     const element = {
-        $$typeof: REACT_ELEMENT_TYPE,
+        $$typeof: REACT_ELEMENT_TYPE, // 标示元素的类型，并且可以防止xss攻击
         type,
         key,
         ref,

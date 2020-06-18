@@ -54,3 +54,8 @@
 // 3. requestAnimationFrame在重新渲染屏幕之前执行，非常适合用来做动画。
 // 4. requestIdleCallback在渲染屏幕之后执行，并且是否有空执行要看浏览器的调度，如果你一定要它在某个时间内执行，请使用 timeout参数。
 // 5. resize和scroll事件其实自带节流，它只在 Event Loop 的渲染阶段去执行事件。
+
+
+// fib数列及优化（斐波那契数列）
+// setState 流程
+// js 大数计算如何实现

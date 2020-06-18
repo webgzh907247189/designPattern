@@ -1,4 +1,4 @@
-1. target="_blank" 也有一个安全漏洞。新的页面可以通过 window.opener 访问旧的窗口对象，甚至可以使用 window.opener.location = newURL 将旧页面导航至不同的网址。
+1. target="_blank" 也有一个安全漏洞。新的页面可以通过 window.opener 访问旧的窗口对象，甚至可以使用 window.opener.location = newURL 将旧页面导航至不同的网址。 加上 rel="noopener noreferrer"
 2. $borderCast $dispatch 简化流程
 3. provider inject 带来的问题，非响应式，使用函数获取最新的值
 4. 调整生产的缓存策略 善于去发现问题，思考问题
@@ -12,6 +12,12 @@
 12. webpack 的 mainFileds 加速匹配
 13. 加速快发体验，优化开发中的问题，package.json 经常变更问题，批量引入问题
 14. 替换qs，用单元测试驱动，保持基本功能一样
+
+15. vue频繁变更的数据，单独抽出去，放到另一个组件里面，vue是组件级别的更新
+16. vue组件当key 使用 WeakMap 装载，就算这个item被删除，不会造成内存泄漏
+17. 查看当前页面已经加载的js，有多少的使用率，为code split 作出基础
+18. 通过 performace 查看 页面加载的js 的时间，扣除不必要的js作为vender.js 加载 (看Main -> task, 某一个帧)
+19. vuex 不是必须的，放在 vender.js 里面，加载时间很长，监听vuex的action完成行为，每次对localStorage io操作，很费时
 
 {
     function user(obj){

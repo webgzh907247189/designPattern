@@ -102,3 +102,30 @@ const data = produce(state, draftState => {
 
 console.log(JSON.stringify(data), JSON.stringify(state));
 console.log(data.data === state.data)
+
+
+
+
+
+{
+  var obj = {name: '111',sex: '22'}
+  var objProxy = Proxy.revocable(obj, {
+      get(obj,key){
+          console.log(key,'111')
+          return obj[key]
+      },
+      set(obj,key,val){
+          console.log(key,'222')
+          obj[key] = val
+      }
+  })
+
+  var name = objProxy.proxy.name 
+  console.log(name)// 111
+
+  objProxy.proxy.sex = 'zzz'
+  console.log(obj.sex)// 'zzz'
+
+  objProxy.revoke()
+  console.log(objProxy.proxy.name)// 报错
+}

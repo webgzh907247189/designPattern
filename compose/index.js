@@ -456,6 +456,30 @@
 	// () => trim(toUpper(test(greeting())))
 	// () => greeting() => test() => toUpper() => trim() 调用顺序
 	
+
+	// 针对最好一步 没有调用的场景 -> a(1)(2)(3)  无最后一步调用
+	{
+		function add() {
+			let args = Array.prototype.slice.call(arguments)
+			let adder =  function() {
+				// 利用闭包的特性保存 args 并且收集参数
+				args = args.concat(Array.prototype.slice.call(arguments))
+				return adder
+			}
+			// 利用 toString 隐式转换的的特性返回最终计算的值
+			adder.toString = function() {
+				return args.reduce((a, b) => {
+					return a + b
+				})
+			}
+			return adder
+		}
+		console.log(add(1)(2)(3))
+		console.log(add(1)(2, 3)(4))
+		console.log(add(1, 2)(3) (4, 5))
+	}
+	
+	// 高阶函数，转化多参数使用
 	function curry (fn, ...args) {
 		if (args.length >= fn.length) {
 			const realArgs = args.pop();
@@ -487,4 +511,43 @@
 			return objCombine;
 		}, Object.create(null));
 	};
+}
+
+{
+
+	function a(value){
+		 return value + '111'
+	}
+
+	function aa(value){
+		 return value + '???'
+	}
+
+	 function aaa(value){
+		 return value + '!!'
+	}
+	 
+	function compose(...fns){
+//             debugger
+		 return fns.reduce((a,b) => (...args) => a(b(...args)));
+	 }
+
+	 const pipe = (value) => {
+		 const fnStack = [];
+		 const proxyPipe = new Proxy({}, {
+			 get(target, key) {
+				 if (key.toLocaleLowerCase() === 'get') {
+					 debugger
+					 return compose(...fnStack)(value);
+				 }
+				 fnStack.push(window[key]);
+				 return proxyPipe;
+			 },
+		 });
+
+		 return proxyPipe;
+	 };
+
+	 console.log(pipe(333).aaa.aa.a.get);
+
 }
