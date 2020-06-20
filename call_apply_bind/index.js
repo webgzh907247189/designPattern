@@ -253,7 +253,7 @@
         name: 'joker'
     }
     function fn(name, age) {
-        console.log(this)  //  this是fn
+        console.log(this)  //  this是obj
     }
     var result = fn.myBind(obj)
     result() // {name: "joker"}
