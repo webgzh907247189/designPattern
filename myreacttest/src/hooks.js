@@ -154,13 +154,16 @@ function MyUseStateMore(){
 
 let myUseReducerObj = {
     memoizedState: '',
+    // useReducer 后两个参数 就是为了得到 initialState
     useReducer(reducer,initArg,init){
+        // 得到 initialState
         let initialState = void 0
         if(typeof init != 'undefined'){
             initialState = init(initArg)
         }else{
             initialState = initArg
         }
+
         this.memoizedState = this.memoizedState || initialState
 
         let dispatch = (action) => {

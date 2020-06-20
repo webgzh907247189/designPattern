@@ -90,6 +90,7 @@ function SubCounter({data,onClick}){
 
 
 function UseRef(){
+    // ref只在创建时更新，其属性current跟随xxx变化，不会生成新的，可以做常量控制
     let ref = React.useRef()
     function getFocus(){
         // 可以直接在父组件操作子组件的value(不安全)
@@ -113,6 +114,7 @@ function UseRefChildren(props,ref){
 
 
 function UseRefSafe(){
+    // ref只在创建时更新，其属性current跟随xxx变化，不会生成新的，可以做常量控制
     let parentRef = React.useRef()
     function getFocus(){
         // 可以直接在父组件操作子组件的value，只能调用 通过useImperativeHandle() 暴漏的api 
@@ -132,6 +134,7 @@ function UseRefSafe(){
 
 UseRefSafeChildren = React.forwardRef(UseRefSafeChildren)
 function UseRefSafeChildren(props,ref){
+    // ref只在创建时更新，其属性current跟随xxx变化，不会生成新的，可以做常量控制
     let childrenRef = React.useRef()
     let childrenInputRef = React.useRef()
     React.useImperativeHandle(ref,()=>{
