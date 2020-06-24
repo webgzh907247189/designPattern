@@ -18,6 +18,11 @@
 17. 查看当前页面已经加载的js，有多少的使用率，为code split 作出基础
 18. 通过 performace 查看 页面加载的js 的时间，扣除不必要的js作为vender.js 加载 (看Main -> task, 某一个帧)
 19. vuex 不是必须的，放在 vender.js 里面，加载时间很长，监听vuex的action完成行为，每次对localStorage io操作，很费时
+20. {...null,...undefined} -> {}
+[...null,...undefined] -> 报错
+null == undefined  true -> null 只等于 undefined
+null == '' false
+通过 xx == undefined, && xx !== undefined 来判断是不是null
 
 {
     function user(obj){
