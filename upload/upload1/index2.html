@@ -20,6 +20,9 @@
 				let fileRead = new FileReader();
 				fileRead.readAsDataURL(file);
 				fileRead.onload = ev => {
+					// fileRead 和 ev.target 是相等的
+					console.log(ev.target === fileRead) // true
+
 					resolve(ev.target.result);
 				};
 			});
