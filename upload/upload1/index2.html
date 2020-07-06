@@ -14,10 +14,23 @@
 
 	<script src="./md5.min.js"></script>
 	<script src="./ajax.js"></script>
+	<!-- https://juejin.im/post/5f01ddfee51d4534c36d8914 -->
+
+	<!-- base64所以每 6 个比特为一个单元，对应某个可打印字符。
+	3 个字节有 24 个比特，对应于 4 个 base64 单元，即 3 个字节可由 4 个可打印字符来表示
+	一个字节8个比特 -->
+
+
+	在 JavaScript 中，有两个函数被分别用来处理解码和编码 base64 字符串：
+	btoa()：该函数能够基于二进制数据 “字符串” 创建一个 base64 编码的 ASCII 字符串。
+	atob()： 该函数能够解码通过 base64 编码的字符串数据。
 	<script>
 		function convertBase64(file) {
 			return new Promise(resolve => {
 				let fileRead = new FileReader();
+
+				// readAsArrayBuffer() 和 readAsText() 方法，用于把 File/Blob 对象转换为其它的数据格式。
+				// 当文件读取完成后，会触发绑定的 onload 事件处理函数，在该处理函数内部会把获取 Data URL 数据赋给 img 元素的 src 属性，从而实现图片本地预览。
 				fileRead.readAsDataURL(file);
 				fileRead.onload = ev => {
 					// fileRead 和 ev.target 是相等的
