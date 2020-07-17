@@ -44,6 +44,9 @@
     description?: string;
     done?: boolean;
   }
+
+
+  // 范型 只有一个 T
   type RequiredPick<T,F extends keyof T> = { [G in F]-?: T[G] };
 
   const test2: RequiredPick<Todo, 'description' | 'done'> = {
@@ -74,7 +77,9 @@
 
 {
   // Record
-  type Record<K extends keyof any, T> = { [P in K]: T };
+  // 报错  ->  参考上面的 RequiredPick， 只能有一个 T，P属于没有定义
+  type Record1<K extends keyof P, T> = { [F in K]: T } 
+  type Record<K extends keyof any, T> = { [F in K]: T }
 
   type TodoProperty = "title" | "description";
 
