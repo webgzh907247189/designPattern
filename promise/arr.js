@@ -756,5 +756,5 @@
 
 		dp[i] = Math.max(dp[i -1], count)
 	}
-	console.log(dp, dp.pop())  // [ 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 5 ] 6
+	console.log(dp, [...dp].pop())  // [ 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 5, 6 ] 6
 }
