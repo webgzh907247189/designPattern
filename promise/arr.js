@@ -693,3 +693,68 @@
 	}
 	test()
 }
+
+
+
+
+{
+	let list = [1,1,0,1,1,1,0,1]
+	let flagIdx = -1;
+
+	function getCount(idx,arr, count){
+		flagIdx = idx;
+		return arr[idx + 1] === 1 ? getCount(idx + 1, arr, count + 1) : count;
+	}
+
+	function getCountList(list) {
+		return list.reduce((result,item,index) => {
+			if(index > flagIdx){
+				let count = 0;
+
+				if(item === 1){
+					count += 1;
+					count = getCount(index, list, count);
+				}else{
+					count = 0
+				}
+
+				result.push(count)
+			}
+			return result;
+		},[])
+	}
+	const result = getCountList(list)
+	console.log(result, Math.max.apply(Math, result)); // [ 2, 0, 3, 0, 1 ] 3
+}
+{
+	let list = [1,1,0,1,1,1,0,1,1,1,1,1,1]
+	let max = 0;
+	let count = 0
+
+	for(let i=0; i< list.length; i++){
+		if (list[i] === 1) {
+			count += 1
+		} else {
+			max = Math.max(count,max)
+			count = 0
+		}
+	}
+	max = Math.max(count,max)
+	console.log(max) // 6
+}
+{
+	let list = [1,1,0,1,1,1,0,1,1,1,1,1,1]
+	let count = 0;
+	let dp = [];
+
+	for(let i=0; i< list.length; i++){
+		count = list[i] === 0 ? 0 : ++count
+		if(i === 0){
+			dp[i] = list[i]
+			continue
+		}
+
+		dp[i] = Math.max(dp[i -1], count)
+	}
+	console.log(dp, dp.pop())  // [ 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 5 ] 6
+}
