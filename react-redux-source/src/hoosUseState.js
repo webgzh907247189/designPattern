@@ -31,6 +31,7 @@ function HoosUseState(){
     const addLazy2 = () => {
         setTimeout(() => {
             // 使用函数更新state 正确
+            // 和calss组件不一样，不会合并data，直接覆盖
             setState((state) => ({number: state.number + 1}))
         },3000)
     }
