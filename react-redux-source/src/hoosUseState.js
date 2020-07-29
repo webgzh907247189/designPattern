@@ -80,7 +80,11 @@ function HooksUseCallBack(){
 }
 
 
-
+/**
+ * memo 使用 认知 调整
+ * 虽然 数据源 使用了 useMemo & useCallBack 进行了缓存，但是子组件还是需要memo 来帮助 子组件进行缓存
+ * 否则 每次 父组件 重新渲染 子组件 也会重新渲染
+ */
 
 function ChildrenTest(props){
     console.log('Children---render')
@@ -88,6 +92,8 @@ function ChildrenTest(props){
 }
 ChildrenTest = memo(ChildrenTest)
 
+let lastData;
+let changeValueFn;
 function HooksUseCallBack1(){
     const [name,setName] = useState('name')
     const [number, setNumber] = useState(0)
@@ -97,13 +103,25 @@ function HooksUseCallBack1(){
     const changeValue = useCallback(() => { setNumber(number + 1) }, [number]);
     // 上面两个 changeValue 含义是不一样的，但是实现的功能是一样的
 
+    console.log(changeValueFn === changeValue, 'changeValueFn === changeValue')
+    changeValueFn = changeValue;
+
     const data = useMemo(() => ({ number }), [number]);
+    console.log(data === lastData, 'data === lastData')
+    lastData = data;
     return <>
         <input value={name} type="text" onChange={(e) => { setName(e.target.value) }}/>
 
         {/* 需要memo支撑，不然无效 */}
         <ChildrenTest data={data} changeValue={changeValue}></ChildrenTest>
+
+        <TestRendeer />
     </>
+}
+TestRendeer = memo(TestRendeer)
+function TestRendeer(){
+    console.log('TestRendeer')
+    return <>111</>
 }
 
 
@@ -259,4 +277,4 @@ function TestUseEffect(){
         { falg && <Counter2/> }
     </>
 }
-export default TestUseEffect;
+export default HooksUseCallBack1;
