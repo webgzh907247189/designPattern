@@ -1,4 +1,4 @@
-import React, { useState, useCallback, memo, useMemo, useReducer, useContext, useEffect } from 'react';
+import React, { useState, useCallback, memo, useMemo, useReducer, useContext, useEffect, useRef, useImperativeHandle, useLayoutEffect } from 'react';
 
 function HoosUseState(){
     const [state,setState] = useState(() => {
@@ -277,4 +277,207 @@ function TestUseEffect(){
         { falg && <Counter2/> }
     </>
 }
-export default HooksUseCallBack1;
+
+
+
+/**
+ * 
+ * @param {*} createRef 
+ * @param {*} useRef 
+ * 
+ * 下面的案例看出来 createRef 和 useRef 的区别
+ * createRef 每次渲染都会创建新的 ref 对象
+ * 
+ * useMemo，useCallback，useRef 都是为了缓存，避免再次创建
+ */
+
+ // 使用 useRef 创建ref， 只会创建一次
+let crrrentRef;
+function useRef1(){
+    if(!crrrentRef){
+        crrrentRef = {current: null}
+    }
+    return crrrentRef;
+}
+
+let lastRef;
+function MyUseRefChildrenCreateRef(props,ref){
+    let refObj = React.createRef();
+    console.log('lastRef === refObj', lastRef === refObj)
+    lastRef = refObj;
+
+    const btnGetFocus = useCallback(() => {
+        refObj.current.focus();
+    })
+    return <>
+        <input ref={refObj}/>
+        <button onClick={btnGetFocus}>获得焦点</button>
+    </>
+}
+
+
+function MyUseRefChildrenUseRef(props,ref){
+    let refObj1 = useRef()
+
+    // 通过 useImperativeHandle 暴露我只想暴露的部分
+    // 父组件的 refObj.current 拿到的是 useImperativeHandle 回调函数的返回值
+    useImperativeHandle(ref, () => {
+        return {
+            focus(){
+                refObj1.current.focus()
+            }
+        }
+    })
+    return <>
+        {/* <input ref={ref}/> */}
+        <input ref={refObj1}/> 
+    </>
+}
+MyUseRefChildrenUseRef = React.forwardRef(MyUseRefChildrenUseRef);
+function MyUseRef(){
+    const [state, setState] = useState(0)
+    let refObj = React.useRef();
+
+    const btnClick = useCallback(() => {
+        setState(x => x + 1);
+    })
+
+    const btnGetFocus = useCallback(() => {
+        refObj.current.focus();
+    })
+    return <>
+        {state}
+        <MyUseRefChildrenCreateRef/>
+        <button onClick={btnClick}>+1</button>
+        '----隔离----'
+        <MyUseRefChildrenUseRef ref={refObj}/>
+        <button onClick={btnGetFocus}>获得焦点</button>
+    </>
+}
+
+
+
+/**
+ * useLayoutEffect 同步触发渲染 & 读取 dom 布局
+ * 在所有的 dom 变更只会 同步调用 effect
+ * 
+ * useLayoutEffect 在 layout 阶段后面 & painting 阶段之前 执行
+ * useEffect 在 painting 阶段之后 渲染 执行
+ */
+
+function TestUseLayoutEffect(){
+    const [color, setColor] = useState('red')
+
+    useEffect(() => {
+        console.log(color)
+    })
+
+    useLayoutEffect(() => {
+        alert(color)
+    })
+
+    return <>
+        <div style={{ background: color }}>颜色</div>
+        <button onClick={ () => { setColor('red') }} >变红</button>
+        <button onClick={ () => { setColor('yellow')}} >变黄</button>
+        <button onClick={ () => { setColor('blue')}} >变蓝</button>
+    </>
+}
+
+
+
+/**
+ * 自定义 hooks
+ */
+
+function UseNumber(){
+    const [number, setNumber] = useState(0)
+    useEffect(() => {
+        let timer = setInterval(() => {
+            setNumber( x => x+ 1)
+        }, 1000);
+
+        return () => {
+            clearInterval(timer)
+        }
+    })
+    return number
+}
+
+function TestUseNumber(){
+    let number = UseNumber()
+    return <>
+        {number}
+    </>
+}
+
+/**
+ * redux-logger
+ */
+function UseLogger(reducer, initState){
+    let [state, dispatch] = useReducer(reducer, initState)
+    function loggerDispatch(action){
+        console.log('old state', state)
+        dispatch(action)
+    }
+
+    useEffect(() => {
+        console.log('new state', state)
+    })
+    return [state, loggerDispatch]
+}
+
+
+function reducer1(state,action){
+    switch(action.type){
+        case 'add':
+            return {name: state.name + 1}
+        case 'decrement':
+            return {name: state.name - 1}
+        default:
+            return state
+    }
+}
+function TestUseLogger(){
+    // useReducer 后两个参数(initArgs,initFn) 就是为了得到 initialState
+    const [state, dispatch] = UseLogger(reducer1, {name: 1})
+
+    return <>
+        {state.name}
+        <button onClick={() => {dispatch({type: 'add'})}}>add</button>
+        <button onClick={() => {dispatch({type: 'decrement'})}}>decrement</button>
+    </>
+}
+
+
+/**
+ * redux-thunk
+ */
+function UseThunk(reducer, initState){
+    let [state, dispatch] = useReducer(reducer, initState)
+
+    function thunkDispatch(action){
+        if(typeof action === 'function'){
+            // 传入 thunkDispatch 可以反复进行 异步 dispatch 操作
+            // 如果传入 dispatch 会出现 异步action套异步action 没法运行情况
+            action(thunkDispatch, () => state)
+        }else {
+            dispatch(action)
+        }
+    }
+    return [state, thunkDispatch]
+}
+
+function TestUseThunk(){
+    // useReducer 后两个参数(initArgs,initFn) 就是为了得到 initialState
+    const [state, dispatch] = UseThunk(reducer1, {name: 1})
+
+    return <>
+        {state.name}
+        <button onClick={ () => {  dispatch( (dispatch, getState) => {
+            return dispatch((dispatch1, getState) => (dispatch1({type: 'add'})))
+        } )  } }>add</button>
+        <button onClick={() => {dispatch({type: 'decrement'})}}>decrement</button>
+    </>
+}
+export default TestUseThunk;
