@@ -428,19 +428,9 @@ function UseLogger(reducer, initState){
 }
 
 
-function reducer1(state,action){
-    switch(action.type){
-        case 'add':
-            return {name: state.name + 1}
-        case 'decrement':
-            return {name: state.name - 1}
-        default:
-            return state
-    }
-}
 function TestUseLogger(){
     // useReducer 后两个参数(initArgs,initFn) 就是为了得到 initialState
-    const [state, dispatch] = UseLogger(reducer1, {name: 1})
+    const [state, dispatch] = UseLogger(reducer, {name: 1})
 
     return <>
         {state.name}
@@ -470,7 +460,7 @@ function UseThunk(reducer, initState){
 
 function TestUseThunk(){
     // useReducer 后两个参数(initArgs,initFn) 就是为了得到 initialState
-    const [state, dispatch] = UseThunk(reducer1, {name: 1})
+    const [state, dispatch] = UseThunk(reducer, {name: 1})
 
     return <>
         {state.name}
