@@ -1,5 +1,11 @@
 import React, { useState, useCallback, memo, useMemo, useReducer, useContext, useEffect, useRef, useImperativeHandle, useLayoutEffect } from 'react';
 
+/**
+ * useState 
+ * useState 想同的值 不会触发 更新  内部使用 Object.is 来比较state，判断是否需要更新组件
+ * useState 和 class 组件不一样，不会合并。而是直接覆盖 state
+ * 使用 函数更新 可以完成 同步更新
+ */
 function HoosUseState(){
     const [state,setState] = useState(() => {
         console.log('惰性初始化')
@@ -55,6 +61,9 @@ function HoosUseState(){
     </>
 }
 
+/**
+ * 依赖变了， 重新生成
+ */
 let lastChangeCount;
 let lastChangeName;
 function HooksUseCallBack(){
@@ -125,6 +134,9 @@ function TestRendeer(){
 }
 
 
+/**
+ * useReducer 使用
+ */
 function reducer(state,action){
     switch(action.type){
         case 'add':
@@ -150,7 +162,9 @@ function HooksUseReducer(){
     </>
 }
 
-// 使用 useReducer 实现 useState
+/**
+ * 使用 useReducer 实现 useState
+ */
 function UseMyState(initState){
     const reducer = useCallback((state,action) => {
         return action.payload
@@ -166,7 +180,9 @@ function UseMyState(initState){
 }
 
 
-// useContext
+/**
+ * useContext
+ */
 const ctx = React.createContext();
 function MyUseContext(props){
     const [state,setState] = useState({number: 0})
@@ -206,9 +222,13 @@ function GetCtx2(){
 
 
 
-// 重要的hook
-// useEffect -> componentDidMount,componentDidUpdate,componentWillUnMount 相当于这三个生命周期
-
+/**
+ * useEffect
+ * useEffect -> componentDidMount,componentDidUpdate,componentWillUnMount 相当于这三个生命周期
+ * useEffect 会在组件挂载完成之后，或者组件更新之后执行
+ * 
+ * 如果没有给第二个参数，每次渲染都会执行(出现 setInterval 会出现定时器累加的情况)  ->  useEffect(() => {})
+ */
 class Counter extends React.Component{
     state = { number: 0 }
     componentDidMount(){
@@ -316,6 +336,10 @@ function MyUseRefChildrenCreateRef(props,ref){
 }
 
 
+/**
+ * 通过 useImperativeHandle 暴露我只想暴露的部分
+ * 父组件的 refObj.current 拿到的是 useImperativeHandle 回调函数的返回值
+ */
 function MyUseRefChildrenUseRef(props,ref){
     let refObj1 = useRef()
 
@@ -470,4 +494,78 @@ function TestUseThunk(){
         <button onClick={() => {dispatch({type: 'decrement'})}}>decrement</button>
     </>
 }
-export default TestUseThunk;
+
+/**
+ * redux-promise
+ */
+function UsePromise(reducer, initState){
+    let [state, dispatch] = useReducer(reducer, initState)
+
+    function promiseDispatch(action){
+        if(typeof action.then === 'function'){
+            // 传入 thunkDispatch 可以反复进行 异步 dispatch 操作
+            // 如果传入 dispatch 会出现 异步action套异步action 没法运行情况
+            action.then(promiseDispatch)
+        }else {
+            dispatch(action)
+        }
+    }
+    return [state, promiseDispatch]
+}
+
+function TestUsePromise(){
+    // useReducer 后两个参数(initArgs,initFn) 就是为了得到 initialState
+    const [state, dispatch] = UsePromise(reducer, {name: 1})
+
+    return <>
+        {state.name}
+        <button onClick={ () => { dispatch(
+            new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({type: 'add'})
+                }, 1000);
+            })  
+        ) } }>add</button>
+        <button onClick={() => {dispatch({type: 'decrement'})}}>decrement</button>
+    </>
+}
+
+
+function UseAjax(url){
+    const [offset, setOffset] = useState(0)
+    const [data,setData] = useState([])
+
+    function loadMore(){
+        fetch(url).then((res) => res.json()).then((res) => {
+            setData(...data, ...res)
+            setOffset(offset + res.length)
+        })
+    }
+
+    useEffect(() => {
+        loadMore()
+    }, [])
+    return [data, loadMore]
+}
+
+function TestUseAjax(){
+    const [users, loadMore] = UseAjax('/test')
+    // 点击按钮调用 loadMore
+    
+    if(users.length){
+        return <ul>
+            {
+                users.map((item) => {
+                    return <li>{item.name}</li>
+                })
+            }
+        </ul>
+    }else {
+        return <>loading....</>
+    }
+}
+export default TestUsePromise;
+
+/**
+ * redux-hooks ？？？？
+ */
