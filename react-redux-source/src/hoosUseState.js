@@ -531,15 +531,27 @@ function TestUsePromise(){
 }
 
 
+let id = 0;
 function UseAjax(url){
     const [offset, setOffset] = useState(0)
     const [data,setData] = useState([])
 
     function loadMore(){
-        fetch(url).then((res) => res.json()).then((res) => {
-            setData(...data, ...res)
+        // fetch(url).then((res) => res.json()).then((res) => {
+        //     setData(...data, ...res)
+        //     setOffset(offset + res.length)
+        // })
+        
+        const res = []
+        for(let i = 0; i<5; i++){
+            res.push({name: ++id});
+        }
+
+        setTimeout(() => {
+            console.log('111---zzz');
+            setData([...data, ...res])
             setOffset(offset + res.length)
-        })
+        }, 1000);
     }
 
     useEffect(() => {
@@ -550,21 +562,23 @@ function UseAjax(url){
 
 function TestUseAjax(){
     const [users, loadMore] = UseAjax('/test')
+    console.log('222---zzz', users);
     // 点击按钮调用 loadMore
-    
+
     if(users.length){
         return <ul>
             {
-                users.map((item) => {
-                    return <li>{item.name}</li>
+                users.map((item, index) => {
+                    return <li key={index}>{item.name}</li>
                 })
             }
+            <button onClick={ () => loadMore() }>loadMore</button>
         </ul>
     }else {
         return <>loading....</>
     }
 }
-export default TestUsePromise;
+export default TestUseAjax;
 
 /**
  * redux-hooks ？？？？
