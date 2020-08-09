@@ -90,7 +90,7 @@ function HooksUseCallBack(){
 
 
 /**
- * memo 使用 认知 调整
+ * memo 使用 认知 调整 （针对 useCallBack 也适用）
  * 虽然 数据源 使用了 useMemo & useCallBack 进行了缓存，但是子组件还是需要memo 来帮助 子组件进行缓存
  * 否则 每次 父组件 重新渲染 子组件 也会重新渲染
  */
@@ -147,9 +147,13 @@ function reducer(state,action){
             return state
     }
 }
+let lastDispatch;
 function HooksUseReducer(){
     // useReducer 后两个参数(initArgs,initFn) 就是为了得到 initialState
+    // useReducer 生成的 dispatch 不需要使用 useCallback 包装
     const [state, dispatch] = useReducer(reducer, {name: 1}, (abc) => abc)
+    console.log(dispatch === lastDispatch, 'dispatch === lastDispatch')
+    lastDispatch = dispatch;
 
     const [myState,setMyState] = UseMyState({name: '自定义useState'})
     return <>
@@ -547,11 +551,13 @@ function UseAjax(url){
             res.push({name: ++id});
         }
 
-        setTimeout(() => {
-            console.log('111---zzz');
-            setData([...data, ...res])
-            setOffset(offset + res.length)
-        }, 1000);
+        // setTimeout(() => {
+            Promise.resolve().then(() => {
+                console.log('111---zzz');
+                setData([...data, ...res])
+                setOffset(offset + res.length)
+            })
+        // }, 1000);
     }
 
     useEffect(() => {
@@ -586,7 +592,135 @@ function TestUseAjax(){
         return <>loading....</>
     }
 }
-export default TestUseAjax;
+
+// class 组件 setState 有类似批处理方式
+// 同一个方法调用两次 setState 只render 一次
+class ClassTestUseAjax extends React.Component{
+    state = {name: '11',sex: '222'}
+
+    changeName = () => {
+        this.setState({name: '33333'})
+        this.setState({sex: '444'})
+    }
+
+    changeSex = () => {
+        this.setState({name: '5555'})
+        this.setState({sex: '6666'})
+    }
+
+    render(){
+        console.log('render---ClassTestUseAjax')
+        return <>
+            {this.state.name}--{this.state.sex}
+            <button onClick={ this.changeName }>loadMore</button>
+            <button onClick={ this.changeSex }>loadMore</button>
+        </>  
+    }
+}
+
+
+
+// https://juejin.im/post/6854573217349107725
+
+function debounce(fn, ms) {
+    let timer;
+    return function(...args) {
+      if (timer) {
+        clearTimeout(timer)
+      }
+      timer = setTimeout(() => {
+        fn(...args)
+        timer = null;
+      }, ms);
+    }
+  }
+  
+function useDebounce1(fn, time) {
+    console.log('useDebounce')
+    return debounce(fn, time);
+}
+
+function TestUseDebounce1() {
+    const [counter, setCounter] = useState(0);
+  
+    const handleClick = useDebounce1(function() {
+      setCounter(counter + 1)
+    }, 1000)
+  
+    console.log('zzz--render')
+    return <div style={{ padding: 30 }}>
+      <button
+        onClick={handleClick}
+      >click</button>
+      <div>{counter}</div>
+    </div>
+}
+    
+function TestUseDebounce2() {
+    const [counter1, setCounter1] = useState(0);
+    const [counter2, setCounter2] = useState(0);
+  
+    const handleClick = useDebounce1(function() {
+      setCounter1(counter1 + 1)
+    }, 500)
+   // 补充一个函数，加载后会自动更新counter2的数值 
+    useEffect(function() {
+      const t = setInterval(() => {
+        setCounter2(x => x + 1)
+      }, 500);
+      return () => clearInterval(t)
+    }, [])
+  
+  
+    return <div style={{ padding: 30 }}>
+      <button
+        onClick={function() {
+          handleClick()
+        }}
+      >click</button>
+      <div>{counter1}</div>
+      <div>{counter2}</div>
+    </div>
+  }
+  
+function useDebounce2(fn, delay) {
+    return useCallback(debounce(fn, delay), [])
+  }
+  
+function TestUseDebounce3() {
+    const [counter, setCounter] = useState(0);
+  
+    const handleClick = useDebounce2(function() {
+      setCounter(counter + 1)
+    // setCounter(counter => counter + 1)
+    }, 1000)
+  
+    return <div style={{ padding: 30 }}>
+      <button
+        onClick={handleClick}
+      >click</button>
+      <div>{counter}</div>
+    </div>
+  }
+  
+
+function useDebounce3(fn, delay, dep = []) {
+    const { current } = useRef({ fn, timer: null });
+    useEffect(function () {
+      current.fn = fn;
+    }, [fn]);
+  
+    return useCallback(function f(...args) {
+      if (current.timer) {
+        clearTimeout(current.timer);
+      }
+      current.timer = setTimeout(() => {
+        current.fn.call(this, ...args);
+      }, delay);
+    }, dep)
+}
+  
+export default TestUseDebounce3;
 
 /**
  * redux-hooks ？？？？
