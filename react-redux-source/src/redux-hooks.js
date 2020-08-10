@@ -74,6 +74,7 @@ let thunk = ({getState,dispatch}) => next => action => {
 function applyMiddleware(...middlerares){
     return (createStore) => {
         return (reducer, initState) => {
+
             let {store, Provider, connect} = createStore(reducer, initState)
             // 增强disptach 方法， 中间价本质 增强 dispatch 方法
 
@@ -87,7 +88,7 @@ function applyMiddleware(...middlerares){
                 return middlerare(middlerareApi)
             })
             // debugger
-            dispatch = compose(...middlerares)((...args1) => store.dispatch(...args1))
+            dispatch = compose(...middlerares)((...args1) => store._dispatch(...args1))
             // dispatch = compose(...middlerares)(store._dispatch);
             store.dispatch = dispatch;
             return {
@@ -103,18 +104,24 @@ function applyMiddleware(...middlerares){
  * hooks-redux
  */
 const ReduxContext = React.createContext();
+let lastState
 function createStore(reducer, initState){
     let store = {}
 
     const Provider = (props) => {
         const [state, dispatch] = useReducer(reducer, initState)
         store.getState = () => state;
-        console.log(store.dispatch, 'store._dispatch__store._dispatch');
+
+        // 到这一步 store 对象 已经有了 getState 函数 和 dispatch 函数
+        // 此时 若在这里 给 store.dispatch 重新赋值，会把 useReducer 生成的 dispatch 覆盖掉 上面 compose 生成的 dispatch
+        console.log(store._dispatch, 'store._dispatch__store._dispatch', store);
         // if(!store.dispatch){  // ？？？
             // 每次都生成新的 dispatch 
-            store.dispatch = dispatch;
+            store._dispatch = dispatch;
         // }
 
+        console.log(lastState === state, 'lastState === state')
+        lastState = state;
         return (
             <ReduxContext.Provider value={state}>
                 {/* {props.children} */}
@@ -133,8 +140,10 @@ function createStore(reducer, initState){
             let state = initState;
             let actions = {};
             return (props) => {
+                // debugger
                 if(store.getState())
                     state = mapStateToProps(store.getState())
+                
                 actions = mapDispatchToProps(store.dispatch)
                 return <Com {...state} {...actions} {...props}/>
             }
@@ -165,8 +174,8 @@ function Count(props){
         <button onClick={props.add}>redux-hooks</button>
         <button onClick={props.decerame}>redux-hooks</button>
 
-        <button onClick={props.thunkAdd}>redux-hooks</button>
-        <button onClick={props.promiseAdd}>redux-hooks</button>
+        <button onClick={props.thunkAdd}>thunkAdd-hooks</button>
+        <button onClick={props.promiseAdd}>promiseAdd-hooks</button>
     </>
 }
 Count = connect((state) => {
