@@ -20,6 +20,11 @@
 19. vuex 不是必须的，放在 vender.js 里面，加载时间很长，监听vuex的action完成行为，每次对localStorage io操作，很费时
 20. {...null,...undefined} -> {}
 [...null,...undefined] -> 报错
+21. (https://juejin.im/post/5f0dd54df265da230c20a226)
+针对 options 请求，-> 原因 跨域 && 非简单请求造成的 -> 解决 1: 都用简单请求 2: 使用 Access-Control-Max-Age 解决
+22. 使用patch-package 处理问题，如何解决，如何修复，node_modules 的 node_modules 的处理 
+23. 不是简单的写代码，遇到问题如何解决，如何规避问题
+
 null == undefined  true -> null 只等于 undefined
 null == '' false
 通过 xx == undefined, && xx !== undefined 来判断是不是null
