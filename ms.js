@@ -28,6 +28,9 @@
 null == undefined  true -> null 只等于 undefined
 null == '' false
 通过 xx == undefined, && xx !== undefined 来判断是不是null
+21. vuex-persite 全量写入数据，太大，影响io
+22. axios的promise处理和react的tranction处理，异曲同工，包装函数，使得函数扩展
+
 
 {
     function user(obj){

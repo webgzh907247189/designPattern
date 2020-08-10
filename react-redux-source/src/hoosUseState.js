@@ -571,6 +571,14 @@ function TestUseAjax(){
     console.log('222---zzz', users);
     // 点击按钮调用 loadMore
 
+    useLayoutEffect(() => {
+        console.log('render');
+    })
+
+    requestAnimationFrame(()=> {
+        console.log('render11');
+    })
+    
     if(users.length){
         return <ul>
             {
