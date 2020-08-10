@@ -1,5 +1,5 @@
 import React, { useState, useCallback, memo, useMemo, useReducer, useContext, useEffect, useRef, useImperativeHandle, useLayoutEffect } from 'react';
-
+import TestTestUseDebounce from './hooksDebounce';
 /**
  * useState 
  * useState 想同的值 不会触发 更新  内部使用 Object.is 来比较state，判断是否需要更新组件
@@ -618,109 +618,7 @@ class ClassTestUseAjax extends React.Component{
     }
 }
 
-
-
-// https://juejin.im/post/6854573217349107725
-
-function debounce(fn, ms) {
-    let timer;
-    return function(...args) {
-      if (timer) {
-        clearTimeout(timer)
-      }
-      timer = setTimeout(() => {
-        fn(...args)
-        timer = null;
-      }, ms);
-    }
-  }
-  
-function useDebounce1(fn, time) {
-    console.log('useDebounce')
-    return debounce(fn, time);
-}
-
-function TestUseDebounce1() {
-    const [counter, setCounter] = useState(0);
-  
-    const handleClick = useDebounce1(function() {
-      setCounter(counter + 1)
-    }, 1000)
-  
-    console.log('zzz--render')
-    return <div style={{ padding: 30 }}>
-      <button
-        onClick={handleClick}
-      >click</button>
-      <div>{counter}</div>
-    </div>
-}
-    
-function TestUseDebounce2() {
-    const [counter1, setCounter1] = useState(0);
-    const [counter2, setCounter2] = useState(0);
-  
-    const handleClick = useDebounce1(function() {
-      setCounter1(counter1 + 1)
-    }, 500)
-   // 补充一个函数，加载后会自动更新counter2的数值 
-    useEffect(function() {
-      const t = setInterval(() => {
-        setCounter2(x => x + 1)
-      }, 500);
-      return () => clearInterval(t)
-    }, [])
-  
-  
-    return <div style={{ padding: 30 }}>
-      <button
-        onClick={function() {
-          handleClick()
-        }}
-      >click</button>
-      <div>{counter1}</div>
-      <div>{counter2}</div>
-    </div>
-  }
-  
-function useDebounce2(fn, delay) {
-    return useCallback(debounce(fn, delay), [])
-  }
-  
-function TestUseDebounce3() {
-    const [counter, setCounter] = useState(0);
-  
-    const handleClick = useDebounce2(function() {
-      setCounter(counter + 1)
-    // setCounter(counter => counter + 1)
-    }, 1000)
-  
-    return <div style={{ padding: 30 }}>
-      <button
-        onClick={handleClick}
-      >click</button>
-      <div>{counter}</div>
-    </div>
-  }
-  
-
-function useDebounce3(fn, delay, dep = []) {
-    const { current } = useRef({ fn, timer: null });
-    useEffect(function () {
-      current.fn = fn;
-    }, [fn]);
-  
-    return useCallback(function f(...args) {
-      if (current.timer) {
-        clearTimeout(current.timer);
-      }
-      current.timer = setTimeout(() => {
-        current.fn.call(this, ...args);
-      }, delay);
-    }, dep)
-}
-  
-export default TestUseDebounce3;
+export default TestTestUseDebounce;
 
 /**
  * redux-hooks ？？？？
