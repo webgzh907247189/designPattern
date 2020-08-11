@@ -31,7 +31,7 @@
         let oldpushState = history.pushState
 
         history.pushState = function(state, title, path){
-            console.log('触发了pushState')
+            console.log('触发了pushState--自定义函数 onpushpstate')
             oldpushState.call(history, state, title, path)
 
             // 自定义的 onpushpstate 类似与功能 onpopstate 实现 pushState 也可以完成页面内容显示
