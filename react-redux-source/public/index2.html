@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <div>
+        history -> demo
+        <div id="btn"></div>
+    </div>
+  </body>
+  <script>
+    // 监听 popstate 事件 ->  (路由出栈事件)
+    // 调用history.pushState()或history.replaceState()不会触发 popstate 事件
+    // 只有在做出浏览器动作时，才会触发该事件，如用户点击浏览器的回退按钮（或者在Javascript代码中调用history.back()）
+
+    // history.pushState()只会改变当前地址栏的路径，并不会更新页面内容 -> 只是变更了 history 的记录，页面没有刷新
+
+    window.onpopstate = function(e){
+        console.log(e)
+    }
+
+    setTimeout(() => {
+        history.pushState({page: 1}, 'page1', '/page1')
+    }, 1000)
+    setTimeout(() => {
+        history.pushState({page: 2}, 'page2', '/page2')
+    }, 2000)
+    setTimeout(() => {
+        history.pushState({page: 3}, 'page3', '/page3')
+    }, 3000)
+
+
+    setTimeout(() => {
+        history.replaceState({page: 4}, 'page4', '/page4')
+    }, 4000)
+
+
+    setTimeout(() => {
+        history.back(); // 因为触发了 popstate 所以执行了上面注册的onpopstate 函数
+    }, 5000)
+
+
+    setTimeout(() => {
+        history.forward(); // 因为触发了 popstate   (forward 也触发了 popstate 前跳 后跳 都会)
+    }, 6000)
+  </script>
+</html>
