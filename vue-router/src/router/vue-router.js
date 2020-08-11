@@ -1,5 +1,5 @@
 /**
- * history.length 最大为50 有大小限制
+ * history.length 最大为50 有大小限制 -> react-router 视频第一节  lenght 一直是50
  */
 class HistoryRoute{
     constructor(){

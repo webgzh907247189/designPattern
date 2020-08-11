@@ -6,6 +6,11 @@ import {Route,HashRouter as Router} from 'react-router-dom'
  *  exact  精确匹配
  *  switch 精确匹配，后面的不判断  类似 switch case
  *  redirect 重定向 to from 从哪里来的重定向， 不加from 直接重定向
+ * 
+ * 
+ * history
+ * history.pushState()     推入路由栈
+ * history.replaceState()  替换路由栈
  */
 
 let App = <Router>

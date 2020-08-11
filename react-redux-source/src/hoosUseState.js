@@ -1,5 +1,6 @@
 import React, { useState, useCallback, memo, useMemo, useReducer, useContext, useEffect, useRef, useImperativeHandle, useLayoutEffect } from 'react';
 import TestTestUseDebounce from './hooksDebounce';
+import ReduxHooks from './redux-hooks'
 /**
  * useState 
  * useState 想同的值 不会触发 更新  内部使用 Object.is 来比较state，判断是否需要更新组件
@@ -618,7 +619,7 @@ class ClassTestUseAjax extends React.Component{
     }
 }
 
-export default TestTestUseDebounce;
+export default ReduxHooks;
 
 /**
  * redux-hooks ？？？？
