@@ -1,4 +1,6 @@
 import {Route,HashRouter as Router} from 'react-router-dom'
+// HashRouter 路由容器
+// exact 精确匹配
 
 /**
  *  Router 路由容器
@@ -11,6 +13,7 @@ import {Route,HashRouter as Router} from 'react-router-dom'
  * history
  * history.pushState()     推入路由栈
  * history.replaceState()  替换路由栈
+ * 
  */
 
 let App = <Router>
