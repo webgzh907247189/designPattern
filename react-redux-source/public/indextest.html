@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <div id="s1">s1
+        <div id="s2">s2</div>
+    </div>
+  </body>
+  <script>
+    // https://segmentfault.com/a/1190000005654451
+
+    // s1.addEventListener("click",function(e){
+    //     console.log("s1 冒泡事件");
+    // },false);
+    // s2.addEventListener("click",function(e){
+    //     console.log("s2 冒泡事件");
+    // },false);
+
+    // // 点击s2的时候 ->  先 s2 在 s1
+
+
+
+    // s1.addEventListener("click",function(e){
+    //     console.log("s1 捕获事件");
+    // },true);
+    // s2.addEventListener("click",function(e){
+    //     console.log("s2 捕获事件");
+    // },true);
+    
+    // // 点击s2的时候，执行结果如下 先 s1 在 s2
+
+
+
+    // 事件捕获vs事件冒泡
+    // 当事件捕获和事件冒泡一起存在的情况，事件又是如何触发呢。
+    // 这里记被点击的DOM节点为target节点
+
+    // document 往 target节点，捕获前进，遇到注册的捕获事件立即触发执行
+    // 到达target节点，触发事件（对于target节点上，是先捕获还是先冒泡则捕获事件和冒泡事件的注册顺序，先注册先执行）
+    // target节点 往 document 方向，冒泡前进，遇到注册的冒泡事件立即触发
+    s1.addEventListener("click",function(e){
+        console.log("s1 冒泡事件");         
+    },false);
+    s2.addEventListener("click",function(e){
+        console.log("s2 冒泡事件");
+    },false);
+            
+    s1.addEventListener("click",function(e){
+        console.log("s1 捕获事件");
+    },true);
+            
+    s2.addEventListener("click",function(e){
+        console.log("s2 捕获事件");
+    },true);
+
+  </script>
+</html>
