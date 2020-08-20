@@ -154,7 +154,14 @@
     // ReturnType
     type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
 }
+{
+    function putAPI(a: string, b: string){}
+    type ArgsType<T> = T extends (...args: infer U) => unknown ? U : never;
+    type PutAPIType = ArgsType<typeof putAPI>;
 
+    // 验证
+    type s = typeof putAPI
+}
 
 {
     // InstanceType
@@ -237,3 +244,48 @@ infer X 就相当于声明了一个变量
 //     console.log(dukeinfo.address);
 //     //error 类型“{ name: string; } & { age: number; }”上不存在属性“address”
 // }
+
+
+
+
+
+
+// https://www.cnblogs.com/wjaaron/p/11672764.html
+// ts 枚举
+{
+  enum Status{
+    Off,
+    On
+  }
+
+  const enum Animal{
+      Dog,
+      Cat
+  }
+
+  const status = Status.On
+  const animal = Animal.Dog
+
+  // 编译出来的js是
+  // 编译后的代码中并没有像创建Status一样创建了Animal，而是直接把 Animal 中 Dog 值 0 替换到表达式中 Animal.Dog 的位置
+  // 这样就节省了生成代码的开销。
+
+  // var Status;
+  // (function (Status) {
+  //     Status[Status["Off"] = 0] = "Off";
+  //     Status[Status["On"] = 1] = "On";
+  // })(Status || (Status = {}));
+  // var status = Status.On;
+  // var animal = 0 /* Dog */;
+
+
+  // 反向映射
+  enum Status1 {
+    Success = 200,
+    NotFound = 404,
+    Error = 500
+  }
+
+  console.log(Status1.Success) // 200
+  console.log(Status1[200]) // Success
+}
