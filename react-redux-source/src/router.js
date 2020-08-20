@@ -1,4 +1,9 @@
+import React from 'react';
 import {Route,HashRouter as Router} from 'react-router-dom'
+import User from './router/user';
+import Home from './router/home';
+import Profile from './router/profile';
+
 // HashRouter 路由容器
 // exact 精确匹配
 
@@ -15,10 +20,12 @@ import {Route,HashRouter as Router} from 'react-router-dom'
  * history.replaceState()  替换路由栈
  * 
  */
-
-let App = <Router>
-    <Route path='/' component={component1} exact></Route>
-    <Route path='/test' component={component2} ></Route>
-</Router>
-
-export default App
+export default class RouterApp extends React.Component {
+    render(){
+        return <Router>
+        <Route path='/' component={Home} exact></Route>
+        <Route path='/user' component={User} ></Route>
+        <Route path='/profile' component={Profile} ></Route>
+    </Router>
+    }
+}

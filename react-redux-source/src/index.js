@@ -3,6 +3,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 // import Demo from './reactDemo'
 import Middlerare from './middlerare';
+import ReduxHooks from './redux-hooks';
+import HoosUseState from './hoosUseState'
+import RouterApp from './router';
 
 // /** hooks 测试 */
 // import Hooks from './hooks'
@@ -168,7 +171,8 @@ import Middlerare from './middlerare';
 //     React.createElement('button',{id: 'test'},'我是按钮')
 // )
 // console.log(ele);
-ReactDOM.render(<Middlerare></Middlerare>, document.getElementById('root'));
+{/* <HoosUseState></HoosUseState> */}
+ReactDOM.render(<RouterApp></RouterApp>, document.getElementById('root'));
 
 // class TestReact extends React.Component{
 //     constructor(props){
