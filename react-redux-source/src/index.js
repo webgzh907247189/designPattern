@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 // import Demo from './reactDemo'
 import Middlerare from './middlerare';
+import HoosUseState from './hoosUseState';
 
 // /** hooks 测试 */
 // import Hooks from './hooks'
@@ -168,7 +169,7 @@ import Middlerare from './middlerare';
 //     React.createElement('button',{id: 'test'},'我是按钮')
 // )
 // console.log(ele);
-ReactDOM.render(<Middlerare></Middlerare>, document.getElementById('root'));
+ReactDOM.render(<HoosUseState></HoosUseState>, document.getElementById('root'));
 
 // class TestReact extends React.Component{
 //     constructor(props){

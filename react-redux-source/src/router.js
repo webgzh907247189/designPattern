@@ -15,10 +15,20 @@ import {Route,HashRouter as Router} from 'react-router-dom'
  * history.replaceState()  替换路由栈
  * 
  */
+function Component1(){
+    return <>
+        Component1
+    </>
+}
 
-let App = <Router>
-    <Route path='/' component={component1} exact></Route>
-    <Route path='/test' component={component2} ></Route>
+function Component2(){
+    return <>
+        Component2
+    </>
+}
+const RouterApp = <Router>
+    <Route path='/' component={Component1} exact></Route>
+    <Route path='/test' component={Component2} ></Route>
 </Router>
 
-export default App
+export default RouterApp
