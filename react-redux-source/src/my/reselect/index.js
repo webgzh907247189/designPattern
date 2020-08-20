@@ -16,6 +16,26 @@ function createSelect(selector,reduce){
 export default createSelect
 
 
+{
+    // 实现一个 once 函数，记忆返回结果只执行一次
+    const f = () => {console.log('call'); return 3;}
+
+    function once(fn){
+        let result;
+        let flag = false;
+        return (...args) => {
+            if(flag){
+                return result;
+            }
+            flag = true;
+            result = f(...args)
+            return result;
+        }
+    }
+    const r1 = once(f);
+    console.log(r1(), 'r11')
+    console.log(r1(), 'r12')
+}
 
 {
 //     function defaultEqualityCheck(a, b) {
