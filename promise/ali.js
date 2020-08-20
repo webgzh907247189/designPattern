@@ -95,6 +95,7 @@ function createFlow(list){
 {
     Promise.resolve().then(() => {
         console.log('0000')
+        // 注意这里 有没有 return 对是不是按序打印影响很大
         return new Promise((reslve) => {
             setTimeout(() => {
                 console.log('1111')
