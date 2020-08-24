@@ -10,7 +10,10 @@ export default class Router extends React.Component{
         let {path='/',component: Component,exact=false,render} = this.props
         let pathName = location.pathName
         let paramNames = []
+        // paramNames 拿到的是 正则匹配的数据
+
         let regexpResult = pathToRegexp(path,paramNames,{end: exact})
+        // 不使用test的原因，后续需要这个返回值
         let result = location.pathName.match(regexpResult)
 
         let props = {

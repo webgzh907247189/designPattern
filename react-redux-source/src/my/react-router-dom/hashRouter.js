@@ -7,7 +7,8 @@ export default class HashRouter extends React.Component{
     }
 
     componentDidMount(){
-        window.location.hash = window.location.hash || '/'
+
+        // hashChange 改变状态，router(HashRouter)组件重新渲染，致使子组件重新渲染
         window.addEventListener('hashChange',()=>{
             this.setState({
                 location: {
@@ -17,6 +18,8 @@ export default class HashRouter extends React.Component{
                 }
             })
         })
+
+        window.location.hash = window.location.hash || '/'
     }
 
     render(){

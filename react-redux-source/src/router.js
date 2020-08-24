@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route,HashRouter as Router} from 'react-router-dom'
+import {Route,HashRouter as Router, Link} from 'react-router-dom'
 import User from './router/user';
 import Home from './router/home';
 import Profile from './router/profile';
@@ -23,6 +23,9 @@ import Profile from './router/profile';
 export default class RouterApp extends React.Component {
     render(){
         return <Router>
+        <Link to="/user">user</Link>
+        <Link to="/profile">profile</Link>
+        <Link to="/">home</Link>
         <Route path='/' component={Home} exact></Route>
         <Route path='/user' component={User} ></Route>
         <Route path='/profile' component={Profile} ></Route>
