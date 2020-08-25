@@ -3,6 +3,7 @@ import RouterCtx from './context'
 import pathToRegexp from 'path-to-regexp'
 
 export default class Router extends React.Component{
+    // 没有加 switch 的时候，第一个匹配上了，后续的 Route 继续匹配
     static contextType = RouterCtx
 
     render(){
