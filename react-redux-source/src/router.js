@@ -3,6 +3,7 @@ import {Route,HashRouter as Router, Link, Redirect} from 'react-router-dom'
 import User from './router/user';
 import Home from './router/home';
 import Profile from './router/profile';
+import Authorized from './router/authorized';
 
 // HashRouter 路由容器
 // exact 精确匹配
@@ -23,6 +24,9 @@ import Profile from './router/profile';
  * 
  * Redirect to 重定向到哪里去， from 表示从哪里来的 & 没有匹配上 才重定向到 to
  */
+
+
+ // 此处没有加 switch ，所以匹配了第一个/ ，继续向下匹配，知道匹配到重定向
 export default class RouterApp extends React.Component {
     render(){
         return <Router>
@@ -32,10 +36,31 @@ export default class RouterApp extends React.Component {
         &nbsp;&nbsp;
         <Link to="/">home</Link>
         &nbsp;&nbsp;
+        <Link to="/login">login</Link>
+        &nbsp;&nbsp;
         <Route path='/' component={Home} exact></Route>
         <Route path='/user' component={User} ></Route>
-        <Route path='/profile' component={Profile} ></Route>
+        <Route path='/login' component={Login} ></Route>
+        <Authorized path='/profile' component={Profile} />
         <Redirect from="/" to="/user"/>
     </Router>
     }
+}
+
+function Login(props){
+    const onLogin = () => {
+        const path = props.location?.state?.from
+        
+        // 从哪里来跳到哪里去
+        if(path){
+            props.history.push(path)
+        }else{
+            props.history.push('/')
+        }
+        localStorage.setItem('logined', true)
+    }
+
+    return <>
+        <button onClick={onLogin}>登陆</button>
+    </>
 }

@@ -1,26 +1,36 @@
 import React from 'react'
 import RouterCtx from './context'
 
+(function(history){
+    let oldpushState = history.pushState
+
+    history.pushState = function(state, title, path){
+        console.log('触发了pushState--自定义函数 onpushpstate')
+        oldpushState.call(history, state, title, path)
+
+        // 自定义的 onpushpstate 类似与功能 onpopstate 实现 pushState 也可以完成页面内容显示
+        window.onpushstate && window.onpushstate(state, title, path)
+    }
+})(window.history)
+
 export default class HashRouter extends React.Component{
     // 初始化定义一个 state ，下面的 Link 组件会用到
     state = {
-        location: {pathName: window.location.hash.slice(1),state: null}
+        location: {pathName: '',state: null}
     }
 
     componentDidMount(){
-
-        // hashChange 改变状态，router(HashRouter)组件重新渲染，致使子组件重新渲染
-        window.addEventListener('hashChange',()=>{
+        // onpopstate 原生事件
+        // onpushstate 扩展事件
+        window.onpopstate = window.onpushstate = (state, pathname) => {
             this.setState({
                 location: {
                     ...this.state.location,
-                    pathName: window.location.hash.slice(1),
-                    state: this.locationState
+                    pathName,
+                    state
                 }
             })
-        })
-
-        window.location.hash = window.location.hash || '/'
+        }
     }
 
     render(){
@@ -41,10 +51,9 @@ export default class HashRouter extends React.Component{
                         let {pathname, state } = to
                         that.locationState = state
 
-                        // 此处改变 hash ，触发 hashCHange， 重新setState
-                        window.location.hash = pathname
+                        window.location.pushState(state, null, pathname)
                     }else{
-                        window.location.hash = to
+                        window.location.pushState('', null, to)
                     }
                 },
                 block(msg){

@@ -35,7 +35,7 @@
             oldpushState.call(history, state, title, path)
 
             // 自定义的 onpushpstate 类似与功能 onpopstate 实现 pushState 也可以完成页面内容显示
-            window.onpushpstate && window.onpushpstate(state, title, path)
+            window.onpushstate && window.onpushstate(state, title, path)
         }
     })(window.history)
 

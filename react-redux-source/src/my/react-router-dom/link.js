@@ -8,7 +8,7 @@ export default class Link extends React.Component{
 
         // return <a href={`#${to}`}>{this.props.children}</a>
 
-        return <a href={`#${to}`} onClick={() => this.context.history.push(to) }>{this.props.children}</a>
+        return <a {...this.props} href={`#${to}`} onClick={() => this.context.history.push(to) }>{this.props.children}</a>
     }
 }
 /**

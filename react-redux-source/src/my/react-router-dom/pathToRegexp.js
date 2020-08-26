@@ -6,14 +6,14 @@ const pathToRegexp = require('path-to-regexp')
 // end 以什么结束(/home 结束)
 let regexp = pathToRegexp.pathToRegexp('/home',[], {end: true})
 console.log(regexp)
- 
+
 // ?: 分组不捕获
 let str = '/home/'
 console.log(str.match(regexp))
 // [ '/home/', index: 0, input: '/home/' ]
 
 let params = []
-let regexp1 = pathToRegexp.pathToRegexp('/home/:name/:id',params, {end: true})
+let regexp1 = pathToRegexp.pathToRegexp('/home/:name/:id',params, {end: false})
 console.log(regexp1, params) // /^\/home(?:\/([^\/#\?]+?))(?:\/([^\/#\?]+?))[\/#\?]?$/i
 // [ 
 //     { name: 'name', prefix: '/', suffix: '', pattern: '[^\\/#\\?]+?', modifier: '' },
