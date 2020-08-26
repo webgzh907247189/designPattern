@@ -51,7 +51,8 @@ function Login(props){
     const onLogin = () => {
         const path = props.location?.state?.from
         
-        // 从哪里来跳到哪里去
+        // 因为是针对 /profile ，然后重定向过来的， 所以在 Authorized 组件 里面注入了state对象
+        // 从哪里来跳到哪里去 (针对 被 Authorized 包裹的组件)
         if(path){
             props.history.push(path)
         }else{
