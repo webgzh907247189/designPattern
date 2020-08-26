@@ -27,8 +27,11 @@ export default class RouterApp extends React.Component {
     render(){
         return <Router>
         <Link to="/user">user</Link>
+        &nbsp;&nbsp;
         <Link to="/profile">profile</Link>
+        &nbsp;&nbsp;
         <Link to="/">home</Link>
+        &nbsp;&nbsp;
         <Route path='/' component={Home} exact></Route>
         <Route path='/user' component={User} ></Route>
         <Route path='/profile' component={Profile} ></Route>
