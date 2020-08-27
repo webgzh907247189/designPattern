@@ -1,9 +1,28 @@
 import React from 'react';
-
-export default class Home extends React.Component{
+import { connect } from "react-redux";
+import { push } from "connected-react-router";
+class Home extends React.Component{
     render(){
+        console.log(this.props)
         return <>
-            home
+            home -> {this.props.reducer.number}
+            <button onClick={this.props.add}>add</button>
+            <button onClick={() => this.props.goto('/profile')}>goto</button>
         </>
     }
 }
+
+
+export default connect((state)=> {
+    return state
+},(dispatch) => {
+    return {
+        add(){
+            dispatch({type: 'add'})
+        },
+        goto(path){
+            console.log(path, '????')
+            return push(path)
+        }
+    }
+})(Home)
