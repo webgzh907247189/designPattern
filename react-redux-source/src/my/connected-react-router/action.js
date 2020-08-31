@@ -1,0 +1,7 @@
+const LOCATION_CHANGE = ''
+const CALL_HISTORY_METHOD = '@@router/CALL_HISTORY_METHOD'
+
+export {
+    LOCATION_CHANGE,
+    CALL_HISTORY_METHOD
+}

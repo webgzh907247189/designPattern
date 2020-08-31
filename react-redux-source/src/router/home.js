@@ -21,8 +21,9 @@ export default connect((state)=> {
             dispatch({type: 'add'})
         },
         goto(path){
-            console.log(path, '????')
-            return push(path)
+            // debugger
+            console.log(push(path))
+            return dispatch(push(path))
         }
     }
 })(Home)

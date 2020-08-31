@@ -26,7 +26,7 @@ import Authorized from "./router/authorized";
  */
 
 import { Provider } from "react-redux";
-import { createStore, combineReducers, applyMiddleware } from "redux";
+import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import { connectRouter, routerMiddleware, ConnectedRouter } from "connected-react-router";
 import { createHashHistory } from "history";
 
@@ -39,6 +39,7 @@ function reducer(state = {number: 0},action){
     }
 }
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const history = createHashHistory()
 
 // 每当地址栏改变当时候，向仓库派发一个动作，由 reducer 进行运算(保存路径)
@@ -46,7 +47,8 @@ const history = createHashHistory()
 const reducers = combineReducers({reducer, router: connectRouter(history)})
 
 // const store = createStore(reducers)
-const store = applyMiddleware(routerMiddleware(history))(createStore)(reducers)
+// const store = applyMiddleware(routerMiddleware(history))(createStore)(reducers)
+const store = createStore(reducers, composeEnhancers(applyMiddleware(routerMiddleware(history))));
 
 
 // 此处没有加 switch ，所以匹配了第一个/ ，继续向下匹配，知道匹配到重定向
