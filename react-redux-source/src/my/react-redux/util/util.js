@@ -1,7 +1,8 @@
 export default class Subscription{
     constructor(store){
+        console.log(store, 'store')
         this.listener = []
-        store.subscripte(() => this.notify())
+        store.subscribe(() => this.notify())
     }
 
     subscripte(listener){

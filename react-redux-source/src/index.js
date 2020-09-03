@@ -7,6 +7,8 @@ import Middlerare from './middlerare';
 import ReduxHooks from './redux-hooks';
 import HoosUseState from './hoosUseState'
 import RouterApp from './router';
+import ReduxActionsDemo from "./reduxActionsDemo";
+import ReduxHooksDemoContainer from "./reduxHooksDemo";
 
 // /** hooks 测试 */
 // import Hooks from './hooks'
@@ -173,8 +175,8 @@ import RouterApp from './router';
 // )
 // console.log(ele);
 {/* <HoosUseState></HoosUseState> */}
-ReactDOM.render(<RouterApp></RouterApp>, document.getElementById('root'));
-
+// ReactDOM.render(<RouterApp></RouterApp>, document.getElementById('root'));
+ReactDOM.render(<ReduxHooksDemoContainer></ReduxHooksDemoContainer>, document.getElementById('root'));
 // class TestReact extends React.Component{
 //     constructor(props){
 //         super(props)
