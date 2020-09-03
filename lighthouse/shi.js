@@ -153,9 +153,16 @@ redux
 
                     // typeof fn.then === 'function'
 
-                    isPromise(action.payload) ? action.payload.then(d=>{
-                        dispatch({...action,payload: d})
-                    }) : next(action) 
+                    // promise 中间件 有两种写法
+                    if(isPromise(action) ){
+                        action.then(dispatch)
+                    }else if(isPromise(action.num)){
+                        action.num.then(d=>{
+                            dispatch({...action,num: d})
+                        })
+                    }else {
+                        next(action) 
+                    }
                 }
             }
         }

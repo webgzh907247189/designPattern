@@ -57,9 +57,16 @@ function promise({getState,dispatch}){
         console.log('1111')
         return function(action){
             console.log('dispatch 333 start')
-            isPromise(action.num) ? action.num.then(d=>{
-                dispatch({...action,num: d})
-            }) : next(action) 
+            // promise 中间件 有两种写法
+            if(isPromise(action) ){
+                action.then(dispatch)
+            }else if(isPromise(action.num)){
+                action.num.then(d=>{
+                    dispatch({...action,num: d})
+                })
+            }else {
+                next(action) 
+            }
             console.log('dispatch 333 end')
         }
     }

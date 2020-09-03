@@ -31,9 +31,16 @@ function isPromise(fn){
 function promise({getState,dispatch}){
     return function(next){
         return function(action){
-            isPromise(action.num) ? action.num.then(d=>{
-                dispatch({...action,num: d})
-            }) : next(action) 
+            // promise 中间件 有两种写法
+            if(isPromise(action) ){
+                action.then(dispatch)
+            }else if(isPromise(action.num)){
+                action.num.then(d=>{
+                    dispatch({...action,num: d})
+                })
+            }else {
+                next(action) 
+            } 
         }
     }
 }

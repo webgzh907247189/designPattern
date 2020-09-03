@@ -10,7 +10,7 @@ import Subscription from "./util/util";
 // 这个provider 与 react的ctx的Provider 无关
 export default class Provider extends React.Component{
     render(){
-        const store = props.store
+        const store = this.props.store
         let subscription = new Subscription(store)
 
         return <ReactReduxContext.Provider value={{store: this.props.store, subscription}}>

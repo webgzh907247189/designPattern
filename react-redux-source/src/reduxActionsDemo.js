@@ -21,20 +21,41 @@ let MINUS = 'minus'
 //     }
 // }
 let reducer = handleActions({
-    ADD: (state,action) => ({count: state.count + action.num}),
-    MINUS: (state,action) => ({count: state.count - action.num})
+    [ADD]: (state,action) => ({count: state.count + action.num}),
+    [MINUS]: (state,action) => ({count: state.count - action.num})
 },{count: 0})
 
 
-let actions = createActions({
+let actions = {
     ADD: (num = 1)=>{
-        return num
+        return {
+            type: ADD,
+            num
+        }
     },
     MINUS: (num = 1)=>{
-        return num
-    }
-})
-
+        return {
+            type: MINUS,
+            num
+        }
+    },
+    promise1: () => {
+        return {
+            type: ADD,
+            num: Promise.resolve(1)
+        }
+    },
+    promise2: (num = 3) => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    type: ADD,
+                    num,
+                })
+            }, 2000)
+        })
+    },
+}
 
 function isPromise(fn){
     return typeof fn.then === 'function'
@@ -42,9 +63,16 @@ function isPromise(fn){
 function promise({getState,dispatch}){
     return function(next){
         return function(action){
-            isPromise(action.num) ? action.num.then(d=>{
-                dispatch({...action,num: d})
-            }) : next(action) 
+            // promise 中间件 有两种写法
+            if(isPromise(action) ){
+                return action.then(dispatch)
+            }else if(isPromise(action.num)){
+                action.num.then(d=>{
+                    dispatch({...action,num: d})
+                })
+            }else {
+                next(action) 
+            }
         }
     }
 }
@@ -61,7 +89,7 @@ function thunk({getState,dispatch}){
 
             // action 是 actions中的函数运行的返回值
             if(typeof action === 'function'){
-                action(dispatch)
+                action(dispatch,getState)
             }else{
                 next(action)
             }
@@ -104,6 +132,14 @@ class ReduxActionsDemo extends React.Component{
         this.props.ADD(10)
     }
 
+    promise1 = () => {
+        this.props.promise1(1)
+    }
+
+    promise2 = () => {
+        this.props.promise2(3)
+    }
+
     render(){
         console.log(this.props,'z')
         return <div>
@@ -112,6 +148,8 @@ class ReduxActionsDemo extends React.Component{
             <button onClick={this.add}>加</button>
             <button onClick={this.minus}>减</button>
             <button onClick={this.combine}>加10</button>
+            <button onClick={this.promise1}>promise1加1</button>
+            <button onClick={this.promise2}>promise2加3</button>
         </div>
     }
 }
