@@ -141,6 +141,7 @@ redux
         }
         let thunk = createThunkMiddleware()
 
+        // 分别判断 action 和 action.payload 因为可能存在 失败的promise
         function promise({getState,dispatch}){
             // getState可以在logger中间件可以使用
             return (next)=>{

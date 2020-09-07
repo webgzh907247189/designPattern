@@ -21,6 +21,7 @@ function reducer(state = { count: Map({ num: 0 }) }, action) {
 function isPromise(fn) {
   return typeof fn.then === "function";
 }
+// 分别判断 action 和 action.payload 因为可能存在 失败的promise
 function promise({ getState, dispatch }) {
   return function (next) {
     return function (action) {
