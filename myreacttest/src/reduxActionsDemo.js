@@ -32,19 +32,43 @@ let actions = createActions({
     },
     MINUS: (num = 1)=>{
         return num
-    }
+    },
+    promise1: () => {
+        return {
+            type: ADD,
+            num: Promise.resolve('1')
+        }
+    },
+    promise2: (num = 3) => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    type: ADD,
+                    num,
+                })
+            }, 2000)
+        })
+    },
 })
 
 
 function isPromise(fn){
     return typeof fn.then === 'function'
 }
+// 分别判断 action 和 action.payload 因为可能存在 失败的promise
 function promise({getState,dispatch}){
     return function(next){
         return function(action){
-            isPromise(action.num) ? action.num.then(d=>{
-                dispatch({...action,num: d})
-            }) : next(action) 
+            // promise 中间件 有两种写法
+            if(isPromise(action) ){
+                return action.then(dispatch)
+            }else if(isPromise(action.num)){
+                action.num.then(d=>{
+                    dispatch({...action,num: d})
+                })
+            }else {
+                next(action) 
+            }
         }
     }
 }
@@ -112,6 +136,8 @@ class ReduxActionsDemo extends React.Component{
             <button onClick={this.add}>加</button>
             <button onClick={this.minus}>减</button>
             <button onClick={this.combine}>加10</button>
+            <button onClick={this.promise1}>promise1加1</button>
+            <button onClick={this.promise2}>promise2加3</button>
         </div>
     }
 }

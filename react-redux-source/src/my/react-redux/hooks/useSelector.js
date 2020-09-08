@@ -1,17 +1,18 @@
-import React, { useContext, useLayoutEffect, useLayoutEffect, useRef, useReducer } from "react";
+import React, { useContext, useLayoutEffect, useRef, useReducer } from "react";
 import reactReduxContext from "../context";
 import useStore from "./useStore";
 import Subscription from "../util/util";
 import useReduxContext from "./useReduxContext";
 
 // 没有这个，不刷新 (假设只有 useDispatch, useStore)
-export default function useSelect(selector){
+export default function useSelector(selector){
     const { store, subscription} = useReduxContext();
     const selectedStore = useSelectorWithStore(selector, equaltyFn, store, subscription)
     return selectedStore
 }
 
 const equaltyFn = (a,b) => a === b;
+
 function useSelectorWithStore(selector, equaltyFn, store, subscription){
     const [,forceUpdate] = useReducer(s=> s+1, 0)
 

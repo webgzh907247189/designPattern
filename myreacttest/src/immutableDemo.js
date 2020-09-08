@@ -28,12 +28,20 @@ let actions = {
 function isPromise(fn){
     return typeof fn.then === 'function'
 }
+// 分别判断 action 和 action.payload 因为可能存在 失败的promise
 function promise({getState,dispatch}){
     return function(next){
         return function(action){
-            isPromise(action.num) ? action.num.then(d=>{
-                dispatch({...action,num: d})
-            }) : next(action) 
+            // promise 中间件 有两种写法
+            if(isPromise(action) ){
+                return action.then(dispatch)
+            }else if(isPromise(action.num)){
+                action.num.then(d=>{
+                    dispatch({...action,num: d})
+                })
+            }else {
+                next(action) 
+            }
         }
     }
 }
