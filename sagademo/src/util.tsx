@@ -1,4 +1,5 @@
-export const delay = (ms1: number, ms2: number) => {
+export const delay = function (this: any, ms1: number, ms2: number) {
+    console.log('read saga ', this)
     return new Promise((resolve)=>{
         setTimeout(()=>{
             resolve(ms1)
