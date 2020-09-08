@@ -119,7 +119,7 @@ let reducers = combineReducers({
 
 
 // 中间件的顺序是有关系的  （promise先运行，logger，thunk最后运行）
-let store = applyMiddleware(thunk,logger,promise)(createStore)(reducers)
+let store = applyMiddleware(thunk,logger,promise)(createStore)(reducers,{})
 // 运行顺序  dispatch 被反复增强，每个中间件都在增强 dispatch 的能力，最初传入(最后一个中间件接收的next)才是 真正的  store.dispatch 
 // s = (...args) => thunk(logger(...args)) -> args 是 58行到64行
 // (...args) => s(promise(...args)) -> args 就是 store.dispatch
