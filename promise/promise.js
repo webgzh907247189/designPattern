@@ -649,3 +649,17 @@ new Promise((resolve,reject)=>{
 
     //2314
 }
+
+
+
+{
+	// 返回一个非Promise， 都会被包装为 promise
+	// throw new Error('error')  || Promise.reject 可以
+	Promise.resolve('1').then(() => {
+		return new Error('error') 
+	}).then(() => {
+		console.log('then') // then
+	}).catch(() => {
+		console.log('then')
+	})
+}
