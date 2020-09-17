@@ -2,6 +2,14 @@ import React from 'react'
 import RouterCtx from './context'
 import pathToRegexp from 'path-to-regexp'
 
+
+/**
+ * https://www.jianshu.com/p/ed5e56994f13?from=timeline 
+ * 介绍 使用 Switch 和 exact 情况
+ * 
+ * Switch 匹配到就不再匹配
+ * exact 代表精确匹配，注意联想 pathToRegexp {end: true} 的 情况
+ */
 export default class Switch extends React.Component{
     static contextType = RouterCtx
 
