@@ -1,6 +1,15 @@
 // 屏幕刷新
 // 60次/秒 ->  一次大概 16.6ms 
 
+/**
+ * 当前帧没有渲染，进入下一帧渲染 -> 长task造成的， 需要拆分任务(分片更新)
+ * 
+ * 某一个task执行时间超过了16.6ms（比如taskA中有个很耗时的while循环）
+ * 
+ * 那么这一帧就没有时间render，页面直到下一帧render后才会更新
+ * 
+ * https://juejin.im/post/6873337391608758285
+ */
 
 // 每一帧 先经过 requestAnimationFrame ，后面到 queuestIdleCallback
 
