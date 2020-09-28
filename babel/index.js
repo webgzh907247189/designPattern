@@ -77,3 +77,19 @@ console.log(ast4.code)
 
 // "use strict";
 // [1, 2, 3, 4, [5, 6, [7, 8]]].flat(Infinity);
+
+
+
+{
+  const arrays = [[10], 50, [100, [2000, 3000, [40000]]]];
+
+  function getList(list){
+      return list.reduce((result, item) => {
+          const i = Array.isArray(item) ? getList(item) : item
+          result = result.concat(i)
+          return result
+      }, [])
+  }
+  console.log(getList(arrays))
+  // [ 10, 50, 100, 2000, 3000, 40000 ]
+}
