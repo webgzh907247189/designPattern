@@ -50,8 +50,30 @@
 
 // 给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
 // abcabcbb -> abc 3; bbbbb -> b 1
-{
 
+/**
+ * 滑动窗口来降低时间复杂度
+ * 定义一个map数据结构，维护这么一个结构（key,index），key值就是字符，index表示的就是第几个字符。
+ * 滑动窗口的话，我们需要维护的就是一个start开始位置，end结束位置。
+ * end指针不断向后走，当遇到区间[start,end]相同的字符时，我们就需要重新跟新start指针，并且把此时的答案ans更新即可。
+ */
+{
+    var lengthOfLongestSubstring = function (s) {
+        let mapTemp = new Map(),
+            max = 0
+        const len = s.length
+        for (let i = 0, j = 0; j < len; j++) {
+            if (mapTemp.has(s[j])) {
+                // 窗口的start更新
+                i = Math.max(mapTemp.get(s[j]) + 1, i)
+                // i = mapTemp.get(s[j]) + 1
+            }
+            max = Math.max(max, j - i + 1)
+            mapTemp.set(s[j], j)
+        }
+        return max
+    }    
+    console.log(lengthOfLongestSubstring('abcabcbb'))
 }
 
 
