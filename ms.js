@@ -53,3 +53,35 @@ null == '' false
      * 因此在函数内部修改参数，将会影响到原始值。
      */
 }
+
+
+
+{
+  // finally 不一定是最后执行，看 finally注册的顺序
+  // finally 的回掉函数 没有参数，返回值 也不会被下一个 注册的链式 接收
+  new Promise((resolve) => {
+    resolve(1)
+  }).finally((d)=>{
+    console.log(d, 'finally0')
+    return 'zasdasdasd'
+  }).then((d)=>{
+    console.log(d, 'then2')
+    return '???????????'
+  }).finally((d)=>{
+    console.log(d, 'finally1')
+    return 'zasdasdasd1111'
+  }).finally((d)=>{
+    console.log(d, 'finally2')
+    return 'zasdasdasd222'
+  }).then((d)=>{
+    console.log(d, 'thenssssssssss')
+  })
+
+  /**
+   * undefined "finally0"
+   * 1 "then2"
+   * undefined "finally1"
+   * undefined "finally2"
+   * ??????????? thenssssssssss
+   */
+}
