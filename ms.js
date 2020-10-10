@@ -85,3 +85,66 @@ null == '' false
    * ??????????? thenssssssssss
    */
 }
+
+
+/**
+ * promise thenable 对象情况
+ */
+{
+  var t = {
+    then(resolve,reject){
+        console.log('ttt')
+        reject('??')
+    }
+  }
+
+  // 执行 reject 方法
+  Promise.reject(t).then((d) => {
+      console.log(d, '1111')
+  }, (d) => {
+      console.log(d, '2222')
+  })
+  // t 222
+}
+{
+  var t = {
+    then(resolve,reject){
+        console.log('ttt')
+        reject('??')
+    }
+  }
+
+  // 执行 t里面的then 方法，并且进入 resolve
+  Promise.resolve(t).then((d) => {
+      console.log(d, '1111')
+  }, (d) => {
+      console.log(d, '2222')
+  })
+  // ttt
+  // ?? 222
+}
+
+
+
+/**
+ * promise.resolve || reject 返回 Promise的情况
+ */
+{
+  // 进入 reject
+  // Promise.resolve 直接把 里面的 promise 返回
+  Promise.resolve(Promise.reject('1')).then((d) => {
+    console.log(d, '1111')
+  }, (d) => {
+      console.log(d, '2222')
+  })
+  // 1, 2222
+}
+
+{
+  Promise.reject(Promise.resolve('1')).then((d) => {
+    console.log(d, '1111')
+  }, (d) => {
+      console.log(d, '2222')
+  })
+  // Promise { '1' } '2222'
+}
