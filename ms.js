@@ -148,3 +148,16 @@ null == '' false
   })
   // Promise { '1' } '2222'
 }
+
+
+// 解构 也会把 原型链上面的 属性给解构了  -> 类似与直接进行 取值
+// newObj 已经是一个新的对象了 ->  o 这个对象的原型还是 直接 create 指向的对象
+{
+  const o = Object.create({ x: 1, y: 2 });
+  o.z = 3;
+
+  let { x, ...newObj } = o;
+  let { y, z } = newObj;
+  console.log(x, y, z)
+  // 1 undefined 3
+}
