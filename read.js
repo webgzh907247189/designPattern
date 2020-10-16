@@ -2,6 +2,12 @@ Vue中filter能不能写异步代码，能不能获取$vm？
 2.foreach 能不能改变原来的数组?
 3.map如果不return会怎么样？
 
+
+https://zhuanlan.zhihu.com/p/78516581
+https://zhuanlan.zhihu.com/p/28532725
+
+
+
 二进制(配合视频zf)
 https://juejin.im/post/6864743228684369927?utm_source=gold_browser_extension
 文件下载
