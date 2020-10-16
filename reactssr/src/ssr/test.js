@@ -14,7 +14,7 @@ class SsrTest extends React.Component{
 
     render(){
         return <div style={ {color: 'red'} }>
-            <button onClick={this.handle}>增加</button>
+            <button onClick={this.handle} style={{ color: 'red'}}>增加</button>
             <button onClick={this.handleMinus}>异步减少</button>
             <div className={style.font}>{this.props.number}</div>
         </div>

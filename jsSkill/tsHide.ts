@@ -130,6 +130,13 @@ type ThreeStringProps = Record<'prop1' | 'prop2' | 'prop3', string>
 
 
 
+interface Part {
+  id: number
+  name: string
+  subparts: Part[]
+  updatePart(newName: string): void
+}
+
 // Pick
 type Pick<S, K extends keyof S> = {
   [I in K]: S[I]
@@ -243,8 +250,8 @@ get(data, 'a') // 3
 
 // keyof & typeof
 const colors = {
-  red: 'red',
-  blue: 'blue'
+  red: 'red1',
+  blue: 'blue1'
 }
 type Colors = keyof typeof colors
 
@@ -499,6 +506,9 @@ console.log(fun1([1]))
     return { name: "Wayou", age: 999 } as Person;
   }
   
+  type T0 = string | number | never 
+
+  
   type UnPromisify<T> = T extends (args: any) => Promise<infer R> ? R : never; 
 
   type extractStringPromise = UnPromisify<typeof stringPromise>; // string
@@ -517,6 +527,18 @@ type ArgsType1<T> = T extends (...args: infer A) => any ? A : never;
 type Fn = (a: number, b: string) => string;
 type Fn2Args = ArgsType<Fn>; // [number, string]
 type Fn2Args1 = ArgsType1<Fn>; // [number, string]
+
+{
+  const ss = (obj) => {
+    return Object.keys(obj).reduce((result, item) => {
+        const statusObj = obj;
+        result.push({ label: statusObj[item], value: item });
+        return result;
+    }, []);
+  };
+  ss({ 1: 'asdad', 4: 'zz' });
+  
+}
 
 
 const fn1: Fn = (a, b) => {

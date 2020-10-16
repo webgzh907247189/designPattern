@@ -263,3 +263,13 @@ ReactDOM.render(<ReduxHooksDemoContainer></ReduxHooksDemoContainer>, document.ge
 
 // // react里面，避免在componentDidMount() 写同步代码，因为会 重新render 一次
 // // 同步代码写在 constructor，不应该写在 componentWillMount()里面 ,会被废弃
+
+
+// useCallBack 生成的需要加入进依赖， useState生成的不需要加入依赖 ？？
+// useMemo 包装
+// 什么时候用useState ，useReducer
+
+// bonnieclyde
+// 577100351
+
+// 浏览器加载页面会把代码放到栈内存中执行，函数进栈执行会产生一个私有的上下文（EC），此上下文能保存里面的私有变量（也就是AO）不会被外界干扰，并且如果当前上下文中的某些内容，被上下文以外的内容所占用，当前上下文是不会出栈释放的，形成不销毁的执行上下文，这样可以保存和保护里面的变量和变量值，闭包是一种保存和保护内部私有变量的机制.

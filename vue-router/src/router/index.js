@@ -54,3 +54,64 @@ export default new Router1({
 		}
 	]
 })
+
+
+分层后进行分块然后提交给合成线程进行光栅化成为位图，然后drawquad传给浏览器进程绘制
+浏览器渲染流程： 构建Dom树 -> 计算css属性-> 构建布局树-> 分层 -> 光栅化 -> 绘制
+重排就是要重新计算css - > 构建布局树，重绘则不需要
+
+合适的进行分层
+documentFrame离线更新
+批量更新样式
+使用will-change生成独立的帧
+
+
+{
+	var s = {
+		name: '1',
+		children: [
+			{name: '2'},
+			{name: '22', children: [
+				{name: '33'},
+				{name: '44'},
+				{name: '55', children: [
+					{name: '66', children: [
+						{name: '77'},
+					]},
+					{name: 'tt'}
+				]}
+			]}
+		]
+	}
+
+	function getList(obj){
+		const name = obj.name;
+		const list = obj.children ? obj.children: [];
+		return getName(list, name)
+	}
+	function getName(list = [], name){
+		let result = []
+		for(let i=0; i<list.length; i++){
+			const item = list[i]
+			if(item.children){
+				const resultChildren = getName(item.children, `${name}/${item.name}`)
+				result = [...result, ...resultChildren]
+				continue
+			}
+			result.push(`${name}/${item.name}`)
+		}
+		return result;
+	}
+	console.log(getList(s))
+}
+
+{
+	var arr = [1,2,4,5,6]
+	function getRandom(arr){
+		return arr.sort((a,b) => {
+			return Math.random() - 0.5
+		})
+		
+	}
+	console.log(getRandom(arr))
+}
