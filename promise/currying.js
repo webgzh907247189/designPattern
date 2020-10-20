@@ -32,24 +32,69 @@
 	function curry (fn) {
 	  const args1 = Array.prototype.slice.call(arguments, 1)
 	  console.log(args1,'args1')    //[1] "args1"
+	  let arr = [...args1];
 	
-	  return function () {
-	    const args2 = Array.from(arguments)
+	  return function fn1() {
+		const args2 = Array.from(arguments)
 		console.log(args2,'args2')  // [2] "args2"
 	
-	    const arr = args1.concat(args2)
+	    arr = [...arr, ...args2]
 		console.log(arr,'arr')  //  [1, 2] "arr"
 
-	    return fn.apply(this, arr)
+		if(fn.length == arr.length){
+			return fn.apply(this, arr)
+		}
+
+		return fn1
 	  }
 	}
 
-	const sum = (a, b) => {
-	  return a + b
+	const sum = (a, b, c) => {
+	  return a + b + c
 	}
-	curry(sum, 1)(2)   // 3
+	console.log(curry(sum, 1)(2)(3))   // 3
 }
 
+{
+	function testCurry(...res){
+		console.log(res, 'start')
+		return testCurry.bind(null, ...res)
+	}
+
+	const t1 = testCurry('0000')
+	const t2 = t1.bind(null, '111');
+	const t3 = t2.bind(null, '2222')
+	const t4 = t3.bind(null, '3333')
+	const t5 = t4.bind(null, '4444')
+	const t6 = t5.bind(null, '5555')
+	const t7 = t6.bind(null, '6666')
+	// ["0000"] "start
+
+	console.log(t7())
+	// ["0000", "111", "2222", "3333", "4444", "5555", "6666"] "start"
+}
+
+{
+	function curry(targetfn) {
+		var numOfArgs = targetfn.length;
+		return function fn(...rest) {
+		  if (rest.length < numOfArgs) {
+			return fn.bind(null, ...rest);
+		  } else {
+			return targetfn.apply(null, rest);
+		  }
+		};
+	}
+	
+	// 加法函数
+	function add(a, b, c, d) {
+		return a + b + c + d;
+	}
+
+	// 将一个多参数函数转化为多个嵌套的单参数函数
+	console.log("柯里化：", curry(add)(1)(2)(3)(4));
+	// 柯里化：10
+}
 
 {
 	function curry (fn) {
