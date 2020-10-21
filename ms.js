@@ -172,3 +172,35 @@ null == '' false
     2.?? 运算符的优先级非常低，仅略高于 ? 和 =，因此在表达式中使用它时请考虑添加括号。
     3. 如果没有明确添加括号，不能将其与 || 或 && 一起使用。
 }
+
+
+/**
+ * 任何一个await语句后面的 Promise 对象变为reject状态，那么整个async函数都会中断执行
+ * 第二个await语句是不会执行的，因为第一个await语句状态变成了reject。
+ * 
+ * 规避 可以使用  try-catch处理 或者 promise.catch 处理
+ */
+{
+  async function asyncTest() {
+    await Promise.reject('出错了');
+    await Promise.resolve('hello world'); // 不会执行
+  }
+
+  asyncTest()
+}
+
+/**
+ * await命令后面是一个 Promise 对象，返回该对象的结果。如果不是 Promise 对象，就直接返回对应的值。
+ */
+{
+  function testAwait(){
+    return Promise.resolve({url: '123123'})
+  }   
+
+  async function show() {
+    const imageSrc = (await testAwait()).url
+    console.log(imageSrc)
+    return imageSrc
+  }
+  show() 
+}
