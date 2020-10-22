@@ -214,4 +214,13 @@ null == '' false
   // WeakSet 没有遍历方法，因为其成员都是弱引用，弱引用随时都会消失，遍历机制无法保证成员的存在
   // WeakSet集合中对象的引用为弱引用。如果没有其他的对WeakSet中对象的引用，那么这些对象会被当成垃圾回收掉。 
   //这也意味着WeakSet中没有存储当前对象的列表。正因为这样，WeakSet 是不可枚举的
+  {
+    // 对应的 item & item 可能被删除的情况
+    function getOnlyKey(item) {
+      if (!uidMap.has(item)) {
+          uidMap.set(item, uidKey++);
+      }
+      return uidMap.get(item);
+    }
+  }
 }
