@@ -1,0 +1,18 @@
+{
+  "name": "mysinglespa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "rollup -c -w"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "rollup": "^2.34.1",
+    "rollup-plugin-server": "^0.7.0"
+  },
+  "dependencies": {
+    "qiankun": "^2.3.2"
+  }
+}
