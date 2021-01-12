@@ -12,6 +12,9 @@
     </div>
 </body>
 <script>
+    // vue2.x源码中，事件绑定的一个值得学习的小操作
+    // https://juejin.cn/post/6844904162803580942
+
     const app = new Vue({
         template: '<button @click="btnClick1();btnClick2()">1111</button>',
         data(){
@@ -28,7 +31,6 @@
             }
         }
     })
-    console.log(app)
     app.$mount('#root')
 </script>
 </html>
