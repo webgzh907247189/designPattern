@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0, user-scalable=no">
+	<title>vuedemo</title>
+</head>
+<script src="node_modules/vue/dist/vue.js"></script>
+<body>
+    <div id="root">
+    </div>
+</body>
+<script>
+    const app = new Vue({
+        template: '<button @click="btnClick1();btnClick2()">1111</button>',
+        data(){
+            return {
+                name: '111'
+            }
+        },
+        methods: {
+            btnClick1(){
+                console.log('111?????')
+            },
+            btnClick2(){
+                console.log('222?????')
+            }
+        }
+    })
+    console.log(app)
+    app.$mount('#root')
+</script>
+</html>
