@@ -3,7 +3,7 @@
     11112 name -> {{name}}
     <Suspense>
       <template #default>
-        <Children :name="name" @setName="setName"/>
+        <Children :name="name" @setName="setName" ref="childrenRef"/>
       </template>
       <template #fallback>
         loading...
@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 import { useStore, Store } from 'vuex';
 import { GlobalState } from '../../store';
 import Children from './children.vue';
@@ -27,6 +27,10 @@ function useName(store: Store<GlobalState>){
   function setName(newName: string){
     store.commit(`home/${SET_NAME}`, newName);
   }
+
+  onMounted(() => {
+    console.log('onMounted')
+  })
   return {name, setName};
 }
 
@@ -39,6 +43,10 @@ export default defineComponent({
     let store = useStore<GlobalState>();
 
     let {name, setName} = useName(store);
+
+    const childrenRef = ref<null | HTMLElement>(null)
+    // childrenRef.value = ''
+    console.log(childrenRef.value)
 
     return {
       name,

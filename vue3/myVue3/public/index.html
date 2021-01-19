@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  </head>
+  <body>
+    <noscript>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+    <!-- <script src="/dist/vue.js"></script> -->
+
+    <!-- <script src="/node_modules/@vue/reactivity/dist/reactivity.global.js"></script> -->
+    <script src="/node_modules/vue/dist/vue.runtime.global.js"></script>
+    <script>
+      let { createApp, reactive, h } = Vue
+      let App = {
+        setup(){
+          const state = reactive({name: 'test', age: '20', eat: '???', test: { name: 'test' }, list: ['1']})
+          return () => h('div', {style: {color: 'red'}}, state.name + state.eat)
+        },
+      }
+      createApp(App).mount('#app')
+
+      // runtime-core 核心 不考虑平台
+      // runtime-dom 针对浏览器平台
+    </script>
+    <!-- <script>
+      const { reactive, effect } = VueReactivity;
+      const state = reactive({name: 'test', age: '20', eat: '???', test: { name: 'test' }, list: ['1']})
+      effect(() => {
+        app.innerHTML = ++state.age
+      })
+    </script> -->
+
+    <script>
+      // const { reactive, effect } = VueReactivity;
+      // const state = reactive({name: 'test', age: '20', eat: '???', test: { name: 'test' }, list: ['1']})
+      // const state = reactive(['1', '2', '3'])
+      // console.log(state, state.test)
+
+      // effect 的依赖发生变化， 自动帮你执行
+      // watch 依赖 effect
+      // effect(() => {
+      //   console.log('effect')
+      //   // app.innerHTML = state.name + state.age
+      // })
+      // setTimeout(() => {
+      //   state.eat = 'zzz'
+      // }, 2000)
+
+      // effect(() => {
+      //   app.innerHTML = state.length
+      // })
+      // setTimeout(() => {
+      //   state[10] = 10
+      // }, 2000)
+
+      
+
+      // setTimeout(() => {
+      //   state.name = '???';
+      //   // state[2] = 'eat'
+      // }, 1000)
+      // setTimeout(() => {
+      //   state.eat = 'eat';
+      //   // state[0] = 'eat'
+      // }, 2000)
+    </script>
+  </body>
+</html>
