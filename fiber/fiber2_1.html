@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<div>
+	</div>
+</body>
+<script>
+	// 这是宏任务
+	const channel = new MessageChannel()
+	const port1 = channel.port1
+	const port2 = channel.port2
+
+	port1.onmessage = function(e){
+		console.log('监听到port2的消息', e.data)
+	}
+	port2.onmessage = function(e){
+		console.log('监听到port1的消息', e.data)
+	}
+
+	port1.postMessage('port1传递给port2')
+	port2.postMessage('port2传递给port1')
+</script>
+</html>

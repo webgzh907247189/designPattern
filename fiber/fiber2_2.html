@@ -17,6 +17,40 @@
 		}
 	}
 
+	let activeFrameTime = 1000 / 60; 
+	let frameDeadline; // 这一帧的截止时间 
+	let pendingCallback;
+	// 剩余时间
+	let timeRemaining = () => frameDeadline - performance.now();
+
+
+	let channel = new MessageChannel();
+	channel.port2.onmessage = (e) => {
+		let currentTime = performance.now()
+		let didTimeout = frameDeadline <= currentTime;
+
+		if(didTimeout || timeRemaining() > 0){
+			if(pendingCallback){
+				pendingCallback({didTimeout, timeRemaining})
+			}
+		}
+	}
+
+	// 模拟实现 requestIdleCallback
+	window.requestIdleCallback = (cb, options) => {
+		requestAnimationFrame((rafTime)=> {
+			console.log('rafTime', rafTime)
+
+			// 这一帧的截止时间 = rafTime(每一帧开始的时间) + activeFrameTime(每一帧时间)
+			frameDeadline = rafTime + activeFrameTime;
+
+			pendingCallback = cb;
+
+			// 发完消息，相当于添加一个宏任务
+			channel.port1.postMessage('port1')
+		})
+	}
+
 	const workers = [
 		() => {
 			console.log('第1个任务开始')

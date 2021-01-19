@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<div id="root">
+	</div>
+</body>
+<script>
+	const element = {
+		type: 'div', 
+		props: {
+			key: 'A1',
+			children: [
+				{ type: 'div', props: {key: 'B1', children: [{ type: 'div', props:{key: 'C1'}},{ type: 'div', props:{key: 'C2'} }]} },
+				{ type: 'div', props: {key: 'B2'} }
+			]
+		},
+		
+	}
+	// fiber 解决了执行栈不能中断的问题
+	
+	// 每个fiber节点有三个指针
+	// children 指向第一个子节点 return 指向他的父节点  sibling 指向他的弟弟
+
+	// 每次渲染有两个阶段 协调(reconciler)和提交(commit)
+	// commit 不能被打断
+
+	const container = document.getElementById('root')
+	let workInProcessRoot = {
+		stateNode: container,
+		key: 'root',
+		props: {
+			children: [element],
+		}
+	}
+	let nextUnitOfWork = workInProcessRoot;
+
+
+	const PLACEMENT = 'PLACEMENT';
+
+	function workLoop(){
+		// debugger
+		while(nextUnitOfWork){ // 如果有执行单元待执行，就执行 然后返回下一个  ->  待执行待单元
+			nextUnitOfWork = performUnitOfWork(nextUnitOfWork)
+		}
+
+		// 进入 commit 阶段
+		if(!nextUnitOfWork){
+			console.log('render 阶段结束了')
+			commitRoot()
+		}
+	}
+
+	function commitRoot(){
+		let currentFiber = workInProcessRoot.firstEffect;
+
+		while(currentFiber){
+			// 插入
+			if(currentFiber.effectTag === PLACEMENT){
+				currentFiber.return.stateNode.appendChild(currentFiber.stateNode)
+			}
+
+			currentFiber = currentFiber.nextEffect
+		}
+		// 清空
+		workInProcessRoot = null;
+	}
+
+	function performUnitOfWork(fiber){
+		// 处理此fiber -> 单元 fiber
+		beiginWork(fiber)
+
+		// 处理 fiber.child
+		if(fiber.child){
+			return fiber.child
+		}
+
+		// fiber.child 完成了 child， 找他的弟弟
+		while(fiber){
+			complateUnitOfWork(fiber)
+			if(fiber.slibling){
+				return fiber.slibling
+			}
+
+			fiber = fiber.return
+		}
+	}
+
+	// 创建 真实 dom，不会进行挂载，创建 fiber 子树，
+	function beiginWork(fiber){
+		console.log('开始' + fiber.props.key)
+		if(!fiber.stateNode){
+			fiber.stateNode = document.createElement(fiber.type)
+			for(let key in fiber.props){
+				if(key !== 'children'){
+					fiber.stateNode[key] = fiber.props[key];
+				}
+			}
+		}
+
+		// 创建 子 fiber
+		let previousFiber
+		(fiber.props?.['children'] ?? []).forEach((child, index) => {
+			let childFiber = {
+				type: child.type,
+				props: child.props,
+				return: fiber,
+				effectTag: PLACEMENT, // 这个 fiber 需要被查到到 dom
+				nextEffect: null, // 下一个有副作用到节点
+			}
+
+			if(index === 0){
+				fiber.child = childFiber
+			}else {
+				previousFiber.slibling = childFiber
+			}
+			previousFiber = childFiber
+		});
+	}
+
+	// 构建 父 作用域 链(effectList)， 副作用(需要进行 dom 操作，更新 插入 删除)
+	// fiber 不是每次更新，所有节点都参与，只是有副作用的节点 参与更新
+	// firstEffect 指向第一个有副作用的节点  nextEffect 下一个有副作用的节点 lastEffect 最后一个有副作用的节点
+	function complateUnitOfWork(fiber){
+		console.log('结束' + fiber.props.key)
+
+		// 下面操作 构建 父作用域链
+		let returnFiber = fiber.return;
+
+		// 归并操作
+		if(returnFiber){
+			// 向 父亲 身上 归并 类似 班级收班费(分层级)
+			if(!returnFiber.firstEffect){
+				returnFiber.firstEffect = fiber.firstEffect;
+			}
+
+			if(fiber.lastEffect){
+				if(returnFiber.lastEffect){
+					returnFiber.lastEffect.nextEffect = fiber.firstEffect
+				}
+				returnFiber.lastEffect = fiber.lastEffect
+			}
+			// 自己挂载到后面
+			if(fiber.effectTag){
+				if(returnFiber.lastEffect){
+					returnFiber.lastEffect.nextEffect = fiber;
+				}else{
+					returnFiber.firstEffect = fiber
+				}
+				returnFiber.lastEffect = fiber
+			}
+		}
+
+	}
+
+	workLoop()
+
+	// 开始A1
+	// 开始B1
+	// 开始C1
+	// 结束C1
+	// 开始C2
+	// 结束C2
+	// 结束B1
+	// 开始B2
+	// 结束B2
+	// 结束A1
+	// render 阶段结束了
+</script>
+</html>

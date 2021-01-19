@@ -26,3 +26,13 @@ function myNonEssentialWork(deadline){ // 解构赋值 报错
  * 这个时候，requestIdleCallback的表现就与setTimeout的表现一致了。
  * 
  */
+
+
+ /**
+  * reconcile 阶段 可以被打断
+  * commit 阶段 不能被打断
+  * 
+  * fiber 树 遍历规则 (深度优先遍历) fiber 是一个普通的 js 对象
+  * 1. 先儿子 在弟弟  后叔叔
+  * 2. 自己所有子节点完成算自己完成
+  */
