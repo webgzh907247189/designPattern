@@ -47,51 +47,51 @@ const code = `[1, 2, 3, 4, [5, 6, [7, 8]]].flat(Infinity);`;
 // 只编译语法，不编译 api
 // 注意 使用 和 不使用 @babel/plugin-transform-runtime 结果差异很大
 // 使用 helpers 是通过 require 引入的，这样就不会存在代码重复的问题了。 (重复的被抽离出去了，通过require 引入)
-// {
-//   const code = `() => {console.log('11')};class A{}`;
-//   const ast1 = babel.transform(code, {
-//     presets: [
-//       [
-//         '@babel/preset-env',
-//         {
-//           useBuiltIns: 'usage',
-//           corejs: 3
-//         }
-//       ]
-//     ],
-//     plugins: [
-//       ["@babel/plugin-transform-runtime"]
-//     ]
-//   });
-//   console.log(ast1.code)
+{
+  const code = `() => {console.log('11')};class A{}`;
+  const ast1 = babel.transform(code, {
+    presets: [
+      [
+        '@babel/preset-env',
+        {
+          useBuiltIns: 'usage',
+          corejs: 3
+        }
+      ]
+    ],
+    plugins: [
+      ["@babel/plugin-transform-runtime"]
+    ]
+  });
+  console.log(ast1.code)
   
-//   // "use strict";
-//   // (function () {
-//   //   console.log('11');
-//   // });
-// }
+  // "use strict";
+  // (function () {
+  //   console.log('11');
+  // });
+}
 
 
 
-// {
-//   const ast1 = babel.transform(code, {
-//     presets: [
-//       [
-//         '@babel/preset-env',
-//         {
-//           useBuiltIns: 'usage',
-//           corejs: 2
-//         }
-//       ]
-//     ]
-//   });
+{
+  const ast1 = babel.transform(code, {
+    presets: [
+      [
+        '@babel/preset-env',
+        {
+          useBuiltIns: 'usage',
+          corejs: 2
+        }
+      ]
+    ]
+  });
 
-//   // 用core-js@2 来看看转码后的结果
-//   console.log(ast1.code);
+  // 用core-js@2 来看看转码后的结果
+  console.log(ast1.code);
 
-//   // "use strict";
-//   // [1, 2, 3, 4, [5, 6, [7, 8]]].flat(Infinity);
-// }
+  // "use strict";
+  // [1, 2, 3, 4, [5, 6, [7, 8]]].flat(Infinity);
+}
 
 
 
@@ -118,64 +118,58 @@ const code = `[1, 2, 3, 4, [5, 6, [7, 8]]].flat(Infinity);`;
 
 
 
-// {
-//   const ast3 = babel.transform(code, {
-//     presets: [
-//       [
-//         '@babel/preset-env',
-//         {
-//           useBuiltIns: 'entry',
-//           corejs: 2
-//         }
-//       ]
-//     ]
-//   });
-//   console.log(ast3.code)
-//   // "use strict";
-//   // [1, 2, 3, 4, [5, 6, [7, 8]]].flat(Infinity);
-// }
+{
+  const ast3 = babel.transform(code, {
+    presets: [
+      [
+        '@babel/preset-env',
+        {
+          useBuiltIns: 'entry',
+          corejs: 2
+        }
+      ]
+    ]
+  });
+  console.log(ast3.code)
+  // "use strict";
+  // [1, 2, 3, 4, [5, 6, [7, 8]]].flat(Infinity);
+}
 
 
-// {
-//   const code = 'require("@babel/polyfill");new Promise((r,j) => {r(1)})';
-//   const ast4 = babel.transform(code, {
-//       presets: [
-//         [
-//           '@babel/preset-env',
-//           {
-//             targets: {
-//               ie: 9,
-//             },
-//             useBuiltIns: 'entry',
-//             corejs: 2
-//           }
-//         ]
-//       ]
-//   });
-//   console.log(ast4.code)
-//   // "use strict";
-//   // 加载很多 polyfill
-//   // [1, 2, 3, 4, [5, 6, [7, 8]]].flat(Infinity);
-// }
+{
+  const code = 'require("@babel/polyfill");new Promise((r,j) => {r(1)})';
+  const ast4 = babel.transform(code, {
+      presets: [
+        [
+          '@babel/preset-env',
+          {
+            targets: {
+              ie: 9,
+            },
+            useBuiltIns: 'entry',
+            corejs: 2
+          }
+        ]
+      ]
+  });
+  console.log(ast4.code)
+  // "use strict";
+  // 加载很多 polyfill
+  // [1, 2, 3, 4, [5, 6, [7, 8]]].flat(Infinity);
+}
 
 
 
-// {
-//   const arrays = [[10], 50, [100, [2000, 3000, [40000]]]];
+{
+  const arrays = [[10], 50, [100, [2000, 3000, [40000]]]];
 
-//   function getList(list){
-//       return list.reduce((result, item) => {
-//           const i = Array.isArray(item) ? getList(item) : item
-//           result = result.concat(i)
-//           return result
-//       }, [])
-//   }
-//   console.log(getList(arrays))
-//   // [ 10, 50, 100, 2000, 3000, 40000 ]
-// }
-
-
-// 优化
-// 1. 抽离公共helper 函数 babel/plugin-transform-runtime
-// 2. 浏览器的兼容 默认值？？？env？？
-// 3.core-js/stable 进来了吗。 regenerator-runtime/runtime？
+  function getList(list){
+      return list.reduce((result, item) => {
+          const i = Array.isArray(item) ? getList(item) : item
+          result = result.concat(i)
+          return result
+      }, [])
+  }
+  console.log(getList(arrays))
+  // [ 10, 50, 100, 2000, 3000, 40000 ]
+}
