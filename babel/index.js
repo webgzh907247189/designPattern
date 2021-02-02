@@ -3,6 +3,12 @@
 // https://github.com/sorrycc/blog/issues/80
 
 /**
+ * 插件比预设先执行
+ * 插件执行顺序是插件数组从前向后执行
+ * 预设执行顺序是预设数组从后向前执行
+ */
+
+/**
  * 需要指定执行环境 Browserslist， Browserslist 的配置有几种方式，并按下面的优先级使用：
  * 1. @babel/preset-env 里的 targets
  * 2. package.json 里的 browserslist 字段
@@ -14,7 +20,6 @@
  * core-js 提供了两种补丁方式。
  * 1. core-js/library，通过 helper 方法的方式提供
  * 2. core-js/module，通过覆盖全局变量的方式提供
-
  */
 
 
