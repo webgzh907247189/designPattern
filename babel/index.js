@@ -100,8 +100,12 @@ const code = `[1, 2, 3, 4, [5, 6, [7, 8]]].flat(Infinity);`;
 
 
 
+/**
+ * 当使用 useBuiltIns: 'usage' 再次引入 'require("@babel/polyfill");' 会 warn
+ * 当使用 useBuiltIns: 'usage' 再次引入 "import 'core-js/stable';import 'regenerator-runtime/runtime';"  多引入 "require('core-js/stable');require('regenerator-runtime/runtime');" 
+ */
 {
-  const ast2 = babel.transform('require("@babel/polyfill");' + code, {
+  const ast2 = babel.transform(code, {
     presets: [
       [
         '@babel/preset-env',
@@ -141,9 +145,34 @@ const code = `[1, 2, 3, 4, [5, 6, [7, 8]]].flat(Infinity);`;
 }
 
 
+/**
+ * 当使用 corejs 2 & useBuiltIns: 'entry' 再次引入 'require("@babel/polyfill");' 会 加载很多 polyfill
+ * 
+ */
 {
-  const code = 'require("@babel/polyfill");new Promise((r,j) => {r(1)})';
-  const ast4 = babel.transform(code, {
+  const ast3 = babel.transform('require("@babel/polyfill");' + code, {
+    presets: [
+      [
+        '@babel/preset-env',
+        {
+          useBuiltIns: 'entry',
+          corejs: 2
+        }
+      ]
+    ]
+  });
+  console.log(ast3.code)
+  // "use strict";
+  //  加载很多 polyfill
+  // [1, 2, 3, 4, [5, 6, [7, 8]]].flat(Infinity);
+}
+
+
+
+
+
+{
+  const ast4 = babel.transform('require("@babel/polyfill");' + code, {
       presets: [
         [
           '@babel/preset-env',
@@ -153,6 +182,28 @@ const code = `[1, 2, 3, 4, [5, 6, [7, 8]]].flat(Infinity);`;
             },
             useBuiltIns: 'entry',
             corejs: 2
+          }
+        ]
+      ]
+  });
+  console.log(ast4.code)
+  // "use strict";
+  // 加载很多 polyfill
+  // [1, 2, 3, 4, [5, 6, [7, 8]]].flat(Infinity);
+}
+
+
+{
+  const ast4 = babel.transform('import "core-js/stable";import "regenerator-runtime/runtime";' + code, {
+      presets: [
+        [
+          '@babel/preset-env',
+          {
+            targets: {
+              ie: 9,
+            },
+            useBuiltIns: 'entry',
+            corejs: 3
           }
         ]
       ]
