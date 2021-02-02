@@ -101,11 +101,13 @@ const code = `[1, 2, 3, 4, [5, 6, [7, 8]]].flat(Infinity);`;
 
 
 /**
- * 当使用 useBuiltIns: 'usage' 再次引入 'require("@babel/polyfill");' 会 warn
- * 当使用 useBuiltIns: 'usage' 再次引入 "import 'core-js/stable';import 'regenerator-runtime/runtime';"  多引入 "require('core-js/stable');require('regenerator-runtime/runtime');" 
+ * 当使用 corejs 3 || 2 & useBuiltIns: 'usage' 再次引入 'require("@babel/polyfill");' 会 warn
+ * 
+ * 当使用 corejs 3 & useBuiltIns: 'usage' 再次引入 "import 'core-js/stable';import 'regenerator-runtime/runtime';"  多引入 "require('core-js/stable');require('regenerator-runtime/runtime');" 
+ * 当使用 corejs 2 & useBuiltIns: 'usage' 再次引入 "import 'core-js/stable';import 'regenerator-runtime/runtime';"  引入 "require('core-js/stable');require('regenerator-runtime/runtime');" 
  */
 {
-  const ast2 = babel.transform(code, {
+  const ast2 = babel.transform("import 'core-js/stable';import 'regenerator-runtime/runtime';" + code, {
     presets: [
       [
         '@babel/preset-env',
@@ -147,7 +149,7 @@ const code = `[1, 2, 3, 4, [5, 6, [7, 8]]].flat(Infinity);`;
 
 /**
  * 当使用 corejs 2 & useBuiltIns: 'entry' 再次引入 'require("@babel/polyfill");' 会 加载很多 polyfill
- * 
+ * 当使用 corejs 3 & useBuiltIns: 'entry' 再次引入 'require("@babel/polyfill");' 会 warn 
  */
 {
   const ast3 = babel.transform('require("@babel/polyfill");' + code, {
