@@ -36,7 +36,29 @@ emitter.emit('test', 'ffff')
 
        // 订阅
        listener: function (key,fn) {
-           this.list[key] = [...(this.list[key] || []),fn]
+           // 注意此处的写法，会影响发布订阅的循环订阅问题
+
+           /**
+            * nextTick 的 flushCallback 每次执行 都进行拷贝一次，是有含义的
+            * 
+            * this.list[key] = [...(this.list[key] || []),fn]
+            * 编译之后相当于 concat
+            * 
+            * const listFns = this.list[key] || [];this.list[key] = listFns.concat(fn);
+            * 此时因为在 fn2 函数里面开始 执行 obj.listener('drink'， xx) 此时  let listFns = this.list[key] 已经确定了，指向引用地址 bbb
+            * 由于进行 concat 操作，导致 新的订阅函数(obj.listener('drink'， xx)) 被推入 listFns 函数，指向一块新的引用地址ccc，但是循环里面用的还 是上次的引用地址，所以没有出现循环引用的问题 
+            * 
+            * 
+            * this._events[eventName] ? this._events[eventName].push(callback) : this._events[eventName] = [callback];
+            * 此时因为在 fn2 函数里面开始 执行 obj.listener('drink'， xx) 此时  let listFns = this.list[key] 已经确定了，指向引用地址 bbb
+            * 由于进行push，导致 引用地址 bbb 被添加一个新的函数(obj.listener('drink'， xx)), 所以会出现循环引用的问题
+            */
+
+            // 写法1 -> 不太出现循环引用问题
+            // this.list[key] = [...(this.list[key] || []),fn]
+
+            // 写法2 -> 可能会出现循环引可能用问题
+            this.list[key] ? this.list[key].push(fn) : this.list[key] = [fn];
        },
 
        //发布
@@ -50,10 +72,14 @@ emitter.emit('test', 'ffff')
            // 防止在一个事件监听器中监听同一个事件，接而导致死循环
            // 同一个事件监听同一个事件，造成这个数组对应的key的数组
            // 每执行一次，数组增加一次，所以数组会持续的增加
-           let resultList = this.arrayClone(listFns,listFns.length)
-           for(let itemFn of resultList){
-               itemFn.apply(this,args)
-           }
+        //    let resultList = this.arrayClone(listFns,listFns.length)
+        //    for(let itemFn of listFns){
+        //        itemFn.apply(this,args)
+        //    }
+
+           for (var i = 0; i < listFns.length; ++i){
+                Reflect.apply(listFns[i], this, args);
+            }
        },
 
        arrayClone(arr, i) {
