@@ -15,6 +15,9 @@
     "@babel/plugin-transform-runtime": "^7.12.10",
     "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.12.11",
-    "babel-cli": "^6.26.0"
-  }
+    "babel-cli": "^6.26.0",
+    "dayjs": "^1.8.20",
+    "dayjs-plugin-utc": "^0.1.2"
+  },
+  "dependencies": {}
 }
