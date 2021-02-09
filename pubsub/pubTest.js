@@ -27,6 +27,9 @@ emitter.emit('test', 'ffff')
 
 
 /**
+ * https://cnodejs.org/topic/571e0c445a26c4a841ecbcf1
+ * 通过源码解析 Node.js 中 events 模块里的优化小细节
+ * 
  * 同一个事件订阅同一个事件
  * arrayClone 貌似要不要都可以
  */
