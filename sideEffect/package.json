@@ -7,8 +7,8 @@
   "scripts": {
     "postinstall": "patch-package && node ./patch/qs.package.js",
     "dev": "webpack --color --config webpack.config.js",
-    "webpack4prod": "lerna --scope webpack4 run prod",
     "webpack5prod": "lerna --scope webpack5 run prod",
+    "webpack4prod": "lerna --scope webpack4 run prod",
     "uglifyProd": "webpack --color --config webpack.uglify.prod.config.js",
     "testQs": "node ./src/nodeTest/index.js"
   },
