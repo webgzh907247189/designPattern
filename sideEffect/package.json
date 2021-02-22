@@ -4,11 +4,14 @@
   "description": "",
   "private": true,
   "main": "webpack.config.js",
+  "workspaces": [
+    "webpackTest/*"
+  ],
   "scripts": {
     "postinstall": "patch-package && node ./patch/qs.package.js",
     "dev": "webpack --color --config webpack.config.js",
-    "webpack5prod": "lerna --scope webpack5 run prod",
-    "webpack4prod": "lerna --scope webpack4 run prod",
+    "webpack5prod": "lerna --scope @webpackTest/webpack5 run prod",
+    "webpack4prod": "lerna --scope @webpackTest/webpack4 run prod",
     "uglifyProd": "webpack --color --config webpack.uglify.prod.config.js",
     "testQs": "node ./src/nodeTest/index.js"
   },
@@ -22,7 +25,6 @@
     "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "^3.0.0",
     "core-js": "^3.8.3",
-    "html-webpack-plugin": "^5.0.0",
     "is-promise": "^4.0.0",
     "patch-package": "^6.2.2",
     "qs": "^6.9.6",

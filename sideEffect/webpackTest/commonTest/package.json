@@ -1,11 +1,11 @@
 {
-  "name": "commontest",
+  "name": "@webpackTest/commontest",
   "version": "1.0.0",
   "description": "> TODO: description",
   "author": "gzh <18255106634@163.com>",
   "homepage": "https://github.com/webgzh907247189/designPattern#readme",
   "license": "ISC",
-  "main": "lib/commonTest.js",
+  "main": "src/index.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -22,5 +22,7 @@
   },
   "bugs": {
     "url": "https://github.com/webgzh907247189/designPattern/issues"
+  },
+  "devDependencies": {
   }
 }

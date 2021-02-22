@@ -1,7 +1,9 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const {CleanWebpackPlugin} = require('clean-webpack-plugin')
+const {strTest} = require('@webpackTest/commontest')
 
+console.log(strTest) // commonTest
 module.exports = {
     mode: 'production',
     entry: '../../src/index.js',

@@ -2,5 +2,7 @@
   "packages": [
     "webpackTest/*"
   ],
-  "version": "independent"
+  "version": "independent",
+  "npmClient": "npm",
+  "useWorkspaces": true
 }

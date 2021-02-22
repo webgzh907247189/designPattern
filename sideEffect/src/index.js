@@ -81,8 +81,10 @@ root.innerHTML = a();
   * 
   * 
   * 在项目最顶层启动各个子项目
-  * "webpack4prod": "lerna --scope webpack4 run prod"
-  * "webpack5prod": "lerna --scope webpack5 run prod"
+  * "webpack4prod": "lerna --scope @webpackTest/webpack4 run prod"
+  * "webpack5prod": "lerna --scope @webpackTest/webpack5 run prod"
   * 
   * 
+  * 添加子项目的依赖
+  * lerna add @webpackTest/commontest --scope @webpackTest/webpack5
   */

@@ -1,1 +1,1 @@
-export const str = 'commonTest'
+module.exports.strTest = 'commonTest'
