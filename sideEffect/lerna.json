@@ -1,0 +1,6 @@
+{
+  "packages": [
+    "webpackTest/*"
+  ],
+  "version": "independent"
+}
