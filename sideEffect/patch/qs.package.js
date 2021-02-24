@@ -7,6 +7,10 @@ const readFile = fs.readFileSync(qsPackageJsonPath, 'utf-8')
 // "import": "./esm/index.js",
 // "require": "./lib/index.js",
 
+
+// https://es6.ruanyifeng.com/#docs/module-loader
+// 注意，如果同时还有其他别名，就不能采用简写，否则或报错。(类似下面的混合写法，暂时不支持)
+
 const josn = {...JSON.parse(readFile), "exports": {
     // ".": "./esm/index.js",
     // "default": "./lib/index.js",
