@@ -46,3 +46,36 @@
  * CommonJS 的require()命令不能加载 ES6 模块，会报错，只能使用import()这个方法加载。
  * require()不支持 ES6 模块的一个原因是，它是同步加载，而 ES6 模块内部可以使用顶层await命令，导致无法被同步加载
  */
+
+
+
+
+
+
+ /**
+  * 定时器指定的时间间隔，表示的是何时将定时器的代码添加到消息队列，而不是何时执行代码。所以真正何时执行代码的时间是不能保证的，取决于何时被主线程的事件循环取到，并执行。
+  * 
+  * 每个 setTimeout 产生的任务会直接 push 到任务队列中；
+  * setInterval 在每次把任务 push 到任务队列前，都要进行一下判断(看上次的任务是否仍在队列中，如果有则不添加，没有则添加)。
+  * 
+  * setInterval 有两个缺点：
+  * 1. 使用 setInterval 时，某些间隔会被跳过；(队列还有同样的任务，没有 push 进来)
+  * 2. 可能多个定时器会连续执行；(push之后，一直没有执行。最后并发执行)
+  */
+
+// let timer
+// function interval(fn,wait){
+//     const warpFn = function(){
+//         fn.call(null)
+//         timer = setTimeout(warpFn, wait)
+//     }
+
+//     timer = setTimeout(warpFn, wait)
+// }
+
+// interval(() => {
+//     console.log('test')
+// }, 1000)
+
+
+// clearTimeout(timer)
