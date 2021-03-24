@@ -1,4 +1,6 @@
+import Dep from './dep';
 import Observe from './observe'
+import Watcher from './watcher';
 
 export function initState(vm){
     let opt = vm.$options;
@@ -8,11 +10,11 @@ export function initState(vm){
     }
 
     if(opt.computed){
-        initComputed()
+        initComputed(vm)
     }
 
     if(opt.watch){
-        initWatch()
+        initWatch(vm)
     }
 }
 
@@ -21,6 +23,11 @@ export function observe(date){
         return
     }
 
+    // console.log(date, '?????')
+    // 已经被观测过了
+    if(date.__ob__){
+        return date.__ob__
+    }
     return new Observe(date)
 }
 
@@ -44,13 +51,61 @@ function initDate(vm){
     for(let key in data){
         proxy(vm,'_data',key)
     }
+    // debugger
     observe(vm._data)
 }
 
-function initComputed(){
+// 计算属性默认不执行，等用户取值才会执行，会缓存取过的值
+// 依赖的值 发生了变化，会更新 dirty 属性，再次取值时，可以重新取值
 
+// watch 不能放在模板 ({{}}) 里面
+function initComputed(vm){
+    let computed = vm.$options.computed
+    let watchers = vm._watchersComputed =Object.create(null)
+    for(let key in computed){
+        const useDef = computed[key]
+        // lazy => true 表示计算属性 ，不会立即执行
+        watchers[key] = new Watcher(vm,useDef,() => {}, { lazy: true })
+        Object.defineProperty(vm,key,{
+            // 用户取值用到这个方法
+            get: createComputedGetter(vm,key)
+        })
+    }
 }
 
-function initWatch(){
+function initWatch(vm){
+    let watch = vm.$options.watch
+    for(let key in watch){
+        let userDef = watch[key]
+        
+        let handler = userDef;
+        if(userDef.handler){
+            handler = userDef.handler
+        }
+        createWatcher(vm,key,handler, { immediate: userDef.immediate })
+    }
+}
 
+function createWatcher(vm,key,handler, opts){
+    return vm.$watch(key, handler, opts)
+}
+
+function createComputedGetter(vm,key){
+    let watcher = vm._watchersComputed[key]
+    // 用户取值调用下面的函数
+    return function(){
+        if(watcher){
+            // dirty false 不需要重新计算val，返回上次
+            if(watcher.dirty){
+                watcher.evaluate()
+            }
+            // debugger
+            console.log(Dep.target, 'Dep.target')
+            // 计算属性 watcher
+            if(Dep.target){
+                watcher.depend()
+            }
+            return watcher.value;
+        }
+    }
 }

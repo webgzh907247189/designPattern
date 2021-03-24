@@ -44,6 +44,8 @@ methods.forEach((method) => {
         if(inserted){
             observableArray(inserted)
         }
+        // console.log(this.__ob__.dep)
+        this.__ob__.dep.notify() // 通知试图更新
         return result;
     }
 })
@@ -54,4 +56,16 @@ function observableArray(data){
         observe(data[i])
     }
 }
-export { arrayMethods, observableArray }
+
+function dependArray(data){
+    for(let i=0; i< data.length; i++){
+        const item = data[i];
+        item.__ob__ && item.__ob__.dep.depend();
+
+        if(Array.isArray(item)){
+            // 循环绑定依赖
+            dependArray(item)
+        }
+    }
+}
+export { arrayMethods, observableArray, dependArray }
