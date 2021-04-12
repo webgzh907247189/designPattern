@@ -78,6 +78,7 @@ function initWatch(vm){
     for(let key in watch){
         let userDef = watch[key]
         
+        // 可能会出现对象的情况，处理掉 对象里面掉  handler 情况
         let handler = userDef;
         if(userDef.handler){
             handler = userDef.handler
