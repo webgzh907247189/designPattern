@@ -60,6 +60,7 @@ function initDate(vm){
 
 // watch 不能放在模板 ({{}}) 里面
 function initComputed(vm){
+    // debugger
     let computed = vm.$options.computed
     let watchers = vm._watchersComputed =Object.create(null)
     for(let key in computed){
@@ -104,6 +105,7 @@ function createComputedGetter(vm,key){
             console.log(Dep.target, 'Dep.target')
             // 计算属性 watcher
             if(Dep.target){
+                // watcher 代表 计算属性 watcher
                 watcher.depend()
             }
             return watcher.value;

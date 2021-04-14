@@ -8,6 +8,10 @@
 
 // vue的 批量更新 算是一个亮点
 
+// computed 返回函数 ？？
+// computed 支持 set ？？
+// computed 更新 dirty ？？/
+
 let id = 0;
 import Dep, { pushTarget, popTarget } from './dep'
 import { util } from './util';

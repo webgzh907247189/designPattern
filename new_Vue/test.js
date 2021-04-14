@@ -4,6 +4,7 @@ let vue = new Vue({
     data(){
         return {
             msg: 'msg',
+            test: '111',
             school: {
                 name: 'gzh'
             },
@@ -23,12 +24,12 @@ let vue = new Vue({
     },
     computed:{
         name1(){
-            return this.msg +'--'+ this.school.name
+            return this.msg +'--'+ this.test
         }
     },
     el: document.getElementById('root'),
     render(h){
-        return h('p',{}, this.msg, this.school, this.arr)
+        return h('p',{}, this.name1)
     }
 })
 
