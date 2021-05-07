@@ -99,6 +99,12 @@ export default class Watcher {
     // 此时先判断 是不是 computed 属性， 需要重新重新 computed 值
     update(){
         // 如果是计算属性
+        // 因为 computed 函数里面  依赖的data中的key ***属性*** 已经被 new Dep
+        // 在 computed 函数里面 进行 取值的过程中，此时 Dep.target 指向 computed watcher
+        // 触发了 observel 的 dep.depend()， 并且 向 computed watcher 中 添加了 当前依赖的 key 的 dep，
+        // 并且也向 当前的 key 的dep 添加了 computed watcher
+
+        // 此时 computed 的函数 依赖的 某一个 属性发生了变化，需要执行 watcher的 update
         if(this.lazy){
             // 计算属性依赖的值发生了变化
             // debugger
@@ -135,7 +141,8 @@ let has = Object.create(null);
 let queue = []
 
 // 针对同样的 watcher 进行过滤操作，因为 vue2 就一个render watcher
-// data 里面的属性 主要都是dep，每个 dep 都会保存watcher， 在执行 set操作的时候，会触发 dep.notify() -> watcher.update() -> watcher.get() -> 执行 render watcher 的 update (updateCom的cb) 
+// data 里面的属性 主要都是dep，每个 dep 都会保存watcher， 在执行 set操作的时候，
+// 会触发 dep.notify() -> watcher.update() -> watcher.run() -> watcher.get() -> 执行 render watcher 的 update (updateCom的cb) 
 function queueWacther(watcher){
     let id = watcher.id
     if(!has[id]){

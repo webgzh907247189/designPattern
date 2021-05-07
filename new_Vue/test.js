@@ -23,8 +23,10 @@ let vue = new Vue({
         // }
     },
     computed:{
-        name1(){
-            return this.msg +'--'+ this.test
+        name1: {
+            get(){
+                return this.msg +'--'+ this.test
+            }
         }
     },
     el: document.getElementById('root'),

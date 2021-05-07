@@ -58,20 +58,38 @@ function initDate(vm){
 // 计算属性默认不执行，等用户取值才会执行，会缓存取过的值
 // 依赖的值 发生了变化，会更新 dirty 属性，再次取值时，可以重新取值
 
-// watch 不能放在模板 ({{}}) 里面
 function initComputed(vm){
-    // debugger
     let computed = vm.$options.computed
     let watchers = vm._watchersComputed =Object.create(null)
     for(let key in computed){
         const useDef = computed[key]
+        const getter = typeof useDef === 'function' ? useDef : useDef.get;
+       
         // lazy => true 表示计算属性 ，不会立即执行
-        watchers[key] = new Watcher(vm,useDef,() => {}, { lazy: true })
-        Object.defineProperty(vm,key,{
-            // 用户取值用到这个方法
-            get: createComputedGetter(vm,key)
-        })
+        watchers[key] = new Watcher(vm,getter,() => {}, { lazy: true })
+        defineComputed(vm,key,useDef)
     }
+}
+
+
+const sharePropertyDefinition = {
+    enumerable: true,
+    configuable: true,
+    get: () => {},
+    // set: () => {},
+}
+function defineComputed(vm,key,useDef){
+    if(typeof useDef === 'function'){
+        sharePropertyDefinition.get = createComputedGetter(vm,key)
+    } else {
+        sharePropertyDefinition.get = createComputedGetter(vm,key)
+        sharePropertyDefinition.set = useDef.set || (() => {});
+    }
+    // Object.defineProperty(vm,key,{
+    //     // 用户取值用到这个方法
+    //     get: createComputedGetter(vm,key)
+    // })
+    Object.defineProperty(vm,key,sharePropertyDefinition)
 }
 
 function initWatch(vm){
