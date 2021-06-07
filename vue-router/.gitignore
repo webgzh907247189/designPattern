@@ -6,3 +6,4 @@ mediatorModel
 .cache-loader/
 cache-loader/
 dist/
+/.cache-loader/
