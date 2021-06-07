@@ -9,7 +9,7 @@ fastclick.attach(document.body)
 Vue.prototype.axios = axios
 
 new Vue({
-	el: '#app',
+	el: '#root',
 	router,
 	store,
     template: '<App/>',

@@ -1,11 +1,6 @@
-/**
- * history.length 最大为50 有大小限制 -> react-router 视频第一节  lenght 一直是50
- */
-class HistoryRoute{
-    constructor(){
-        this.current = null
-    }
-}
+import HashHistory from './history/hash';
+import BrowereHistory from './history/history';
+import { createMatcher } from './match';
 
 class VueRouter{
     constructor(options){
@@ -13,56 +8,44 @@ class VueRouter{
         this.mode = options.mode || 'hash'
         this.routes = options.routes || []
 
-        // 收敛数组
-        this.routesMaps = this.createMap(this.routes)
+        // 构建映射表  ->  二级路有 不带有 /  因为这时 手动添加了  /
+        this.matcher = createMatcher(this.routes)
+        // debugger
 
-        this.history = new HistoryRoute()
-        this.init()
+        this.history = this.mode === 'hash' ? new HashHistory(this) : new BrowereHistory(this);
+        // this.init(this)
+
+        this.beforeEachHooks = [];
     }
 
-    createMap(list){
-        return list.reduce((result,item)=>{
-            result[item.path] = item.component
-            return result
-        },Object.create(null))
-    }
+    // 初始化渲染
+    init(app){
+        const history = this.history;
 
-    hashLoad(){
-        window.addEventListener('load',()=>{
-            // console.log('zzz')
-            this.history.current = location.hash.slice(1)
-        })
-    }
-
-    hashChange(){
-        window.addEventListener('hashchange',()=>{
-            this.history.current = location.hash.slice(1)
-        })
-    }
-
-    pathLoad(){
-        window.addEventListener('load',()=>{
-            this.history.current = location.pathname
-        })
-    }
-    go(){
-        // 只有前进后退才能触发popstate，pushState不会触发popstate
-        window.addEventListener('popstate',()=>{
-            this.history.current = location.pathname
-        })
-    }
-
-    init(){
-        if(this.mode == 'hash'){
-            //判断用户打开时有没有hash，没有跳到/#/
-            location.hash ? '' : location.hash = '#/'
-            this.hashLoad()
-            this.hashChange()
-        }else{
-            location.pathname ? '' : location.pathname = '/'
-            this.pathLoad()
-            this.go()
+        // 跳转之后，再去监听 hash 变化
+        const setupHashListener = () => {
+            history.setupListener();// 监听 hash 变化
         }
+
+        // history.getCurrentLocation() 拿到当前路径
+        history.transitionTo(history.getCurrentLocation(), setupHashListener);
+        history.listen((route) => {
+            app._route = route;
+        })
+    }
+
+    match(location){
+        console.log(location, 'location')
+        return this.matcher.match(location)
+    }
+
+    push(location){
+        this.history.push(location)
+    }
+
+    beforeEach(fn){
+        // to,form, next
+        this.beforeEachHooks.push(fn)
     }
 }
 
@@ -71,33 +54,35 @@ class VueRouter{
     // 每个组件都有 this.$router 和 this.$route
     Vue.mixin({
         beforeCreate(){
-
+            // debugger
             // vue组件渲染顺序 ->  先序深度遍历 渲染
             if(this.$options && this.$options.router){ //根组件
-                this._root = this
+                this._routerRoot = this
                 this._router = this.$options && this.$options.router
 
                 // console.log(this._router.history,'this.$router')
                 // 深度监控 (服务于  router-view的current)
-                Vue.util.defineReactive(this,'xx',this._router.history)
+                // return { path: 'xxx', machted: [] }
+                Vue.util.defineReactive(this,'_route',this._router.history.current)
+                // console.log(this._route, 'this._route')
+
+                this._router.init(this)
             }else{
                 // 深度先续遍历
-                this._root = this.$parent && this.$parent._root
+                this._routerRoot = this.$parent && this.$parent._routerRoot
             }
 
             Object.defineProperty(this,'$router',{
                 get(){
                     // 唯一的路由实列 得到 VueRouter 的实列(所以 this.$router 有go方法)
-                    return this._root._router
+                    return this._routerRoot._router
                 }
             })
 
             Object.defineProperty(this,'$route',{
                 get(){
                     // this._root._router.history 是 HistoryRoute 的实列
-                    return {
-                        current: this._root._router.history.current
-                    }
+                    return this._routerRoot._route
                 }
             })
         }
@@ -113,11 +98,11 @@ class VueRouter{
         },
         methods: {
             handleClick(){
-                // href={mode === 'hash' ? `#${this.to}`: this.to}
+                this.$router.push(this.to);
             }
         },
         render(h){
-            let mode = this._self._root._router.mode
+            let mode = this._self._routerRoot._router.mode
             let Tag = this.tag
             return (<Tag on-click={this.handleClick}  href={mode === 'hash' ? `#${this.to}`: this.to}>{this.$slots.default}</Tag>)
         }
@@ -128,12 +113,31 @@ class VueRouter{
         // render 方法 里面的 this_self 指向 组件
         // this._self._root 指向 根组件
         // this._self._root._router 指向 根组件的 HistoryRoute 实例
-        render(h){
-            let current = this._self._root._router.history.current
+        functional: true,
+        render(h, { data, parent }){
+            let route = parent.$route
+            let depth = 0;
+            let records = route.machted
+            data.routerView = true
+            // debugger
 
-            let routersMap = this._self._root._router.routesMaps
-            console.log(current,'current')
-            return h(routersMap[current])
+            console.log(data, 'parent')
+
+            while(parent){
+                // console.log(parent)
+                if(parent.$vnode && parent.$vnode.data.routerView){
+                    
+                    depth++
+                }
+                parent = parent.$parent
+            }
+
+            let record = records[depth]
+            if(!record){
+                return h();
+            }
+            // console.log(record, 'record',records)
+            return h(record.component,data)
         }
     })
  }
