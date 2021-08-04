@@ -55,7 +55,7 @@ fn();
 // 3. external 打包不引入
 
 import $ from 'jquery';
-// import $ from 'expose-loader?$!jquery';
+// import $ from 'expose-loader?exposes[]=$!jquery';
 
 
 // 使用expose-loader 暴露的，直接访问，并且 window 上也存在这个属性
