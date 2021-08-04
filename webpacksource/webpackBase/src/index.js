@@ -63,6 +63,10 @@ console.log($, '111', window.$);
 console.error('2222');
 
 
+// import ss from 'expose-loader?exposes[]=TTT!babel-loader!./testExpose';
+import ss from './testExpose';
+
+
 import Vue from 'vue';
 // 在每个模块进行注入，使用 webpack.ProvidePlugin， window上面没有这个属性
 console.log(window.$1, '333',$1, Vue);
