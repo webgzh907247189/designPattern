@@ -65,6 +65,15 @@ module.exports = {
                     },
                 }
             },
+            {
+                test: require.resolve('./src/testExpose.js'),
+                use: {
+                    loader: 'expose-loader',
+                    options: {
+                        exposes: ['testGzh'],
+                    },
+                }
+            },
             // @babel/core
             // babelCore.transform
             // 使用 babelCore 进行 transform code
