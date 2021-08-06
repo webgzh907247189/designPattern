@@ -48,8 +48,8 @@ fn();
 
 
 
-
-
+// --mode 拿到的值
+console.log(process.env.NODE_ENV, 'fe');
 // 1. expose-loader 暴露给window
 // 2. provider-plugin 给每个模块提供
 // 3. external 打包不引入

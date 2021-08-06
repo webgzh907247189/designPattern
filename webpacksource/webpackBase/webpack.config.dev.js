@@ -2,6 +2,8 @@ const path = require('path');
 const HtmlWebpackplugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
+// cross-env 拿到的值
+console.log(process.env.NODE_ENV, 'be');
 module.exports = {
     // 当前工作目录
     context: process.cwd(),
@@ -80,12 +82,12 @@ module.exports = {
             {
                 test: /\.js$/,
                 use: [{
-                    loader: 'bannerLoader',
-                    options: {
-                        text: 'gzh',
-                        filename: path.resolve(__dirname, 'doc/bannerLoaderText.js'),
-                    },
-                }, {
+                    // loader: 'bannerLoader',
+                    // options: {
+                        // text: 'gzh',
+                    //     filename: path.resolve(__dirname, 'doc/bannerLoaderText.js'),
+                    // },
+                // }, {
                     loader: 'babelLoader',
                     // loader: 'babel-loader',
                     options: {
