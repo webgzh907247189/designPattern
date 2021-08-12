@@ -51,7 +51,7 @@
 
 
 // https://juejin.im/post/5e532c1b6fb9a07ca5303cd5
-// 节流 (第一个人说了算)
+// 节流 (第一个人说了算)，时间到了就走，不管有没有人上车了
 {
     function throttle(time, fn) {
         let start = 0
@@ -114,7 +114,7 @@
 }
 
 
-// 防抖 (最后一个人说了算)
+// 防抖 (最后一个人说了算)，有人来了，重新计时
 {
     function debounce(time, fn) {
         let timer = null;
