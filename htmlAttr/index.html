@@ -1,0 +1,87 @@
+ <!DOCTYPE html>
+ <html>
+     <head>
+        <meta charset="utf-8">
+        <!-- https://juejin.cn/post/6991888178890145828 -->
+         <!-- 使用CSP，就是白名单，告诉浏览器哪些外部资源可以加载执行，让即使插入进来恶意代码的也不会执行，或者可以向哪些第三方站点提交数据。开启白名单的方式有两种：
+         使用 meta 标签 <meta http-equiv="Content-Security-Policy">
+         设置http头部的 Content-Security-Policy -->
+        <meta http-equiv="Content-Security-Policy">
+
+
+        <!-- https://segmentfault.com/a/1190000002407912  https://www.jianshu.com/p/739d7ce9c6fe  http://blog.csdn.net/rogerjava/article/details/17123593 https://www.zhihu.com/question/22431667-->
+
+        <!-- 控制状态栏显示样式 -->
+        <meta content="black" name="apple-mobile-web-app-status-bar-style">
+
+        <!-- 删除默认的苹果工具栏和菜单栏,默认就是显示工具栏和菜单栏 (伪装app，离线应用)-->
+        <meta content="yes" name="apple-mobile-web-app-capable">
+
+        <!-- "添加到主屏幕“后，全屏显示(苹果特有) -->
+        <meta content="yes" name="apple-touch-fullscreen">
+
+        <!-- 去除默认的数字做为点好号码的设置 -->
+        <meta content="telephone=no,email=no" name="format-detection">
+
+        <!-- iOS上的Safari和Windows Phone上的IE在内的一些移动端浏览器会在超链接元素被触摸（tap）的时候显示一个半透明的高亮背景，来给用户一个附加的反馈。然而，很多网站想要禁用这种默认的行为来更好地控制自己站点的外观和体验。 -->
+        <meta name="msapplication-tap-highlight" content="no">
+
+        <!-- 禁止浏览器从本地计算机的缓存中访问页面内容 -->
+        <!-- <meta http-equiv="Pragma" content="no-cache"> -->
+
+        <!-- 用百度打开网页可能会对其进行转码（比如贴广告），避免转码可添加如下meta -->
+        <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+        <link rel="shortcut icon" type="image/x-icon" href="bai.ico" />
+
+        <!-- 添加到主屏后的标题 -->
+        <meta name="apple-mobile-web-app-title" content="测试项目">
+        <!-- IOS (将网站添加到iPhone的主屏幕上,且添加指定的图片作为桌面icon)-->
+        <link rel="apple-touch-icon" href="/custom_icon.png"/>
+        <link rel="apple-touch-icon" sizes="72x72" href="/custom_icon.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/custom_icon.png" />
+        <!-- iOS将图标添加高光效果 -->
+        <link rel="apple-touch-icon-precomposed" href="/custom_icon.png"/>
+
+        <!-- 添加智能 App 广告条 Smart App Banner：告诉浏览器这个网站对应的app
+        https://developer.apple.com/library/content/documentation/AppleApplications/Reference/SafariWebContent/PromotingAppswithAppBanners/PromotingAppswithAppBanners.html -->
+        <!-- <meta name="apple-itunes-app" content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">  -->
+
+        <meta name="screen-orientation" content="portrait">
+        <meta name="x5-orientation" content="portrait">
+
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"> -->
+     </head>
+     <body>
+        <script src="./index.js"></script>
+     	<script src='http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js'></script>
+        <div>
+           111
+            https://juejin.cn/post/6992732498308366343
+
+            <div style="color: red; border: 1px solid #000; margin-bottom: 6px;">
+               要隐藏一个DOM元素，不需要JavaScript。一个原生的HTML属性就足以隐藏。其效果类似于添加一个style display: none;。不过，这个技巧对伪元素不起作用。
+               <p hidden>该段落在页面上是不可见的，它对HTML是隐藏的。</p>
+            </div>
+
+            <input type="text"/>
+
+            <div style="color: pink; border: 1px solid #000;margin-bottom: 6px; position: relative; inset: 0;">
+               inset` CSS 属性吗？它是`top`、`left`、`right`和bottom的缩写版本。与简写的margin和padding`类似，我们可以在一行中设置一个元素的所有偏移量。
+               <div style="position: absolute; inset: 0;">inset 属性</div>
+            </div>
+        </div>　
+     </body>
+     <script>
+      // connection.downlink返回的并不是用户当前环境的展示的网络传输速度，而是当前网络的带宽，官方说法是：返回以Mb/s为单位的有效带宽，并保留该值为25kb/s的最接近的整数倍。
+      // Chrome浏览器控制台跑一下navigator.connection.downlink这段语句，结果返回的是10, 表示下载带宽是10M的。
+      console.log(navigator.connection.downlink, '当前网络的带宽');
+
+
+      // 禁止插入文字
+      const input = document.querySelector('input');
+      input.addEventListener("paste", function(e){
+         e.preventDefault()
+      })
+     </script>
+ </html>
