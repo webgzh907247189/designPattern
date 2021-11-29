@@ -24,7 +24,14 @@ const styleLoader = function(source){
 // 此时被 styleLoader.pitch 劫持了，并且被赋值 style.innerHTML = require("module.exports = 'xxx'" )
 
 
-styleLoader.pitch = function(remainingRequest){
+// Pitching Loader 返回非 undefined 值时，就会实现熔断效果
+
+/**
+ * @remainingRequest 剩余请求
+ * @precedingRequest 前置请求
+ * @data 数据对象    pitch 函数中往 data 对象上添加数据，之后在 normal 函数中通过 this.data 的方式读取已添加的数据。
+ */
+styleLoader.pitch = function(remainingRequest, precedingRequest, data){
     let str = `
         let style = document.createElement('style')
         style.innerHTML = require(${loadUtils.stringifyRequest(this, '!!' + remainingRequest)})
@@ -35,3 +42,9 @@ styleLoader.pitch = function(remainingRequest){
 }
 
 module.exports = styleLoader;
+
+
+// a -> b -> c
+// remainingRequest  ->  /Users/fer/webpack-loader-demo/loaders/c-loader.js!/Users/fer/webpack-loader-demo/src/data.txt #剩余请求
+// precedingRequest  ->  /Users/fer/webpack-loader-demo/loaders/a-loader.js #前置请求
+// {} #空的数据对象
