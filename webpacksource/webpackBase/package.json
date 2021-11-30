@@ -5,9 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "preprod": "npm run dll",
+    "postprod": "npm run dll",
     "prod": "webpack --config webpack.config.prod.js",
     "dev": "cross-env NODE_ENV=fe webpack-dev-server --config webpack.config.dev.js",
-    "dll": "webpack --config wepack.dll.config.js"
+    "dll": "webpack --config wepack.dll.config.js",
+    "aotoExternal": "webpack --config webpack.config.autoExternal.js",
+    "lazy": "webpack --config webpack.config.prod.lazy.js",
+    "preinstall": "node ./preinstall.js"
   },
   "author": "",
   "license": "ISC",
@@ -26,6 +31,7 @@
     "html-webpack-plugin": "^3.2.0",
     "html-withimg-loader": "^0.1.16",
     "jquery": "^3.3.1",
+    "jszip": "^3.7.1",
     "loader-utils": "^1.2.0",
     "mime": "^2.5.2",
     "mini-css-extract-plugin": "^0.5.0",
