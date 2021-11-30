@@ -17,7 +17,7 @@ class Lesson{
                 console.log('node', name);
 
                 // 标示 当前异步什么时候 执行完
-                cb();
+                cb(null, {name: '11'});
             }, 2000)
         })
 
@@ -32,8 +32,8 @@ class Lesson{
     }
 
     start(name){
-        this.hook.arch.callAsync(name, () => {
-            console.log('end');
+        this.hook.arch.callAsync(name, (err, args) => {
+            console.log('end', args);
         });
     }
 
@@ -69,9 +69,9 @@ class Lesson{
 }
 
 let lesson = new Lesson();
-// lesson.tapAsync()
-// lesson.start('chifan')
+lesson.tapAsync()
+lesson.start('chifan')
 
 
-lesson.tapPromise()
-lesson.promise('chifan111')
+// lesson.tapPromise()
+// lesson.promise('chifan111')

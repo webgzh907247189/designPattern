@@ -18,6 +18,7 @@ class Lesson{
         this.hook.arch.tap('node', (name) => {
             console.log('node', name);
 
+            // return 了 返回值 就停止执行
             return '想停止学习'
         })
 
