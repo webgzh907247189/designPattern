@@ -17,6 +17,12 @@ module.exports = class Asyncplugin {
                 }, 1000)
             })
         })
+
+        compiler.hooks.compilation.tap('Assetplugin', (compilation,cb) => {
+            compilation.hooks.chunkAsset.tap('Assetplugin',(chunk, filename) => {
+                console.log(chunk.name, filename, 'gzh--compilation');
+            })
+        })
     }
 }
 
