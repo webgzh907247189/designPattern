@@ -35,3 +35,19 @@
 // npm home vue
 // npm repo 可以打开项目的源代码仓库（大部分情况下是 GitHub），它还有一个姊妹命令，
 // npm home，可以打开项目的主页。不过，我个人觉得，比起这两个命令，通常而言， IDE 或者编辑器的智能提示（速览类型、速览文档、速览定义之类）更高效。
+
+
+
+
+
+/**
+ * https://juejin.cn/post/7023539063424548872
+ */
+// 在Web环境中，如果使用loader加载ESM（ES module），那么这三个配置的加载顺序是browser→module→main，如果使用require加载CommonJS模块，则加载的顺序为main→module→browser。​
+
+// 所有node_modules/.bin/目录下的命令，都可以用npm run [命令]的格式运行。
+
+// files配置是一个数组，用来描述当把npm包作为依赖包安装时需要说明的文件列表。当npm包发布时，files指定的文件会被推送到npm服务器中，如果指定的是文件夹，那么该文件夹下面所有的文件都会被提交。
+// 如果有不想提交的文件，可以在项目根目录中新建一个.npmignore文件，并在其中说明不需要提交的文件，防止垃圾文件推送到npm上。这个文件的形式和.gitignore类似。写在这个文件中的文件即便被写在files属性里也会被排除在外。
+
+
