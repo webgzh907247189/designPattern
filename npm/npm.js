@@ -41,7 +41,10 @@
 
 
 /**
+ * package.json 的配置
  * https://juejin.cn/post/7023539063424548872
+ * 发布npm包的配置
+ * 
  */
 // 在Web环境中，如果使用loader加载ESM（ES module），那么这三个配置的加载顺序是browser→module→main，如果使用require加载CommonJS模块，则加载的顺序为main→module→browser。​
 
@@ -50,4 +53,5 @@
 // files配置是一个数组，用来描述当把npm包作为依赖包安装时需要说明的文件列表。当npm包发布时，files指定的文件会被推送到npm服务器中，如果指定的是文件夹，那么该文件夹下面所有的文件都会被提交。
 // 如果有不想提交的文件，可以在项目根目录中新建一个.npmignore文件，并在其中说明不需要提交的文件，防止垃圾文件推送到npm上。这个文件的形式和.gitignore类似。写在这个文件中的文件即便被写在files属性里也会被排除在外。
 
-
+// module字段可以定义 npm 包的 ESM 规范的入口文件，browser 环境和 node 环境均可使用。如果 npm 包导出的是 ESM 规范的包，使用 module 来定义入口文件。
+// 如果 npm 包只在 web 端使用，并且严禁在 server 端使用，使用 browser 来定义入口文件。
