@@ -9,6 +9,10 @@ const fn = () => {
 };
 fn();
 
+async function aa(){
+    console.log('111--gzh');
+}
+aa();
 
 // loader 默认从右向左执行， 从下向上执行
 // loader 类型： 

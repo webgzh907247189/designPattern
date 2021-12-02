@@ -7,6 +7,7 @@ const webpack = require('webpack');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
+console.log(require.resolve('jquery') === path.resolve(__dirname, 'jquery'))
 
 const MyDonePlugin = require('./myPlugin/Doneplugin');
 const Asyncplugin = require('./myPlugin/Asyncplugin');
@@ -215,6 +216,7 @@ module.exports = {
     // 'eval-source-map' 不产生单独的 source-map 文件，但是可以显示 行列
     devtool: 'source-map',
     externals: {
+        // key 是模块名 value 是全局变量名
         // vue: 'Vue',
         'vue-router': 'VueRouter',
     },
