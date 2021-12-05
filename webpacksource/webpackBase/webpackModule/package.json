@@ -1,0 +1,13 @@
+{
+  "name": "webpackmodule",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.prod.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.prod.js",
+    "build1": "webpack --config webpack.config.prod.js --json > stats.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
