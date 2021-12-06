@@ -43,8 +43,13 @@ module.exports = {
         // mainFiles: [], // 入口文件的名字 //解析目录时要使用的文件名   ->    .index.web.js  index.rn.js
 
         // mainFields的默认值和当前webpack配置的target属性有关：如果target为webworker或web（默认）
+
+        // 在Web环境中，如果使用loader加载ESM（ES module），那么这三个配置的加载顺序是browser→module→main，如果使用require加载CommonJS模块，则加载的顺序为main→module→browser。​
         // mainFields: [] // 入口  // 针对Npm中的第三方模块优先采用jsnext:main中指向ES6模块化语法的文件  package的 browser/module/main 字段 browser module main
         // extensions: [], // 扩展名  ->   .js .css .vue
+        alias: {
+            // 加快 模块查找的速度  
+        }
     },
     // 专门解析 loader
     resolveLoader: {

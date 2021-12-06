@@ -54,7 +54,7 @@ module.exports = {
 
 
 
-// webpack4 tree-shaking 三个条件 1. 生产模式下 2. @babel/preset-env 的 modules 为 false   3. 不产生 source-map ????
+// webpack4 tree-shaking 三个条件 1. 生产模式下 2. @babel/preset-env 的 modules 为 false(告诉webpack 不要编译import语法)   3. 不产生 source-map ????
 
 
 
@@ -72,7 +72,7 @@ module.exports = {
 // webpack 容易混淆知识点
 // https://www.cnblogs.com/skychx/tag/Webpack/
 // webpackChunkName 是为预加载的文件取别名，webpackPrefetch 会在浏览器闲置下载文件，webpackPreload 会在父 chunk 加载时并行下载文件。
-// preload(预加载) chunk 具有中等优先级，并立即下载。prefetch(预获取) chunk 在浏览器闲置时下载。
+// preload(预加载，未来一定会用到的资源，加载优先级高) chunk 具有中等优先级，并立即下载。prefetch(预获取，未来可能会用到的资源，加载优先级不高) chunk 在浏览器闲置时下载。
 
 
 
@@ -126,6 +126,16 @@ module.exports = {
 // 输出完成：输出所有的chunk到文件系统；
 
 
+/***********     loader 与 plugin 的区别       *************/
+// Loader 就是将 Webpack 不认识的内容转化为认识的内容
+// 插件（Plugin）可以贯穿 Webpack 打包的生命周期，执行不同的任务
+
+// prefetch (预获取)：浏览器空闲的时候进行资源的拉取
+// preload (预加载)：提前加载后面会用到的关键资源   因为会提前拉取资源，如果不是特殊需要，谨慎使用
+
+// 所有文件都没有副作用，"sideEffects": false
+
+// workbox -> workbox-webpack-plugin
 
 // env
 /**

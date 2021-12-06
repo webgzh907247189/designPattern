@@ -28,6 +28,14 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         filename: 'main.[hash:5].js',
     },
+    /**
+     * 以下情况的代码块会被分割
+     * 1. 来自于多个入口 (共享模块)
+     * 2. 来自于 node_modules
+     * 3. gzip 之前 大于20kb
+     * 4. 按需加载的模块，并发请求的最大数量 小于30
+     * 5. 入口加载代码块 并发请求数量 低于30
+     */
     optimization: {
         minimizer: [
             // 压缩了css 导体 webpack默认的js 没有压缩，所以需要手动在压缩一次
@@ -48,15 +56,15 @@ module.exports = {
         //     minSize: 0, // 默认值30kb， 超过多少kb 才分出去
         //     minChunks: 1, // 被多少模块共享， 在分割之前模块模块的被 引用次数
 
-        //     maxAsyncRequest: 5, // 限制异步模块内的并行最大请求数
-        //     maxInitialRequest: 3, // 限制 入口的 拆分数量
+        //     maxAsyncRequests: 5, // 限制异步模块内的并行最大请求数
+        //     maxInitialRequests: 3, // 限制 入口的 拆分数量
 
         //     name: true, // 打包之后的名称 默认是 chunk的 名字通过分割符 (~) 分割开， 如 vender～
         //     automaticNameDelomiter: '~',
 
 
 
-        //     // 缓存组
+        //     // 缓存组 分割和合并代码的工具
         //     cacheGroups: {
         //         // 公共的模块
         //         // 存在优先级的问题，默认先走上面
@@ -193,7 +201,9 @@ module.exports = {
                         loader: 'url-loader',
                         options: {
                             limit: 1,
-                            outputPath: '/img/',
+                            outputPath: '/img/', // 输出的目录
+                            publicPath: '', // ??? 指定引入时的目录
+
                             // img、font中是没有chunkHash的，仍然需要用到hash
                             // name: './assets/imgs/[name].[contentHash].[ext]'
                         }
@@ -246,8 +256,11 @@ module.exports = {
         ]),
         new webpack.BannerPlugin('test--webpack'),
 
-        // 忽略打包
-        new webpack.IgnorePlugin(/\.\/locale/,/moment/),
+        // 忽略打包 引入方式调整
+        new webpack.IgnorePlugin({
+            resourceRegExp: /\.\/locale/,
+            contextRegExp: /moment/,
+        }),
 
         new MyDonePlugin(),
         new Asyncplugin(),

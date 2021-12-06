@@ -14,6 +14,8 @@
 console.log("test2" + test3); //log2//log1
             return require("./src/index.js")
         })({
-            "./src/test.js": function(module, exports, require){ module.exports = 'test3'; //log2//log1 } 
+            // key 是 模块的 ID，此模块相对根目录的路径
+            // val 是一个函数 
+            "./src/test.js": function(module, exports, require){ module.exports = 'test3';  } 
         })
     

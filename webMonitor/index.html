@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>monitor</title>
+</head>
+<body>
+    <div id="container">
+        <div id="content">
+            <div>
+                <button onclick="btnclick()">点击抛出错误</button>
+                <button onclick="promiseclick()">promise 错误</button>
+                <button onclick="sendSuccess()">发送成功的 ajax 请求</button>
+                <button onclick="sendError()">发送失败的 ajax 请求</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    // https://mp.weixin.qq.com/s/d-P8s51U6IfJ-VrRkGygLA
+    function btnclick(){
+        window.some.error = 'error'
+    }
+
+    function promiseclick(){
+        // 这种可以 捕捉到行数
+        new Promise((resolve,reject) => {
+            window.some.error = 'error'
+            // reject('11')
+        })
+
+
+        // 这种情况的reject 捕捉不到行数
+        // new Promise((resolve,reject) => {
+        //     reject('22')
+        // })
+    }
+
+    function sendSuccess(){
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '/success', true)
+        xhr.responseType = 'json'
+        xhr.onload = function(){
+            console.log(xhr.response)
+        }
+        xhr.send()
+    }
+
+    function sendError(){
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/error', true)
+        xhr.responseType = 'json'
+        xhr.onload = function(){
+            console.log(xhr.response)
+        }
+        xhr.onerror = function(error){
+            console.log(error)
+        }
+        xhr.send({name: '11'})
+    }
+</script>
+<script src="sadasd.js"></script>
+</html>

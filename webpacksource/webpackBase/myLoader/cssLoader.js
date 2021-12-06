@@ -16,25 +16,31 @@
     //     groups: undefined
     // ] 15
 }
-module.exports = function(source){
+function cssLoader(source){
     let reg = /url\((.+?)\)/g;
 
     let idx = 0;
     let current
-    let arr = ['let list = []']
+    let arr = ['let list = [];']
     while(current = reg.exec(source)){
         let [matchUrl, g] = current
 
         let last = reg.lastIndex - matchUrl.length
 
-        arr.push(`list.push(${JSON.stringify(source.slice(idx, last))})`)
+        arr.push(`list.push(${JSON.stringify(source.slice(idx, last))});`)
 
         idx = reg.lastIndex
         // 把 g 替换成为 requiere 写法
         arr.push(`list.push('url('+require(${g})+')')`)
     }
-    arr.push(`list.push(${JSON.stringify(source.slice(idx))})`)
+    arr.push(`list.push(${JSON.stringify(source.slice(idx))});`)
     arr.push(`module.exports = list.join('')`);
     
     return arr.join('');
+}
+module.exports = cssLoader
+
+{
+    const str = '123url("./xxx")456';
+    console.log(cssLoader(str))
 }
