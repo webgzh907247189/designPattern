@@ -1,0 +1,29 @@
+{
+  "name": "vite-cli",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "gzh <18255106634@163.com>",
+  "homepage": "https://github.com/webgzh907247189/designPattern#readme",
+  "license": "ISC",
+  "main": "lib/cli.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webgzh907247189/designPattern.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/webgzh907247189/designPattern/issues"
+  },
+  "bin": {
+    "vite-cli": "./bin/vite.js"
+  }
+}
