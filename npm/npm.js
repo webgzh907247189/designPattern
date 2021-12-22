@@ -1,6 +1,9 @@
 /**
  * 你可能不知道的 npm 实用技巧
  * https://juejin.cn/post/6844903879306379277
+ * 
+ * 
+ * https://zhuanlan.zhihu.com/p/430580607
  */
 
 // npm ci 根据 package-lock.json 安装依赖，这可以保证整个开发团队都使用版本完全一致的依赖，避免把时间浪费在排查因为依赖不一致而导致的各种奇怪问题上
