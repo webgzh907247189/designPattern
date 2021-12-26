@@ -1,0 +1,17 @@
+{
+  "name": "reactsource_lesson",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "compilejsx": "babel ./compilejsx/index.js --out-file compile.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/plugin-transform-react-jsx": "^7.16.0",
+    "@babel/preset-react": "^7.16.0"
+  }
+}

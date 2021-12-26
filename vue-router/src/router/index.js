@@ -1,9 +1,9 @@
 import Vue from 'vue'
-// import Router from 'vue-router'
-import Router1 from './vue-router'
+import Router from 'vue-router'
+// import Router1 from './vue-router'
 // Vue.use(Router)
 
-Vue.use(Router1)
+Vue.use(Router)
 // new Router1({
 // 	// mode: 'hash',
 // 	routes: [{
@@ -43,7 +43,7 @@ import About from '@/component/about'
 import Test from '@/component/test'
 import TestChild from '@/component/testChild'
 
-const router1 = new Router1({
+const router1 = new Router({
 	mode: 'hash',
 	routes: [{
 			path: '/home',

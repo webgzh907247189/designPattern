@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MVVM</title>
+</head>
+<body>
+    <div id="app">
+        {{show}}
+        {{computedName}}
+        <!-- {{computedAgeFn('zzzz')}} -->
+    </div>
+
+    <!-- 引入依赖的 js 文件 -->
+    <script src="vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                name: 'gzh',
+                show: { name: '11' },
+                age: '28',
+            },
+            computed: {
+                computedName(){
+                    console.log('computed -- 执行了')
+                    return this.name
+                },
+                computedAgeFn(){
+                    console.log('computed -- 执行了')
+                    return (str) => {
+                        return this.age + str
+                    }
+                },
+            },
+            watch: {
+                show(val ,oldval){
+                    console.log(val ,oldval, 'watch -- 执行了')
+                }
+            }
+        });
+
+        // setTimeout(() => {
+        //     vm.show = false
+        // }, 5000)
+        setTimeout(() => {
+            // vm.name = 'ceshi'
+            vm.show = { name: '22' }
+        }, 5000)
+    </script>
+</body>
+</html>

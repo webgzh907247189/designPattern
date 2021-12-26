@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+</head>
+
+<body>
+  <noscript>
+  </noscript>
+  <div id="app"></div>
+</body>
+<script src="./index.js"></script>
+<script>
+  const state = reactive({
+    count: 0,
+    name: '懒响应式'
+  })
+
+  effect(() => {
+    // 放在 effect 里面的目的， 每次render 都重新拿到一次 count 的值
+    const vnode = {
+      tag: 'div',
+      props: {
+        style: {background: 'red'}
+      },
+      children: [
+        {
+          tag: 'li',
+          props: { style: { color: 'pink' }, key: 'A' },
+          children: 'A'
+        },
+        {
+          tag: 'li',
+          props: { style: { color: '#fff' }, key: 'B' },
+          children: 'B'
+        }
+      ]
+    }
+
+    render(vnode, document.getElementById('app'))
+
+    setTimeout(() => {
+      const vnode = {
+        tag: 'div',
+        props: {
+          style: {background: 'blue'}
+        },
+        children: [
+          {
+            tag: 'li',
+            props: { style: { color: 'red' }, key: 'B' },
+            children: 'B'
+          },
+          {
+            tag: 'li',
+            props: { style: { color: '#000' }, key: 'A' },
+            children: 'A'
+          },
+        ]
+      }
+
+      render(vnode, document.getElementById('app'))
+
+    }, 2000)
+  })
+</script>
+
+</html>

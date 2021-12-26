@@ -143,6 +143,8 @@ let queue = []
 // 针对同样的 watcher 进行过滤操作，因为 vue2 就一个render watcher
 // data 里面的属性 主要都是dep，每个 dep 都会保存watcher， 在执行 set操作的时候，
 // 会触发 dep.notify() -> watcher.update() -> watcher.run() -> watcher.get() -> 执行 render watcher 的 update (updateCom的cb) 
+
+let pedding = false;
 function queueWacther(watcher){
     let id = watcher.id
     if(!has[id]){
@@ -150,7 +152,11 @@ function queueWacther(watcher){
         queue.push(watcher)
 
         // 延迟清空队列
-        nextTick(flushQueue)
+
+        if(!pedding){
+            pedding = true;
+            nextTick(flushQueue)
+        }
     }
 }
 
@@ -162,39 +168,48 @@ function flushQueue(){
     // 等待下一轮更新
     has = Object.create(null);
     queue = []
+    pedding = false
 }
 
 
 
-
+let waiting = false;
 let callBacks = []
 function flushCallBack(){
     callBacks.forEach((cb) => cb())
+    waiting = false
+    callBacks = []
 }
+
+// waiting 的 作用
+// nextTick 可以同时调用多次， 但是 在这 同时调用多次的过程中， 只能保证有一个 promise(setImmediate) 异步任务，因为在这些异步任务的 cb 里面 会去 挨个循环 nextTick 的 回掉函数
 function nextTick(cb){
     callBacks.push(cb)
 
-    let timeFunc = () => {
-        flushCallBack();
+    if (!waiting) {
+        waiting = true
+        let timeFunc = () => {
+            flushCallBack();
+        }
+    
+        if(Promise){
+            return Promise.resolve().then(() => {
+                timeFunc()
+            })
+        }
+    
+        if(MutationObserver){
+            let observe = new MutationObserver(timeFunc)
+            let textNode = document.createTextNode(1)
+            observe.observe(textNode, { characterData: true })
+            textNode.textContent = 2
+            return
+        }
+    
+        if(setImmediate){
+            return setImmediate(timeFunc,0);
+        }
+    
+        setTimeout(timeFunc,0);
     }
-
-    if(Promise){
-        return Promise.resolve().then(() => {
-            timeFunc()
-        })
-    }
-
-    if(MutationObserver){
-        let observe = new MutationObserver(timeFunc)
-        let textNode = document.createTextNode(1)
-        observe.observe(textNode, { characterData: true })
-        textNode.textContent = 2
-        return
-    }
-
-    if(setImmediate){
-        return setImmediate(timeFunc,0);
-    }
-
-    setTimeout(timeFunc,0);
 }

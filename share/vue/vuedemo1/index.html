@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MVVM</title>
+</head>
+<body>
+    <div id="app">
+        <!-- <Test1></Test1> -->
+        frezz{{list}}
+    </div>
+
+    <!-- 引入依赖的 js 文件 -->
+    <script src="vue.js"></script>
+    <script>
+        // Vue.component('header11',{
+        //     template: '<div>显示{{name}}</div>',
+        //     data: () => {
+        //         return {
+        //             name: 'gzh'
+        //         }
+        //     },
+        //     created(){
+        //         this.$once('hook:mounted',() => {
+        //             console.log('mounted','自定义的hook:mounted')
+        //         });
+        //     },
+        //     mounted(){
+        //         console.log('mounted','test1-mounted')
+        //     },
+        // })
+
+        // 结论
+        // 1. 数据尽量精简，数据结构越简单越好
+        // 2. 不要把 冗余数据也放到 data里面去， data里面的每一个 key 都会被 observel 处理
+
+        // frezz 问题，虽然解决了 冻结，但是 writeable 也是false, 后续追加数据进去没办法追加 (seal)
+        // {
+        //     var obj = {name: '11'}
+        //     var objFrezz = Object.freeze(obj)
+        //     var objDes = Object.getOwnPropertyDescriptors(objFrezz)
+        //     console.log(objDes)
+        //     // {name: {value: "11", writable: false, enumerable: true, configurable: false}
+        // }
+
+        // {
+        //     var obj = {name: '11'}
+        //     var objFrezz = Object.seal(obj)
+        //     var objDes = Object.getOwnPropertyDescriptors(objFrezz)
+        //     console.log(objDes)
+        //     // {name: {value: "11", writable: true, enumerable: true, configurable: false}
+        // }
+
+
+        const datalist = [
+            { list: [
+                {
+                    list: [
+                        {
+                            list : [
+                                {
+                                    name: '111'
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ] }
+        ];
+
+        Vue.config.performance = true 
+        let vm = new Vue({
+            el: '#app',
+            // data: {
+            //     list: Object.freeze(datalist)
+            // },
+            data: datalist,
+            mounted(){
+                
+            }
+        });
+    </script>
+</body>
+</html>

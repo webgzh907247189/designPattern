@@ -50,7 +50,6 @@ function setProps(target, props) {
     setProp(target, key, props[key]);
   });
 }
-
 /**
  * babel-cli和babel-plugin-transform-react-jsx这两个库，前者提供Babel的命令行功能，后者主要帮我们把jsx转化成js。
  *

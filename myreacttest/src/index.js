@@ -1,6 +1,7 @@
-// import React from 'react';
-import React from './my/react16';
+import React from 'react';
+// import React from './my/react16';
 import ReactDOM from 'react-dom';
+import APP from './router';
 // import Demo from './reactDemo'
 
 // /** hooks 测试 */
@@ -159,15 +160,15 @@ import ReactDOM from 'react-dom';
 // {/* <Demo></Demo> */  }
 // // ele2
 
-let ele = React.createElement('div',{
-        id: 'yyy',
-        className: 'xxx',
-        style: {color: 'red',fontSize: '20px'},
-    },'hello',
-    React.createElement('button',{id: 'test'},'我是按钮')
-)
-console.log(ele);
-// ReactDOM.render(<div><div>123213</div></div>, document.getElementById('root'));
+// let ele = React.createElement('div',{
+//         id: 'yyy',
+//         className: 'xxx',
+//         style: {color: 'red',fontSize: '20px'},
+//     },'hello',
+//     React.createElement('button',{id: 'test'},'我是按钮')
+// )
+// console.log(ele);
+ReactDOM.render(<APP/>, document.getElementById('root'));
 
 // class TestReact extends React.Component{
 //     constructor(props){

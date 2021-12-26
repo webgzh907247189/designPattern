@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MVVM</title>
+</head>
+<body>
+    <div id="app">
+        {{a}}
+        <!-- <img src="https://img-blog.csdnimg.cn/20200723203202525.png" onload="loadImage()" onerror="loadError()" /> -->
+    </div>
+
+    <!-- 引入依赖的 js 文件 -->
+    <!-- <script src="vue.js"></script> -->
+    <script>
+        // const data = {a: 1}
+        // let vm = new Vue({
+        //     el: '#app',
+        //     data,
+        //     mounted(){
+                
+        //     },
+        //     methods: {
+        //         loadImage(){
+        //             console.log('onload')
+        //         },
+        //         loadError(){
+        //             console.log('loadError')
+        //         }
+        //     },
+        //     created(){
+        //         // console.log(this.obj, 'this.aa')
+        //     },
+        // });
+        // vm.b = '22'
+        // window.aa = vm;
+
+
+        function a(){
+            var a1 = 'a1'
+            return () => {
+                console.log(a1)
+            }
+        }
+        var aa = a()
+
+
+        function b(){
+            var b1 = 'b1'
+            return () => {
+            }
+        }
+
+        var bb = b()
+
+
+        function c(){
+            var c1 = 'c1'
+            return () => {
+                eval()
+            }
+        }
+
+        var cc = c()
+
+
+        function d(){
+            return () => {
+                
+            }
+        }
+
+        var dd = d()
+    </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "name": "designpattern",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.0",
+    "save-dev": "^2.0.0",
+    "webpack": "^5.63.0",
+    "webpack-manifest-plugin": "^2.0.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webgzh907247189/designPattern.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/webgzh907247189/designPattern/issues"
+  },
+  "homepage": "https://github.com/webgzh907247189/designPattern#readme"
+}

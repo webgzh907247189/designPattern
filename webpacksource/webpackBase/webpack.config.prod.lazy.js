@@ -10,7 +10,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
     // 当前工作目录
     context: process.cwd(),
-    mode: 'development',
+    mode: 'none', // production // development
     devtool: false,
     entry: './src/lazy.js',
     output: {
@@ -56,7 +56,13 @@ module.exports = {
                         loader: 'babel-loader',
                         options: {
                             presets: [
-                                '@babel/preset-env'
+                                ['@babel/preset-env', {
+                                    targets: {
+                                        "chrome": "70",
+                                    },
+                                    // useBuiltIns: 'usage',
+                                    corejs: 3
+                                }]
                             ],
                             plugins: [
                                 '@babel/plugin-transform-runtime'

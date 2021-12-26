@@ -1,4 +1,4 @@
 
 export const wxq = 'wxq11';
-export default test = '?????';
+// export default test = '?????';
 console.error('wxq');

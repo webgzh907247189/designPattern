@@ -663,3 +663,71 @@ new Promise((resolve,reject)=>{
 		console.log('then')
 	})
 }
+
+
+
+
+{
+	const s = [1,2,3]
+	s.reduce((r,i) => {
+		return r.then(() => {
+			return new Promise((r) => {
+				setTimeout(() => {
+					console.log(i)
+					r(i)
+				}, 1000)
+			})
+		})
+		// 	return r; -> 这样写错误，无法达到每隔一秒输出一次 因为 r被 return了，实际 return 应该是 then里面的 promise
+	}, Promise.resolve())
+}
+
+{
+	function red(){
+		console.log('red')
+	}
+
+	function yellow(){
+		console.log('yellow')
+	}
+
+	function green(){
+		console.log('green')
+	}
+
+	function light(time,cb){
+		return new Promise((r) => {
+			setTimeout(() => {
+				cb()
+				r()
+			}, time)
+		})
+	}
+
+	const step = function(){
+		Promise.resolve().then(() => {
+			return light(3000, red)
+		}).then(() => {
+			return light(2000, green)
+		}).then(() => {
+			return light(1000, yellow)
+		}).then(() => {
+			return step()
+		})
+	}
+
+	step()
+}
+
+
+{
+	// finally 返回一个默认原来的promise对象  throw new Error() 和  new Error() 在Promise里面不一样
+	// finally 
+	// 1 '??'
+	Promise.resolve(1).finally(() => {
+		console.log('finally')
+		return 'finally'
+	}).then((d) => {
+		console.log(d, '??')
+	})
+}

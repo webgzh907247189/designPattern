@@ -111,3 +111,15 @@ import "reflect-metadata";
 
     proxy.getDate() // 1
 }
+
+{
+    // const <string>s = undefined;
+
+    // const <string>abc = "23" 
+
+    // type s = number ;
+    type aa1<T = string> = T;
+    
+    var aa: aa1 = ''
+    console.log(aa);
+}

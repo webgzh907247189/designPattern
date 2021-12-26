@@ -116,5 +116,106 @@ fetch("https://avatars3.githubusercontent.com/u/4220799")
 
 
 
-// Uint8Array 数组类型表示一个 8 位无符号整型数组，创建时内容被初始化为 0
+/**********  ArrayBuffer 类型数组 **********/
+// 表示通用的 固定长度的原始二进制数据缓冲区
+// 它是一个字节数组
+// 不能直接操作ArrayBuffer，要想操作 ArrayBuffer，需要使用 TypedArray 或者 DataView 才能操作 ArrayBuffer
 
+
+
+/**********  TypedArray 类型数组 **********/
+// Uint8Array 数组类型表示一个 8 位无符号整型数组，创建时内容被初始化为 0
+// int16Array.buffer === buffer
+
+// Int8Array  8位二进制有符号整数
+// Unit8Array 8位无符号整数
+
+// Int68Array  16位二进制有符号整数
+// Unit16Array 16位无符号整数
+
+let buffer = new ArrayBuffer(8)
+console.log(buffer.byteLength)  // 8
+
+const int8Array = new Int8Array(buffer)
+console.log(int8Array.length)  // 8
+
+const int16Array = new Int16Array(buffer)
+console.log(int16Array.length, int16Array.buffer === buffer);  // 4
+
+
+
+/**********  DateView 对象 **********/
+// dataView.buffer === buffer
+
+{
+    let buffer = new ArrayBuffer(2)
+    console.log(buffer.byteLength)  // 2
+
+    let dataView = new DataView(buffer)
+    dataView.setInt8(0, 1)
+    dataView.setInt8(1, 2)
+    console.log(dataView.getInt8(0))  // 1
+    console.log(dataView.getInt8(1))  // 2
+    console.log(dataView.getInt16(0), dataView.buffer === buffer)  // 258
+}
+
+
+
+/**********  Blob 类文件对象 **********/
+{
+    const obj = {name: '11'}
+    const objStr = JSON.stringify(obj);
+    let blob = new Blob([objStr], {type: 'application/json'});
+    console.log('blob.size',blob.size)  // 13
+
+    function readBlob(blob, type){
+        return new Promise((resolve,reject) => {
+            let reader = new FileReader()
+
+            reader.onload = function(event){
+                resolve(event.target.result)
+            }
+            switch(type){
+                case 'ArrayBuffer':
+                    reader.readAsArrayBuffer(blob)
+                    break;
+                case 'DataURL':
+                    reader.readAsDataURL(blob)
+                    break;
+                case 'Text':
+                    reader.readAsText(blob)
+                    break;
+            }
+        })
+    }
+
+    readBlob(blob, 'ArrayBuffer').then((data) => {
+        console.log(data); // ArrayBuffer(13)
+    })
+    readBlob(blob, 'DataURL').then((data) => {
+        console.log(data); // data:application/json;base64,eyJuYW1lIjoiMTEifQ==
+    })
+    readBlob(blob, 'Text').then((data) => {
+        console.log(data); // {"name":"11"}
+    })
+}
+
+
+
+/**********  URL.createObjectURL & URL.revokeObjectURL(url) **********/
+{
+    function download(){
+        const obj = {name: '11'}
+        const objStr = JSON.stringify(obj);
+        let blob = new Blob([objStr], {type: 'application/json'});
+        
+        let ele = document.createElement('a');
+        ele.href = URL.createObjectURL(blob)
+        ele.download = 'user.json'
+        ele.rel = 'noopener'
+
+        ele.dispatchEvent(new MouseEvent('click'))
+
+        URL.revokeObjectURL(blob); // 用完之后销毁 URL，也会销毁 blob
+    }
+}

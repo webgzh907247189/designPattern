@@ -14,6 +14,7 @@ const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin')
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const WebpackObfuscator = require('webpack-obfuscator');
 
 // const setIterm2Badge = require('set-iterm2-badge');
 // setIterm2Badge('prod环境');
@@ -25,6 +26,7 @@ module.exports = {
 	entry: {
 		index: './src/main.js'
 	},
+	devtool: 'source-map',
 	output: {
 		filename: 'scripts/[name].[hash:5].bundle.js',
 		publicPath: '/'
@@ -46,9 +48,23 @@ module.exports = {
 			},
 			{
 				test: /\.js$/,
-				use: ['cache-loader', 'babel-loader'],
-				include: [path.resolve('src')],
+				// use: ['cache-loader', 'babel-loader'],
+				use: 'babel-loader',
+				// include: [path.resolve('src')],
 				exclude: /node_modules/
+			},
+			{
+				test: /\.js$/,
+				exclude: [ 
+					path.resolve(__dirname, 'src/test.js') 
+				],
+				enforce: 'post',
+				use: { 
+					loader: WebpackObfuscator.loader, 
+					options: {
+						rotateStringArray: true
+					}
+				}
 			},
 			{
 				test: /\.css$/,
@@ -135,24 +151,6 @@ module.exports = {
 			name: 'runtime'
 		},
 		minimizer: [
-			new UglifyJsPlugin({
-				exclude: /\.min\.js$/, // 过滤掉以".min.js"结尾的文件，我们认为这个后缀本身就是已经压缩好的代码，没必要进行二次压缩
-				cache: true,
-				parallel: os.cpus().length - 1, //true, // 开启并行压缩，充分利用cpu (多核压缩)
-				sourceMap: false,
-				extractComments: false, // 移除注释
-				uglifyOptions: {
-					compress: {
-						unused: true,
-						warnings: false,
-						drop_debugger: true,
-						drop_console: true // 删除所有的 `console` 语句
-					},
-					output: {
-						comments: false
-					}
-				}
-			}),
 			// 用于优化css文件 (CSS nano 解决单页的css)
 			new OptimizeCssAssetsPlugin({
 				assetNameRegExp: /\.css$/g,
@@ -181,7 +179,7 @@ module.exports = {
 			filename: 'index.html',
 			template: './index.html'
 		}),
-		new InlineManifestWebpackPlugin('runtime'),
+		// new InlineManifestWebpackPlugin('runtime'),
 		new ProgressBarPlugin(),
 		new ManifestPlugin()
 	]

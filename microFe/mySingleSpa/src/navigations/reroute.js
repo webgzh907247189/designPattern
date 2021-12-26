@@ -14,10 +14,10 @@ export const reroute = () => {
 
 
     if (started) {
-        console.log('第二次run  调用 start 方法  装载app')
+        // console.log('第二次run  调用 start 方法  装载app')
         return performAppChanges()
     } else {
-        console.log('第一次run  调用 registerApplication 方法')
+        // console.log('第一次run  调用 registerApplication 方法')
         // 注册应用， 需要预先加载
         return loadApps()
     }

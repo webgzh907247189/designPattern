@@ -1,5 +1,15 @@
 import Vue from './index'
 
+Vue.mixin({
+    beforeCreate(){
+        console.log('11')
+    }
+})
+
+Vue.component('my-button', {
+    template: '<div>my-button11</div>'
+})
+
 let vue = new Vue({
     data(){
         return {
@@ -29,9 +39,19 @@ let vue = new Vue({
             }
         }
     },
+    beforeCreate(){
+        console.log('22')
+    },
     el: document.getElementById('root'),
-    render(h){
-        return h('p',{}, this.name1)
+    // render(h){
+    //     return h('p',{}, this.name1)
+    // },
+    // template: '<my-button></my-button><div id="app" style="font-size: 22px; font-weight: 400;"> <div style="color: red;"><span><p>hello</p>111{{msg}}aa{{test}}很好</span></div> </div>',
+    template: '<div><my-button></my-button><my-button></my-button><my-button></my-button></div>',
+    components: {
+        'my-button': {
+            template: '<div>my-button22</div>'
+        }
     }
 })
 
@@ -45,6 +65,7 @@ setTimeout(() => {
     // vue.arr.push('444')
     // vue.arr[0].push('???')
     vue.msg = 'msgnew'
+    window.vue =  vue;
     // vue.arr = ['ggg']
     console.log(vue)
 }, 2000)

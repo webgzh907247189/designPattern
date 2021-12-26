@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MVVM</title>
+</head>
+<body>
+    <div id="app">
+        {{message}}
+        {{ggg}}
+        <input  v-model="inputModel"/>
+        <!-- <header11 v-if="show"/> -->
+        <div v-for="(item,val, index) in list" :style="{}">
+            {{item}}--{{val}}--{{index}}--{{ttttttsssss}}
+        </div>
+        <input id="input" type="text"/>{{show}}
+    </div>
+
+    <!-- 引入依赖的 js 文件 -->
+    <script src="vue.js"></script>
+    <script>
+        // Vue.component('header11',{
+        //     template: '<div>显示{{test}}{{name}}</div>',
+        //     inject: ['name'],
+        //     data: () => {
+        //         console.log(this.name)
+        //         return {
+        //             test: 'gzh',
+        //             a: 1,
+        //         }
+        //     },
+        //     // beforeCreate(){
+        //     //     console.log('test-beforeCreate')
+        //     // },
+        //     created(){
+                
+        //         this.$once('hook:mounted',() => {
+                
+        //             this.a = null;
+        //             console.log('??? 自定义的hook:mounted')
+        //         });
+        //         // console.log('test-created')
+        //     },
+        //     // beforeMount(){
+        //     //     console.log('test-beforeMount')
+        //     // },
+        //     mounted(){
+        //         console.log('test-mounted111，??? 自定义的hook:mounted')
+        //     },
+        //     mounted(){
+        //         console.log('test-mounted222，??? 自定义的hook:mounted')
+        //     },
+        //     // beforeUpdate(){
+        //     //     console.log('test-beforeUpdate')
+        //     // },
+        //     // updated(){
+        //     //     console.log('test-updated')
+        //     // },
+        //     // beforeDestroy(){
+        //     //     console.log('test-beforeDestroy')
+        //     // },
+        //     // destroyed(){
+        //     //     console.log('test-destroyed')
+        //     // },
+        // })
+        // debugger
+        const a = Symbol('a')
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                testtttttt: '111111',
+                show: true,
+                message: 'test',
+                ggg: {name: '111'},
+                inputModel: 'test',
+                list: {
+                    [a]: '1',
+                    b: 2
+                }
+            },
+            provide(){
+                return {
+                    name: this.ggg
+                }
+            },
+            computed: {
+                sssss:{ // 4
+                    get(){
+                        console.log('computed--computed')
+                        return this.inputModel
+                    },
+                    set(){
+                        debugger
+                        this.inputModel = 'computedSet'
+                    }
+                },
+                tttttt(){ //3 
+                    return this.testtttttt +  this.sssss;
+                },
+                ttttttsssss(){ // 2
+                    return this.tttttt;
+                }
+            },
+            watch: {
+                show(newVal, oldVal){
+                    console.log(newVal, oldVal)
+                    
+                }
+            },
+            mounted(){
+                // setTimeout(() => {
+                //     this.message = '????';
+                //     const obj = this.ggg;
+                //     this.ggg = {aa: '2222'}
+                //     obj.name = '????????'
+                // }, 5000)
+
+                // this.$nextTick(() => {
+                //     console.log('nextTick111')
+                //     this.$nextTick(() => {
+                //         console.log('nextTick222')
+                //     })
+                // })
+            }
+        });
+        // console.log(vm, '???')
+        window.vm = vm;
+
+
+    setTimeout(() => {
+        debugger
+        // vm.inputModel = '?????'
+        vm.show = false
+        // this.show = true
+        // vm.sssss = '????'
+    }, 5000)
+
+
+
+    // const inputEle = document.getElementById('input')
+    // const idReg = /[0-9]/g
+    // inputEle.addEventListener('input', function(e){
+    //     console.log(e.target.composing)
+    //     let value = e.target.value
+
+    //     value = value.replace(idReg, '')
+    //     inputEle.value = value
+    // })
+    </script>
+</body>
+</html>

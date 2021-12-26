@@ -358,3 +358,20 @@ resultFunc = function(name: string,sex: string){
 }
 
 resultFunc('张三','男')
+
+
+
+
+
+
+
+
+
+interface Person{
+    name: string
+    age: number
+}
+
+type GetVal<T> = T[keyof T]
+type ss1 = GetVal<Person>
+

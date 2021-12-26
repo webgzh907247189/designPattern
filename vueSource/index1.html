@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MVVM</title>
+</head>
+<body>
+    <div id="app">
+        {{list.name.age.name1111}}--{{sex}}
+        <Test :testmsg="aa" :obj="obj" :cc1="cc1"/>
+    </div>
+
+    <!-- 引入依赖的 js 文件 -->
+    <script src="vue.js"></script>
+    <script>
+        const a = Symbol('a')
+        let vm = new Vue({
+            el: '#app',
+            data(){
+                const objData = Object.freeze({
+                        name: { age: {
+                            name1111: '111'
+                        } }
+                })
+                // console.log(objData, Object.getOwnPropertyDescriptors(objData))
+                let aa = Object.freeze({
+                        name: 'testmsg'
+                })
+
+                const obj = Object.freeze({
+                    buttons: [
+                        {
+                            text: '取消',
+                            type: 'cancle',
+                        },
+                        {
+                            text: '去申请',
+                            type: 'confirm',
+                            disable: true,
+                        },
+                    ],
+                    text: '123456'
+                })
+                return {
+                    list: objData,
+                    aa, 
+                    obj,
+                    cc1: 'cc1',
+                    sex: 'sex'
+                    // test: {
+                    //     name: { age: {
+                    //         name1111: '111'
+                    //     } }
+                    // }
+                }
+            },
+            mounted(){
+                // setTimeout(() => {
+                //     this.list = Object.seal({name: { age: {name1111 : '222'} }})
+                // }, 4000)
+
+                // setTimeout(() => {
+                //     Vue.nextTick(() => {
+                //         console.log('1111')
+                //     })
+                // }, 5000)
+            },
+            components: {
+                Test: {
+                    template: '<div>111{{testmsg}}--{{cc1}}--{{obj}}</div>',
+                    props: {
+                        testmsg: {
+                            type: Object,
+                            default: {},
+                        },
+                        obj: {
+                            type: Object,
+                            default: {},
+                        },
+                        cc1: {
+                            type: String,
+                            default: '',
+                        },
+                    },
+                   
+                    mounted(){
+                        // console.log(this.props, 'this.props')
+                        window.bb = this;
+                        // console.log()
+                    },
+                    // watch: {
+                    //     testmsg(val,oldval){
+                    //         this.testmsgCopy = val
+                    //     }
+                    // },
+                    updated(){
+                        console.log('222--updated')
+                    }
+                }
+            },
+            created(){
+                // this.testmsg = 'testmsg'
+                setTimeout(() => {
+                    // debugger
+                //    this.aa.name = '????'
+                this.obj.buttons[1].text = '?????'
+                // this.$forceUpdate();
+
+                // this.sex = '1sex1'
+                   this.cc1 = '22'
+                //    this.aa = {sex: 'sss'}
+                   console.log(this.obj, 'this.aa')
+                }, 5000)
+            },
+            updated(){
+                console.log('111--updated')
+            }
+        });
+        window.aa = vm;
+    </script>
+</body>
+</html>

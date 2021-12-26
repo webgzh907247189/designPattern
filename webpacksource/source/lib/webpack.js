@@ -7,7 +7,7 @@ const webpack = (options, cb) => {
     // 2. 得到compile。
 
     let compile = new Compile(options.context);
-    compile.options = compile;
+    compile.options = options;
 
     // 让 compile 可以读写文件
     new NodeEnvirenmentPlugin().apply(compile);

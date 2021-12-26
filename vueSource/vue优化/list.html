@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>长列表</title>
+</head>
+
+<body>
+    <div id="app">
+    </div>
+    <!-- 引入依赖的 js 文件 -->
+    <script src="../vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            template: `<div>
+                <Heavy v-if="defer(1)" />
+                <Heavy v-if="defer(2)" />
+                <Heavy v-if="defer(3)" />
+                <Heavy v-if="defer(4)" />
+            </div>`,
+            // template: `<div>
+            //     <Heavy />
+            //     <Heavy />
+            //     <Heavy />
+            //     <Heavy />
+            // </div>`,
+            data() {
+                return {
+                    displayPriority: 0
+                }
+            },
+            mounted() {
+                this.runDisplayPriority()
+            },
+            updated(){
+                console.log('更新了')
+            },
+            methods: {
+                runDisplayPriority() {
+                    const step = () => {
+                        requestAnimationFrame(() => {
+                            this.displayPriority++
+                            if (this.displayPriority < 10) {
+                                step()
+                            }
+                        })
+                    }
+                    // debugger
+                    step()
+                },
+                defer(priority) {
+                    return this.displayPriority >= priority
+                }
+            },
+            components: {
+                Heavy: {
+                    template: '<div>222</div>',
+                    updated(){
+                        console.log('child--更新了')
+                    },
+                }
+            },
+        });
+
+        // https://mp.weixin.qq.com/s/TeJaj06C_7b3ZhBvW3NBJw
+    </script>
+</body>
+
+</html>

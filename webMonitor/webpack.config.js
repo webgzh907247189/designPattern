@@ -81,6 +81,7 @@ module.exports = {
         // },
     },
     // https://www.cnblogs.com/yan7/p/14499137.html
+    // dev: { writeToDisk: true }
     devServer: {
         hot: true,
         static: {

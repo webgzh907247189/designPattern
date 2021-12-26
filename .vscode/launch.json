@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
 
+    
+    {
+        "name": "babel-import",
+        "request": "launch",
+        "type": "node",
+        "webRoot": "${workspaceFolder}/webpacksource/easyWebpack/test-import.js"
+    },
         {
             "type": "node",
             "request": "launch",
@@ -52,6 +59,34 @@
             "request": "launch",
             "name": "connect",
             "program": "${workspaceFolder}/node/connect.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "webpack1",
+            "program": "${workspaceFolder}/webpacksource/debugger.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "nodeFork",
+            "program": "${workspaceFolder}/node/node_threads/fork.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "vite",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "cwd": "${workspaceFolder}/vite_source/packages/vite-project",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run", "dev",
+            ],
+            "port": 9229,
+            "stopOnEntry": true,
+            "autoAttachChildProcesses": true
         }
     ]
 }

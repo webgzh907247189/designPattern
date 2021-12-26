@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>VDOM</title>
+    <style>
+    </style>
+  </head>
+  <body>
+
+    <div id="app"></div>
+    
+    <script>
+        // 渲染不是一个一个渲染的， 是批量渲染的 -> 新版浏览器
+        let total = 100000
+        let timer = Date.now()
+
+        for(let i=0; i < total; i ++){
+            let li = document.createElement('li')
+            li.innerHTML = i
+            app.appendChild(li)
+        }
+
+        console.log(Date.now() - timer);
+
+        // 统计渲染时间, 两次宏任务之间算的是 渲染时间
+        setTimeout(() => {
+            console.log(Date.now() - timer, 'setTimeout');
+        }, 0)
+    </script>
+  
+  </body>
+</html>

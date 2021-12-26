@@ -33,6 +33,7 @@ module.exports = smp.wrap({
             {
                 test: /\.vue$/,
                 loader: 'vue-loader',
+                // use: ['thread-loader', 'vue-loader'],
                 include: [path.resolve('src')],
                 exclude: /node_modules/
             },

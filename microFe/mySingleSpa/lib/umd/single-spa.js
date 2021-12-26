@@ -63,20 +63,26 @@
         if (app.loadPromise) {
             return app.loadPromise
         }
+
+        // 目的 ： 为了只加载一次
+        // 第二次加载，直接返回 app.loadPromise， 加载完成，直接删除 app.loadPromise
+        // 第一次正在加载，还未删除 app.loadPromise， 直接返回 当前已经加载的， 保证 loadApp 只是加载一次
+        return app.loadPromise = Promise.resolve().then(async () => {
+            app.status = LOADING_SOURCE_CODE;
+
+            // 加载完成
+            let { bootstrap,mount,unmount } = await app.loadApp(app.customProps);
         
-        app.status = LOADING_SOURCE_CODE;
-
-        // 加载完成
-        let { bootstrap,mount,unmount } = await app.loadApp(app.customProps);
-
-        app.status = NOT_BOOTSTRAP;
-
-        // 因为 bootstrap 可能是一个数组，需要 compose 一下
-        app.bootstrap = flatFnArray(bootstrap);
-        app.mount = flatFnArray(mount);
-        app.unmount = flatFnArray(unmount);
-
-        return app;
+            app.status = NOT_BOOTSTRAP;
+        
+            // 因为 bootstrap 可能是一个数组，需要 compose 一下
+            app.bootstrap = flatFnArray(bootstrap);
+            app.mount = flatFnArray(mount);
+            app.unmount = flatFnArray(unmount);
+        
+            delete app.loadPromise;
+            return app;
+        })
     }
 
     // 卸载 app 操作
@@ -122,10 +128,10 @@
 
 
         if (started) {
-            console.log('第二次run  调用 start 方法  装载app');
+            // console.log('第二次run  调用 start 方法  装载app')
             return performAppChanges()
         } else {
-            console.log('第一次run  调用 registerApplication 方法');
+            // console.log('第一次run  调用 registerApplication 方法')
             // 注册应用， 需要预先加载
             return loadApps()
         }

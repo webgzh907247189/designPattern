@@ -48,6 +48,8 @@
 				window.xx = this;
 				this.test2 = 'test3'
 			})
+
+			this.name.sex.age.asd.asd.asda = '1'
 		},
 		created(){
 			console.log('about--created')

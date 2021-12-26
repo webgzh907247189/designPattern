@@ -1,7 +1,22 @@
 Vue中filter能不能写异步代码，能不能获取$vm？
 2.foreach 能不能改变原来的数组?
 3.map如果不return会怎么样？
+model/peegasus_ph
 
+// 今天刚好在看event loop和requestAnimationFrame，之前只知道RAF能优化性能让网页流畅，今天才弄懂原理，https://m.youtube.com/watch?v=cCOL7MC4Pl0 这个视频是googler jake archibald在jsconf的演讲
+
+// 【回放视频上线】
+ 
+// <主题> 前端频繁报错，如何才能精准分析、高效决策
+// <嘉宾> 新浪移动前端基础架构组负责人 付强(小爝)
+ 
+// 回放视频地址：http://gk.link/a/10iBG
+// 错过正式直播的兄弟们，登陆InfoQ官网可观看回放画面。
+
+// 公开课录播已上传b站  头条上传问题
+// 观看地址：https://www.bilibili.com/video/av88787688
+
+// https://css-tricks.com/how-do-you-remove-unused-css-from-a-site/  css tree shaking 问题
 
 https://zhuanlan.zhihu.com/p/78516581
 https://zhuanlan.zhihu.com/p/28532725
@@ -198,3 +213,85 @@ https://juejin.im/post/6881779044505878542?utm_source=gold_browser_extension
 HTTP和HTTPS详解
 https://juejin.im/post/6844903604868874247#heading-33
 https://zhuanlan.zhihu.com/p/61423830
+
+
+
+
+
+1.（1）10进制转自定义的7进制
+（2）处理金额，转成千分位表示法
+12345.6 -> 12,345.6
+{
+    function getStr(str){
+        const [str1, str2] = str.split('.');
+        const str1List = str1.split('').reverse();
+    
+        return str1List.reduce((result, item, idx) => {
+            result = (idx % 3 === 0 && idx !== 0 ? `${item},` : item) + result;
+            return result
+        },str2 ? `.${str2}`: '')
+    }
+    
+    console.log(getStr('1234567.99'))    
+}
+
+2. 解决过最棘手的问题
+
+3. React受控组件和非受控组件的区别
+
+4. 虚拟化列表的原理，解决了什么问题
+
+5. 怎么保证Node服务的稳定性
+
+6. Node端的buffer有什么用？浏览器怎么知道流已经传输完成。
+它和直接吐html表现有什么不一样？
+
+7.浏览器的304状态码表示什么？服务端要做什么设置？
+
+8. node服务的QPS是多少
+
+9. 怎么向淘宝网发起一个CSRF攻击
+
+10. 在团队中有推动过什么？
+
+11. 监控指标怎么计算的？如何优化首屏性能的？分别优化了多少时间？
+
+
+
+
+
+
+
+
+/**
+ * 结束的
+ * 
+ * tree shaking 及其工作原理
+ * https://juejin.cn/post/6917053287846035463
+ * 
+ * 
+ * 面试 (值得反复看)
+ * https://juejin.cn/post/6844904097556987917
+ * 
+ * 
+ * babel 知识
+ * https://www.cnblogs.com/shiyunfront/p/7338384.html (babel-runtime 过时的)
+ * 
+ * 
+ * mono-repo
+ * https://segmentfault.com/a/1190000038801642
+ * 
+ * 
+ * 
+ * JavaScript 中模块的导入和导出 (为什么 CommonJS 和 ES Module 不能共存)
+ * 
+ * CommonJS，是在 Node.js 实现的同步加载模块的方法，
+ * 异步模块定义（AMD）则是非同步加载模块，
+ * 还有通用模块定义（UMD），旨在成为能够支持两种加载模式的通用的解决方案
+ * 
+ * https://mp.weixin.qq.com/s/qCE9kzJhjnxvXbTydaHiqQ
+ * https://juejin.cn/post/6865557155102064648
+ * https://mp.weixin.qq.com/s/Fb2DReiFFkNES02Zem38iA 
+ * 
+ * https://es6.ruanyifeng.com/#docs/module-loader
+ */

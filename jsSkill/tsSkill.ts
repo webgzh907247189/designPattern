@@ -16,6 +16,7 @@
 
   type Partial<T> = { [K in keyof T]?: T[K] };
 
+  type ss = Partial<Todo>
   const test1: Partial<Todo> = {
     title: "",
   };
@@ -172,6 +173,9 @@
       
     type test1 = typeof C
     type T0 = InstanceType<typeof C>;  // C
+    var s: C = {x: 1, y: 123};
+    // var s1: test1 = ;
+
     
     type T1 = InstanceType<any>;  // any
     

@@ -1,0 +1,23 @@
+{
+  "name": "vuesource",
+  "version": "1.0.0",
+  "description": "",
+  "main": "1.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "vueLoader": "node ./vueLoader.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vue-loader": "^15.9.6",
+    "vue-template-compiler": "^2.6.12",
+    "webpack": "^5.27.1",
+    "webpack-cli": "^4.5.0"
+  },
+  "dependencies": {
+    "vue": "^2.6.12",
+    "vue-router": "^3.5.0",
+    "vuex": "^3.6.0"
+  }
+}

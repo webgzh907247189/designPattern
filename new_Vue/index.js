@@ -1,19 +1,27 @@
 import { initState } from './observe/index'
 import Watcher from './observe/watcher'
-import compile from './observe/util';
-import { h, patch, render } from './vdom';
+import { compileToFunction } from './compile/index';
+import renderMinxin from './render';
+import lifeCycleMinxin, { mountComponent, callHook } from './lifeCycle'
+import initGlobalApi, { mergeOptions } from './global-api/index';
 
 function Vue(options){
     this._init(options)
 }
 
+lifeCycleMinxin(Vue);
+renderMinxin(Vue);
+initGlobalApi(Vue);
+
 Vue.prototype._init = function(options){
     // vue 初始化，this.$options 标示的是vue中的参数
     let vm = this;
-    vm.$options = options
+    vm.$options = mergeOptions(vm.constructor.options,options)
 
+    callHook(vm, 'beforeCreate')
     // 数据初始化
     initState(vm)
+    callHook(vm, 'created')
 
     // 开始渲染
     if(vm.$options.el){
@@ -22,64 +30,26 @@ Vue.prototype._init = function(options){
 }
 
 
-
-// Vue.prototype._update = function(){
-//     // 用户传入的数据去更新试图
-//     let vm = this;
-//     let el = vm.$el;
-
-//     let node = document.createDocumentFragment()
-
-//     let firstChild
-//     while (firstChild = el.firstChild) {
-//         node.appendChild(firstChild)
-//     }
-
-//     compile(node,vm)
-//     el.appendChild(node)
-//     // 需要使用 {{}} 的方式进行替换
-
-// }
-Vue.prototype._update = function(vnode){
-    // debugger
-    // 用户传入的数据去更新试图
-    let vm = this;
-    let el = vm.$el;
-
-    let prevVnode = vm.prevVnode
-    // 初次渲染
-    if(!prevVnode){
-        // 保存上一次的节点
-        vm.prevVnode = vnode
-        render(vnode, el)
-    }else{
-        vm.$el = patch(prevVnode, vnode)
-    }
-}
-
-
-Vue.prototype._render = function(){
-    let vm = this;
-    let render = vm.$options.render;
-    // vNode
-    return render.call(vm, h)
-}
-
 Vue.prototype.$mount = function(){
     let vm = this;
+    debugger
     let el = vm.$options.el;
-    el = vm.$el = query(el);  // vm.$el 就是将要挂载的元素
+    el = vm.$el = el && query(el);  // vm.$el 就是将要挂载的元素
 
-    // 渲染通过watcher
-    // 渲染watcher 用于渲染的watcher
-    // vue 2.0 组件级别的更新
+    const options = vm.$options;
+    // 编译模版
+    if(!options.render){
+        let template = options.template
+        if(!template & el){
+            // 查找规范，先找 template
+            template = el.outerHTML
+        }
 
-    let updateCom = () => {
-        console.log('更新组件') //第一次渲染，后面是更新
-        vm._update(vm._render()) // 更新组件
+        const render = compileToFunction(template)
+        options.render = render;
     }
 
-    new Watcher(vm,updateCom) // 渲染watcher
+    mountComponent(vm)
 }
 
 Vue.prototype.$watch = function(key, handler, opts){

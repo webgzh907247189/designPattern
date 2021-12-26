@@ -5,10 +5,33 @@ export function render(vnode,container){
     return el;
 }
 
+function createComponent(vnode) {
+    let i = vnode.props;
 
-function createEle(vnode){
+    if ((i = i.hook) && (i = i.init)) {
+        i(vnode)
+    }
+
+    // 代表是组件实列
+    if(vnode.componentInstance){
+        return true;
+    }
+    return false
+}
+
+export function createEle(vnode){
     let {tag, props, key, children, text} = vnode
+    // console.log(vnode, 'vnode')
     if (typeof tag === 'string') {
+        // 返回 true 代表是 组件
+        if(createComponent(vnode)){
+            // 把组件渲染后的真实元素拿到
+            debugger
+            return vnode.componentInstance.$el;
+        }
+
+
+        // 使用指令的时候可以通过 vnode 拿到真实 dom
         vnode.el = document.createElement(tag)
         updateProperties(vnode);
         children.forEach(item => {
@@ -22,19 +45,21 @@ function createEle(vnode){
 }
 
 
-function updateProperties(vnode, oldProps = {}){
+export function updateProperties(vnode, oldProps = {}){
     let newProps = vnode.props || {};
     let el = vnode.el
 
     let newStyle = newProps.style || {}
     let oldStyle = oldProps.style || {}
 
+    // 针对样式 做特殊 处理
     for(let key in oldStyle){
         if(!newStyle[key]){
             el.style[key] = ''
         }
     }
 
+    // 老的有，新的没有，直接删除
     for(let key in oldProps){
         if(!newProps[key]){
             delete el[key]
@@ -69,6 +94,7 @@ export function patch(oldVnode, newVnode){
         }
     }
 
+    // 元素相同， 复用老节点，更新属性(把老的dom 给新的虚拟节点的 el 属性)
     let el = newVnode.el = oldVnode.el
     // 比较属性
     updateProperties(newVnode, oldVnode.props)
@@ -115,6 +141,7 @@ function updateChildren(parent, oldChildren, newChildren){
         children.forEach((item,idx) => {
             map[item.key] = idx
         })
+        return map;
     }
     let map = makeIndexByKey(oldChildren)
 
@@ -159,6 +186,7 @@ function updateChildren(parent, oldChildren, newChildren){
         // 头头不一样，尾巴尾巴不一样 (拿新的节点去老的节点查找，没有的话把新的插入进来。有的话，复用一下)
         // 1. 先查找E有没有，没有，先把E插入到老的最前面
         } else {
+            // 用新的vnode 去 老的里面查找 没有找到 就插入
             let moveIndex = map[newStartVnode.key]
             // 在老的里面没有找到
             if(!moveIndex){
@@ -166,6 +194,7 @@ function updateChildren(parent, oldChildren, newChildren){
             }else{
                 // 把新的移走，原来的位置赋值为 undefined
                 let moveNode = oldChildren[moveIndex]
+                // 更新vnode 的属性 (更新样式之类的)
                 patch(moveNode,newStartVnode)
                 oldChildren[moveIndex] = undefined
                 parent.insertBefore(moveNode.el,oldStartVnode.el)

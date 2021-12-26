@@ -93,6 +93,7 @@ app.get('*',function(req,res){
                     window.context = {
                         state: ${JSON.stringify(store.getState())}
                     }
+                    window.name= '111'
                 </script>
                 <script src="indexssr.js"></script>
             </body>

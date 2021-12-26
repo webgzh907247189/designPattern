@@ -13,14 +13,29 @@
   "files": [
     "lib"
   ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/webgzh907247189/designPattern.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "dev": "vite"
   },
   "bugs": {
     "url": "https://github.com/webgzh907247189/designPattern/issues"
+  },
+  "dependencies": {
+    "@vitejs/plugin-vue": "^1.10.2",
+    "@vue/compiler-sfc": "^3.2.25",
+    "es-module-lexer": "^0.9.3",
+    "koa": "^2.13.4",
+    "koa-static": "^5.0.0",
+    "magic-string": "^0.25.7",
+    "vite": "^2.7.1",
+    "vue": "^3.2.25"
   }
 }

@@ -14,17 +14,21 @@
 // https://zhuanlan.zhihu.com/p/139359864
 // babel corejs@3 是如何按需polyfill原型对象方法的
 
-  
 {
     const babel = require('@babel/core');
-    const code = `[1, 2, 3].includes(3);`; // class Person{};
-    const ast1 = babel.transform(code, {
+    const code = `class C {#brand;};`; // class Person{}; // class C {#brand;}
+    // transformXxx 的 api，已经被标记为过时了，后续会删掉，不建议用，直接用 transformXxxSync 和 transformXxxAsync。
+    const ast1 = babel.transformSync(code, {
       presets: [
         [
-          '@babel/preset-env',
+          '@babel/env', // '@babel/preset-env',
           {
             useBuiltIns: 'usage',
             corejs: 3,
+            // 切换是否开启对处于提案中的且浏览器已经实现的内置对象/特性的支持。若是你的目标环境已经有了对某提案特性的原生支持，
+            // 将开启与其相匹配的解析器语法插件，而不是执行任何的转换。
+            // 注意，这不会开启与@babel/preset-stage-3相同的转换，因为这些提案在正式落地到浏览器之前还会继续改变。
+            shippedProposals: true, // https://babeljs.io/docs/en/babel-preset-env#shippedproposals
           }
         ]
       ],

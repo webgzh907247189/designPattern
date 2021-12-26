@@ -1,3 +1,4 @@
+// 单页入口
 const itemToPlugin = (context, entry, name) => {
     return new SingleEntryPlugin(context, entry, name)
 }

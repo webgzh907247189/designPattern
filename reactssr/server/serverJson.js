@@ -2,6 +2,8 @@ let express = require('express')
 let bodyParseer = require('body-parser')
 let cors = require('cors')
 let session = require('express-session')
+
+console.log('??111111')
 let app = express()
 
 
@@ -23,6 +25,7 @@ app.get('/api',function(req,res){
 })
 
 app.post('/api/login',function(req,res){
+    console.log('1111')
     let user = req.body
     req.session.user = user
     res.json({

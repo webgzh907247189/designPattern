@@ -6,6 +6,7 @@ export function initState(vm){
     let opt = vm.$options;
 
     if(opt.data){
+        debugger
         initDate(vm)
     }
 

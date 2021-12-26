@@ -1,0 +1,14 @@
+{
+  "name": "compilejsx",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compilejsx": "babel --plugins @babel/plugin-transform-react-jsx index.js --out-file compile.js",
+    "compilejsx2": "babel index.js --out-file compile2.js",
+    "nodecompilejsx": "node ./nodeCompile.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -33,6 +33,7 @@
     "koa-cors": "0.0.16",
     "mime": "^2.4.4",
     "node-xlsx": "^0.15.0",
-    "nodemon": "^1.17.5"
+    "nodemon": "^1.17.5",
+    "superagent": "^6.1.0"
   }
 }

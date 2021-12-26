@@ -10,6 +10,7 @@ import RouterApp from './router';
 import ReduxActionsDemo from "./reduxActionsDemo";
 import ReduxHooksDemoContainer from "./reduxHooksDemo";
 
+import Test from './test'
 // /** hooks 测试 */
 // import Hooks from './hooks'
 // Hooks()
@@ -176,7 +177,7 @@ import ReduxHooksDemoContainer from "./reduxHooksDemo";
 // console.log(ele);
 {/* <HoosUseState></HoosUseState> */}
 // ReactDOM.render(<RouterApp></RouterApp>, document.getElementById('root'));
-ReactDOM.render(<ReduxHooksDemoContainer></ReduxHooksDemoContainer>, document.getElementById('root'));
+ReactDOM.render(<Test></Test>, document.getElementById('root'));
 // class TestReact extends React.Component{
 //     constructor(props){
 //         super(props)

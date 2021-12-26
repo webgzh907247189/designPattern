@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>VDOM</title>
+    <style>
+    </style>
+  </head>
+  <body>
+
+    <div id="app"></div>
+    
+    <script>
+        // 渲染不是一个一个渲染的， 是批量渲染的 -> 新版浏览器
+        let total = 100000
+
+        let index = 0 // 偏移量
+        let id = 0 // 递增的内容
+
+        // 当前 宏任务渲染的前提 是上一词 渲染完成。分片渲染
+        // 每次 宏任务 之间 穿插 渲染
+        function load(){
+          index += 50
+          console.log(index, 'index');
+          if(index <= total){
+            setTimeout(() => {
+              for(let i=0; i < 50; i ++){
+                // ie 浏览器 需要文档碎片。不然容易造成 重排
+                let li = document.createElement('li')
+                li.innerHTML = id++
+                app.appendChild(li)
+              }
+              load()
+            }, 0)
+          }
+        }
+        load()
+    </script>
+  
+  </body>
+</html>

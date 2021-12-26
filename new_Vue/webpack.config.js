@@ -9,6 +9,7 @@ module.exports = {
         src: './test.js',
         testVdom: './testVdom.js',
         testVnode: './testVnode.js',
+        testDiff: './testDiff.js',
     },
     output: {
         filename: 'chunk[contentHash:5].js',

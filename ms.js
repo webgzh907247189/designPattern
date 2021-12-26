@@ -32,6 +32,13 @@ null == '' false
 
 
 
+// 几种刷新和回车的区别
+// 使用 Ctrl+F5 强制刷新页面时，会对本地缓存文件直接过期，然后跳过强缓存和协商缓存，直接请求服务器
+// 点击刷新或 F5 刷新页面时，对本地缓存文件过期，然后带If-Modifed-Since和If-None-Match发起协商缓存验证新鲜度
+// 浏览器输入URL回车，浏览器查找 Disk Cache，有则使用，没有则发送网络请求
+
+
+
 {
     function user(obj){
         obj.name = '11';
@@ -214,6 +221,7 @@ null == '' false
   // WeakSet 没有遍历方法，因为其成员都是弱引用，弱引用随时都会消失，遍历机制无法保证成员的存在
   // WeakSet集合中对象的引用为弱引用。如果没有其他的对WeakSet中对象的引用，那么这些对象会被当成垃圾回收掉。 
   //这也意味着WeakSet中没有存储当前对象的列表。正因为这样，WeakSet 是不可枚举的
+  // 因为是弱引用，所以WeakMap、WeakSet的键值对是不可枚举的
   {
     // 对应的 item & item 可能被删除的情况
     function getOnlyKey(item) {
@@ -224,3 +232,126 @@ null == '' false
     }
   }
 }
+
+
+27555
+
+
+{
+  const arr = [1, [2, [3, [4, 5]]], 6];
+  const list = JSON.stringify(arr).replace(/\[|\]/g, '').split(',')
+  console.log(list)
+}
+{
+  const arr = [1, [2, [3, [4, 5]]], 6];
+  const getList = (list) => {
+    return list.reduce((result, item) => {
+      return result.concat(Array.isArray(item) ? getList(item) : item)
+    }, [])
+  }
+  console.log(getList(arr))
+}
+
+
+{
+  https://github.com/mqyqingfeng/Blog/issues/2
+  // 1
+function inheritPrototype(subType, superType) {
+  function F() {}
+  F.prototype = superType.prototype;
+  var f = new F();
+  f.constructor = subType;
+  subType.prototype = f;
+  }
+  
+  function SuperType4(name) {
+  this.name = name;
+  this.colors = ["red", "blue", "green"];
+  }
+  
+  SuperType4.prototype.sayName = function() {
+  console.log(this.name);
+  };
+  
+  function SubType4(name, age) {
+  SuperType4.call(this, name);
+  this.age = age;
+  }
+  inheritPrototype(SubType4, SuperType4);
+  
+  SubType4.prototype instanceof SuperType4
+  new SubType4('dd','pp').__proto__
+  new SubType4('dd','pp').__proto__.__proto__
+  new SubType4('dd','pp').__proto__.__proto__.__proto__
+  
+  
+  
+  // 2
+  function inheritPrototype(subType, superType) {
+  subType.prototype = superType.prototype;
+  subType.constructor = subType;
+  }
+  
+  function SuperType7(name) {
+  this.name = name;
+  this.colors = ["red", "blue", "green"];
+  }
+  
+  SuperType7.prototype.sayName = function() {
+  console.log(this.name);
+  };
+  
+  function SubType7(name, age) {
+  SuperType7.call(this, name);
+  this.age = age;
+  }
+  inheritPrototype(SubType7, SuperType7);
+  SubType7.prototype instanceof SuperType7
+  new SubType7('dd','pp').__proto__
+  new SubType7('dd','pp').__proto__.__proto__
+}
+
+
+{
+  秋招
+  https://pan.baidu.com/s/1wcC48wAzq0YHSTI7Ctscxw  
+  密码: ppl1  
+
+  前端性能优化CRP
+  链接：https://pan.baidu.com/s/1TzzLaYtx6HZtbW0Oj8Cnbg 
+  提取码：47fx
+}
+{
+  nest
+  相关的录播视频链接：https://pan.baidu.com/s/1PFu6Sa80EkKDQaeD3SB0FA 
+  提取码：490u 
+  复制这段内容后打开百度网盘手机App，操作更方便哦
+}
+
+{
+  axios，flex，
+  bfc，渲染过程，@import link,
+  $dispatch 含义(配合 $on,为什么$on可以完成这个操作，因为都在this.$vm上)
+  看完文的那个vue进阶 精选
+}
+
+
+
+
+// 先是初始化作用域链
+// 然后是初始化this和arguments
+// 然后是形参赋值
+// 再到变量提升
+
+
+
+// 数组 一般是链表存储，哈希表读取
+// 怎么区分堆内存栈内存
+
+// 对对象来说 指针是放在栈啊 数据放在堆
+// 快的是栈 慢的是堆
+// 引用类型存在堆，非引用类型 放在栈
+// https://blog.csdn.net/xiebaochun/article/details/85711635
+ 
+
+http://www.zhufengpeixun.com/grow/html/103.10.webpack-optimize.html 

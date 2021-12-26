@@ -14,6 +14,7 @@
 			"loose": false
 		}],
         "@babel/plugin-proposal-do-expressions",
-        "transform-vue-jsx"
+        "transform-vue-jsx",
+		"@babel/plugin-syntax-dynamic-import"
 	]
 }

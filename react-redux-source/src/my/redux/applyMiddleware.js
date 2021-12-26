@@ -13,12 +13,12 @@ function applyMiddleware(...middlerares){
             // 没有直接传入store，因为遵循  最小开放策略，只放开需要的 方法
             let middlerareAPI = {
                 dispatch: (...args) => {
-                    // debugger;
+                    debugger;
                     console.log(dispatch,'ff');
 
                     // 这个dispatch 是下面的compose运行的返回值，是增强版的 dispatch
-                    // return dispatch(...args)
-                    return store.dispatch(...args)
+                    return dispatch(...args)
+                    // return store.dispatch(...args)
                 },
                 getState: store.getState
             }

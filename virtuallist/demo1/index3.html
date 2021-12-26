@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>VDOM</title>
+    <style>
+    </style>
+  </head>
+  <body>
+
+    <div id="app"></div>
+    
+    <script>
+        // 渲染不是一个一个渲染的， 是批量渲染的 -> 新版浏览器
+        let total = 100000
+
+        let index = 0 // 偏移量
+        let id = 0 // 递增的内容
+
+        // 当前 宏任务渲染的前提 是上一词 渲染完成。分片渲染
+        // 每次 宏任务 之间 穿插 渲染
+        function load(){
+          index += 50
+          console.log(index, 'index');
+          if(index <= total){
+            // 每次调用之前创建一个 fragement，循环结束之后在进行 插入
+            // 高版本浏览器不需要 fragement，浏览器自带优化
+            let fragement = document.createDocumentFragment();
+            requestAnimationFrame(() => {
+              for(let i=0; i < 50; i ++){
+                // ie 浏览器 需要文档碎片。不然容易造成 重排
+                let li = document.createElement('li')
+                li.innerHTML = id++
+                fragement.appendChild(li)
+              }
+              app.appendChild(fragement)
+              load()
+            })
+          }
+        }
+        load()
+    </script>
+  
+  </body>
+</html>

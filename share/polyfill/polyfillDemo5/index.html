@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+       <meta charset="utf-8">
+
+       <!-- https://segmentfault.com/a/1190000002407912  https://www.jianshu.com/p/739d7ce9c6fe  http://blog.csdn.net/rogerjava/article/details/17123593 https://www.zhihu.com/question/22431667-->
+
+       <!-- 控制状态栏显示样式 -->
+       <meta content="black" name="apple-mobile-web-app-status-bar-style">
+
+       <!-- 删除默认的苹果工具栏和菜单栏,默认就是显示工具栏和菜单栏 (伪装app，离线应用)-->
+       <meta content="yes" name="apple-mobile-web-app-capable">
+
+       <!-- "添加到主屏幕“后，全屏显示(苹果特有) -->
+       <meta content="yes" name="apple-touch-fullscreen">
+
+       <!-- 去除默认的数字做为点好号码的设置 -->
+       <meta content="telephone=no,email=no" name="format-detection">
+
+       <!-- iOS上的Safari和Windows Phone上的IE在内的一些移动端浏览器会在超链接元素被触摸（tap）的时候显示一个半透明的高亮背景，来给用户一个附加的反馈。然而，很多网站想要禁用这种默认的行为来更好地控制自己站点的外观和体验。 -->
+       <meta name="msapplication-tap-highlight" content="no">
+
+       <!-- 禁止浏览器从本地计算机的缓存中访问页面内容 -->
+       <!-- <meta http-equiv="Pragma" content="no-cache"> -->
+
+       <!-- 用百度打开网页可能会对其进行转码（比如贴广告），避免转码可添加如下meta -->
+       <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+       <link rel="shortcut icon" type="image/x-icon" href="bai.ico" />
+
+       <!-- 添加到主屏后的标题 -->
+       <meta name="apple-mobile-web-app-title" content="测试项目">
+       <!-- IOS (将网站添加到iPhone的主屏幕上,且添加指定的图片作为桌面icon)-->
+       <link rel="apple-touch-icon" href="/custom_icon.png"/>
+       <link rel="apple-touch-icon" sizes="72x72" href="/custom_icon.png" />
+       <link rel="apple-touch-icon" sizes="114x114" href="/custom_icon.png" />
+       <!-- iOS将图标添加高光效果 -->
+       <link rel="apple-touch-icon-precomposed" href="/custom_icon.png"/>
+
+       <!-- 添加智能 App 广告条 Smart App Banner：告诉浏览器这个网站对应的app
+       https://developer.apple.com/library/content/documentation/AppleApplications/Reference/SafariWebContent/PromotingAppswithAppBanners/PromotingAppswithAppBanners.html -->
+       <!-- <meta name="apple-itunes-app" content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">  -->
+
+       <meta name="screen-orientation" content="portrait">
+       <meta name="x5-orientation" content="portrait">
+
+       <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"> -->
+    </head>
+    <body>
+        <!-- https://cdn.bootcdn.net/ajax/libs/babel-polyfill/7.12.1/polyfill.js -->
+        <script src="https://cdn.polyfill.io/v2/polyfill.min.js?callback=main" async defer></script> 
+       <div>
+           polyfill demo 5
+       </div>　
+    </body>
+</html>

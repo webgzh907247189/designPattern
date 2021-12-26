@@ -12,7 +12,8 @@ module.exports = {
         path: path.resolve(__dirname,'buildSsr')
     },
     // 负责检查所有引入的核心模块，并且告诉webpack，不要打包node自带的核心模块
-    externals: [nodeExternals()],
+    // externals: [nodeExternals()],
+    devtool: 'inline-source-map',
     module: {
         rules: [
             {

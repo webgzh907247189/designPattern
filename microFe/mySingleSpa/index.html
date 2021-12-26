@@ -56,19 +56,36 @@
       // 加载应用
       // 参数1 应用的名字    参数2 加载 app的方法必须是返回一个promise 方法
       singleSpa.registerApplication('app1', async (props) => {
-            console.log('加载时执行') // 打印两次 -> toLoadPromise 执行两次
+            console.log('加载时执行1') // 打印两次 -> toLoadPromise 执行两次
             // 注意 props 的来历， 相当于 父应用给 子应用传参
             return {
                // bootstrap 可以是一个数组函数，也可以是一个单独的函数
-               bootstrap: [async (props) => {console.log('1111')}, async (props) => {console.log('222')}],
-               mount: async (props) => {console.log('3333')},
+               bootstrap: [async (props) => {console.log('app1-1111')}, async (props) => {console.log('app1-222')}],
+               mount: async (props) => {console.log('app1-3333')},
                unmount: async (props) => {},
             }
          },
          // 路由匹配到 以 #/app1 开头的，
          location => location.hash.startsWith('#/app1'),
          // 传递的数据
-         { store: { name: 'test',age: '222' } }
+         { store: { name: 'test1',age: '11111' } }
+      )
+
+
+      singleSpa.registerApplication('app2', async (props) => {
+            console.log('加载时执行2') // 打印两次 -> toLoadPromise 执行两次
+            // 注意 props 的来历， 相当于 父应用给 子应用传参
+            return {
+               // bootstrap 可以是一个数组函数，也可以是一个单独的函数
+               bootstrap: [async (props) => {console.log('app2-1111')}, async (props) => {console.log('app2-222')}],
+               mount: async (props) => {console.log('app2-3333')},
+               unmount: async (props) => {},
+            }
+         },
+         // 路由匹配到 以 #/app1 开头的，
+         location => location.hash.startsWith('#/app2'),
+         // 传递的数据
+         { store: { name: 'test2',age: '222' } }
       )
 
       // registerApplication 默认会加载应用(路由匹配上)，但是不会挂载， 只有当 start 之后，才会真正当挂载

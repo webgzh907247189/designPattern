@@ -1,9 +1,10 @@
-export function vnode(tag, props, key, children, text){
+export function vnode(tag, props, key, children, text, componentOptions){
     return {
         tag, 
         props, 
         key, 
         children, 
-        text
+        text,
+        componentOptions
     }
 }

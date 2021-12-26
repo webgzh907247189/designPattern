@@ -3,6 +3,7 @@ import { arrayMethods, observableArray, dependArray } from './array'
 import Dep from './dep';
 
 export function defineReactive(data,key,value){
+    // debugger
     let childOb = observe(value)
     // console.log(childOb,'??')
 

@@ -1,0 +1,28 @@
+const jsx = '<h1 id="title"><span>hello</span>world</h1>'
+
+// react 17 之前    runtime: 'classic'  pragma: 'createElement'
+// /*#__PURE__*/
+// React.createElement("h1", {
+//     id: "title"
+//   }, /*#__PURE__*/React.createElement("span", null, "hello"), "world");
+
+
+
+// // react 17 之后    runtime: 'automatic',  追加 pragma: 'createElement' 报错
+// var _jsxRuntime = require("react/jsx-runtime");
+// /*#__PURE__*/
+// (0, _jsxRuntime.jsxs)("h1", {
+//   id: "title",
+//   children: [/*#__PURE__*/(0, _jsxRuntime.jsx)("span", {
+//     children: "hello"
+//   }), "world"]
+// });
+
+
+const babelCore = require('@babel/core');
+const pluginTransformReactJsx = require('./pluginTransformReactJsx.js');
+
+const code = babelCore.transformSync(jsx, {
+    plugins: [[pluginTransformReactJsx, { runtime: 'automatic' }]] // default pragma is React.createElement
+})
+console.log(code.code);

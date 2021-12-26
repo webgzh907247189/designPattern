@@ -8,6 +8,9 @@ fastclick.attach(document.body)
 
 Vue.prototype.axios = axios
 
+import(/* webpackChunkName:"testgzh1" */'./test').then((data) => {
+	window.data = data
+})
 new Vue({
 	el: '#root',
 	router,

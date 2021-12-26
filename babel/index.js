@@ -1,11 +1,43 @@
 // https://juejin.im/post/5d7efbbb6fb9a06b2650c74a
 // https://blog.hhking.cn/2019/04/02/babel-v7-update/
 // https://github.com/sorrycc/blog/issues/80
+// https://mp.weixin.qq.com/s/B8XRsMg2uJrQTD5IFWOdlw
+
+
+
+// 姜瑞涛的官方网站
+// https://www.jiangruitao.com/babel/tool/
+
+
 
 /**
+ * 预设就是插件的集合 (多个插件组合出来的)
+ * loose: false (默认)
+ * 通过 object.defineProperty 赋值
+ * 
+ * loose: true 直接给属性赋值
+ * 
+ * 
+ * 
  * 插件比预设先执行
  * 插件执行顺序是插件数组从前向后执行
  * 预设执行顺序是预设数组从后向前执行
+ * 
+ * 
+ * 
+ * https://juejin.cn/post/6992371845349507108
+ * plugins 主要有三种类型：
+ * babel-plugin-transform-xx：转换插件
+ * babel-plugin-syntax-xx：语法插件
+ * babel-plugin-proposal-xx：用来编译和转换在提案中的属性
+ * 
+ * 
+ * preset-env 依赖 browserslist, compat-table, and electron-to-chromium 实现了特性的精细按需引入
+ * @babel/compat-data 可以看下兼容性 (includes)
+ * 
+ * 
+ * npx browserslist "> 0.25%, not dead"
+ * 
  */
 
 /**
@@ -16,6 +48,10 @@
  * 
  * browserslist 是用来给不同的前端工具（Autoprefixer, babel-preset-env）共享 target browsers 和 Node.js versions 配置的.
  *  一般推荐将配置写在 package.json 里的 browserslist 字段。
+ * 
+ * babel 是优先读取.babelrc 文件中@babel/preset-env 的 targets 属性，未定义会读取 package.json 中的 browserslist。
+ * 在终端中运行npx browserslist命令，查看您的查询选择了哪些浏览器
+ * 
  * 
  * core-js 提供了两种补丁方式。
  * 1. core-js/library，通过 helper 方法的方式提供
@@ -231,3 +267,9 @@ const code = `[1, 2, 3, 4, [5, 6, [7, 8]]].flat(Infinity);`;
   console.log(getList(arrays))
   // [ 10, 50, 100, 2000, 3000, 40000 ]
 }
+
+
+// https://juejin.cn/post/6917656850309578759
+// https://juejin.cn/post/6900853307158298638
+// https://juejin.cn/post/6901649054225465352
+// https://zhuanlan.zhihu.com/p/147083132

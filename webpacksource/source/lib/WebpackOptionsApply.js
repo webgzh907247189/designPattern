@@ -2,6 +2,7 @@
 const EntryOptionPlugin = require('./EntryOptionPlugin')
 class WebpackOptionsApply {
     process(options, compile){
+        // 注册插件
         new EntryOptionPlugin().apply(compile);
 
         // 触发 entry 钩子

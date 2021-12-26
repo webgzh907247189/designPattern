@@ -13,13 +13,15 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'main.js',
+
+        // publicPath: '/',
     },
     devServer: {
         hot: true,
 
         port: 3001,
         progress: true,
-        // 额外的静态文件根目录
+        // 额外的静态文件根目录 ，配置 . 代表是项目的根目录来作为 静态资源
         contentBase: '.',  // './dist', 这个值没有意义，默认就是output 输出的目录。 此配置一般是添加额外的目录作为 http-server 被访问 
         // 3. 在server 中启动webpack
         // 2. mock
@@ -28,6 +30,7 @@ module.exports = {
                 res.json({name: 'test'});
             })
         },
+        // writeToDisk: true,
         // 1. 代理
         proxy: {
             '/api': {
@@ -167,9 +170,9 @@ module.exports = {
     //     ignored: /node_modules/ // 不需要监控的
     // },
     plugins: [
-        new webpack.DllReferencePlugin({
-            manifest: path.resolve(__dirname, 'dist', 'mainfast.json')
-        }),
+        // new webpack.DllReferencePlugin({
+        //     manifest: path.resolve(__dirname, 'dist', 'mainfast.json')
+        // }),
         // 在每个模块进行注入
         new webpack.ProvidePlugin({
             '$1': 'jquery'

@@ -58,3 +58,73 @@ suite.add('extends', function() {
   })
   // run async
   .run({ 'async': true });
+
+
+
+
+
+
+
+
+
+// const Benchmark = require('benchmark');
+
+// const suite = new Benchmark.Suite;
+
+// suite.add('awaitWrapFn', function() {
+//     function awaitWrapFn(promiseFn) {
+//       return (...args) => {
+//           return promiseFn(...args)
+//           .then(data => [null, data])
+//           .catch(err => [err, null])
+//       }
+//     }
+//     awaitWrapFn((ddd) => {
+//       return Promise.resolve(ddd)
+//     })('2222')
+
+//   })
+//   .add('compose', function() {
+//     function awaitWrap(promise) {
+//       return promise
+//         .then(data => [null, data])
+//         .catch(err => [err, null])
+//     } 
+
+//     function compose(...fns) {
+//       return fns.reduce((a, b) => {
+//           return (...args) => {
+//               return a(b(...args));
+//           }
+//       })
+//     }
+  
+//     const testFn = (ddd) => {
+//       return Promise.resolve(ddd)
+//     }
+//     compose(awaitWrap, testFn)('222');
+
+//   })
+//   .add('awaitWrap', function() {
+//     function awaitWrap(promise) {
+//       return promise
+//         .then(data => [null, data])
+//         .catch(err => [err, null])
+//     } 
+
+//     const testFn = (ddd) => {
+//       return Promise.resolve(ddd)
+//     }
+//     awaitWrap(testFn('222'));
+
+//   })
+
+//   // add listeners
+//   .on('cycle', function(event) {
+//     console.log(String(event.target));
+//   })
+//   .on('complete', function() {
+//     console.log('Fastest is ' + this.filter('fastest').map('name'));
+//   })
+//   // run async
+//   .run({ 'async': true });

@@ -20,7 +20,7 @@ module.exports = {
     ],
 	plugins: [
         ["@babel/plugin-transform-runtime", {
-            "corejs": 3 // ???? 对比之前的版本 flat打包体积 //测试babel 文章的 打包 // 压缩比列
+            "corejs": 3 // ???? 对比之前的版本 flat打包体积 //测试babel 文章的 打包 // 压缩比列 // ？？vite 测试
         }]
 	]
 }

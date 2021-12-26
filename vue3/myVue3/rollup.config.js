@@ -26,7 +26,7 @@ export default {
             open: true,
             openPage: '/public/index.html',
             port: 3000,
-            contentBase: '', //不给报错
+            contentBase: '', //不给报错  // 表示基准目录，一定要给
         })
     ]
 }

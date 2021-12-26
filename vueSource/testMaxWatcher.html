@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试最大的 watcher 数量</title>
+</head>
+<body>
+    <div id="app">
+        {{data}}
+        {{data[2]}}
+        <!-- {{ss}} -->
+    </div>
+
+    <!-- 引入依赖的 js 文件 -->
+    <script src="vue.js"></script>
+    <!-- <script src="vue.2.js"></script> -->
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            data(){
+                const list = new Array(2);
+                const result = {} // Object.create(null); ?????
+
+                for(let i=0; i<= list.length; i++){
+                    result[i] = i + 1;
+                }
+                return {
+                    data: result,
+                    test: { aa: 111 }
+                };
+            },
+            mounted(){
+                setTimeout(() => {
+                    this.test.aa = 2222
+                    console.log(this.data, '?')
+                    Object.keys(this.data).forEach((element, idx) => {
+                        this.data[element] = idx + 2;
+                    });
+
+                    console.log(this.data, this.test);
+                }, 2000)
+
+                this.$nextTick(undefined,{name: '111'}).then((dd) => {
+                    console.log(dd, 'then', this.$nextTick())
+                })
+
+                // setTimeout(() => {
+                //     this.test.aa = 2222
+                // }, 3000)
+            },
+            // computed: {
+            //     ss(){
+            //         return this.test.aa
+            //     }
+            // }
+        });
+    </script>
+</body>
+</html>

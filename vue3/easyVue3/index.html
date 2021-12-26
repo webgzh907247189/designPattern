@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+</head>
+
+<body>
+  <noscript>
+  </noscript>
+  <div id="app"></div>
+</body>
+<script src="./index.js"></script>
+<script>
+  const state = reactive({
+    count: 0,
+    name: '懒响应式'
+  })
+
+  const Mycomponent = {
+    setup(props,context){
+      // 没有返回函数，用tempalte => render 把 render 函数当作 setup 的返回值
+      return () => {
+        return {
+          tag: 'div',
+          props: { style: {color: 'pink'} },
+          children: [
+            {
+              tag: 'div',
+              props: {
+                onClick: () => {
+                  // state.count += 1
+
+                  // 没有用到 name ，name变懒重新渲染懒  不符合逻辑(懒响应式)
+                  state.name = '????'
+                }
+              },
+              children: '我是一个组件' + state.name, // state.count
+            }
+          ]
+        }
+      }
+    }
+  }
+
+  // const vnode = {
+  //   tag: 'div',
+  //   props: {
+  //     style: {background: 'red'}
+  //   },
+  //   children: [{
+  //     tag: 'p',
+  //     props: {
+  //       style: {color: 'blue'}
+  //     },
+  //     children: `vue3 - 计数器${state.count}`
+  //   }, {
+  //     tag: 'button',
+  //     props: {
+  //       onClick: () => {
+  //         alert(state.count)
+  //       }
+  //     },
+  //     children: `点我啊`
+  //   }, {
+  //     tag: Mycomponent,
+  //     props: null,
+  //     children: '' // 组件的插槽
+  //   }]
+  // }
+
+  effect(() => {
+    // 放在 effect 里面的目的， 每次render 都重新拿到一次 count 的值
+    const vnode = {
+      tag: 'div',
+      props: {
+        style: {background: 'red'}
+      },
+      children: [{
+        tag: 'p',
+        props: {
+          style: {color: 'blue'}
+        },
+        children: `vue3 - 计数器${state.count}`
+      }, {
+        tag: 'button',
+        props: {
+          onClick: () => {
+            alert(state.count)
+          }
+        },
+        children: `点我啊`
+      }, {
+        tag: Mycomponent,
+        props: null,
+        children: '' // 组件的插槽
+      }]
+    }
+
+    render(vnode, document.getElementById('app'))
+  })
+</script>
+
+</html>

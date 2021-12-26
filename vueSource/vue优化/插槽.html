@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>插槽</title>
+</head>
+<body>
+    <div id="app">
+    </div>
+    <!-- 引入依赖的 js 文件 -->
+    <script src="../vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            data(){
+                return {
+                    name: '11',
+                    sex: '222' 
+                }
+            },
+            template: '<div><Child><template>{{name}}</template></Child>{{sex}}</div>',
+            // template: '<div><Child><template v-slot>{{name}}</template></Child>{{sex}}</div>',
+            components: {
+                Child: {
+                    template: '<div><slot></slot></div>',
+                    updated(){
+                        console.log('子组件--updated');
+                    },
+                    created(){
+                        window.bb = this;
+                        console.log('子组件--created');
+                    }
+                }
+            },
+            updated(){
+                console.log('父组件--updated');
+            },
+            created(){
+                console.log('父组件--created');
+
+                setTimeout(() => {
+                    window.aa = this;
+                    this.name = 'test'
+                }, 3000)
+            }
+        });
+
+        // https://mp.weixin.qq.com/s/TeJaj06C_7b3ZhBvW3NBJw
+        
+        // 旧的写法是将插槽内容作为 children 渲染的，会在父组件的渲染函数中创建，
+        // 插槽内容的依赖会被父组件收集（name 的 dep 收集到父组件的渲染 watcher），
+        // 而新的写法将插槽内容放在了 scopedSlots 中，会在子组件的渲染函数中调用，
+        // 插槽内容的依赖会被子组件收集（name 的 dep 收集到子组件的渲染 watcher），
+        // 最终导致的结果就是：当我们修改 name 这个属性时，旧的写法是调用父组件的更新（调用父组件的渲染 watcher），然后在父组件更新过程中调用子组件更新（prePatch => updateChildComponent），
+        // 而新的写法则是直接调用子组件的更新（调用子组件的渲染 watcher）。
+
+        // 这样一来，旧的写法在更新时就多了一个父组件更新的过程，而新的写法由于直接更新子组件，就会更加高效，性能更好，所以推荐始终使用v-slot:slotName语法
+    </script>
+</body>
+</html>

@@ -67,3 +67,33 @@ https://juejin.im/post/5ec227b7e51d4528af0584ed?utm_source=gold_browser_extensio
 9. public，private 缓存
 10. tree组件
 11. node问题
+
+
+
+
+
+
+1. 看下ref使用函数
+2. preload 使用在项目
+
+{
+    解决痛点
+    跨组建传递ref
+    跨组建传递数据
+    跨层级通知消息(跨组件出发事件)
+    interface频繁变更
+    拆解函数，函数单一原则
+    引入中间件思想，一个中间件做一件事情，优化代码判断
+    可选链配置
+    动态倒入，分包加载，针对interface
+    批量引入文件
+    小数计算和取值精度问题
+
+    babel优化，cache
+    webworker 计算
+    反 adblock
+    断网通知
+    sentry 错误监控
+    intersetctionObservale
+    immerjs
+}
