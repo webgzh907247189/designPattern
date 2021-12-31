@@ -24,5 +24,12 @@ const pluginTransformReactJsx = require('./pluginTransformReactJsx.js');
 
 const code = babelCore.transformSync(jsx, {
     plugins: [[pluginTransformReactJsx, { runtime: 'automatic' }]] // default pragma is React.createElement
+    // plugins: [['@babel/plugin-transform-react-jsx', { runtime: 'classic' }]], // pragma: 'shuxinCreateEle'
 })
 console.log(code.code);
+
+// var _jsxRuntime = require("react/jsx-runtime");
+// (0, _jsxRuntime.jsxs)("h1", {
+//   id: "title",
+//   children: "world"
+// });
