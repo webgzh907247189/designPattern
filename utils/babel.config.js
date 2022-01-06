@@ -1,3 +1,4 @@
+console.log(process.env.NODE_ENV, 'process.env.test');
 module.exports = {
     presets: [
         // { "modules": false } 告诉 babel 不要把 es module 的 import 和 export 转换掉
@@ -15,6 +16,9 @@ module.exports = {
     // plugins: [
     //     ['@babel/plugin-transform-runtime', { useESModules: true}],
     // ],
+
+    // https://github.com/ataola/utils/blob/main/.babelrc
+    // core -> config-chain.js -> dedupDescriptors
     env: {
         test: {
             presets: [
