@@ -3,6 +3,25 @@ const HtmlWebpackplugin = require('html-webpack-plugin');
 const miniCssExtractPlugin = require('mini-css-extract-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 
+
+// https://juejin.cn/post/6844904201089204232
+// webpack 打包分析
+
+// n最主要的原因是处理 esModule的default + common引入common，没有default的问题，esModule引入esModule，default在各自模块内部处理，使用的时候直接 moduleName.default就可以了。
+// common引入esModule和es引入es一样。
+// 只有es引入common,commonJs中是没有default的，但是在es中使用import的变量时，我们会默认为它就是 default，所以才用 .n处理了一下
+
+
+
+/*
+* mode & 1 value是模块ID直接用__webpack_require__加载
+* mode & 2 把所有的属性合并到命名空间ns上
+* mode & 4 已经是ns对象了，可以直接返回值
+* mode & 8|1 行为类似于require
+import('xxxx').then(r => r)之后一定是个es6模块，
+进行互相组合
+*/
+
 /**
  * esmodule 和 cjs 的区别
  * esmodule 值的引用
