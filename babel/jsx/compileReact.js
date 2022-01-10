@@ -1,4 +1,4 @@
-const jsx = '<h1 id="title"><span>hello</span>world</h1>'
+const jsx = '<h1 id="title"><span id="spanid"><div id="divid">div</div>hello</span>world</h1>'
 
 // react 17 之前    runtime: 'classic'  pragma: 'createElement'
 // /*#__PURE__*/
@@ -20,10 +20,10 @@ const jsx = '<h1 id="title"><span>hello</span>world</h1>'
 
 
 const babelCore = require('@babel/core');
-const pluginTransformReactJsx = require('./pluginTransformReactJsx.js');
+const pluginTransformReactJsx = require('./pluginTransformReactJsx2.js');
 
 const code = babelCore.transformSync(jsx, {
-    plugins: [[pluginTransformReactJsx, { runtime: 'automatic' }]] // default pragma is React.createElement
+    plugins: [[pluginTransformReactJsx, { runtime: 'classic' }]] // default pragma is React.createElement
     // plugins: [['@babel/plugin-transform-react-jsx', { runtime: 'classic' }]], // pragma: 'shuxinCreateEle'
 })
 console.log(code.code);
@@ -33,3 +33,12 @@ console.log(code.code);
 //   id: "title",
 //   children: "world"
 // });
+
+
+// /*#__PURE__*/
+// React.createElement("h1", {
+//     id: "title"
+//   }, /*#__PURE__*/React.createElement("span", {
+//         id: "spanid"
+//     }, /*#__PURE__*/React.createElement("div", {id: "divid"}, "div"),
+//    "hello"), "world");
