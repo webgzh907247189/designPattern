@@ -11,9 +11,12 @@
 
         return __webpack_require__("./src/index.js")
     })({
-        "./src/title.js": function(module, exports, __webpack_require__){ module.exports = 'title'; } ,
-        "./src/index.js": function(module, exports, __webpack_require__){ 
+        "./src/title.js": function(module, exports, __webpack_require__){
+            module.exports = 'title'; 
+        }, 
+        "./src/index.js": function(module, exports, __webpack_require__){
             const title = __webpack_require__("./src/title.js");
+
             console.log(title); 
-        } 
+        }, 
     })

@@ -36,6 +36,7 @@ function buildModule(absolutePath){
                 const dirname = path.dirname(absolutePath)
                 const depPath = path.join(dirname, moduleName)
                 const depModuleId = './' + path.relative(baseDir, depPath)
+                // console.log(depModuleId, 'depModuleId');
                 node.arguments = [types.stringLiteral(depModuleId)]
                 module.deps.push(buildModule(depPath))
             }
@@ -64,8 +65,8 @@ let content = `
     })({
         ${
             modules.map((module) => {
-                return `"${module.id}": function(module, exports, __webpack_require__){ ${module._source} } \r\n`
-            }).join(',')
+                return `"${module.id}": function(module, exports, __webpack_require__){\r\n${module._source} \r\n}, \r\n`
+            }).join('')
         }
     })
 `
