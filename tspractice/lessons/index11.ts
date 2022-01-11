@@ -57,3 +57,31 @@ namespace COLORS{
 }
 console.log(COLORS.pink, '使用 namespace 扩展出来的')
 
+
+
+
+
+{
+    interface Obj {
+        name: string;
+        age: number;
+    }
+      
+    interface Person extends Obj {
+        add: string;
+    }
+      
+    const arr: Person[] = [
+        {
+          name: "Andy",
+          age: 12,
+          add: "Hangzhou"
+        }
+    ];
+      
+    const onChange = <Key extends keyof Person>(v: Person[Key], index: number, key: Key) => {
+        // if (arr[index]) {
+          arr[index][key] = v;
+        // }
+    };
+}
