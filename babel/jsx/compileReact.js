@@ -18,7 +18,14 @@ const jsx = '<h1 id="title"><span id="spanid"><div id="divid">div</div>hello</sp
 //   }), "world"]
 // });
 
-
+/**
+ * https://zh-hans.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html
+ * 全新的 JSX 转换
+ * 
+ * 使用全新的转换，你可以单独使用 JSX 而无需引入 React。
+ * 根据你的配置，JSX 的编译输出可能会略微改善 bundle 的大小。
+ * 它将减少你需要学习 React 概念的数量，以备未来之需。
+ */
 const babelCore = require('@babel/core');
 const pluginTransformReactJsx = require('./pluginTransformReactJsx2.js');
 
