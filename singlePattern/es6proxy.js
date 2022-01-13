@@ -3,6 +3,42 @@
  */
 
 {
+	let t1 = Symbol('test1')
+	let t2 = Symbol('test2')
+	let obj1 = {name1: '11',[t1]: 'test'}
+	Object.defineProperty(obj1, 'age1', {
+		value: '22',
+		enumerable: false
+	})
+
+	let obj2 = Object.create(obj1)
+	obj2.eat2 = 'eat'
+	obj2[t2] = 'test2'
+
+	Object.defineProperty(obj2, 'drink2', {
+		value: 'drink',
+		enumerable: false
+	})
+	console.log(obj2, obj1);
+
+	// 循环遍历对象自身可枚举属性 和 继承的可枚举属性（不含 Symbol 属性）。
+	for (const key in obj2) {
+		console.log(key) // eat2, name1
+	}
+
+	// 对象自身的（不含继承的）所有可枚举属性（不含 Symbol 属性）的键名。
+	console.log(Object.keys(obj2)) // ['eat2']
+
+
+	// 包含对象自身的所有属性（不含 Symbol 属性，但是包括不可枚举属性）的键名。
+	console.log(Object.getOwnPropertyNames(obj2)) // ['eat2', 'drink2']
+
+
+	// 对象自身的（不含继承的）所有键名，不管键名是 Symbol 或字符串，也不管是否可枚举。
+	console.log(Reflect.ownKeys(obj2)) // ['eat2', 'drink2', Symbol(test2)]
+}
+
+{
 	let hobbies = ['code']
 	Object.defineProperty(hobbies, 'push', {
 		value () {
