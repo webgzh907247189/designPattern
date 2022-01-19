@@ -2,6 +2,14 @@ import { observe } from './index'
 import { arrayMethods, observableArray, dependArray } from './array'
 import Dep from './dep';
 
+/**
+ * Vue data 中随意更改一个属性，视图都会被更新吗？
+ * https://juejin.cn/post/7040733315791323143
+ * 
+ * template 会被编译成render函数，函数执行的时候，访问什么变量，就出触发相应变量的get，然后才会添加watcher。
+ * 触发了 get，然后在 get里面 (每一个data 属性都有一个 dep 实列), 触发了dep.depend() ---> watcher.addDep ---> dep.addSub(dep 把 wacther 加进来)。 dep里面有 wacther， wacter 里面有dep
+ */
+
 export function defineReactive(data,key,value){
     // debugger
     let childOb = observe(value)

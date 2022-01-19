@@ -12,7 +12,7 @@
     <!-- 引入依赖的 js 文件 -->
     <script src="vue.js"></script>
     <script>
-        const data = {a: 1}
+        const data = {a: 1, b: '22', c: 'testcc'}
         let vm = new Vue({
             el: '#app',
             data,
@@ -24,8 +24,21 @@
                 console.log(this.obj, 'this.aa')
             },
         });
-        vm.b = '22'
+        // vm.b = '22'
         window.aa = vm;
+        
+        /**
+         * Vue data 中随意更改一个属性，视图都会被更新吗？
+         * https://juejin.cn/post/7040733315791323143
+         * 
+         * template 会被编译成render函数，函数执行的时候，访问什么变量，就出触发相应变量的get，然后才会添加watcher。
+         * 触发了 get，然后在 get里面 (每一个data 属性都有一个 dep 实列), 触发了dep.depend() ---> watcher.addDep ---> dep.addSub(dep 把 wacther 加进来)。 dep里面有 wacther， wacter 里面有dep
+         */
+
+        setTimeout(() => {
+            window.aa._data.a = 2
+            window.aa._data.b = 212321
+        }, 2000)
     </script>
 </body>
 </html>

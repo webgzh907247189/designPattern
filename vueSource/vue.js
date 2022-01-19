@@ -1055,6 +1055,8 @@
         return value
       },
       set: function reactiveSetter (newVal) {
+        debugger
+
         var value = getter ? getter.call(obj) : val;
         /* eslint-disable no-self-compare */
         if (newVal === value || (newVal !== newVal && value !== value)) {
@@ -4506,7 +4508,7 @@
    * Evaluate the getter, and re-collect dependencies.
    */
   Watcher.prototype.get = function get () {
-    // debugger
+    debugger
     pushTarget(this);
     var value;
     var vm = this.vm;
