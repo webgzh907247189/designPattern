@@ -35,6 +35,8 @@
     type a3 = RequiredKeys<{ foo: number, flag: boolean }>                                  // foo|flag
     type a4 = RequiredKeys<{ foo?: number, flag?: boolean }>                                // never
     type a5 = RequiredKeys<{}>  
+
+    type a6 = OptionalKeys<{ foo: number | undefined, bar?: string, flag: boolean }>
 }
 
 {
