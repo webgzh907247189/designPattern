@@ -14,6 +14,7 @@ module.exports = class FileListplugin{
             // compilation.chunks 存放所有代码块，是一个数组
             complation.chunks.forEach(chunk => {
                 // chunk 代表一个代码块
+                // https://juejin.cn/post/6844904095774408711 ？？？
                 // 代码块由多个模块组成，通过 chunk.modulesIterable 能读取组成代码块的每个模块
                 for(const module of chunk.modulesIterable){
                     // module 代表一个模块
