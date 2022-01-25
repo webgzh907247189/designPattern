@@ -12,6 +12,27 @@
  * WebAssembly同样的强制静态类型，是C/C++/Rust的编译目标。
  */
 
+/**
+ * https://mp.weixin.qq.com/s/rQomt1k4E0NN0vfo_8hQvQ
+ * 其实我们平时写的代码有很多可以优化的地方，如多次执行同一个函数，那么可以将这个函数生成的 Machine Code 标记可优化，
+ * 然后打包送到 JIT Compiler（Just-In-Time），下次再执行这个函数的时候，就不需要经过 Parser-Compiler-Interpreter 这个过程，
+ * 可以直接执行这份准备好的 Machine Code，大大提高的代码的执行效率。
+ * 
+ * 
+ * 但是上述的 JIT 优化只能针对静态类型的变量，如我们要优化的函数，它只有两个参数，每个参数的类型是确定的，
+ * 而 JavaScript 却是一门动态类型的语言，这也意味着，函数在执行过程中，可能类型会动态变化，参数可能变成三个，
+ * 第一个参数的类型可能从对象变为数组，这就会导致 JIT 失效，需要重新进行 Parser-Compiler-Interpreter-Execuation，
+ * 而 Parser-Compiler 这两步是整个代码执行过程中最耗费时间的两步，这也是为什么 JavaScript 语言背景下，
+ * Web 无法执行一些高性能应用，如大型游戏、视频剪辑等。
+ * 
+ * 
+ *  JS 执行慢的一个主要原因是因为其动态语言的特性，导致 JIT 失效，所以如果我们能够为 JS 引入静态特性，那么可以保持有效的 JIT，
+ * 势必会加快 JS 的执行速度，这个时候 asm.js 出现了。
+ * asm.js 只提供两种数据类型：1. 32 位带符号整数 2. 64 位带符号浮点数
+ * 
+ * 不管 asm.js 再怎么静态化，干掉一些需要耗时的上层抽象（垃圾收集等），也还是属于 JavaScript 的范畴，
+ * 代码执行也需要 Parser-Compiler 这两个过程，而这两个过程也是代码执行中最耗时的。
+ */
 
 /**
  * https://juejin.cn/post/6844903491740123143  (了解 V8 的字节码)
