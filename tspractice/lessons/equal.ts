@@ -32,7 +32,7 @@ type i1 = Include1<[true], boolean>
 
 
 
-type aa = boolean extends true ? '1' : '2'
+type aa = boolean extends true ? '1' : '2' // 2
 
 // boolean 是联合类型
 type test<T, K> = T extends K ? '111' : '222'
@@ -41,8 +41,9 @@ type test22 = test<true, boolean>
 
 
 
-
+// 说明 boolean 是 false | true ??
 type B = false | true extends boolean ? true : false; // true
+
 type B1<T = boolean,K = true> = T extends K ? '111' : '222'; // true
 type B11 = B1
 
