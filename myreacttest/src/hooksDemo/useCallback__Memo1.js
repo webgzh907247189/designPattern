@@ -7,6 +7,10 @@ const Child = React.memo(({ onSubmit }) => {
     )
 })
 
+// react.useCallback 优化
+// 1. 子组件必须使用memo包裹
+// 2. 使用ref 生成不可变的ref对象，通过ref对象的current属性来控制需要的值
+
 const App = () => {
     const [text, setText] = React.useState("")
 
