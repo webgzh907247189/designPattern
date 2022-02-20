@@ -1,4 +1,4 @@
-// import React from './source/react';
+import React from './source/react';
 // import './immer/source/test'
 
 /**
@@ -13,7 +13,7 @@ const str = '2021/01/01T16:00:00+0000'
 console.log(dayjs(str.split('+')[0]).format('YYYY-MM-DD hh:mm:ss'))
 
 dayjs('2021-01-01T16:00:00+0000').format('YYYY-MM-DD hh:mm:ss')
-debugger
+// debugger
 dayjs('2021/01/01T16:00:00+0000').format('YYYY-MM-DD hh:mm:ss')
 
 // immer.js
@@ -96,41 +96,42 @@ function btnClick() {
 
 
 
-// class Counter1 extends React.Component{
-//     constructor(props){
-//         super(props)
-//         this.state = {odd: true}
-//     }
+class Counter1 extends React.Component{
+    constructor(props){
+        super(props)
+        this.state = {odd: true}
+    }
 
-//     componentDidMount(){
-//         setTimeout(() => {
-//             this.setState({odd: !this.state.odd})
-//         }, 3000)
-//     }
+    componentDidMount(){
+        setTimeout(() => {
+            // debugger
+            this.setState({odd: !this.state.odd})
+        }, 3000)
+    }
 
-//     render(){
-//         if(this.state.odd){
-//             return React.createElement('ul',{id: 'oldCounter'},
-//                 React.createElement('li',{key: 'A'}, 'A'),
-//                 React.createElement('li',{key: 'B'}, 'B'),
-//                 React.createElement('li',{key: 'C'}, 'C'),
-//                 React.createElement('li',{key: 'D'}, 'D'),
-//                 React.createElement('li',{key: 'Z'}, String(this.state.odd)),
-//             )
-//         }
+    render(){
+        if(this.state.odd){
+            return React.createElement('ul',{id: 'oldCounter'},
+                React.createElement('li',{key: 'A'}, 'A'),
+                React.createElement('li',{key: 'B'}, 'B'),
+                React.createElement('li',{key: 'C'}, 'C'),
+                React.createElement('li',{key: 'D'}, 'D'),
+                React.createElement('li',{key: 'Z'}, String(this.state.odd)),
+            )
+        }
         
-//         return React.createElement('ul',{id: 'newCounter'},
-//             React.createElement('li',{key: 'A'}, 'A'),
-//             React.createElement('li',{key: 'C'}, 'C1'),
-//             React.createElement('li',{key: 'B'}, 'B1'),
-//             React.createElement('li',{key: 'E'}, 'E1'),
-//             React.createElement('li',{key: 'F'}, 'F1'),
-//             React.createElement('li',{key: 'Z'}, String(this.state.odd)),
-//         )
-//     }
-// }
-//<Counter {name: '计数器'}/>
-// React.render(React.createElement(Counter1, {name: '计数器'}), document.getElementById('root'));
+        return React.createElement('ul',{id: 'newCounter'},
+            React.createElement('span',{key: 'A'}, 'A1'),
+            React.createElement('li',{key: 'C'}, 'C1'),
+            React.createElement('li',{key: 'B'}, 'B1'),
+            React.createElement('li',{key: 'E'}, 'E1'),
+            React.createElement('li',{key: 'F'}, 'F1'),
+            React.createElement('li',{key: 'Z'}, String(this.state.odd)),
+        )
+    }
+}
+{/* <Counter {name: '计数器'}/> */}
+React.render(React.createElement(Counter1, {name: '计数器'}), document.getElementById('root'));
 /*********渲染组件***********/
 
 

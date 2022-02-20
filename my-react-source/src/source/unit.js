@@ -2,10 +2,17 @@ import $ from 'jquery';
 import {Element} from './element'
 import types from './type';
 
+/**
+ * https://jsfiddle.net/user/fiddles/all/
+ * 
+ * React 渲染 优化 demo 
+ */
+
 let diffQueue = []; // 差异队列(记住差异，最后同意更新，不是发现差异，就更新)
 let updateDepth = 0; //更新的级别(层级)
 
 // 基类
+// 每个 util** 实列有两个属性 1. _reactid   2._currentElement
 class Unit{
     constructor(element){
         this._currentElement = element;
@@ -69,7 +76,7 @@ class NativeUnit extends Unit{
         let deleteChildren = [] // 存放所有将要删除的节点
         let deleteMap = {} // 存放可以复用的节点
 
-        // debugger
+        // 先把 remove 和 move 都删掉 (从dom里面删掉)，不是真的删掉，是放在 deleteMap 保存，供后续使用
         for(let i=0; i<diffQueue.length; i++){
             let difference = diffQueue[i];
 
@@ -86,10 +93,9 @@ class NativeUnit extends Unit{
         console.log(deleteChildren, 'deleteChildren', diffQueue);
         $.each(deleteChildren,(idx,item) => $(item).remove())
 
-
+        
         for(let k=0; k<diffQueue.length; k++){
             let differItem = diffQueue[k];
-
             switch(differItem.type){
                 case types.INSERT:
                     this.insertChildAt(differItem.parentNode,$(differItem.markUp),differItem.toIndex)
@@ -105,7 +111,10 @@ class NativeUnit extends Unit{
     }
 
     insertChildAt(parentNode,newNode,toIndex){
-        let oldChild = parentNode.children().get(toIndex)
+        
+        let oldChildlist = parentNode.children()
+        
+        let oldChild = oldChildlist.get(toIndex)
 
         // 原来的节点有的话，前置插入，没有，后置插入
         oldChild ? newNode.insertBefore(oldChild) : newNode.appendTo(parentNode);
@@ -114,18 +123,20 @@ class NativeUnit extends Unit{
     // 对比 dom diff
     // 老节点的map -> key 是 索引，value 是unit类 实列
 
+    // diff 通过新的 newChildrenElements 来对比 oldChildrenUnitMap， 产生新的 newChildrenUnitMap 和 newChildren (newChildrenUnits)
     diff(diffQueue,newChildrenElements){
         // 生成一个map，key是索引 或者 传入的 key
         let oldChildrenUnitMap = this.oldChildrenUnitMap(this._renderChildrenUnits);
 
         // 先找老的集合，看有没有能用的，尽量复用老的 -> 构建新的unit数组
-        let {newChildren: newChildrenUnits, newChildrenUnitMap} = this.getNewChildren(oldChildrenUnitMap,newChildrenElements);
+        let {newChildrenUtilLists: newChildrenUnits, newChildrenUnitMap} = this.getNewChildren(oldChildrenUnitMap,newChildrenElements);
         // console.log(newChildrenUnits, newChildrenUnitMap, 'zzzzz')
 
-        // 上一个已经确定位置的索引
+        // 上一个已经确定位置的索引   上一次的最大值
         let lastIndex = 0
 
         // console.log(newChildrenUnits, 'newChildrenUnits', newChildrenUnitMap)
+        // debugger
         for(let i=0; i<newChildrenUnits.length; i++){
             let newUnit = newChildrenUnits[i]
 
@@ -137,7 +148,7 @@ class NativeUnit extends Unit{
             let oldChilrenUnit = oldChildrenUnitMap[newKey]
 
             // console.log(oldChilrenUnit === newUnit, 'oldChilrenUnit', newUnit)
-            // 新老一致，可复用老节点
+            // 新老一致，可复用老节点, 通过 key 去比较的 (可能出现 key 一样，但是 type 不一样的情况)
             if(oldChilrenUnit === newUnit){
                 if(oldChilrenUnit._mountedIndex < lastIndex){
                     diffQueue.push({
@@ -148,8 +159,25 @@ class NativeUnit extends Unit{
                         toIndex: i,
                     })
                 }
+                // 上一次的最大值
                 lastIndex = Math.max(lastIndex,oldChilrenUnit._mountedIndex)
             }else {
+                // 出现了 (key 一样, 但是 type 不一样的情况, 通过 key 去比较的, oldChilrenUnit! == newUnit)
+                if(oldChilrenUnit){
+                    diffQueue.push({
+                        parentId: this._reactid,
+                        parentNode: $(`[data-reactid="${this._reactid}"]`),
+                        type: types.REMOVE,
+                        fromIndex: oldChilrenUnit._mountedIndex
+                    })
+
+                    // 如果要删除某个节点 把对应的 unit 也要删掉
+                    this._renderChildrenUnits = this._renderChildrenUnits.filter(_ => _ != oldChilrenUnit)
+                    // 解绑事件
+                    // $(document).undelegate(`.${this._reactid}`)
+                    $(document).undelegate(`.${oldChilrenUnit._reactid}`)
+                }
+
                 diffQueue.push({
                     parentId: this._reactid,
                     parentNode: $(`[data-reactid="${this._reactid}"]`),
@@ -159,6 +187,7 @@ class NativeUnit extends Unit{
                 })
             }
 
+            // 矫正索引
             newUnit._mountedIndex = i;
         }
 
@@ -171,6 +200,10 @@ class NativeUnit extends Unit{
                     type: types.REMOVE,
                     fromIndex: oldChild._mountedIndex,
                 })
+
+                // 如果要删除某个节点 把对应的 unit 也要删掉
+                this._renderChildrenUnits = this._renderChildrenUnits.filter(_ => _ != oldChild)
+                $(document).undelegate(`.${oldChild._reactid}`)
             }
         }
         // console.log(diffQueue, 'diffQueuediffQueuediffQueue')
@@ -188,7 +221,7 @@ class NativeUnit extends Unit{
     }
 
     getNewChildren(oldChildrenUnitMap,newChildrenElements){
-        let newChildren = [];
+        let newChildrenUtilLists = [];
         let newChildrenUnitMap = {};
         // 最终返回的是新的 -> 用newChildrenElements 去构建，尽量复用oldChildrenUnitMap
 
@@ -207,20 +240,22 @@ class NativeUnit extends Unit{
                 // 类型一样 -> 更新 
                 oldUnit.update(newElement)  // -> 只有老的 oldUnit 才会更新
                 // 更新之后， oldUnit 变成新的
-                newChildren.push(oldUnit)
+                newChildrenUtilLists.push(oldUnit)
 
                 newChildrenUnitMap[newKey] = oldUnit 
             }else{
                 // console.log(newElement, 'newElementnewElement')
                 let nextUnit = createUnit(newElement)
-                newChildren.push(nextUnit)
+                newChildrenUtilLists.push(nextUnit)
                 newChildrenUnitMap[newKey] = nextUnit
+
+                this._renderChildrenUnits[index] = nextUnit
             }
 
             // console.log(newElement,oldElement)
         })
 
-        return {newChildren, newChildrenUnitMap};
+        return {newChildrenUtilLists, newChildrenUnitMap};
     }
 
     updateDOMProperties(oldProps,newProps){
@@ -265,8 +300,9 @@ class NativeUnit extends Unit{
         // 记录childrenUnits(旧的记录children)
         this._renderChildrenUnits = []
         for(let propName in props){
+            // 事件绑定，都不是直接绑定到 元素，都是通过代理来处理，方便取消和移除事件
             if(/^on[A-Z]/.test(propName)){
-                // 事件代理
+                // 事件代理 绑定事件
                 const eventName = propName.slice(2).toLowerCase();
                 $(document).delegate(`[data-reactid="${this._reactid}"]`, `${eventName}.${this._reactid}`, props[propName])
             }else if(propName === 'style'){
@@ -290,7 +326,7 @@ class NativeUnit extends Unit{
                 // console.log(children, 'childrenchildrenchildrenchildren')
                 // 递归，处理children
                 children.forEach((child,index)=>{
-                    // 每个 child 都有自己到unit类
+                    // 每个 child 都有自己到unit类,  可能是字符串也可能是 react元素
                     let childUnit = createUnit(child)
 
                     // 每个 unit 有个 _mounted 属性 ，指向自己在父节点的索引位置
@@ -405,8 +441,9 @@ function shouldDeepCompare(oldElement,newElement) {
         // }
 
         if(oldElement instanceof Element && newElement instanceof Element){
-            return oldElement.type === oldElement.type
+            return oldElement.type === newElement.type
         }
     }
+    return false
 }
 export {TextUnit, createUnit}
