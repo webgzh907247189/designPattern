@@ -18,7 +18,9 @@ type sss2 = {} extends unknown ? 1 : 2
 
 type sss3 = unknown extends {} ? 1 : 2
 
-
+// 1. number extends S        过滤出来 string , {a: 3}, object
+// 2. keyof S extends never   过滤出来 any, Object
+// 3. unknown extends {}      过滤出来 unknown
 type IsEmptyType<S> = number extends S ? keyof S extends never ? unknown extends S ? false : true : false : false
 type IEmptyType2<S> = number extends S ? keyof S extends never ? S extends {} ? true : false : false : false
 
@@ -34,6 +36,10 @@ type aa22 = keyof any; // string | number | symbol
 
 type T111 = number extends object ? true : false // false
 type T222 = number extends {} ? true : false // true
+type T333 = number extends {a: 1} ? true : false // false
+
+
+type T444 = number extends Object ? true : false // true
 
 
 type test111 = unknown extends {} ? true : false;
