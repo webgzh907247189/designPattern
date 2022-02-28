@@ -123,6 +123,15 @@
     type B = IsAny<any> // true
     type C = IsAny<unknown> // false
     type D = IsAny<never> // false
+
+    // 简易的判断 IsAny
+    type IsAny1<T> = 'dong' extends ('guang' & T) ? true : false
+    type A1 = IsAny1<string> // false
+    type B1 = IsAny1<any> // true
+    type C1 = IsAny1<unknown> // false
+    type D1 = IsAny1<never> // false
+    type F1 = IsAny1<'eat'> // false
+    type test11 = 'guang' & unknown // 'guang'
 }
 
 {
