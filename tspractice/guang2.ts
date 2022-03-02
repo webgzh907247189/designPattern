@@ -7,6 +7,15 @@ type DeepPromiseValueType<T> = T extends Promise<infer R> ? DeepPromiseValueType
 type DeepPromiseValueTypetest = DeepPromiseValueType<Promise<Promise<Promise<{sex: boolean, age: number}>>>>
 
 
+type Awaited<T> = T extends null | undefined ? T : T extends object & { then(onfulfilled: infer F): any } 
+            ? F extends ((value: infer V, ...args: any) => any)
+            ? Awaited<V>  
+            : never
+            : T
+
+type DeepPromiseValueTypetest2 = Awaited<Promise<Promise<Promise<{sex: boolean, age: number}>>>>
+
+
 
 type ReverseArr<Arr extends unknown[]> = Arr extends [infer L,...infer Rest] ? [...ReverseArr<Rest>, L] : Arr;
 type ReverseArrTest = ReverseArr<[1, 2, 3, 4, 5]>
@@ -245,7 +254,8 @@ type IsEqualTest2 = IsEqual2<'a' ,any> // false
 {
     class Person {
         name: string
-        getName(this: Person){
+        // 编译出来没有 this 作为参数的
+        getName(this: Person, a: string){
             return 'test' + this.name
         }
     }
@@ -256,4 +266,13 @@ type IsEqualTest2 = IsEqual2<'a' ,any> // false
 
     type GetThisParameterType<T> = T extends (this: infer ThisType, ...args) => unknown ? ThisType : never
     type GetThisParameterTypeTest = GetThisParameterType<typeof person.getName> // Person
+
+
+    type OmitThisParameter<T> = unknown extends ThisParameterType<T> 
+        ? T :
+        T extends (...args: infer A) => infer R 
+            ? (...args: A) => R
+            : T;
+    type OmitThisParameterTest = OmitThisParameter<typeof person.getName>
+    type ss = typeof person.getName
 }
