@@ -5,7 +5,7 @@ import types from './type';
 /**
  * https://jsfiddle.net/user/fiddles/all/
  * 
- * React 渲染 优化 demo 
+ * React 渲染优化 demo 
  */
 
 let diffQueue = []; // 差异队列(记住差异，最后同意更新，不是发现差异，就更新)
