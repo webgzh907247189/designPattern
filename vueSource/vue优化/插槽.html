@@ -19,10 +19,12 @@
 
                     // Property "$test" must be accessed with "$data.$test" because properties starting with "$" or "_" are not proxied in the Vue instance to prevent conflicts with Vue internals.
                     // $ 开头 活着 _ 开头不会被代理到 vm 上
-                    $test: 'test'
+                    $test: {
+                        val: '$test'
+                    }
                 }
             },
-            template: '<div><Child><template>{{name}}</template></Child>{{sex}}{{$test}}</div>',
+            template: '<div><Child><template>{{name}}</template></Child>{{sex}}{{_data.$test}}</div>',
             // template: '<div><Child><template v-slot>{{name}}</template></Child>{{sex}}</div>',
             components: {
                 Child: {
