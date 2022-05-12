@@ -1,3 +1,8 @@
+
+//             A
+//     B               C
+// D       E               F
+
 const root = {
     val: "A",
     left: {
