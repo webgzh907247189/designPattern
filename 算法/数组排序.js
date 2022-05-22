@@ -13,8 +13,8 @@
 
     function bubble(arr){
         let temp = null
-        for (let index = 0; index < arr.length; index++) {
-            for (let j = 0; j < arr.length - index; j++) {
+        for (let index = 0; index < arr.length - 1; index++) {
+            for (let j = 0; j < arr.length - 1 - index; j++) {
                 // 前一项比后一项大
                 if(arr[j] > arr[j + 1]){
                     temp = arr[j]
@@ -31,7 +31,47 @@
 }
 
 
+// 使用 冒泡 完成排序
+{
+    // 价格由低到高排序，价格相等时，按评分由高到低排序
+    let obj= {
+        hotels: [{
+            id: 1,
+            price: 100,
+            score: 80
+        }, {
+            id: 2,
+            price: 70,
+            score: 90, 
+        }, {
+            id: 3,
+            price: 70,
+            score: 95
+        }]
+    }
 
+    // 注意 此处 length - 1 
+    function sort(list){
+        var temp = null;
+        for(let i=0; i < list.length - 1; i++){
+            for(let j=0; j < list.length - 1 - i; j++){
+                if(list[j].price > list[j + 1].price){
+                    temp = list[j + 1]
+                    list[j + 1] = list[j]
+                    list[j] = temp
+                }
+
+                if(list[j].price === list[j + 1].price && list[j].score < list[j + 1].score){
+                    temp = list[j + 1]
+                    list[j + 1] = list[j]
+                    list[j] = temp
+                }
+            }
+        }
+        return list
+    }
+    console.log(sort(obj.hotels)) // [10, 2, 14, 8, 100]
+}
 
 
 // 插入排序 // https://segmentfault.com/a/1190000015489767
@@ -102,7 +142,6 @@
         let idx = Math.floor(arr.length / 2)
         // console.log(Math.floor(arr.length / 2), 'Math.floor(arr.length / 2)', idx)
         let midd = arr.splice(idx, 1)[0]
-        console.log(midd, 'midd',arr)
 
         let left = []
         let right = []
