@@ -8,6 +8,7 @@ const itemToPlugin = (context, entry, name) => {
 class EntryOptionPlugin {
     apply(compile){
         compile.hooks.entryOption.tap('EntryOptionPlugin', (context, entry) => {
+            console.log('EntryOptionPlugin 注册')
             itemToPlugin(context, entry, 'main').apply(compile)
         })
     }
