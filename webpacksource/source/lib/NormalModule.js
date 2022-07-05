@@ -1,9 +1,15 @@
+const path = require('path');
+const types = require('babel-types');
+const generate = require('babel-generator').default;
+const traverse = require('babel-traverse').default;
+
+
 module.exports = class NormalModule {
     constructor({ name, context, rawRequest, resource, parser }) {
         this.name = name
         this.context = context
         this.rawRequest = rawRequest
-        this.resource = resource
+        this.resource = resource // 入口的绝对路径
         this.parser = parser
 
         // 此模块对应的源代码
@@ -28,7 +34,27 @@ module.exports = class NormalModule {
         // 先执行 doBuild cb， 在 执行 build 的 cb
         this.doBuild(compilation, (err) => {
             this._ast = this.parser.parse(this._source)
-            cb()
+
+            traverse(this._ast, {
+                // 遍历到 CallExpression 进入到这个方法
+                CallExpression: (nodePath) => {
+                    const node = nodePath.node
+                    if(node.callee.name === 'require'){
+                        let moduleName = node.arguments[0].value
+                        // 处理后缀名
+                        let extName = moduleName.split(path.posix.sep).pop().indexof('.') ? '.js' : '';
+
+                        // 获取依赖模块的绝对路径  使用 path.posix.join('a','b') -> a/b 在 windows 上面也是这个结果
+                        // resource  入口的绝对路径   a/b/c + d + .js
+                        let depResource = path.posix.join(path.posix.dirname(this.resource), moduleName + extName)
+
+                        // 拿到 模块id
+                        let depModuled = './' + path.posix.relative(this.context, depResource)
+
+                    }
+                }
+            })
+            // cb()
         })
     }
     doBuild(compilation, cb){
