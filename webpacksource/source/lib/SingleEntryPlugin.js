@@ -10,6 +10,7 @@ class SingleEntryPlugin {
             const {context, entry, name} = this;
 
             // 从此入口开始编译
+            // console.log('addEntry');
             compilation.addEntry(context, entry, name,cb)
         })
     }

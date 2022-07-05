@@ -1,3 +1,5 @@
+const SingleEntryPlugin = require('./SingleEntryPlugin')
+
 // 单页入口
 const itemToPlugin = (context, entry, name) => {
     return new SingleEntryPlugin(context, entry, name)
@@ -5,7 +7,7 @@ const itemToPlugin = (context, entry, name) => {
 
 class EntryOptionPlugin {
     apply(compile){
-        compile.hooks.entryOption.tag('EntryOptionPlugin', (context, entry) => {
+        compile.hooks.entryOption.tap('EntryOptionPlugin', (context, entry) => {
             itemToPlugin(context, entry, 'main').apply(compile)
         })
     }

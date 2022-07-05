@@ -1,6 +1,8 @@
 
 const { Tapable, AsyncSeriesHook, SyncBailHook, AsyncParallelBailHook, SyncHook } = require('tapable');
 const NormalModuleFactory = require('./NormalModuleFactory');
+const Compilation = require('./Compilation');
+const Stats = require('./Stats')
 
 class Compile extends Tapable{
     constructor(context){
@@ -46,12 +48,13 @@ class Compile extends Tapable{
         }
 
         const onCompiled = (err, compilation) => {
-            finalCallback(err,  {
-                entries: [], // 显示所有的入口
-                chunks: [], // 显示所有的代码块
-                modules: [], // 显示所有的模块
-                assets: [], // 显示所有的资源，打包之后的文件
-            })
+            // finalCallback(err,  {
+            //     entries: [], // 显示所有的入口
+            //     chunks: [], // 显示所有的代码块
+            //     modules: [], // 显示所有的模块
+            //     assets: [], // 显示所有的资源，打包之后的文件
+            // })
+            finalCallback(err, new Stats(compilation))
         }
 
         this.hooks.beforeRun.callAsync(this, (err) => {
@@ -61,16 +64,27 @@ class Compile extends Tapable{
         })
     }
 
-    compile(){
+    compile(onCompiled){
         const params = this.newCompilationsParams();
         this.hooks.beforeCompile.callAsync(params, err => {
             this.hooks.compile.call(params)
+
+            // 此处创建 compilation
             const compilation = this.newCompilation(params)
+
+            // 触发 make 钩子 执行
+            this.hooks.make.callAsync(compilation, err => {
+                console.log('make 完成');
+                onCompiled(err, compilation);
+            })
         })
     }
-    newCompilation(){
+    newCompilation(params){
         const compilation = this.createCompilation();
 
+        this.hooks.thisCompilation.call(compilation, params)
+        this.hooks.compilation.call(compilation, params)
+        return compilation
     }
     createCompilation(){
         return new Compilation(this)
