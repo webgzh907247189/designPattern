@@ -3,14 +3,14 @@ const { Tapable, AsyncSeriesHook, SyncBailHook, AsyncParallelBailHook, SyncHook 
 const NormalModuleFactory = require('./NormalModuleFactory');
 const Compilation = require('./Compilation');
 const Stats = require('./Stats')
+const mkdirp = require('mkdirp')
 
 class Compile extends Tapable{
     constructor(context){
         super();
         this.context = context;
         this.hooks = {
-            // 当编译完成触发这个钩子
-            done: new AsyncSeriesHook(['stats']),
+           
 
             // context 项目根目录的决定路径  entry 项目入口
             entryOption: new SyncBailHook(['context', 'entry']),
@@ -37,6 +37,10 @@ class Compile extends Tapable{
             beforeRun: new AsyncSeriesHook(['compiler']),
             // 运行时
             run: new AsyncSeriesHook(['compiler']),
+
+            emit: new AsyncSeriesHook(['compilation']), // 发射写入
+            // 当编译完成触发这个钩子
+            done: new AsyncSeriesHook(['stats']),
         }
     }
 
@@ -57,6 +61,15 @@ class Compile extends Tapable{
             //     assets: [], // 显示所有的资源，打包之后的文件
             // })
             finalCallback(err, new Stats(compilation))
+
+            // chunk 变成文件，写入硬盘
+            const emitFiles = () => {
+
+            }
+            // emit 是修改资源的最后机会，后面就写入硬盘了
+            this.hooks.emit.callAsync(compilation, err => {
+                mkdirp(this.options.output.path, emitFiles)
+            })
         }
 
         this.hooks.beforeRun.callAsync(this, (err) => {
