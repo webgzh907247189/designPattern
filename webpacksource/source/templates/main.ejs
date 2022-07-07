@@ -1,0 +1,20 @@
+(function(modules){
+    function __webpack_require__(moduleId){
+            var module = {
+            i: moduleId,
+            exports: {},
+        }
+        modules[moduleId].call(module.exports, module, module.exports, __webpack_require__)
+        module.l = true;
+        return module.exports;
+    }
+
+    return __webpack_require__("<%-entryModuleId%>")
+
+})({
+    <%for(let mod of modules){%>
+    "<%-mod['moduleId']%>": function(module, exports, __webpack_require__){
+        <%-mod._source%>
+    },
+    <%}%>
+})

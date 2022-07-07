@@ -60,21 +60,57 @@ class Compile extends Tapable{
             //     modules: [], // 显示所有的模块
             //     assets: [], // 显示所有的资源，打包之后的文件
             // })
-            finalCallback(err, new Stats(compilation))
+            // finalCallback(err, new Stats(compilation))
 
             // chunk 变成文件，写入硬盘
-            const emitFiles = () => {
+            // const emitFiles = () => {
+            //     const assets = compilation.assets
+            //     let outputPath = compilation.options.output.path
+            //     for (const file in assets) {
+            //        const source = assets[file]
+            //        let targetPath = path.posix.join(outputPath, file)
+            //        this.outputFileSystem.writeFileSync(targetPath, source)
+            //     }
+            //     cb()
+            // }
+            // // emit 是修改资源的最后机会，后面就写入硬盘了
+            // this.hooks.emit.callAsync(compilation, err => {
+            //     mkdirp(this.options.output.path, emitFiles)
+            // })
 
-            }
-            // emit 是修改资源的最后机会，后面就写入硬盘了
-            this.hooks.emit.callAsync(compilation, err => {
-                mkdirp(this.options.output.path, emitFiles)
+            this.emitAssets(compilation,err => {
+                let stats = new Stats(compilation)
+                this.hooks.done.callAsync(stats, (err) => {
+                    cb(err, stats)
+                })
             })
         }
 
         this.hooks.beforeRun.callAsync(this, (err) => {
             this.hooks.run.callAsync(this,err => {
                 this.compile(onCompiled)
+            })
+        })
+    }
+    emitAssets(compilation, cb){
+        // 把 chunk 写文文件，写入硬盘
+        const emitFiles = (err) => {
+            const assets = compilation.assets
+            let outputPath = compilation.options.output.path
+            for (const file in assets) {
+               const source = assets[file]
+               let targetPath = path.posix.join(outputPath, file)
+               this.outputFileSystem.writeFileSync(targetPath, source)
+            }
+            cb()
+        }
+        // emit 钩子很多，他是修改资源的最后的钩子，之后就开始写入硬盘了
+        this.hooks.emit.callAsync(compilation, () => {
+            // 先创建dist目录， 在写入文件
+
+            // console.log(this.options.output, 'this.options.output.path', emitFiles)
+            mkdirp(this.options.output.path).then(() => {
+                emitFiles()
             })
         })
     }

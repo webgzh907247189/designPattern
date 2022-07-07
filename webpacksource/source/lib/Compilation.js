@@ -1,5 +1,6 @@
 const { Tapable, AsyncSeriesHook, SyncBailHook, AsyncParallelBailHook, SyncHook } = require('tapable');
 const path = require('path');
+const fs = require('fs')
 const neoAsync = require('neo-async')
 const Chunk = require('./Chunk')
 
@@ -9,6 +10,10 @@ const parser = new Parser();
 const NormalModuleFactory = require('./NormalModuleFactory')
 const normalModuleFactory = new NormalModuleFactory();
 
+
+const ejs = require('ejs');
+const mainTempalte = fs.readFileSync(path.posix.join(__dirname, '../templates', 'main.ejs'), 'utf-8')
+const mainRender = ejs.compile(mainTempalte)
 
 module.exports = class Compilation extends Tapable {
     constructor(compiler){
@@ -34,6 +39,10 @@ module.exports = class Compilation extends Tapable {
         }
 
         this._modules = {} // key 模块id， value 模块
+
+        this.files = [] // 本地编译所有产出的文件
+
+        this.assets = {} // 存放生成的资源， key 是文件名， 值是 文件的内容
     }
     /**
      * 开始编译新的入口
@@ -141,6 +150,26 @@ module.exports = class Compilation extends Tapable {
         }
 
         this.hooks.afterChunks.call(this.chunks)
+        // 生成代码块之后，需要生成代码块对应的资源
+        this.createChunkAssets()
         cb()
+    }
+    createChunkAssets(){
+        for (let index = 0; index < this.chunks; index++) {
+            const chunk = this.chunks[index];
+            const file = chunk.name + '.js'
+
+            chunk.files.push(file)
+
+            let source = mainRender({
+                entryModuleId: chunk.entryModule.moduleId,
+                modules: chunk.modules
+            })
+            this.emitAssets(file, source)
+        }
+    }
+    emitAssets(file, source){
+        this.assets[file] = source
+        this.files.push(file)
     }
 }
