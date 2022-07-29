@@ -93,7 +93,7 @@ traverse(ast, {
 
             if (path.findParent(path => path.isJSXElement())) {
                 path.replaceWith(types.arrayExpression([newNode, path.node]))
-                // path.skip 跳过新节点的遍历
+                // path.skip 跳过新节点的遍历( 跳过当前节点的子节点的遍历)
                 path.skip(); 
             } else {
                 path.insertBefore(newNode);
