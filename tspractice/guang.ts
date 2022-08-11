@@ -21,6 +21,29 @@ export {}
 // 2. 函数传参限制 key
 
 
+type ooo = {
+    name: string,
+    age: number
+}
+const obj: ooo = {
+    name: 'ss',
+    age: 100
+}
+
+function getKeys<T>(obj: T) {
+    return Object.keys(obj) as Array<keyof T>;
+}
+
+function getStr(){
+    let str = ''
+
+    getKeys(obj).forEach((key) => {
+        str += `${str}${key}=${obj[key]}&`
+    })
+    console.log(str)
+}
+getStr()
+
 function getPropValue<T extends object, Key extends keyof T>(obj: T, key: Key): T[Key] {
     return obj[key];
 }
@@ -73,9 +96,6 @@ type MergeParams<
             : never
 }
 type sss1 = MergeParams<{a: 1, b: 3}, {b: 2}>
-
-
-
 
 
 
