@@ -12,11 +12,12 @@
 // }
 
 
-
 const parser = require('@babel/parser');
 const types = require('@babel/types');
 const traverse = require('@babel/traverse').default;
 const generate = require('@babel/generator').default;
+const template = require('@babel/template').default;
+
 
 const sourceCode = `
     console.log(1);
@@ -46,24 +47,57 @@ const ast = parser.parse(sourceCode, {
 
 traverse(ast, {
     CallExpression(path, state) {
-        if (types.isMemberExpression(path.node.callee) && path.node.callee.object.name === 'console' && ['log', 'info', 'debug', 'error'].includes(path.node.callee.property.name)) {
-            const { line, column } = path.node.loc.start;
-            let newNode = types.stringLiteral(`filename, line: ${line}, column: ${column}`)
-            let oldNode = path.get('arguments.0').node;
+        // if (types.isMemberExpression(path.node.callee) && path.node.callee.object.name === 'console' && ['log', 'info', 'debug', 'error'].includes(path.node.callee.property.name)) {
+        //     const { line, column } = path.node.loc.start;
+        //     // 1.
+        //     // let newNode = types.stringLiteral(`filename, line: ${line}, column: ${column}`)
+        //     // let oldNode = path.get('arguments.0').node;
+        //     // path.node.arguments =  [newNode, oldNode]
 
-            path.get('arguments.0').replaceWithMultiple([newNode, oldNode])
-            // path.get('arguments.1').replaceWith(oldNode)
 
-            // 2
-            // let newNode = types.stringLiteral(`filename, line: ${line}, column: ${column}`)
-            // let oldNode = path.get('arguments.0').node;
+        //     // 2
+        //     let newNode = types.stringLiteral(`filename, line: ${line}, column: ${column}`)
+        //     let oldNode = path.get('arguments.0').node;
+        //     // path.get('arguments.0').replaceWithMultiple([newNode, oldNode])
+        //     path.get('arguments.0').insertBefore(newNode)
 
-            // var s =path.get('arguments')
-            // s.replaceWith(newNode)
 
-            // 3
-            // let newNode = types.stringLiteral(`filename, line: ${line}, column: ${column}`)
-            // path.node.arguments.unshift(newNode)
+        //     // 3
+        //     // let newNode = types.stringLiteral(`filename, line: ${line}, column: ${column}`)
+        //     // path.node.arguments.unshift(newNode)
+        // }
+
+        // 简化判断
+        // const targetCalleeName = ['log', 'info', 'error', 'debug'].map(item => `console.${item}`);
+        // if (types.isMemberExpression(path.node.callee) && targetCalleeName.includes(path.get('callee').toString())) {
+        //     const { line, column } = path.node.loc.start;
+        //     let newNode = types.stringLiteral(`filename, line: ${line}, column: ${column}`)
+        //     path.node.arguments.unshift(newNode)
+        // }
+
+
+
+        // 需求变更
+        // 新的节点替换了旧的节点之后，插入的节点也是 console.log，也会进行处理，这是没必要的，所以要跳过新生成的节点的处理
+        if (path.node.isNew) {
+            return;
+        }
+        
+        const targetCalleeName = ['log', 'info', 'error', 'debug'].map(item => `console.${item}`);
+        if (types.isMemberExpression(path.node.callee) && targetCalleeName.includes(path.get('callee').toString())) {
+          
+            const { line, column } = path.node.loc?.start;
+
+            let newNode = template.expression(`console.log("filename: (${line}, ${column})")`)();
+            newNode.isNew = true;
+
+            if (path.findParent(path => path.isJSXElement())) {
+                path.replaceWith(types.arrayExpression([newNode, path.node]))
+                // path.skip 跳过新节点的遍历( 跳过当前节点的子节点的遍历)
+                path.skip(); 
+            } else {
+                path.insertBefore(newNode);
+            }
         }
     }
 });
