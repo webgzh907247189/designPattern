@@ -23,8 +23,16 @@ export {}
     type typeStrToNumber44 = StrToNum<'12'> // 12
 
 
-    type typeStrToNumber3<T> = T extends `${infer Num extends number}` ? Num : T 
-    type typeStrToNumber33 = typeStrToNumber3<Res>  // 'abc' | 111 | 222
+    // type typeStrToNumber3<T> = T extends `${infer Num extends number}` ? Num : T 
+    // type typeStrToNumber33 = typeStrToNumber3<Res>  // 'abc' | 111 | 222
+}
+{
+
+    const list = [{name: '11', age: 1}, {name: '222', age: 2}] as const
+    type sss = typeof list[number]['name']
+
+    type UnionValType<T extends readonly any[], K extends keyof T[number] = ''> = T[number][K]
+    type UnionValType1 = UnionValType<typeof list, 'name'>
 }
 
 
