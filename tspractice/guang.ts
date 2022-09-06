@@ -1,29 +1,33 @@
 export {}
 
-// infer 提取出来的类型是 unknow， 所以后面需要用 & string 进行交叉  或者使用 xx extends String 来进行转换
-// 使用 infer extends 进行简化
-enum Code {
-    a = 111,
-    b = 222,
-    c = 'abc'
+{
+    // infer 提取出来的类型是 unknow， 所以后面需要用 & string 进行交叉  或者使用 xx extends String 来进行转换
+    // 使用 infer extends 进行简化
+    enum Code {
+        a = 111,
+        b = 222,
+        c = 'abc'
+    }
+    type Res = `${Code}`
+
+
+    type typeStrToNumber2<T> = T extends `${infer Num}` ? Num : T 
+    type typeStrToNumber22 = typeStrToNumber2<Res> // "111" | "222" | "abc"
+
+
+    type GetArrLen<N, Ele = unknown, A extends unknown[] = []> = `${A["length"]}` extends N ? A['length'] : GetArrLen<N, Ele, [...A, Ele]> 
+    type typeStrToNumber11 = GetArrLen<'11'>; // 11
+
+
+    type StrToNum<T extends string, N extends number = 0> = T extends `${N}` ? N : GetArrLen<T>
+    type typeStrToNumber44 = StrToNum<'12'> // 12
+
+
+    type typeStrToNumber3<T> = T extends `${infer Num extends number}` ? Num : T 
+    type typeStrToNumber33 = typeStrToNumber3<Res>  // 'abc' | 111 | 222
 }
-type Res = `${Code}`
 
 
-type typeStrToNumber2<T> = T extends `${infer Num}` ? Num : T 
-type typeStrToNumber22 = typeStrToNumber2<Res> // "111" | "222" | "abc"
-
-
-type GetArrLen<N, Ele = unknown, A extends unknown[] = []> = `${A["length"]}` extends N ? A['length'] : GetArrLen<N, Ele, [...A, Ele]> 
-type typeStrToNumber11 = GetArrLen<'11'>; // 11
-
-
-type StrToNum<T extends string, N extends number = 0> = T extends `${N}` ? N : GetArrLen<T>
-type typeStrToNumber44 = StrToNum<'12'> // 12
-
-
-type typeStrToNumber3<T> = T extends `${infer Num extends number}` ? Num : T 
-type typeStrToNumber33 = typeStrToNumber3<Res>  // 'abc' | 111 | 222
 
 
 // 非常巧妙的办法 L & string 帮助规避了类型的检查
