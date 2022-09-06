@@ -23,8 +23,8 @@ export {}
     type typeStrToNumber44 = StrToNum<'12'> // 12
 
 
-    // type typeStrToNumber3<T> = T extends `${infer Num extends number}` ? Num : T 
-    // type typeStrToNumber33 = typeStrToNumber3<Res>  // 'abc' | 111 | 222
+    type typeStrToNumber3<T> = T extends `${infer Num extends number}` ? Num : T 
+    type typeStrToNumber33 = typeStrToNumber3<Res>  // 'abc' | 111 | 222
 }
 {
 
