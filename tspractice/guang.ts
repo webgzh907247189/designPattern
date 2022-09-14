@@ -1,6 +1,18 @@
 export {}
 
+// 想要约束以某个字符串开头的字符串字面量类型
+function func(str: `#${string}`){}
+func('#sasd')
+
+type tuple = [string, number?];
+let ss: tuple = ['2']
+
+
+
+
 {
+    // Typescript 类型的模式匹配是通过 extends 对类型参数做匹配，结果保存到通过 infer 声明的局部类型变量里，
+    // 如果匹配就能从该局部变量里拿到提取出的类型。
     // infer 提取出来的类型是 unknow， 所以后面需要用 & string 进行交叉  或者使用 xx extends String 来进行转换
     // 使用 infer extends 进行简化
     enum Code {
@@ -69,8 +81,8 @@ const obj: ooo = {
     age: 100
 }
 
-function getKeys<T>(obj: T) {
-    return Object.keys(obj) as Array<keyof T>;
+function getKeys<T extends Record<any, any>>(obj: T) {
+    return Object.keys(obj)// as Array<keyof T>;
 }
 
 function getStr(){
@@ -82,6 +94,19 @@ function getStr(){
     console.log(str)
 }
 getStr()
+
+    
+function getStrBackup<T extends Record<any, any>>(obj: T){
+    let str = ''
+    Object.keys(obj).forEach((key) => {
+        str += `${str}${key}=${obj[key]}&`
+    })
+    console.log(str)
+    return str
+}
+getStrBackup(obj)
+
+
 
 function getPropValue<T extends object, Key extends keyof T>(obj: T, key: Key): T[Key] {
     return obj[key];
@@ -151,7 +176,12 @@ type MapType<T> = {
 type test11 = MapType<{a: 1, b: 2}>;
 
 
+// GetRefProps
+type GetRefProps<Props> = 'ref' extends keyof Props ? Props extends {ref?: infer R} ? R : never :never
+type GetRefPropsTest1 = GetRefProps<{ref?: 1, name: 'test'}> // 1
 
+type GetRefProps1<Props> = 'ref' extends keyof Props ? Props['ref'] :never
+type GetRefPropsTest22 = GetRefProps1<{ref?: 1, name: 'test'}> // 1 | undefined
 
 
 
@@ -184,8 +214,11 @@ type ShiftArr1<Arr extends unknown[]> =
 type testShiftArr1 = ShiftArr1<[1,2,3]>
 
 // 麻烦的写法
-type ShiftArr2<Arr extends unknown[], List extends unknown[] = []> = 
-    Arr extends [infer L, ...infer R] ? List['length'] extends 0 ? R : Arr : never;
+// type ShiftArr2<Arr extends unknown[], List extends unknown[] = []> = 
+//     Arr extends [infer L, ...infer R] ? List['length'] extends 0 ? R : Arr : never;
+
+// type ShiftArr2<Arr extends unknown[]> = Arr extends [infer L, ...infer R] ? R : never;
+type ShiftArr2<Arr extends unknown[]> = Arr extends [unknown, ...infer R] ? R : never;
 type testShiftArr2 = ShiftArr2<[1,2,3]>
 
 
@@ -206,9 +239,6 @@ type ReplaceStrTest1 = ReplaceStr<'你吃饭了吗', '吃饭' , '喝水'>
 type TrimStrRight<Str extends string> = Str extends `${infer Rest}${' ' | '\n' | '\t'}` ? TrimStrRight<`${Rest}`> : Str
 type TrimStrLeft<Str extends string> = Str extends `${' ' | '\n' | '\t'}${infer Rest}` ? TrimStrLeft<`${Rest}`> : Str
 type TrimStrTest1 = TrimStrLeft<TrimStrRight<'  abc asd   '>>
-
-
-
 
 
 
