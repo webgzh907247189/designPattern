@@ -94,8 +94,15 @@ export { }
     type OmitThisParameter11 = OmitThisParameter<TypeFn> 
     type OmitThisParameter22 = OmitThisParameter<(age: number) => void> 
 
-    
+
     // this 被占位了， 直接拿到 ...args 参数
     type test11 = ((this: {name: string}, age: number) => void) extends ((this: any, ...args: infer A) => infer R) ?  (...args: A) => R : ''
     type test22 = ((this: {name: string}, age: number) => void) extends ((...args: infer A) => infer R) ?  (...args: A) => R : ''
+}
+
+// 泛型 约束 返回 T 报错
+{
+    const getRemovePrefixUrl = <T extends string>(url: T): string => {
+        return url.startsWith('/') ? url.substring(1) : url
+    }
 }
