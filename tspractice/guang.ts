@@ -1,11 +1,29 @@
 export {}
 
+// TypeScript 类型系统支持 3 种可以声明任意类型的变量： type、infer、类型参数。
+
 // 想要约束以某个字符串开头的字符串字面量类型
 function func(str: `#${string}`){}
 func('#sasd')
 
+
 type tuple = [string, number?];
 let ss: tuple = ['2']
+
+/**
+ * 数组和元组的区别：
+ * 数组类型是指任意多个同一类型的元素构成的，比如 number[]、Array<number>，
+ * 而元组则是数量固定，类型可以不同的元素构成的，比如 [1, true, 'guang']。
+ */
+type Push<Arr extends  any[], Ele> = [...Arr, Ele];
+type sss = Push<[], 1>
+
+
+
+// 函数类型的重新构造
+// 在已有的函数类型上添加一个参数
+type AppendArgument2<Func extends Function, Arg> = Func extends (...args: infer A) => infer R ? (...args: [...A, Arg]) => R : never
+type AppendArgumentTest2 = AppendArgument2<(a: string, b :number) => unknown, { c: number}>
 
 
 
@@ -267,23 +285,19 @@ type CapitalizeStrTestResult1 = Capitalize<CapitalizeStrTest1>
 
 
 
-
+// 两种写法，结果不同
 type DropSubStr<Str extends string, SubStr extends string> =
     Str extends `${infer L}${SubStr}${infer R}` ? `${L}${DropSubStr<R, SubStr>}` : Str
-type DropSubStrTest = DropSubStr<'donngg', 'ng'>
+type DropSubStrTest = DropSubStr<'donngg', 'ng'> // "dong"
 
 
 type DropSubStr1<Str extends string, SubStr extends string> = 
     Str extends `${infer Prefix}${SubStr}${infer Suffix}` 
         ? DropSubStr<`${Prefix}${Suffix}`, SubStr> : Str;
-type DropSubStrTest1 = DropSubStr1<'donngg', 'ng'>
+type DropSubStrTest1 = DropSubStr1<'donngg', 'ng'> // "do"
 
 
 
-
-
-type AppendArgument2<Func extends Function, Arg> = Func extends (...args: infer A) => infer R ? (...args: [...A, Arg]) => R : never
-type AppendArgumentTest2 = AppendArgument2<(a: string, b :number) => unknown, { c: number}>
 
 
 

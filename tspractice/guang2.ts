@@ -3,6 +3,16 @@ export {}
 // 条件类型中如果左边的类型是联合类型，会把每个元素单独传入做计算，而右边不会 -> (T extends F ? 1 : 2 触发了 分发) 
 
 
+
+// 数组转联合类型
+type ListToUnion = ['a', 'b' ,'c'][number] // "a" | "b" | "c"
+
+type BEM<Block extends string, Element extends string[], Modifiers extends string[]> = `${Block}__${Element[number]}--${Modifiers[number]}`
+type bemResult = BEM<'guang', ['aaa', 'bbb'], ['warning', 'success']>;
+
+
+
+
 type DeepPromiseValueType<T> = T extends Promise<infer R> ? DeepPromiseValueType<R> : T;
 type DeepPromiseValueTypetest = DeepPromiseValueType<Promise<Promise<Promise<{sex: boolean, age: number}>>>>
 
@@ -76,6 +86,8 @@ type CamelcaseArrTest1 = CamelcaseArr<['aa_aa_aa', 'bb_bb_bb', 'cc_cc_cc']>
 
 
 
+// 当类型参数为联合类型，并且在条件类型左边直接引用该类型参数的时候，TypeScript 会把每一个元素单独传入来做类型运算，
+// 最后再合并成联合类型，这种语法叫做分布式条件类型。
 
 // A extends A 这段看似没啥意义，主要是为了触发分布式条件类型，让 A 的每个类型单独传入。
 // [B] extends [A] 这样不直接写 B 就可以避免触发分布式条件类型，那么 B 就是整个联合类型。
@@ -84,12 +96,6 @@ type IsUnion<A, B = A> = A extends A ? [B] extends [A] ? false : true : never
 type IsUniontest = IsUnion<'a' | 'b' | 'c'> // true
 
 
-
-// 数组转联合类型
-type ListToUnion = ['a', 'b' ,'c'][number] // "a" | "b" | "c"
-
-type BEM<Block extends string, Element extends string[], Modifiers extends string[]> = `${Block}__${Element[number]}--${Modifiers[number]}`
-type bemResult = BEM<'guang', ['aaa', 'bbb'], ['warning', 'success']>;
 
 
 
