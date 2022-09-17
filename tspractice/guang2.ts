@@ -67,6 +67,12 @@ type DeepReadonlyTest1 = DeepReadonly<obj>['a']
 type DeepReadonlyTest2 = DeepReadonly<obj>['a']['b']['c']['f']
 type DeepReadonlyTest3 = DeepReadonly<obj>['a']['b']['c']['d']
 
+// 使用  Obj extends any 触发了计算
+// ts 的类型只有被用到的时候才会做计算。
+type DeepReadonlyCalc<Obj extends Record<string, any>> = Obj extends any ? {
+    readonly [Key in keyof Obj]: Obj[Key] extends object ? Obj[Key] extends Function ? Obj[Key] : DeepReadonlyCalc<Obj[Key]> : Obj[Key]
+} : never
+type DeepReadonlyTest11 = DeepReadonlyCalc<obj>
 
 
 
@@ -212,6 +218,9 @@ type RemoveIndexSignatureTest = RemoveIndexSignature<{name: string, age: number,
     type aa1 = {} extends Pick<{name: string,  age?: number}, 'age'> ? 1 : 2 // 1
     type aa2 = {} extends Pick<{name: string,  age: number}, 'age'> ? 1 : 2 // 2
     type aaa = Pick<{name: string, age?: number}, 'age'> // {  age?: number | undefined; }
+
+    type test1 = {} extends {age: number} ? 1 : 2 // 2
+    type test2 = {} extends {age?: number} ? 1 : 2 // 1
 
     
     
