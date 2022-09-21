@@ -85,7 +85,7 @@ type CamelcaseTest11 = CamelcaseUpcase<'aa_aa_aa'>
 
 // 非常巧妙的办法 L & string 帮助规避了类型的检查
 type CamelcaseArr<Arr extends unknown[], Result extends unknown[] = []> = 
-    Arr extends [infer L,...infer Rest] ? CamelcaseArr<Rest, [...Result, CamelcaseUpcase<L>]> : Result;
+    Arr extends [infer L extends string,...infer Rest] ? CamelcaseArr<Rest, [...Result, CamelcaseUpcase<L>]> : Result;
 type CamelcaseArrTest1 = CamelcaseArr<['aa_aa_aa', 'bb_bb_bb', 'cc_cc_cc']>
 
 
