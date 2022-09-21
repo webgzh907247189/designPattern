@@ -1,5 +1,10 @@
 export { }
 
+// 类型编程比直接声明类型更高一层，他是对类型参数做一系列类型运算，产生新的类型。
+// 需要动态生成类型的场景，必然会用到类型编程，比如 Promise.all、Promise.race、柯里化等场景。
+
+// 有的时候不用类型编程也行，但用了类型编程能够实现更精准的类型提示和检查，
+// 比如 parseQueryString 这个函数的返回值。
 {
     type A = {
         aa: string
@@ -106,3 +111,44 @@ export { }
         return url.startsWith('/') ? url.substring(1) : url
     }
 }
+
+{
+    // Promise.all 是等所有 promise 执行完一起返回
+    // Promise.race 是有一个执行完就返回。返回的类型都需要用到参数 Promise 的 value 类型
+    interface PromiseConstructor {
+        all<T extends readonly unknown[] | []>
+            (values: T): Promise<{
+                -readonly [P in keyof T]: Awaited<T[P]>
+            }>;
+    
+
+        // 约束为 unknown[] | [] 就是 as const 的意思
+        race<T extends readonly unknown[] | []>
+            (values: T): Promise<Awaited<T[number]>>;
+    }
+}
+// 约束为 unknown[] | [] 就是 as const 的意思
+declare function test1<T extends unknown[]>(values: T): T
+declare function test2<T extends unknown[] | []>(values: T): T
+const res1 = test1([1,2,3]) //  number[]
+const res2 = test2([1,2,3]) //  [number, number, number]
+
+
+
+
+
+type CurriedFunc<Params, Result> = Params extends [infer L, ...infer R] ? (a: L) => CurriedFunc<R, Result> : Result
+declare function currying<Func>(fn: Func): Func extends (...args: infer Args) => infer Result 
+? CurriedFunc<Args, Result> : never
+
+const func = (a: string, b: number, c: boolean) => {};
+const currying = (fn) => {
+    let args = []
+    const fnLength = fn.length
+    if (args.length >= fn.length) {
+        return fn(...args);
+    }
+
+    return (...a) => currying(fn)
+}
+const curryFn = currying(func)
