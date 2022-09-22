@@ -136,19 +136,29 @@ const res2 = test2([1,2,3]) //  [number, number, number]
 
 
 
-
+// 函数柯里化 采用 重载的方式
 type CurriedFunc<Params, Result> = Params extends [infer L, ...infer R] ? (a: L) => CurriedFunc<R, Result> : Result
-declare function currying<Func>(fn: Func): Func extends (...args: infer Args) => infer Result 
-? CurriedFunc<Args, Result> : never
-
-const func = (a: string, b: number, c: boolean) => {};
-const currying = (fn) => {
-    let args = []
+function currying<Func>(fn: Func): Func extends (...args: infer Args) => infer Result ? CurriedFunc<Args, Result> : never
+function currying (fn) {
+    let args: unknown[] = []
     const fnLength = fn.length
-    if (args.length >= fn.length) {
-        return fn(...args);
-    }
 
-    return (...a) => currying(fn)
+    const curryfn = (...a)  => {
+        args = [...args, ...a]
+        if (args.length >= fnLength) {
+            console.log(args, 'args')
+            return fn(...args);
+        }else {
+            return curryfn
+        }
+    }
+    return (...a) => curryfn(...a)
 }
+
+const func = (a: string, b: number, c: boolean) => { return a+ b + c};
 const curryFn = currying(func)
+const curryFn1 = curryFn('123')
+const curryFn2 = curryFn1(333)
+const curryFn3 = curryFn2(true)
+// const curryFn4 = curryFn3('d')
+console.log(curryFn3)
