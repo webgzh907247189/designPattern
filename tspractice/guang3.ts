@@ -162,3 +162,61 @@ const curryFn2 = curryFn1(333)
 const curryFn3 = curryFn2(true)
 // const curryFn4 = curryFn3('d')
 console.log(curryFn3)
+
+
+
+
+
+
+{
+    type KebabCaseToCamelCase<S> = S extends `${infer L}-${infer R}` ? `${L}${KebabCaseToCamelCase<Capitalize<R>>}` : S
+    type KebabCaseToCamelCaseTest = KebabCaseToCamelCase<'aa-bb-cc'>
+}
+
+{
+    type CamelCaseToKebabCase<S> = S extends `${infer L}${infer R}` ? L extends Lowercase<L> ? `${L}${CamelCaseToKebabCase<R>}` : `-${Lowercase<L>}${CamelCaseToKebabCase<R>}` : S
+    type CamelCaseToKebabCaseTest = CamelCaseToKebabCase<'aaBbCc'>
+}
+{
+    type Chunk<
+        Arr extends unknown[], 
+        ItemLen extends number, 
+        CurItem extends unknown[] = [], 
+        Res extends unknown[] = []
+    > = Arr extends [infer L, ...infer R] ? CurItem['length'] extends ItemLen ? Chunk<R, ItemLen, [L], [...Res, CurItem]>  : Chunk<R, ItemLen, [...CurItem, L], Res> : [...Res, CurItem]
+    type ChunkTest = Chunk<[1,2,3,4,5], 2>
+}
+
+
+{
+    type TupleToNestedObject<Tuple extends unknown[], Value> = Tuple extends [infer L extends string, ...infer R] ? {
+        [Key in L]: R extends unknown[] ? TupleToNestedObject<R, Value> : Value
+    } : Value
+    type TupleToNestedObjectTest1 = TupleToNestedObject<['a', 'b', 'c'], 'xxx'>
+    type TupleToNestedObjectTest2 = TupleToNestedObject<['a', 'b', number, 'c'], 'xxx'>
+    type TupleToNestedObjectTest3 = TupleToNestedObject<['a', 'b', undefined, 'c'], 'xxx'>
+}
+
+// as Key extends keyof any ? Key : never 的重映射呢?
+// 因为比如 null、undefined 等类型是不能作为索引类型的 key 的，就需要做下过滤，如果是这些类型，就返回 never，否则返回当前 Key。
+{
+    type TupleToNestedObject<Tuple extends unknown[], Value> = Tuple extends [infer L, ...infer R] ? {
+        [Key in L as Key extends keyof any ? Key : never]: R extends unknown[] ? TupleToNestedObject<R, Value> : Value
+    } : Value
+    type TupleToNestedObjectTest1 = TupleToNestedObject<['a', 'b', 'c'], 'xxx'>
+    type TupleToNestedObjectTest2 = TupleToNestedObject<['a', 'b', number, 'c'], 'xxx'>
+    type TupleToNestedObjectTest3 = TupleToNestedObject<['a', 'b', undefined, 'c'], 'xxx'>
+}
+
+{
+    type Copy<O> = { [key in keyof O]: O[key] }
+
+    type PartialObjectPropByKeys<
+        Obj extends Record<string, any>,
+        Key extends keyof any
+    > = Partial<Pick<Obj,Extract<keyof Obj, Key>>> & Omit<Obj,Key>;
+
+    // 不使用 copy 拿不到计算后的值   ts 只有在需要计算的时候才会去计算
+    type PartialObjectPropByKeysTest1 = Copy<PartialObjectPropByKeys<{name: string, age: number}, 'age'>>
+    type PartialObjectPropByKeysTest2 = PartialObjectPropByKeys<{name: string, age: number}, 'age'>
+}
