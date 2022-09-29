@@ -82,4 +82,4 @@ type Test<T> = T extends true ? 1 : 2;
 type res = Test<never>; // never
 
 type Test1<T> = T extends true ? 1 : 2;
-type res1 = Test1<any>; // 1 ｜ 2
+type res1 = Test1<any>; // 1 ｜ 2        
