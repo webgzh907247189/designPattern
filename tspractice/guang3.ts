@@ -75,6 +75,33 @@ export { }
         ]: T[K] extends Record<string, string> ? Camel<T[K]> : T[K] extends Array<infer A extends string> ? Array<Camelcase<A>> : T[K]
     } : never
     type Camel33 = Camel<A>
+
+
+
+
+    
+    type AA = {
+        aa: string
+        Bb: [{
+                cccDdd: string;
+            }, 
+            {
+                dddEee: string;
+                eeeFff: {
+                    fffGgg: string;
+                };
+        }],
+        cc_Dd_Ee: {
+            eee_fff: string
+        }
+    }
+    type CamelizeArr<Arr> = Arr extends [infer First, ...infer Rest] ? [Camelcase<First & string>, ...CamelizeArr<Rest>] : []
+    type Camel1<T> = T extends any ? {
+        [
+        K in keyof T as Camelcase<K & string>
+        ]: T[K] extends Record<string, string> ? Camel<T[K]> : T[K] extends string[] ? CamelizeArr<T[K]> : T[K]
+    } : never
+    type Camel44 = Camel1<AA>
 }
 
 {
