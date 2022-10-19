@@ -8,7 +8,8 @@ export function patch(oldVnode,newVnode){
 
     // 判断是否存在 nodeType， 存在为真实节点
     const isRealEle = oldVnode.nodeType;
-
+    // 代表是第一次渲染，因为 是真实节点的原因
+    // Vue.propertype._update 里面执行 vm.$el = patch(el, vnode) -> 第一次渲染
     if(isRealEle){
         const oldEle = oldVnode
         const parentEle = oldEle.parentNode
