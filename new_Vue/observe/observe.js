@@ -12,6 +12,7 @@ import Dep from './dep';
 
 export function defineReactive(data,key,value){
     // debugger
+    // 基本数据类型 没有 __ob__, 只有dep
     let childOb = observe(value)
     // console.log(childOb,'??')
 
@@ -31,8 +32,8 @@ export function defineReactive(data,key,value){
 
                 // 数组的 依赖收集
                 if(childOb){
-                    childOb.dep.depend() // 数组收集了 watcher
-                    // 收集数组每一项的 依赖
+                    childOb.dep.depend() // (数组 || 对象)收集了 watcher
+                    // 收集(数组 || 对象) 每一项的 依赖
                     dependArray(value)
                 }
             }
@@ -56,6 +57,7 @@ export default class Observe {
 
         // 每个对象都有一个 __ob__ 属性，返回的是当前的 Observe 实列
         // 注意 this
+        // 这样设置可以避免 __ob__ 再一次在 Object.keys() -> 遍历出来 不可枚举
         Object.defineProperty(data, '__ob__', {
             get:()=>{
                 // console.log(this,'???',data)

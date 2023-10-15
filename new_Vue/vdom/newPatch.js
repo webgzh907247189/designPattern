@@ -1,7 +1,10 @@
 import { vnode } from "./create-element";
 import { createEle, updateProperties, updateChildren } from "./patch";
 
+// 第一次渲染 和 第二次渲染都是走的这个办法 (第二次是 diff 对比)
+// vue 和 react 的对比， 理解成一个班级， vue 设置了很多小组长(watcher)，小组长管组员，react 没有小组长，直接自己管
 export function patch(oldVnode,newVnode){
+    // 组件的渲染
     if(!oldVnode){
         return createEle(newVnode)
     }

@@ -1,7 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>
+
+	// react 16+ 渲染流程
+	// 1. scheduler 选择高优先级的任务进入  reconciler
+	// 2. reconciler 计算变更的 内容  (render 阶段)
+	// 3. 
+	
+
+	// domDiff 拿到老的fiber 树 跟新的 vdom 对比，生成新的 fiber 树的过程
+	</title>
 </head>
 <body>
 	<div id="root">
@@ -23,9 +32,20 @@
 	
 	// 每个fiber节点有三个指针
 	// children 指向第一个子节点 return 指向他的父节点  sibling 指向他的弟弟
+	// 一个节点遍历完成的条件， 自己所有的子节点都完成算完成
 
-	// 每次渲染有两个阶段 协调(reconciler)和提交(commit)
-	// commit 不能被打断
+
+	// fiber 之前的协调， React 会递归的比较 Vdom 树， 找到需要变更的节点，然后同步他们， 这个过程React过程为协调 (递归调用，不能中断)
+	// 在协调期间， React 会一直占用浏览器资源，会导致用户触发的事件得不到响应， 并且可能会掉帧，卡顿
+	
+
+	// 一个虚拟DOM 算一个链表节点，同时，也是一个工作单元
+	// fiber 解决了执行栈不能中断的问题
+
+	// 每次渲染有两个阶段 协调render 函数阶段(reconciler)和提交阶段(commit)
+	// 可以认为是 diff 阶段，这个阶段可以被打断，此阶段找到所有的节点变更 (节点新增，删除，属性变更，这些变更成为 副作用 effect)
+	// commit 不能被打断 (把上一个阶段计算出来的 需要处理的副作用 effect 一次性执行了，这个阶段需要同步进行，不能被打断)
+
 
 	const container = document.getElementById('root')
 	let workInProcessRoot = {
@@ -54,7 +74,9 @@
 	}
 
 	function commitRoot(){
+		console.log(workInProcessRoot, 'commit')
 		let currentFiber = workInProcessRoot.firstEffect;
+		// debugger
 
 		while(currentFiber){
 			// 插入
@@ -107,7 +129,7 @@
 				type: child.type,
 				props: child.props,
 				return: fiber,
-				effectTag: PLACEMENT, // 这个 fiber 需要被查到到 dom
+				effectTag: PLACEMENT, // 这个 fiber 需要被插入到 dom
 				nextEffect: null, // 下一个有副作用到节点
 			}
 
@@ -124,6 +146,7 @@
 	// fiber 不是每次更新，所有节点都参与，只是有副作用的节点 参与更新
 	// firstEffect 指向第一个有副作用的节点  nextEffect 下一个有副作用的节点 lastEffect 最后一个有副作用的节点
 	function complateUnitOfWork(fiber){
+		// debugger
 		console.log('结束' + fiber.props.key)
 
 		// 下面操作 构建 父作用域链
@@ -152,8 +175,29 @@
 				returnFiber.lastEffect = fiber
 			}
 		}
-
+		console.log(returnFiber, 'returnFiber');
 	}
+	/**
+	 * 1. C1 的 return 是 B1     B1.firstEffect = C1; B1.lastEffect = C1 
+	 * 2. C2 的 return 是 B1     B1.lastEffect.nextEffect = C2; B1.lastEffect = C2
+	 * 此时 结构为
+	 * C1.nextEffect = C2;      B1.lastEffect = C2;  (C1 -> C2 ? B1)
+	 * 
+	 * 3. B1 的 return 是 A1     A1.firstEffect = C1; A1.lastEffect = C2; A1.lastEffect.nextEffect = B1; A1.lastEffect = B1
+	 * 此时 结构为
+	 * C2.nextEffect = B1;      A1.lastEffect = B1 (C1 -> C2 -> B1 ? A1)
+	 * 
+	 * 4. B2 的 return 是 A1     A1.lastEffect.nextEffect = B2; A1.lastEffect = B2
+	 * 此时 结构为 
+	 * B1.nextEffect = B2;       A1.lastEffect = B2 (C1 -> C2 -> B1 -> B2 ? A1)
+	 * 
+	 * 5. A1 的 return 是 跟节点   跟节点.firstEffect = A1.firstEffect = C1; 跟节点.lastEffect = B2; 跟节点.lastEffect.nextEffect = A1; 跟节点.lastEffect = A1;
+	 * 此时 结构为 
+	 * B2.nextEffect = A1;       跟节点.lastEffect = A1; 跟节点.firstEffect = C1; (C1 -> C2 -> B1 -> B2 -> A1)
+	 * 
+	 * 最后的结论
+	 * 跟节点.lastEffect = A1; 跟节点.firstEffect = C1; (C1 -> C2 -> B1 -> B2 -> A1)
+	 */
 
 	workLoop()
 

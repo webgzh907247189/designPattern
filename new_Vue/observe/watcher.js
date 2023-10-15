@@ -66,6 +66,7 @@ export default class Watcher {
         this.depsId = new Set();
 
         // this.value 老值
+        // 所以用户的自定义 watcher 会 先执行一次 ， computed 不会立即执行
         this.value = this.lazy ? undefined : this.get()
 
         // console.log(opts, 'this.immediate')
@@ -99,7 +100,9 @@ export default class Watcher {
         let val = this.get()
 
         // 用户自定义的 watch 开始执行
-        if(val !== this.value){
+        // if(val !== this.value){
+        // 区分用户自定义 watcher
+        if(val !== this.value &&  this.opts.user){
             this.cb(val, this.value)
         }
     }
@@ -129,6 +132,7 @@ export default class Watcher {
         // debugger
         let dep = this.deps.length
         console.log(dep,'???',this.deps, Dep.target)
+        // 把computedWatcher的 deps 给了 render watcher
         while(dep--){
             this.deps[dep].depend()
         }
@@ -189,6 +193,22 @@ function flushCallBack(){
     waiting = false
     callBacks = []
 }
+
+
+// 注意有个场景
+// data: {
+//     a: 1
+// }
+// mounted(){
+//     Vue.nextTick(() => {
+//         console.log(app.innerHTML)
+//     })
+//     this.a = 100
+// }
+// 此时 拿到的 app.innerHTML 还是1 ，追踪源码发现
+// callBacks 里面存放两个元素 [cb, flushQueue(queue -> [render watcher])] , cb 是用户传入的， 第二个是 flushQueue
+// 所以执行顺序 还是 cb 先执行。 同步放入，异步执行
+
 
 // waiting 的 作用
 // nextTick 可以同时调用多次， 但是 在这 同时调用多次的过程中， 只能保证有一个 promise(setImmediate) 异步任务，因为在这些异步任务的 cb 里面 会去 挨个循环 nextTick 的 回掉函数

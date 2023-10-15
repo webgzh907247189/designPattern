@@ -6,7 +6,7 @@
 </head>
 <body>
     <div id="app">
-        {{a}}--{{b}}
+        {{aaaa}}--{{bbbb}}---{{cccc}}
     </div>
 
     <!-- 引入依赖的 js 文件 -->
@@ -15,17 +15,41 @@
         const data = {a: 1, b: '22', c: 'testcc'}
         let vm = new Vue({
             el: '#app',
-            data,
-            mounted(){
-                
+            data(){
+                return {
+                    aaaa: 'aaaa',
+                    bbbb: 'bbbb',
+                    dddd: 'dddd'
+                }
             },
-           
+            mounted(){
+                setTimeout(() => {
+                    this.change()
+                }, 2000);
+            },
+            computed:{
+                cccc(){
+                    return this.dddd
+                }
+            },
+            methods: {
+                change(){
+                    this.aaaa = '111'
+                    this.bbbb = '222'
+                    this.dddd = '3333'
+                    debugger
+                    // this.$forceUpdate()
+                }
+            },
             created(){
+                // this.aaaa = 'aaaa'
+                // this.bbbb = 'bbbb'
+                // this.dddd = 'dddd'
                 console.log(this.obj, 'this.aa')
             },
         });
         // vm.b = '22'
-        window.aa = vm;
+        // window.aa = vm;
         
         /**
          * Vue data 中随意更改一个属性，视图都会被更新吗？
@@ -35,10 +59,10 @@
          * 触发了 get，然后在 get里面 (每一个data 属性都有一个 dep 实列), 触发了dep.depend() ---> watcher.addDep ---> dep.addSub(dep 把 wacther 加进来)。 dep里面有 wacther， wacter 里面有dep
          */
 
-        setTimeout(() => {
-            window.aa._data.a = 2
-            window.aa._data.b = 212321
-        }, 2000)
+        // setTimeout(() => {
+        //     window.aa._data.a = 2
+        //     window.aa._data.b = 212321
+        // }, 2000)
     </script>
 </body>
 </html>
