@@ -133,6 +133,7 @@
 				nextEffect: null, // 下一个有副作用到节点
 			}
 
+			// 在此处形成链表， 父 fiber 不直接和 非大儿子 fiber 关联
 			if(index === 0){
 				fiber.child = childFiber
 			}else {

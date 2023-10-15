@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>flex</title>
+</head>
+<style>
+	*{
+		margin: 0;
+		padding: 0;
+	}
+	.content{
+		background-color: yellow;
+		width: 360px;
+		height: 100px;
+		display: flex;
+		align-items: center;
+	}
+
+	.item-left{
+		height: 100%;
+		width: 60px;
+		background-color: red;
+	}
+	.item-right{
+		height: 100%;
+		width: 120px;
+		background-color: red;
+	}
+	.item-center{
+		height: 100px;
+		/* flex: 1; */
+		flex-grow: 1;
+	}
+
+	/* .content {
+		display: flex;
+		width: 100%;
+		align-items: center;
+		background-color: yellow;
+		height: 100px;
+	}
+	.item-left {
+		height: 100px;
+        width: 20%;
+    }
+    .item-center {
+		height: 100px;
+		flex: 1;
+    }
+    .item-right {
+		height: 100px;
+        width: 20%;
+    } */
+</style>
+<body>
+	<div class="content">
+		<div class="item-left">111</div>
+		<div class="item-center">444</div>
+		<div class="item-right">222</div>
+	</div>
+</body>
+</html>

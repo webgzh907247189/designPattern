@@ -3,6 +3,24 @@ Vue中filter能不能写异步代码，能不能获取$vm？
 3.map如果不return会怎么样？
 model/peegasus_ph
 
+https://juejin.cn/post/7139721466722910245
+https://github.com/didi/di18n
+https://blog.csdn.net/qq_42880714/article/details/125833106
+https://blog.csdn.net/qq_42880714/article/details/121651927
+https://blog.csdn.net/qq_42880714/article/details/126575416?spm=1001.2014.3001.5502
+
+
+https://juejin.cn/book/6844733815944904712/section/6844733816066539534
+https://juejin.cn/post/7055138572709396510
+https://juejin.cn/post/7140064503600775176
+https://juejin.cn/post/6844903446785556488
+https://juejin.cn/book/6945998773818490884/section/6950659615675645990
+https://juejin.cn/post/7072156913789566989#heading-7
+https://juejin.cn/post/6844903751799537671#heading-5
+
+
+
+
 // 今天刚好在看event loop和requestAnimationFrame，之前只知道RAF能优化性能让网页流畅，今天才弄懂原理，https://m.youtube.com/watch?v=cCOL7MC4Pl0 这个视频是googler jake archibald在jsconf的演讲
 
 // 【回放视频上线】
