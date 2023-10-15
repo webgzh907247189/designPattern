@@ -44,6 +44,8 @@ module.exports = class FileListplugin{
                 // console.log(fileName, stats.size)
                 content += ` - ${fileName}    ${stats.size()}\r\n`
             })
+
+            // 调用 source() 可以获取 源码
             // assets[this.filename] = {
             //     source(){
             //         return content

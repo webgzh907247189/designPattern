@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>monitor</title>
+</head>
+<body>
+    <div id="container">
+        test
+    </div>
+</body>
+
+<!-- <script src="./packages/reactivity/dist/reactivity.global.js"> -->
+</script>
+<script src="./node_modules/vue/dist/vue.global.js">
+</script>
+<!-- <script>
+    const { watch, effect, reactive, shallowReactive, readonly, computed } = VueReactivity
+    
+    const state2 = reactive({name: 'test', eat: '吃饭', address: { ad: 'sh' }})
+
+    // 监控对象无法区分前后多新值和老值 引用类型的问题
+    // watch(state2, (newVal, oldVal) => {
+    //     console.log(newVal, oldVal)
+    // })
+
+
+    // 这种写法监控 比 上面的写法更优雅
+    watch(() => state2.address.ad, (newVal, oldVal) => {
+        console.log(newVal, oldVal)
+    })
+
+    // 不能直接按照下面这样写
+    // 因为 state2.address.ad 是 一个常量值，无法监控 
+    // watch(state2.address.ad, (newVal, oldVal) => {
+        // console.log(newVal, oldVal)
+    // })
+
+    effect(() => {
+        state2.address.ad = 'test111'
+    })
+</script> -->
+<script>
+    // 对 基本数据类型做 响应式的处理
+    const { ref, reactive, effect, toRefs, toRef, proxyRefs } = Vue
+
+    const state2 = reactive({name: 'test', eat: '吃饭', address: { ad: 'sh' }, testObj: ref(0), testArr: [ref(0)]})
+    
+    // toRefs 只能处理对象
+    let { name, eat } = toRefs(state2)
+
+    // toRef 的用法
+    let name1 = toRef(state2, 'name')
+
+
+    // 在模板里面使用 proxyRefs 包装了一次
+    let nameRef = ref('ref')
+    let _ctx = proxyRefs({ nameRef })
+
+    
+    // 对象的 ref 支持 在 effect 里面不加 .value
+    // 数组的 ref 不支持
+    effect(() => {
+        console.log(state2.testObj, state2.testArr[0].value)
+        container.innerHTML = name.value + '---' + eat.value + '---' + _ctx.nameRef + '---' + state2.testObj + '---' +  state2.testArr[0].value
+    })
+
+    setTimeout(() => {
+        // state2.name = '111'
+        name.value = '222'
+    }, 1000)
+</script>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>monitor</title>
+</head>
+<body>
+    <div id="container">
+        test
+    </div>
+</body>
+<script src="./packages/reactivity/dist/reactivity.global.js">
+</script>
+
+
+<!-- <script src="./node_modules/.pnpm/@vue+reactivity@3.2.33/node_modules/@vue/reactivity/dist/reactivity.global.js"> -->
+<!-- </script> -->
+
+<script>
+    // effect 代表的是副作用函数， 如果 此函数依赖的数据发生了变化，需要重新执行
+    // reactive 将数据变成响应式， proxy
+    // readonly 深度的 readonly
+    // shallowReadonly 浅层的 readonly
+
+    // reactive 只能做 对象的 代理
+    const { effect, reactive, shallowReactive, readonly, shallowReadonly } = VueReactivity
+    const state = reactive({name: true, eat: '吃饭', address: 'sh' })
+    // console.log(state, state.address) // state.address 是一个对象， 在取值的时候发现是一个对象，返回当前对象的 proxy 对象
+
+    // 此 effect 默认会执行一次， 对响应式数据取值 (取值的过程中中数据会依赖当前的  effect)
+    effect(() => {
+        console.log('render')
+        container.innerHTML = state.name ? state.eat : state.address
+    })
+
+    setTimeout(() => {
+        state.name = false
+
+        setTimeout(() => {
+            console.log('修改name，原则上不更新')
+            state.eat = '11'
+        }, 1000)
+    }, 1000)
+</script>
+
+<!-- <script>
+    // 暂停 effect
+    const { effect, reactive, shallowReactive, readonly, shallowReadonly } = VueReactivity
+    const state2 = reactive({name: 'test', eat: '吃饭', address: { ad: 'sh' }})
+
+    // 此 effect 默认会执行一次， 对响应式数据取值 (取值的过程中中数据会依赖当前的  effect)
+    let runner = effect(() => {
+        console.log('render')
+        container.innerHTML = state2.name + state2.eat + state2.address.ad
+    })
+
+    runner.effect.stop()
+    setTimeout(() => {
+        state2.name = 'gzh'
+        console.log('1')
+
+        setTimeout(() => {
+            console.log('2')
+            runner()
+        }, 3000)
+    }, 2000)
+</script> -->
+
+<!-- 
+<script>
+    // 批处理
+    let waiting = false
+    // 批处理
+    const { effect, reactive, shallowReactive, readonly, shallowReadonly } = VueReactivity
+    const state2 = reactive({name: 'test', eat: '吃饭', address: { ad: 'sh' }})
+
+    // 此 effect 默认会执行一次， 对响应式数据取值 (取值的股从俄很难过中数据会依赖当前的  effect)
+    let runner = effect(() => {
+        container.innerHTML = state2.name + state2.eat + state2.address.ad
+    }, {
+        scheduler(){
+            console.log('1')
+        
+            if(!waiting){
+                console.log('2')
+                waiting = true
+                setTimeout(() => {
+                    runner()
+                    waiting = false
+                }, 3000);
+            }
+        }
+    })
+
+    state2.name = 'gzh1'
+    state2.name = 'gzh2'
+    state2.name = 'gzh3'
+    state2.name = 'gzh4'
+    state2.name = 'gzh5'
+</script> -->
+
+
+
+<!-- <script>
+    const { effect, reactive, shallowReactive, readonly, computed } = VueReactivity
+    debugger
+    const state2 = reactive({name: 'test', eat: '吃饭', address: { ad: 'sh' }})
+
+    // const fullName = computed(() => {
+    //     return state2.name + state2.address.ad
+    // })
+
+    const fullName = computed({
+        // defineproperty 中的 get
+        get(){
+            console.log('get');
+            return state2.name + state2.address.ad
+        },
+        // defineproperty 中的 set
+        set(newVal){
+            debugger
+            console.log(newVal)
+        }
+    })
+    // 不访问 fullName.value 不会处罚 get 属性
+
+    // console.log(fullName, fullName.value, fullName.value)
+
+    effect(() => {
+        container.innerHTML = fullName.value
+    })
+
+    // 计算属性通过 .value 来修改
+    setTimeout(() => {
+        state2.name = '123test'
+    }, 2000);
+
+    // 计算属性中肯定有一个缓存的 标识， 如果这个依赖发生了变化，需要重新执行 get， 没有变化不执行 get
+    // dirty
+    // 计算属性 是一个 effect，
+</script> -->
+
+<!-- <script>
+    const { effect, reactive, shallowReactive, readonly, computed } = VueReactivity
+    debugger
+    const state2 = reactive({name: 'test', address: { ad: 'sh' }})
+    effect(() => {
+        container.innerHTML = state2.name + state2.address.ad
+    })
+</script> -->
+</html>

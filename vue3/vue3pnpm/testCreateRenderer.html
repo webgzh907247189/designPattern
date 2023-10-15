@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>monitor</title>
+</head>
+<body>
+    <div id="container">
+        
+    </div>
+</body>
+<script src="./packages/runtime-dom/dist/runtime-dom.global.js">
+</script>
+
+
+<!-- <script src="./node_modules/.pnpm/vue@3.2.33//node_modules//@vue//runtime-dom/dist//runtime-dom.global.js"> -->
+</script>
+<script>
+    const { createRenderer, h, render, TEXT } = VueRuntimeDOM
+
+    let renderer = createRenderer({
+        createElement(ele){
+            return document.createElement(ele)
+        },
+        setElementText(el, text){
+            el.innerHTML = text
+        },
+        patchProp(el, key, prevVal, nextVal){
+            console.log(key, prevVal, nextVal, 'patchProp')
+            if(key === 'style'){
+                for (const key1 in nextVal) {
+                   const val = nextVal[key1]
+                   el.setAttribute(key1, val)
+                }
+            }
+        },
+        insert(el, container){
+            container.appendChild(el)
+        }
+    })
+    // 三种渲染方式
+    // render(h('h1', {style: { color: 'red' }}, 'hello'), container)
+    // h('span', 'world')
+    // render(h('h1', {style: { color: 'red' }}, [h('span', 'world'), '123',]), container)
+
+
+    // 单独渲染的 case
+    // renderer.render(h('h1', {style: { id: 'red' }}, 'hello'), container)
+
+
+    // 更新文本的 case
+    // render(h(TEXT, '444'), container)
+    // setTimeout(() => {
+    //     debugger
+    //     render(h(TEXT, 123), container)
+    // }, 5000)
+
+    // 渲染的元素 更新为 文本的case
+    // render(h('h1', {style: { color: 'red' }}, [h('span', 'world'), '123',]), container)
+    // setTimeout(() => {
+    //     debugger
+    //     render(h(TEXT, 123), container)
+    // }, 5000)
+
+    // diff case1
+    // render(h('h1', {style: { color: 'red' }}, [h('span', 'world'), '123',]), container)
+    // setTimeout(() => {
+    //     debugger
+    //     render(h('h1', {style: { color: 'pink', background: 'yellow' }}, '456'), container)
+    // }, 5000)
+
+    // diff case2
+    // render(h('h1', {style: { color: 'red' }}, 
+    //     [h('li', {key: 'a', style: { color: 'yellow' }}, 'a'), h('li',{key: 'b'}, 'b'),h('li', {key: 'c'}, 'c')]
+    // ), container)
+    // setTimeout(() => {
+    //     debugger
+    //     render(h('h1', {style: { color: 'pink', background: 'yellow' }}, [
+
+    //         h('li', {key: 'e'}, 'e'),
+    //         h('li', {key: 'a'}, 'a'),
+    //         h('li', {key: 'b'}, 'b'),
+    //         h('li', {key: 'c'}, 'c'),
+    //         ]
+    //     ), container)
+    // }, 5000)
+
+    // diff case 2.2
+    // render(h('h1', {style: { color: 'red' }}, 
+    //     [h('li', {key: 'a'}, 'a'), h('li',{key: 'b'}, 'b'),h('li', {key: 'c'}, 'c')]
+    // ), container)
+    // setTimeout(() => {
+    //     debugger
+    //     render(h('h1', {style: { color: 'pink', background: 'yellow' }}, [
+    //             h('li', {key: 'd'}, 'd'),
+    //             h('li', {key: 'a'}, 'a'),
+    //             h('li', {key: 'b'}, 'b'),
+    //             h('li', {key: 'c'}, 'c'),
+    //         ]
+    //     ), container)
+    // }, 5000)
+
+    // diff case3
+    // render(h('h1', {style: { color: 'red' }}, 
+    //     [h('li', {key: 'a'}, 'a'), h('li',{key: 'b'}, 'b'),h('li', {key: 'c'}, 'c')]
+    // ), container)
+    // setTimeout(() => {
+    //     debugger
+    //     render(h('h1', {style: { color: 'pink', background: 'yellow' }}, [
+    //             h('li', {key: 'd'}, 'd'),
+    //             h('li', {key: 'e'}, 'e'),
+    //             h('li', {key: 'b'}, 'b'),
+    //             h('li', {key: 'c'}, 'c'),
+    //         ]
+    //     ), container)
+    // }, 5000)
+
+    // diff case4
+    render(h('h1', {style: { color: 'red' }}, 
+        [
+            h('li', {key: 'a'}, 'a'), 
+            h('li',{key: 'b'}, 'b'),
+            h('li', {key: 'c'}, 'c'),
+            h('li', {key: 'd'}, 'd'),
+            h('li', {key: 'e'}, 'e'),
+            h('li', {key: 'f'}, 'f'),
+            h('li', {key: 'g'}, 'g')
+        ]
+    ), container)
+    setTimeout(() => {
+        debugger
+        render(h('h1', {style: { color: 'pink', background: 'yellow' }}, [
+            h('li', {key: 'a'}, 'a'), 
+            h('li',{key: 'b'}, 'b'),
+            h('li', {key: 'e'}, 'e'),
+            h('li', {key: 'c'}, 'c'),
+            h('li', {key: 'd'}, 'd'),
+            h('li', {key: 'h'}, 'h'),
+            h('li', {key: 'f'}, 'f'),
+            h('li', {key: 'g'}, 'g')
+            ]
+        ), container)
+    }, 5000)
+
+    // render(h('h1', {style: { color: 'red' }}, h('span', 'world'), 'hello'), container)
+</script>
+</html>

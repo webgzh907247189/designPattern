@@ -8,6 +8,7 @@ module.exports = class ZipPlugin {
 
             let assets = compilation.assets
             for (const filename in assets) {
+                // 调用 source() 可以获取 源码
                 let source = assets[filename].source();
                 // console.log(source, 'source');
                 jszip.file(filename, source);

@@ -47,7 +47,9 @@ module.exports = class AutoExternal {
         })
 
         compiler.hooks.compilation.tap('AutoExternal', (compilation) => {
-            HtmlWebpackplugin.getHooks(compilation).alterAssetTags.tapAsync('AutoExternal', (htmlData) => {
+            // HtmlWebpackplugin 自定义 hooks, 加了一个自定义 钩子 htmlWebpackPluginAlterAssetTags
+            // compilation.hools.htmlWebpackPluginAlterAssetTags
+            HtmlWebpackplugin.getHooks(compilation).alterAssetTags.tapAsync('AutoExternal', (htmlData, cb) => {
                 // console.log(htmlData, 'htmlData');
                 Reflect.ownKeys(this.options).filter(_ => this.importedModules.has(_)).forEach(key => {
                     htmlData.assetTags.scripts.unshift({

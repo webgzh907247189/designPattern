@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>monitor</title>
+</head>
+<body>
+    <div id="container">
+        test
+    </div>
+</body>
+<!-- <script src="./packages/reactivity/dist/reactivity.global.js">
+</script> -->
+
+
+<script src="./node_modules/.pnpm/@vue+reactivity@3.2.33/node_modules/@vue/reactivity/dist/reactivity.global.js">
+</script>
+<!-- <script>
+    // 1. 被 readonly 代理过的 不能在被 reactive 代理
+
+    const { effect, reactive, toRaw, markRaw } = VueReactivity
+    // debugger
+    const state = {name: 'test', eat: '吃饭', address: { ad: 'sh' }}
+    const state2 = reactive(state)
+
+    // {name: 'test', __v_skip: true} 标识 __v_skip 跳过 响应式
+    const state3 = {name: 'test'} 
+    debugger
+    // toRaw 返回原数据， markRaw 处理之后的数据，加上 __v_skip 跳过 响应式， 或者使用 frezz
+    console.log(state === toRaw(state2), reactive(markRaw(state3)), toRaw)
+</script> -->
+
+<script>
+    const { effect, reactive, toRaw, markRaw } = VueReactivity
+
+    // 针对性的 处理了 数组的 includes indexOf 方法
+    const data = {name: '11'}
+    const arr = reactive([data])
+    // arr[0] 是个 proxy 对象 和 原数据不想等
+    console.log(arr[0] === data, arr[0])
+    
+
+
+    
+    // 针对 内置的symbol 属性的key 或者 访问的是__prop__ 属性，直接返回，不进行依赖收集
+    // 这里调用 includes 内部会把代理对象变成原始对象, 在进行处理 (arr.includes indexOf lastIndexOf)
+
+    // push pop shift unshift splice 特殊处理了， 不然会多执行
+    // 假设没有特殊处理 1.初始化执行一次 2. 下面 push 之后 在执行一次 3. 执行一次 又触发了 push 又执行一次 (没有爆栈的原因 activeEffect 处理了)
+    // 执行3次
+
+    // 特殊处理之后(停止跟踪)，push 执行 2次 (没有执行3次的原因 activeEffect 处理了 正在执行的 effect 又执行了 effect), 渲染1次
+    // push pop shift unshift splice 这些方法里面 停止依赖收集(pauseTracking), 使用 toRaw 转换成原数组执行完成之后 在开启依赖收集
+    const arr1 = reactive([])
+    debugger
+    effect(() => {
+        console.log('render')
+        debugger
+        arr1.push(1)
+    })
+    debugger
+    arr1.push(1)
+
+
+
+
+    let flag = arr.includes(data)
+
+    // 原始的没找到， 在找代理过的 也就是(arr[0])
+    console.log(flag, 'flag', arr.includes(arr[0]), arr1)
+</script>
+</html>
