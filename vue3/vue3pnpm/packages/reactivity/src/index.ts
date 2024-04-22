@@ -8,6 +8,7 @@ export * from './watch'
 
 export * from './ref'
 
+export * from './effectScope'
 
 // 1. 先通过 new Proxy 实现一个响应式对象
 // 2. effect 默认先执行一次, 把正在执行的 effect 作为全局变量 (activeEffect), 渲染的时候取值, 在 get 方法中进行依赖收集

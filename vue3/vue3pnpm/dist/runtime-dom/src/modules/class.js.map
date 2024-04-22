@@ -1,0 +1,1 @@
+{"version":3,"file":"class.js","sourceRoot":"","sources":["../../../../packages/runtime-dom/src/modules/class.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,MAAM,UAAU,GAAG,CAAC,EAAE,EAAE,OAAO,EAAE,EAAE;IACtC,IAAG,OAAO,KAAK,IAAI,EAAC;QAChB,EAAE,CAAC,eAAe,CAAC,OAAO,CAAC,CAAA,CAAC,cAAc;KAC7C;SAAI;QACD,SAAS;QACT,EAAE,CAAC,SAAS,GAAG,OAAO,CAAA;KACzB;AACL,CAAC,CAAA"}

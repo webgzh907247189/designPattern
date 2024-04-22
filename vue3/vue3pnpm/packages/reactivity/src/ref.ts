@@ -57,6 +57,7 @@ export function toRef(object, key){
 // 属性访问器 编译出来变成 Object.defineProperty
 // 只是把 .value 属性 代理到原来的 对象上面
 class ObjectRefImpl{
+    __v_isRef = true
     constructor(public object, public key){}
     get value(){
         return this.object[this.key]
@@ -79,6 +80,7 @@ export const proxyRefs = (object) => {
                 oldValue.value = value
                 return true
             }else{
+                // 触发 源对象的 set
                 return Reflect.set(target, key, value, recevier)
             }
         }

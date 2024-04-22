@@ -22,11 +22,14 @@ var VueReactivity = (() => {
   __export(src_exports, {
     ReactiveEffect: () => ReactiveEffect,
     activeEffect: () => activeEffect,
+    activeEffectScope: () => activeEffectScope,
     computed: () => computed,
     effect: () => effect,
+    effectScope: () => effectScope,
     isReactive: () => isReactive,
     proxyRefs: () => proxyRefs,
     reactive: () => reactive,
+    recordEffectScope: () => recordEffectScope,
     ref: () => ref,
     toRef: () => toRef,
     toRefs: () => toRefs,
@@ -34,8 +37,56 @@ var VueReactivity = (() => {
     trackEffect: () => trackEffect,
     trigger: () => trigger,
     triggerEffect: () => triggerEffect,
-    watch: () => watch
+    watch: () => watch,
+    watchEffect: () => watchEffect
   });
+
+  // packages/reactivity/src/effectScope.ts
+  var activeEffectScope = null;
+  var EffectScope = class {
+    constructor(detached = false) {
+      this.active = true;
+      this.effects = [];
+      if (!detached && activeEffectScope) {
+        (activeEffectScope.scopes || (activeEffectScope.scopes = [])).push(this);
+      }
+    }
+    run(fn) {
+      if (this.active) {
+        try {
+          this.parent = activeEffectScope;
+          activeEffectScope = this;
+          return fn();
+        } catch (e) {
+          activeEffectScope = this.parent;
+          this.parent = null;
+        }
+      }
+    }
+    stop() {
+      if (this.active) {
+        for (let index = 0; index < this.effects.length; index++) {
+          const effect2 = this.effects[index];
+          effect2.stop();
+        }
+        if (this.scopes) {
+          for (let index = 0; index < this.scopes.length; index++) {
+            const scope = this.scopes[index];
+            scope.stop();
+          }
+        }
+        this.active = false;
+      }
+    }
+  };
+  var effectScope = (detached) => {
+    return new EffectScope(detached);
+  };
+  var recordEffectScope = (effect2) => {
+    if (activeEffectScope && activeEffectScope.active) {
+      activeEffectScope.effects.push(effect2);
+    }
+  };
 
   // packages/reactivity/src/effect.ts
   var activeEffect = void 0;
@@ -54,6 +105,7 @@ var VueReactivity = (() => {
       this.deps = [];
       this.parent = null;
       this.active = true;
+      recordEffectScope(this);
     }
     run() {
       if (!this.active) {
@@ -84,12 +136,12 @@ var VueReactivity = (() => {
     runner.effect = _effect;
     return runner;
   };
-  var trackEffect = (dep) => {
+  var trackEffect = (depSet) => {
     if (activeEffect) {
-      let shouldTrack = !dep.has(activeEffect);
+      let shouldTrack = !depSet.has(activeEffect);
       if (shouldTrack) {
-        dep.add(activeEffect);
-        activeEffect.deps.push(dep);
+        depSet.add(activeEffect);
+        activeEffect.deps.push(depSet);
       }
     }
   };
@@ -115,11 +167,11 @@ var VueReactivity = (() => {
     if (!depsMap) {
       targetMap.set(target, depsMap = /* @__PURE__ */ new Map());
     }
-    let dep = depsMap.get(key);
-    if (!dep) {
-      depsMap.set(key, dep = /* @__PURE__ */ new Set());
+    let depSet = depsMap.get(key);
+    if (!depSet) {
+      depsMap.set(key, depSet = /* @__PURE__ */ new Set());
     }
-    trackEffect(dep);
+    trackEffect(depSet);
   };
   var trigger = (target, type, key, value, oldValue) => {
     debugger;
@@ -248,7 +300,7 @@ var VueReactivity = (() => {
     }
     return value;
   };
-  var watch = (source, cb) => {
+  var doWatch = (source, cb, { immediate } = {}) => {
     let getter;
     if (isReactive(source)) {
       getter = () => traversal(source);
@@ -261,15 +313,28 @@ var VueReactivity = (() => {
     };
     let oldValue;
     const job = () => {
-      if (cleanup) {
-        cleanup();
+      if (cb) {
+        if (cleanup) {
+          cleanup();
+        }
+        const newValue = _effect.run();
+        cb(newValue, oldValue, onCleanup);
+        oldValue = newValue;
+      } else {
+        _effect.run();
       }
-      const newValue = _effect.run();
-      cb(newValue, oldValue, onCleanup);
-      oldValue = newValue;
     };
     const _effect = new ReactiveEffect(getter, job);
+    if (immediate) {
+      return job();
+    }
     oldValue = _effect.run();
+  };
+  var watch = (source, cb, options) => {
+    doWatch(source, cb, options);
+  };
+  var watchEffect = (source, options) => {
+    doWatch(source, null, options);
   };
 
   // packages/reactivity/src/ref.ts
@@ -312,6 +377,7 @@ var VueReactivity = (() => {
     constructor(object, key) {
       this.object = object;
       this.key = key;
+      this.__v_isRef = true;
     }
     get value() {
       return this.object[this.key];

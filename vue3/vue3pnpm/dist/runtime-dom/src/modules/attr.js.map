@@ -1,0 +1,1 @@
+{"version":3,"file":"attr.js","sourceRoot":"","sources":["../../../../packages/runtime-dom/src/modules/attr.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,MAAM,SAAS,GAAG,CAAC,EAAE,EAAE,GAAG,EAAE,OAAO,EAAE,EAAE;IACzC,IAAG,OAAO,EAAC;QACR,EAAE,CAAC,YAAY,CAAC,GAAG,EAAE,OAAO,CAAC,CAAA;KAC/B;SAAI;QACF,EAAE,CAAC,eAAe,CAAC,GAAG,CAAC,CAAA;KACzB;AACN,CAAC,CAAA"}

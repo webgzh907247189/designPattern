@@ -102,11 +102,12 @@
     //     return state2.name + state2.address.ad
     // })
 
+    debugger
     const fullName = computed({
         // defineproperty 中的 get
         get(){
             console.log('get');
-            return state2.name + state2.address.ad
+            return state2.name //+ state2.address.ad
         },
         // defineproperty 中的 set
         set(newVal){
@@ -116,14 +117,17 @@
     })
     // 不访问 fullName.value 不会处罚 get 属性
 
-    console.log(fullName, fullName.value, fullName.value)
+    // console.log(fullName, fullName.value, fullName.value)
 
+    debugger
     effect(() => {
+        debugger
         container.innerHTML = fullName.value
     })
 
     // 计算属性通过 .value 来修改
     setTimeout(() => {
+        debugger
         state2.name = '123test'
     }, 2000);
 

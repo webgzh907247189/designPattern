@@ -77,6 +77,7 @@ export const createRenderer = (renderOptions) => {
      
         for (const key in oldProps) {
             if(!newProps[key]){
+                // 新的 props 为 undefined
                 hostPatchProps(el, key, oldProps[key], undefined)
             }
         }
@@ -102,7 +103,7 @@ export const createRenderer = (renderOptions) => {
         // 从 2 -> 3 区间 是新增的
         // 谁先遍历结束， 以最先结束的为准
 
-        // 使用下面这种方案，尽可能减少比较多内容
+        // 使用下面这种方案，尽可能减少比较多内容 (有任何一方循环中止 就结束)
         while(i <= oldChildrenLength && i <= newChildrenLength){
             const oldChildrenItem = oldChildren[i]
             const newChildrenItem = newChildren[i]
@@ -170,8 +171,8 @@ export const createRenderer = (renderOptions) => {
         let s1 = i
         let s2 = i
         const keyToNewIndexMap = new Map()
-        // a b  c d e    f g
-        // a b  e c d h  f g
+        // old: a b  c d e    f g
+        // new: a b  e c d h  f g
         // 2 4 5 ->  console.log(i, oldChildrenLength, newChildrenLength)
         for (let index = s2; index <= newChildrenLength; index++) {
             keyToNewIndexMap.set(newChildren[index].key, index)
@@ -182,29 +183,38 @@ export const createRenderer = (renderOptions) => {
 
         // 需要处理的节点 数组 长度
         const tobePatched = newChildrenLength - s2 + 1
+        // newIndexToOldIndexMap 其实就是需要变更的几个元素的数组长度 -> [e, c, d, h]
         const newIndexToOldIndexMap = new Array(tobePatched).fill(0)
 
         // 循环老的元素 看一下新的里面有没有 ， 有就比较差异，没有就添加到列表， 老的有新的没有要删除
         for (let index = s1; index <= oldChildrenLength; index++) {
             const oldElement = oldChildren[index];
-            let newIdx = keyToNewIndexMap.get(oldElement.key) // 用老的孩子去新的map 里面找
+            let newIdx = keyToNewIndexMap.get(oldElement.key) // 用老的孩子去新的map 里面找 (看是要新增 还是 更新移动)
 
+            // if 里面说明 老的有，新的没有，直接卸载
             if(!!newIdx){
                 unmount(oldElement)
             }else{
                 // newIdx 是 新元素组成的 map (key, idx)  取值(取 老的 key) 返回 新元素 在新数组的 下标
                 // newIdx - s2 从 0 开始算 ，和 map 对应上
-                newIndexToOldIndexMap[newIdx - s2] = index + 1 // +1 防止 从 0开始
-             
+
+                /*****  这里产生的 newIndexToOldIndexMap: [5,3,4,0] 实际上就是: ****/
+                /*****  新数组的 vnode元素 对应在 老数组 里面vnode元素 位置下标， 如果是 0 代表老数组之前没有该元素，该元素是新增的 ****/
+                /*****  数组的位置是按照新数组的 vnode元素 位置来确定的 ****/
+                newIndexToOldIndexMap[newIdx - s2] = index + 1 // +1 防止 从 0开始 (初始化从0开始的原因，fill 的 0)
+                /*****  这里产生的 newIndexToOldIndexMap: [5,3,4,0] 实际上就是: ****/
+                /*****  新数组的 vnode元素 对应在 老数组 里面vnode元素 位置下标， 如果是 0 代表老数组之前没有该元素，该元素是新增的 ****/
+                /*****  数组的位置是按照新数组的 vnode元素 位置来确定的 ****/
+                
                 patch(oldElement, newChildren[newIdx], el)
             }
         }
         console.log(newIndexToOldIndexMap) // [5,3,4,0]
 
-        // 上面比对，下面移动位置  先 diff 在 remove
+        // 上面比对，下面移动位置  先 diff 在 remove (先 patch 在 remove)
         // 倒叙插入
         for (let index = tobePatched - 1; index >= 0; index--) {
-            const idx = s2 + tobePatched - 1 // i + s2 // ???
+            const idx = s2 + tobePatched - 1 // i + s2 // ??? (被插入元素的数组 最后一个)
             let current = newChildren[idx] // 找到 h
 
             let anchor = idx + 1 < newChildren.length ? newChildren[idx + 1].el : null // 找到需要被插入的节点的 容器节点
@@ -245,6 +255,7 @@ export const createRenderer = (renderOptions) => {
         // 文本 + 空
         if(shapeFlag & ShapeFlags.TEXT_CHILDREN){
             // 老的是数组
+            // 先删除，在给之前的节点的 父节点上面挂载 newChildren 
             if(prevFlag & ShapeFlags.ARRAY_CHILDREN){
                 unmountChildren(oldChildren) // 删除所有的子节点
             }
@@ -254,11 +265,12 @@ export const createRenderer = (renderOptions) => {
                 hostSetElementText(el, newChildren)
             }
         }else{
-            // 进入到了 else， 说明现在 为 空 或者 数组的情况
+            // 进入到了 else， 说明新节点现在 为 空 或者 数组的情况
 
-            // 之前为数组
+            // 新     老
             // 数组 + 数组
-            // 空  +  数组
+            // 空   + 数组
+            // 文本 + 数组 (这种情况，上面已经处理过了)
             if(prevFlag & ShapeFlags.ARRAY_CHILDREN){
                 if(shapeFlag & ShapeFlags.ARRAY_CHILDREN){
                     debugger
@@ -270,9 +282,10 @@ export const createRenderer = (renderOptions) => {
                     // hostSetElementText(el, newChildren)
                 }
             }else{
-                // 数组 + 文本
-                // 空   + 文本
-                // 数组  + 空
+                // 新      老
+                // 数组  +  空
+                // 数组  +  文本
+                // 空    +  文本
                 if(prevFlag & ShapeFlags.TEXT_CHILDREN){
                     hostSetElementText(el, '') // 清空文本
                 }
@@ -287,6 +300,7 @@ export const createRenderer = (renderOptions) => {
     // 先复用节点， 在比较属性， 在比较 children
     const patchElement = (oldValue, newVnode, container) => {
         debugger
+        // 复用节点
         let el = newVnode.el = oldValue.el
         let oldProps = oldValue.props
         let newProps = newVnode.props
@@ -363,6 +377,10 @@ export const createRenderer = (renderOptions) => {
         hostRemove(vnode.el)
     }   
 
+    // render 三种情况
+    // 1. 初始化渲染
+    // 2. 卸载逻辑
+    // 3. diff vnode
     const render = (vnode, container) => {
         console.log(vnode, container, '11')
 

@@ -21,7 +21,7 @@ pnpm i @vue/shared  --filter reactivity
 // pnpm i @vue/shared  --filter @vue/reactivity
 
 安装当前目录的 @vue/shared  在  reactivity 包里面
-npm install @vue/shared@workspace  --filter reactivity
+npm install @vue/shared --workspace  --filter reactivity
 
 // 在 xx 目录启动 server命令
 -C xx server 

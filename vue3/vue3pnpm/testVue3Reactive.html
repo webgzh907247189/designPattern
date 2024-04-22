@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>monitor</title>
+</head>
+
+<body>
+    <div id="container">
+        test
+    </div>
+</body>
+<script src="./packages/reactivity/dist/reactivity.global.js">
+</script>
+
+
+
+<!-- 
+<script>
+    // effect 代表的是副作用函数， 如果 此函数依赖的数据发生了变化，需要重新执行
+    // reactive 将数据变成响应式， proxy
+    // readonly 深度的 readonly
+    // shallowReadonly 浅层的 readonly
+
+    // reactive 只能做 对象的 代理
+    const {
+        effect,
+        reactive,
+        shallowReactive,
+        readonly,
+        shallowReadonly
+    } = VueReactivity
+    debugger
+    const state = reactive({
+        name: 'test',
+        eat: '吃饭',
+        address: {
+            ad: 'sh'
+        }
+    })
+    // console.log(state, state.address) // state.address 是一个对象， 在取值的时候发现是一个对象，返回当前对象的 proxy 对象
+
+    // 此 effect 默认会执行一次， 对响应式数据取值 (取值的过程中中数据会依赖当前的  effect)
+    effect(() => {
+        let aa = Math.random()
+        console.log(aa, 'aaaa')
+        state.eat = aa
+        container.innerHTML = state.name + state.eat
+    })
+
+    setTimeout(() => {
+        // state.address.ad = 'gzh'
+        state.name = 'gzh'
+    }, 2000)
+</script>
+ -->
+
+
+
+<!-- <script>
+    const { effectScope, reactive: reactive1, effect: effect1 } = VueReactivity
+
+    const scope = effectScope()
+
+    scope.run(() => {
+        const state = reactive1({ age: 30 })
+
+        let runner = effect1(() => {
+            console.log(state.age, '????')
+        })
+
+        setTimeout(() => { state.age++ }, 2000)
+    })
+    
+    scope.run(() => {
+        const state = reactive1({ age: 30 })
+
+        let runner = effect1(() => {
+            console.log(state.age, '????')
+        })
+
+        setTimeout(() => { state.age++ }, 2000)
+    })
+
+    scope.stop()
+</script> -->
+
+<script>
+    const { effectScope, reactive: reactive1, effect: effect1 } = VueReactivity
+
+    const scope = effectScope()
+
+    scope.run(() => {
+        const state = reactive1({ age: 30 })
+
+        let runner = effect1(() => {
+            console.log(state.age, '????11')
+        })
+
+        setTimeout(() => { state.age++ }, 2000)
+
+        const scope = effectScope(true)
+            scope.run(() => {
+            const state = reactive1({ age: 30 })
+
+            let runner = effect1(() => {
+                console.log(state.age, '????22')
+            })
+
+            setTimeout(() => { state.age++ }, 2000)
+        })
+
+    })
+    scope.stop()
+</script>
+
+</html>

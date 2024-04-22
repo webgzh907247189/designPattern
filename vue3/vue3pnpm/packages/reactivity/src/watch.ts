@@ -1,6 +1,8 @@
 import { isFunction, isObject } from "@vue/shared"
 import { ReactiveEffect, isReactive } from "."
 
+// vue3 的 watch 自带清理函数
+
 // 考虑对象中循环引用的问题
 const traversal = (value, set = new Set()) => {
     if(!isObject(value)) return value
@@ -22,7 +24,7 @@ const traversal = (value, set = new Set()) => {
 // source 用户传入的数据
 // 使用 watch 尽量 使用 传入函数，避免 递归
 // watch 第一个参数需要是响应式的数据     所以需要 判定 是不是响应式 数据
-const doWatch = (source, cb) => {
+const doWatch = (source, cb, { immediate } = {} as any) => {
     let getter
     if(isReactive(source)){
         // 本质上深度监听
@@ -42,6 +44,7 @@ const doWatch = (source, cb) => {
         cleanup = fn // 保存用户的函数
     }
     let oldValue
+
     const job = () => {
         // 传入 cb 的情况下 是 watch
         // 不传入 代表 watchEffect
@@ -53,23 +56,30 @@ const doWatch = (source, cb) => {
                 cleanup() // 下一次执行的时候触发上一次的 watch 的清理
             }
             const newValue = _effect.run()
+            // 第一次 cb 不执行，onCleanup 就不会执行，cleanup 就没有赋值成功
             cb(newValue, oldValue, onCleanup)
     
             oldValue = newValue
         }else{
+            // else 的情况是 watchEffect 的 case
             // 调用 run 是执行清理 之后  在触发收集 (没有直接调用 getter 的原因)
             _effect.run()
         }
     }
     const _effect = new ReactiveEffect(getter, job) // 监控自己构造的函数，变化之后重新执行 job
 
+
+    if(immediate){
+        return job()
+    }
+
     oldValue =  _effect.run()
 }
 
 
 
-export const watch = (source, cb) => {
-    doWatch(source, cb)
+export const watch = (source, cb, options) => {
+    doWatch(source, cb, options)
 }
 
 // 1. 初始化先执行一次 拿到 oldValue
@@ -79,5 +89,14 @@ export const watch = (source, cb) => {
 // 5. 执行了 job
 
 export const watchEffect = (source, options) => {
-    doWatch(source ,null,)
+    doWatch(source ,null, options)
 }
+
+// watch 本身就是 一个 effect + 自定义的 scheduler
+// watchEffect 是 effect 
+// 有 watchEffect，有时候不需要明确写 依赖项
+
+// vue3 的 watch 自带清理函数
+
+
+// 闭包： 定义的作用域和执行作用域不是同一个
