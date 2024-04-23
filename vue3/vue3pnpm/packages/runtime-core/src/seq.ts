@@ -65,6 +65,7 @@ const getSequence = (list) => {
             end = result.length - 1
             while(start < end){
                 // 向下取整
+                // mid 就是第一个 比 当前大的值
                 mid = (start + end)/2 | 0
 
                 if(list[result[mid]] < item){
