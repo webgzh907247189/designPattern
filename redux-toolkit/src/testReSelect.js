@@ -12,3 +12,5 @@ const result1 = select3(state)
 const result2 = select3(state)
 
 console.log(result1,'result', result2)
+// 执行了计算
+// ab result ab

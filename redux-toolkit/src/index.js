@@ -1,641 +1,398 @@
-import {
-  createStore,
-  combineReducers,
-  bindActionCreators,
-  applyMiddleware,
-} from "./redux";
-import React from "react";
-import ReactDom from 'react-dom/client'
-import { Provider, connect, useSelector, useDispatch } from "./react-redux";
+// // import { createStore } from 'redux'
+// import { configureStore, createAction, createReducer, createSlice } from '@reduxjs/toolkit'
+import { configureStore, createAction, createReducer, createSlice } from './toolkit'
 
-/** case1 **/
-// reducer 的 默认值 和 创建 store 的默认值，优先级覆盖，createStore 的 initstate 优先级更高
-// const reducer = (state = { waibao: 0 }, action) => {
-//   switch (action.type) {
-//     case "add":
-//       // 这里的写法注意点 -> 没有返回新对象，因为不是 react 里面，没必要返回新对象
-//       state.waibao = state.waibao + 1;
-//       return state;
-//     default:
-//       return state;
+
+/** case1  configureStore **/
+// const ADD = "ADD"
+// const MINUS = "MINUS"
+
+// function Add(){
+//   return {
+//     type: ADD
 //   }
-// };
-// const store = createStore(reducer, { waibao: 1 });
+// }
 
-// let waibaoCount = document.getElementById("value");
-
-// document.getElementById("waibao").addEventListener("click", () => {
-//   store.dispatch({ type: 'add' });
-// });
-
-// const render = () => {
-//   console.log('123213', store.getState())
-//   waibaoCount.innerHTML = '外包人数: ' + store.getState().waibao;
-// };
-
-// store.subscribe(render);
-/** case1 **/
-
-/** case2 **/
-// reducer 的 默认值 和 创建 store 的默认值，优先级覆盖
-// const reducer1 = (state = { waibao: 0 }, action) => {
-//   switch (action.type) {
-//     case "add":
-//       // 这里的写法注意点 -> 没有返回新对象，因为不是 react 里面，没必要返回新对象
-//       state.waibao = state.waibao + 1;
-//       return state;
-//     default:
-//       return state;
+// function Minus(){
+//   return {
+//     type: MINUS
 //   }
-// };
-// const reducer2 = (state = { waibao: 0 }, action) => {
-//   switch (action.type) {
-//     case "add2":
-//       // 这里的写法注意点 -> 没有返回新对象，因为不是 react 里面，没必要返回新对象
-//       state.waibao = state.waibao + 1;
-//       return state;
-//     default:
-//       return state;
-//   }
-// };
+// }
 
-// const reducer = combineReducers({
-//   reducer1,
-//   reducer2
+// function reducer(state = {num: 0}, action){
+//   switch(action.type){
+//     case ADD:
+//       return {num: state.num + (action.payload ?? 1)}
+//     case MINUS:
+//       return {num: state.num - 1}
+//     default:
+//       return state
+//   }
+// }
+
+// // **** 使用 configureStore 之后，内置了 thunk 中间件 ****
+// // let store = createStore(reducer)
+
+// let store = configureStore({
+//   reducer,
+//   // middleware: [],
+//   preloadedState: { num: 10 }
 // })
-// // 这里看出来 初始化的 initstate 优先级的关闭，各自 子reducer 优先级更低
-// const store = createStore(reducer, { reducer1: {waibao: 1}, reducer2: { waibao: 0 } });
+// // **** 使用 configureStore 之后，内置了 thunk 中间件 ****
 
-// let waibaoCount1 = document.getElementById("value1");
-// let waibaoCount2 = document.getElementById("value2");
 
-// // 每次变更，所有的 reducer 都会参与运行后， dispatch 很 昂贵
-// // dipatch 一次，就会触发 所有的 被 subscribe 的函数运行，所以 是 循环 listeners ，然后执行每一个 被 subscribe 的函数
-// document.getElementById("waibao1").addEventListener("click", () => {
-//   store.dispatch({ type: 'add' });
-// });
-// document.getElementById("waibao2").addEventListener("click", () => {
-//   store.dispatch({ type: 'add2' });
-// });
-
+// let valEle =  document.getElementById('value')
 // const render = () => {
-//   console.log('123213', store.getState())
-//   waibaoCount1.innerHTML = '外包人数: ' + store.getState().reducer1.waibao;
-//   waibaoCount2.innerHTML = '外包人数: ' + store.getState().reducer2.waibao;
-// };
+//   valEle.innerHTML = store.getState().num
+// }
+// render()
 
-// store.subscribe(render);
-/** case2 **/
+// // 订阅仓库状态， 状态发生变更，重新 render
+// store.subscribe(render)
 
-/** case3 **/
-// reducer 的 默认值 和 创建 store 的默认值，优先级覆盖
-// const reducer1 = (state = { waibao: 0 }, action) => {
-//   switch (action.type) {
-//     case "add":
-//       // 这里的写法注意点 -> 没有返回新对象，因为不是 react 里面，没必要返回新对象
-//       state.waibao = state.waibao + 1;
-//       return state;
-//     default:
-//       return state;
-//   }
-// };
-// const reducer2 = (state = { waibao: 0 }, action) => {
-//   switch (action.type) {
-//     case "add2":
-//       // 这里的写法注意点 -> 没有返回新对象，因为不是 react 里面，没必要返回新对象
-//       state.waibao = state.waibao + 1;
-//       return state;
-//     default:
-//       return state;
-//   }
-// };
 
-// const reducer = combineReducers({
-//   reducer1,
-//   reducer2
+// document.getElementById('add').addEventListener('click', () => {
+//   store.dispatch(Add())
 // })
-// // 这里看出来 初始化的 initstate 优先级的关闭，各自 子reducer 优先级更低
-// const store = createStore(reducer, { reducer1: {waibao: 1}, reducer2: { waibao: 0 } });
 
-// let waibaoCount1 = document.getElementById("value1");
-// let waibaoCount2 = document.getElementById("value2");
-
-// const action = bindActionCreators({
-//   add: (arg1) => ({ type: 'add', payload: arg1}),
-//   add2: () => ({ type: 'add2' })
-// }, store.dispatch)
-
-// const action1 = bindActionCreators(()=>{
-//   return { type: 'add2' }
-// }, store.dispatch)
-
-// // 每次变更，所有的 reducer 都会参与运行后， dispatch 很 昂贵
-// // dipatch 一次，就会触发 所有的 被 subscribe 的函数运行，所以 是 循环 listeners ，然后执行每一个 被 subscribe 的函数
-// document.getElementById("waibao1").addEventListener("click", () => {
-//   // store.dispatch({ type: 'add' });
-
-//   // 切换到 bindActionCreators
-//   action.add('aaa')
-// });
-// document.getElementById("waibao2").addEventListener("click", () => {
-//   // store.dispatch({ type: 'add2' });
-
-//   // 切换到 bindActionCreators
-//   action1()
-// });
-
-// const render = () => {
-//   console.log('123213', store.getState())
-//   waibaoCount1.innerHTML = '外包人数: ' + store.getState().reducer1.waibao;
-//   waibaoCount2.innerHTML = '外包人数: ' + store.getState().reducer2.waibao;
-// };
-
-// store.subscribe(render);
-// /** case3 **/
-
-/** case4 **/
-// next就是原生的dispatch
-// const thunk = ({ dispatch, getState }) => {
-//   return (next) => (action) => {
-//     if (typeof action === "function") {
-//       action(dispatch, getState)
-//     } else {
-//       next(action);
-//     }
-//   };
-// }
-
-// const reducer1 = (state = { waibao: 0 }, action) => {
-//   switch (action.type) {
-//     case "add":
-//       // 这里的写法注意点 -> 没有返回新对象，因为不是 react 里面，没必要返回新对象
-//       state.waibao = state.waibao + 1;
-//       return state;
-//     default:
-//       return state;
-//   }
-// };
-// const reducer2 = (state = { waibao: 0 }, action) => {
-//   switch (action.type) {
-//     case "add2":
-//       // 这里的写法注意点 -> 没有返回新对象，因为不是 react 里面，没必要返回新对象
-//       state.waibao = state.waibao + 1;
-//       return state;
-//     default:
-//       return state;
-//   }
-// };
-
-// const reducer = combineReducers({
-//   reducer1,
-//   reducer2,
-// });
-// // 这里看出来 初始化的 initstate 优先级的关闭，各自 子reducer 优先级更低
-// // const store = applyMiddleware(thunk)(createStore)(reducer, {
-// //   reducer1: { waibao: 1 },
-// //   reducer2: { waibao: 0 },
-// // });
-// const store = createStore(reducer, {
-//   reducer1: { waibao: 1 },
-//   reducer2: { waibao: 0 },
-// }, applyMiddleware(thunk));
-
-// let waibaoCount1 = document.getElementById("value1");
-// let waibaoCount2 = document.getElementById("value2");
-
-// const action = bindActionCreators(
-//   {
-//     add: (arg1) => (dispatch, getState) => {
-//       setTimeout(() => {
-//         dispatch({ type: "add", payload: arg1 })
-//       }, 1000);
-//     },
-//     add2: () => ({ type: "add2" }),
-//   },
-//   store.dispatch
-// );
-
-// const action1 = bindActionCreators(() => {
-//   return { type: "add2" };
-// }, store.dispatch);
-
-// // 每次变更，所有的 reducer 都会参与运行后， dispatch 很 昂贵
-// // dipatch 一次，就会触发 所有的 被 subscribe 的函数运行，所以 是 循环 listeners ，然后执行每一个 被 subscribe 的函数
-// document.getElementById("waibao1").addEventListener("click", () => {
-//   // store.dispatch({ type: 'add' });
-
-//   // 切换到 bindActionCreators
-//   action.add("aaa");
-// });
-// document.getElementById("waibao2").addEventListener("click", () => {
-//   // store.dispatch({ type: 'add2' });
-
-//   // 切换到 bindActionCreators
-//   action1();
-// });
-
-// const render = () => {
-//   console.log("123213", store.getState());
-//   waibaoCount1.innerHTML = "外包人数: " + store.getState().reducer1.waibao;
-//   waibaoCount2.innerHTML = "外包人数: " + store.getState().reducer2.waibao;
-// };
-
-// store.subscribe(render);
-/** case4 **/
+// document.getElementById('minus').addEventListener('click', () => {
+//   store.dispatch(Minus())
+// })
 
 
-
-
-/** case5 **/
-// next就是原生的dispatch
-// const thunk = ({ dispatch, getState }) => {
-//   return (next) => (action) => {
-//     if (typeof action === "function") {
-//       action(dispatch, getState)
-//     } else {
-//       next(action);
-//     }
-//   };
-// }
-
-// const reducer1 = (state = { waibao: 0 }, action) => {
-//   switch (action.type) {
-//     case "add":
-//       // 这里的写法注意点 -> 没有返回新对象，因为不是 react 里面，没必要返回新对象
-//       // state.waibao = state.waibao + 1;
-//       // return state;
-
-
-//       // hooks case -> 返回原对象不更新，必须要返回新对象
-//       return { waibao: state.waibao + 1 }
-//     default:
-//       return state;
-//   }
-// };
-// const reducer2 = (state = { waibao: 0 }, action) => {
-//   switch (action.type) {
-//     case "add2":
-//       // 这里的写法注意点 -> 没有返回新对象，因为不是 react 里面，没必要返回新对象
-//       // state.waibao = state.waibao + 1;
-//       // return state;
-
-
-//       // hooks case -> 返回原对象不更新，必须要返回新对象
-//       return { waibao: state.waibao + 1 }
-//     default:
-//       return state;
-//   }
-// };
-
-// const reducer = combineReducers({
-//   reducer1,
-//   reducer2,
-// });
-// // 这里看出来 初始化的 initstate 优先级的关闭，各自 子reducer 优先级更低
-// // const store = applyMiddleware(thunk)(createStore)(reducer, {
-// //   reducer1: { waibao: 1 },
-// //   reducer2: { waibao: 0 },
-// // });
-// const store = createStore(reducer, {
-//   reducer1: { waibao: 1 },
-//   reducer2: { waibao: 0 },
-// }, applyMiddleware(thunk));
-
-// const action = bindActionCreators(
-//   {
-//     add: (arg1) => (dispatch, getState) => {
-//       setTimeout(() => {
-//         dispatch({ type: "add", payload: arg1 })
-//       }, 1000);
-//     },
-//     add2: () => ({ type: "add2" }),
-//   },
-//   store.dispatch
-// );
-
-// const action1 = bindActionCreators(() => {
-//   return { type: "add2" };
-// }, store.dispatch);
-
-
-// class Test extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       waibao: store.getState().reducer1.waibao,
-//       waibao2: store.getState().reducer2.waibao
-//     }
-//   }
-
-//   componentDidMount() {
-//     this.unsubscribe = store.subscribe(() => {
-//       this.setState({
-//         waibao: store.getState().reducer1.waibao,
-//         waibao2: store.getState().reducer2.waibao
-//       })
-//     })
-//   }
-
-//   componentWillUnmount() {
-//     this.unsubscribe();
-//   }
-
-//   render() {
-//     return (
-//       <div>
-//         <div>1: 外包人数: {this.state.waibao}</div>
-//         <button onClick={() => action.add("aaa")}>2: 我不是外包</button>
-
-//         <div>2: 外包人数: {this.state.waibao2}</div>
-//         <button onClick={() => action1()}>2: 我不是外包</button>
-//       </div>
-//     )
-//   }
-// }
-
-// ReactDom.createRoot(document.getElementById("root")).render(<Test />);
-
-
-
-
-// class Test extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     // this.state = {
-//     //   waibao: store.getState().reducer1.waibao,
-//     //   waibao2: store.getState().reducer2.waibao
-//     // }
-//   }
-
-//   // componentDidMount() {
-//   //   this.unsubscribe = store.subscribe(() => {
-//   //     this.setState({
-//   //       waibao: store.getState().reducer1.waibao,
-//   //       waibao2: store.getState().reducer2.waibao
-//   //     })
-//   //   })
-//   // }
-
-//   // componentWillUnmount() {
-//   //   this.unsubscribe();
-//   // }
-
-//   render() {
-//     return (
-//       <div>
-//         <div>1: 外包人数: {this.props.reducer1.waibao}</div>
-//         <button onClick={() => this.props.add("aaa")}>2: 我不是外包</button>
-
-//         <div>2: 外包人数: {this.props.reducer2.waibao}</div>
-//         <button onClick={() => this.props.add2()}>2: 我不是外包</button>
-//       </div>
-//     )
-//   }
-// }
-// const Test1 = connect(
-//   (state) => { return state }, 
-//   (dispatch) => ({
-//     add2: () => dispatch({ type: "add2" }),
-//     add: (arg1) => dispatch((dispatch, getState) => {
-//       setTimeout(() => {
-//         dispatch({ type: "add", payload: arg1 })
-//       }, 1000);
-//     }),
+// // toolkit 自带的 (异步支持 使用了 redux-thunk)
+// document.getElementById('asyncAdd').addEventListener('click', () => {
+//   store.dispatch(() => {
+//     setTimeout(() => {
+//       const action = Add()
+//       store.dispatch(action)
+//     }, 1000)
 //   })
-
-//   // {
-//   //   add: (arg1) => (dispatch, getState) => {
-//   //     setTimeout(() => {
-//   //       dispatch({ type: "add", payload: arg1 })
-//   //     }, 1000);
-//   //   },
-//   //   add2: () => ({ type: "add2" }),
-//   // }
-//   // {
-//   //     xxx: (...args)=>{
-//   //         dispatch(action[xxx](args))
-//   //     }
-//   // }
-// )(Test)
-// ReactDom.createRoot(document.getElementById("root")).render(<Provider store={store}><Test1 /></Provider>);
-/** case5 **/
+// })
+/** case1 configureStore **/
 
 
 
 
-// /** case6 **/
-// // next就是原生的dispatch
-// const thunk = ({ dispatch, getState }) => {
-//   return (next) => (action) => {
-//     if (typeof action === "function") {
-//       action(dispatch, getState)
-//     } else {
-//       next(action);
-//     }
-//   };
+
+
+/** case2  configureStore createAction **/
+// // const ADD = "ADD"
+// // const MINUS = "MINUS"
+
+// const Add = createAction('ADD', (amount = 1) => {
+//   return {
+//     payload: amount*3
+//   }
+// })
+// const Minus = createAction('MINUS')
+// // function Add(){
+// //   return {
+// //     type: ADD
+// //   }
+// // }
+
+// // function Minus(){
+// //   return {
+// //     type: MINUS
+// //   }
+// // }
+
+// function reducer(state = {num: 0}, action){
+//   switch(action.type){
+//     // case ADD:
+//     case Add.type:
+//       return {num: state.num + (action.payload ?? 1)}
+//     // case MINUS:
+//     case Minus.type:
+//       return {num: state.num - 1}
+//     default:
+//       return state
+//   }
 // }
 
-// const reducer1 = (state = { waibao: 0 }, action) => {
-//   switch (action.type) {
-//     case "add":
-//       // 这里的写法注意点 -> 没有返回新对象，因为不是 react 里面，没必要返回新对象
-//       // state.waibao = state.waibao + 1;
-//       // return state;
+// // **** 使用 configureStore 之后，内置了 thunk 中间件 ****
+// // let store = createStore(reducer)
+
+// let store = configureStore({
+//   reducer,
+//   // middleware: [],
+//   preloadedState: { num: 10 }
+// })
+// // **** 使用 configureStore 之后，内置了 thunk 中间件 ****
 
 
-//       // hooks case -> 返回原对象不更新，必须要返回新对象
-//       return { waibao: state.waibao + 1 }
-//     default:
-//       return state;
+// let valEle =  document.getElementById('value')
+// const render = () => {
+//   valEle.innerHTML = store.getState().num
+// }
+// render()
+
+// // 订阅仓库状态， 状态发生变更，重新 render
+// store.subscribe(render)
+
+
+// document.getElementById('add').addEventListener('click', () => {
+//   store.dispatch(Add())
+// })
+
+// document.getElementById('minus').addEventListener('click', () => {
+//   store.dispatch(Minus())
+// })
+
+
+// // toolkit 自带的 (异步支持 使用了 redux-thunk)
+// document.getElementById('asyncAdd').addEventListener('click', () => {
+//   store.dispatch(() => {
+//     setTimeout(() => {
+//       const action = Add()
+//       store.dispatch(action)
+//     }, 1000)
+//   })
+// })
+/** case2 configureStore createAction **/
+
+
+
+
+
+
+
+/** case3  configureStore createAction createReducer **/
+// // const ADD = "ADD"
+// // const MINUS = "MINUS"
+
+// const Add = createAction('ADD', (amount = 1) => {
+//   return {
+//     payload: amount*3
 //   }
-// };
+// })
+// const Minus = createAction('MINUS')
+// // function Add(){
+// //   return {
+// //     type: ADD
+// //   }
+// // }
 
-// const reducer2 = (state = { waibao: 0 }, action) => {
-//   switch (action.type) {
-//     case "add2":
-//       // 这里的写法注意点 -> 没有返回新对象，因为不是 react 里面，没必要返回新对象
-//       // state.waibao = state.waibao + 1;
-//       // return state;
+// // function Minus(){
+// //   return {
+// //     type: MINUS
+// //   }
+// // }
 
 
-//       // hooks case -> 返回原对象不更新，必须要返回新对象
-//       return { waibao: state.waibao + 1 }
-//     default:
-//       return state;
+
+
+// // // const reducer = createReducer({num: 0},(builder) => {
+// // //   builder
+// // //     .addCase(Add, (state, action) => {
+// // //       return {num: state.num + (action.payload ?? 1)}
+// // //     })
+// // //     .addCase(Minus, (state, action) => {
+// // //       return {num: state.num - 1} 
+// // //     })
+// // // })
+
+
+// const reducer = createReducer({num: 0}, {
+//     [Add.type]: (state, action) => ({num: state.num + (action.payload ?? 1)}),
+//     [Minus.type]: (state, action) => ({num: state.num - 1} )
+// })
+// // function reducer(state = {num: 0}, action){
+// //   switch(action.type){
+// //     // case ADD:
+// //     case Add.type:
+// //       return {num: state.num + (action.payload ?? 1)}
+// //     // case MINUS:
+// //     case Minus.type:
+// //       return {num: state.num - 1}
+// //     default:
+// //       return state
+// //   }
+// // }
+
+
+// // **** 使用 configureStore 之后，内置了 thunk 中间件 ****
+// // let store = createStore(reducer)
+
+// let store = configureStore({
+//   reducer,
+//   // middleware: [],
+//   preloadedState: { num: 10 }
+// })
+// // **** 使用 configureStore 之后，内置了 thunk 中间件 ****
+
+
+// let valEle =  document.getElementById('value')
+// const render = () => {
+//   valEle.innerHTML = store.getState().num
+// }
+// render()
+
+// // 订阅仓库状态， 状态发生变更，重新 render
+// store.subscribe(render)
+
+
+// document.getElementById('add').addEventListener('click', () => {
+//   store.dispatch(Add())
+// })
+
+// document.getElementById('minus').addEventListener('click', () => {
+//   store.dispatch(Minus())
+// })
+
+
+// // toolkit 自带的 (异步支持 使用了 redux-thunk)
+// document.getElementById('asyncAdd').addEventListener('click', () => {
+//   store.dispatch(() => {
+//     setTimeout(() => {
+//       const action = Add()
+//       store.dispatch(action)
+//     }, 1000)
+//   })
+// })
+/** case3 configureStore createAction createReducer **/
+
+
+
+
+
+
+/** case4  configureStore createAction createReducer createSlice **/
+// const ADD = "ADD"
+// const MINUS = "MINUS"
+
+/** 封装到 createSlice 里面 **/
+// const Add = createAction('ADD', (amount = 1) => {
+//   return {
+//     payload: amount*3
 //   }
-// };
+// })
+// const Minus = createAction('MINUS')
+/** 封装到 createSlice 里面 **/
 
-// const reducer = combineReducers({
-//   reducer1,
-//   reducer2,
-// });
-// // 这里看出来 初始化的 initstate 优先级的关闭，各自 子reducer 优先级更低
-// // const store = applyMiddleware(thunk)(createStore)(reducer, {
-// //   reducer1: { waibao: 1 },
-// //   reducer2: { waibao: 0 },
-// // });
-// const store = createStore(reducer, {
-//   reducer1: { waibao: 1 },
-//   reducer2: { waibao: 0 },
-// }, applyMiddleware(thunk));
-  
-// const action = bindActionCreators(
-//   {
-//     add: (arg1) => (dispatch, getState) => {
-//       setTimeout(() => {
-//         dispatch({ type: "add", payload: arg1 })
-//       }, 1000);
-//     },
-//     add2: () => ({ type: "add2" }),
-//   },
-//   store.dispatch
-// );
-  
-// const action1 = bindActionCreators(() => {
-//   return { type: "add2" };
-// }, store.dispatch);
-  
-// function Test2(){
-//   const dispatch = useDispatch();
-//   const state = useSelector((state) => state)
 
-//   const actions = bindActionCreators({
-//     add: (arg1) => (dispatch, getState) => {
-//       setTimeout(() => {
-//         dispatch({ type: "add", payload: arg1 })
-//       }, 1000);
-//     },
-//     add2: () => ({ type: "add2" }),
-//   }, dispatch)
 
-//   return <div>
-//   <div>1: 外包人数: {state.reducer1.waibao}</div>
-//   <button onClick={() => actions.add("aaa")}>2: 我不是外包</button>
-
-//   <div>2: 外包人数: {state.reducer2.waibao}</div>
-//   <button onClick={() => actions.add2()}>2: 我不是外包</button>
-// </div>
+// function Add(){
+//   return {
+//     type: ADD
+//   }
 // }
 
-// ReactDom.createRoot(document.getElementById("root")).render(<Provider store={store}><Test2 /></Provider>);
-// /** case6 **/
+// function Minus(){
+//   return {
+//     type: MINUS
+//   }
+// }
 
 
 
-/** case7 **/
-// next就是原生的dispatch
-const thunk = ({ dispatch, getState }) => {
-  return (next) => (action) => {
-    if (typeof action === "function") {
-      action(dispatch, getState)
-    } else {
-      next(action);
-    }
-  };
-}
-
-const reducer1 = (state = { waibao: 0 }, action) => {
-  switch (action.type) {
-    case "add":
-      // 这里的写法注意点 -> 没有返回新对象，因为不是 react 里面，没必要返回新对象
-      // state.waibao = state.waibao + 1;
-      // return state;
 
 
-      // hooks case -> 返回原对象不更新，必须要返回新对象
-      return { waibao: state.waibao + 1 }
-    default:
-      return state;
-  }
-};
+// // const reducer = createReducer({num: 0},(builder) => {
+// //   builder
+// //     .addCase(Add, (state, action) => {
+// //       return {num: state.num + (action.payload ?? 1)}
+// //     })
+// //     .addCase(Minus, (state, action) => {
+// //       return {num: state.num - 1} 
+// //     })
+// // })
 
-const reducer2 = (state = { waibao: 0 }, action) => {
-  switch (action.type) {
-    case "add2":
-      // 这里的写法注意点 -> 没有返回新对象，因为不是 react 里面，没必要返回新对象
-      // state.waibao = state.waibao + 1;
-      // return state;
+/** 封装到 createSlice 里面 **/
+// const reducer = createReducer({num: 0}, {
+//     [Add.type]: (state, action) => ({num: state.num + (action.payload ?? 1)}),
+//     [Minus.type]: (state, action) => ({num: state.num - 1} )
+// })
+/** 封装到 createSlice 里面 **/
+
+// function reducer(state = {num: 0}, action){
+//   switch(action.type){
+//     // case ADD:
+//     case Add.type:
+//       return {num: state.num + (action.payload ?? 1)}
+//     // case MINUS:
+//     case Minus.type:
+//       return {num: state.num - 1}
+//     default:
+//       return state
+//   }
+// }
 
 
-      // hooks case -> 返回原对象不更新，必须要返回新对象
-      return { waibao: state.waibao + 1 }
-    default:
-      return state;
-  }
-};
 
-const reducer = combineReducers({
-  reducer1,
-  reducer2,
-});
-// 这里看出来 初始化的 initstate 优先级的关闭，各自 子reducer 优先级更低
-// const store = applyMiddleware(thunk)(createStore)(reducer, {
-//   reducer1: { waibao: 1 },
-//   reducer2: { waibao: 0 },
-// });
-const store = createStore(reducer, {
-  reducer1: { waibao: 1 },
-  reducer2: { waibao: 0 },
-}, applyMiddleware(thunk));
-  
-const action = bindActionCreators(
-  {
-    add: (arg1) => (dispatch, getState) => {
-      setTimeout(() => {
-        dispatch({ type: "add", payload: arg1 })
-      }, 1000);
+const counterSlice = createSlice({
+  name: 'test',
+  initialState: {num: 0},
+  reducers: {
+    add: (state, action) => {
+      // 使用了 immer 所以这里做了 替换
+      // return {num: state.num + (action.payload ?? 1)}
+      
+      // 使用 immer 之后，return 一个新对象反而没有更新？， 只能按照下面这种写法
+      state.num += (action.payload ?? 1)
     },
-    add2: () => ({ type: "add2" }),
-  },
-  store.dispatch
-);
-  
-const action1 = bindActionCreators(() => {
-  return { type: "add2" };
-}, store.dispatch);
-  
+    minus: (state, action) => {
+      // 使用了 immer 所以这里做了 替换
+      // return {num: state.num - 1} 
 
-function Test31(){
-  console.log('render--Test31')
-  const dispatch = useDispatch();
-
-  const actions = bindActionCreators({
-    add: (arg1) => (dispatch, getState) => {
-      setTimeout(() => {
-        dispatch({ type: "add", payload: arg1 })
-      }, 1000);
+      // 使用 immer 之后，return 一个新对象反而没有更新？， 只能按照下面这种写法
+      state.num -= 1
     }
-  }, dispatch)
+  }
+})
 
-  
-  const state = useSelector((state) => state.reducer1)
-  return <div>
-    <div>1: 外包人数: {state.waibao}</div>
-    <button onClick={() => actions.add("aaa")}>2: 我不是外包</button>
-  </div>
+const { reducer, actions } = counterSlice
+
+
+// **** 使用 configureStore 之后，内置了 thunk 中间件 ****
+// let store = createStore(reducer)
+
+let store = configureStore({
+  reducer,
+  // middleware: [],
+  preloadedState: { num: 10 }
+})
+// **** 使用 configureStore 之后，内置了 thunk 中间件 ****
+
+
+let valEle =  document.getElementById('value')
+const render = () => {
+  valEle.innerHTML = store.getState().num
 }
+render()
 
-function Test32(){
-  console.log('render--Test32')
-  const dispatch = useDispatch();
-  const actions = bindActionCreators({
-    add2: () => ({ type: "add2" }),
-  }, dispatch)
+// 订阅仓库状态， 状态发生变更，重新 render
+store.subscribe(render)
 
-  const state = useSelector((state) => state.reducer2)
 
-  return <div>
-    <div>2: 外包人数: {state.waibao}</div>
-    <button onClick={() => actions.add2()}>2: 我不是外包</button>
-  </div>
-}
+document.getElementById('add').addEventListener('click', () => {
+  // 使用了 createSlice 替代了 createAction
+  // store.dispatch(Add())
 
-function Test3(){
-  return <>
-    <Test31 />
-    <Test32 />
-  </>
-}
+  store.dispatch({type: actions.add.type})
 
-ReactDom.createRoot(document.getElementById("root")).render(<Provider store={store}><Test3 /></Provider>);
-/** case7 **/
+  // 这里的写法和上面一样，因为 createActions 内部挂载了 type 属性 gei actions 函数
+  // store.dispatch(actions.add())
+})
+
+document.getElementById('minus').addEventListener('click', () => {
+  // 使用了 createSlice 替代了 createAction
+  // store.dispatch(Minus())
+  store.dispatch(actions.minus())
+})
+
+
+// toolkit 自带的 (异步支持 使用了 redux-thunk)
+document.getElementById('asyncAdd').addEventListener('click', () => {
+  store.dispatch(() => {
+    setTimeout(() => {
+      // 使用了 createSlice 替代了 createAction
+      // const action = Add()
+      // store.dispatch(action)
+
+      store.dispatch(actions.add())
+    }, 1000)
+  })
+})
+/** case4 configureStore createAction createReducer createSlice **/

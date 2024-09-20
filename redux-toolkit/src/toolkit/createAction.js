@@ -1,5 +1,6 @@
 export default function createAction(type,prepareAction){
      function actionCreate(payload){
+        // debugger
         if(prepareAction){
             // debugger
             const prepared = prepareAction(payload)
