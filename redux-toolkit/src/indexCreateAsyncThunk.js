@@ -14,6 +14,8 @@ const { reducer } = createSlice({
     // 这个 reducers 会添加前缀
     reducers: {},
 
+    // 这个 extraReducers 不会添加前缀
+    // 源码手动做的 添加前缀
     extraReducers: (builder) => {
         builder.addCase(getTodoList.pending, (state, action) => {
             // debugger
