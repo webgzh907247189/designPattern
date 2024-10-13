@@ -13,6 +13,8 @@ export default function createSlice(options = {}){
     Object.keys(reducers).forEach((key) => {
         // debugger
         let type = getType(name, key)
+
+        // actions 被重新赋值
         actions[key] = createAction(type)
         prefixReducers[type] = reducers[key]
     })
@@ -28,13 +30,20 @@ export default function createSlice(options = {}){
                 return builder;
             }
         };
-        extraReducersCb(builder);
+        typeof extraReducers === 'function' && extraReducersCb(builder);
         return [actionsMap];
     }
 
     const [getExtraReducers] = executeReducerBuilderCallback(extraReducers)
 
-    let reducer = createReducer(initialState, prefixReducers, getExtraReducers)
+    // debugger
+    let reducer = createReducer(initialState, (builder) => {
+        for (const key in prefixReducers) {
+            const reducerKey = prefixReducers[key];
+            builder.addCase(key, reducerKey)
+        }
+    }, getExtraReducers)
+
     return {
         actions,
         reducer

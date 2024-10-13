@@ -20,6 +20,7 @@ export default function createReducer(initState, reducers, extraReducers = {}){
 
         // 这里使用 executeReducerBuilderCallback 拿到 newReducers
         const [newReducers] = executeReducerBuilderCallback(reducers)
+        // debugger
         const reducerFn = newReducers[action.type]
 
         // debugger
