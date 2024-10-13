@@ -17,7 +17,7 @@ export default function createSlice(options = {}){
         prefixReducers[type] = reducers[key]
     })
 
-    const executeReducerBuilderCallback = (builderCallback) => {
+    const executeReducerBuilderCallback = (extraReducersCb) => {
         // debugger
         var actionsMap = {};
         var builder = {
@@ -28,7 +28,7 @@ export default function createSlice(options = {}){
                 return builder;
             }
         };
-        builderCallback(builder);
+        extraReducersCb(builder);
         return [actionsMap];
     }
 
