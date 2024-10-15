@@ -37,6 +37,17 @@ export default function createSlice(options = {}){
     const [getExtraReducers] = executeReducerBuilderCallback(extraReducers)
 
     // debugger
+
+    // prefixReducers 生成的 数据格式
+    // prefixReducers -> 
+    // {
+    //     'test/add': (state, action) => {
+    //         return {num: state.num + (action.payload ?? 1)}
+    //     },
+    //     'test/minus':  (state, action) => {
+    //         return {num: state.num - 1} 
+    //     }
+    // }
     let reducer = createReducer(initialState, (builder) => {
         for (const key in prefixReducers) {
             const reducerKey = prefixReducers[key];
