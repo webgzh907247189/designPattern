@@ -92,3 +92,16 @@ type ssss = TypeParseUrlQuery<'a=1&b=2&c=3'>
     console.log(result)
 }
 
+
+
+
+{
+
+    // 这种写法没有提示， 全是 字符串 就可以通过
+    type Color = 'red' | 'block' | string
+    let a: Color = '12313'
+
+    // 下面这种写法会有提示， 提示有 "red" | "block"
+    type Color1 = "red" | "block" | (string & {});
+    let a1: Color1 = 'block'
+}
