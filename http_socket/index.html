@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+       
+    </head>
+    <body>
+        <div id="app"></div>
+    </body>
+    <script type="text/javascript">
+        
+        const ws = new WebSocket('ws://localhost:3000')
+        ws.onopen = function(){
+            console.log('connection opend')
+
+            ws.send('hello server')
+        }
+
+        ws.onmessage = function(e){
+            console.log('服务器响应的数据是：', e.data)
+        }
+
+        // Sec-Websocket-Key 握手随机创建的值， 用于保证是安全的 websocket 连接
+        // Sec-Websocket-Accept 是服务端接收到 Sec-Websocket-Key，算出来并且返回给客户端
+
+        // 发送数据 最底层: 数据帧 -> ip层: 数据包  -> 数据段 -> websocket
+    </script>
+</html>
