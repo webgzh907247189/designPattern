@@ -1,0 +1,18 @@
+{
+  "name": "learn-eslint",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint --fix"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "eslint": "^9.21.0",
+    "generator-eslint": "^5.1.2",
+    "globals": "^16.0.0",
+    "yo": "^5.1.0"
+  }
+}

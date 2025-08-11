@@ -7,7 +7,7 @@
  * render 阶段 (比较耗时)  两个任务 1.根据vdom生成fiber树  2. 生成 effect List
  * 
  * ->  commit 阶段  
- * dom更新创建阶段，不可暂停，必须保证连续性
+ * dom更新创建阶段，不可暂停，必须保证连续性 (不然 dom 节点更新一会更新一个，一会更新一个，很奇怪，所以不能暂停)
  */
 
  import { TAG_ROOT } from './constant';

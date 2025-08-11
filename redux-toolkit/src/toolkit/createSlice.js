@@ -50,8 +50,8 @@ export default function createSlice(options = {}){
     // }
     let reducer = createReducer(initialState, (builder) => {
         for (const key in prefixReducers) {
-            const reducerKey = prefixReducers[key];
-            builder.addCase(key, reducerKey)
+            const reducerFn = prefixReducers[key];
+            builder.addCase(key, reducerFn)
         }
     }, getExtraReducers)
 

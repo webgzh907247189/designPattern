@@ -90,8 +90,13 @@
 		workInProcessRoot = null;
 	}
 
+	// 优先处理自己
+	// 自己处理完成，处理 child
+	// child 处理完成，找 slibling
+	// 都处理完成，找 return fiber 节点
 	function performUnitOfWork(fiber){
 		// 处理此fiber -> 单元 fiber
+		// // 创建 真实 dom，不会进行挂载，创建 fiber 子树
 		beiginWork(fiber)
 
 		// 处理 fiber.child
@@ -106,6 +111,7 @@
 				return fiber.slibling
 			}
 
+			// child 处理完了，并且 slibling 也处理完了， 此时 回到他的父亲 fiber 节点，找到父亲 fiber 的 slibling 进行处理
 			fiber = fiber.return
 		}
 	}
@@ -143,6 +149,7 @@
 		});
 	}
 
+	// effectTag 不为 null 说明有副作用
 	// 构建 父 作用域 链(effectList)， 副作用(需要进行 dom 操作，更新 插入 删除)
 	// fiber 不是每次更新，所有节点都参与，只是有副作用的节点 参与更新
 	// firstEffect 指向第一个有副作用的节点  nextEffect 下一个有副作用的节点 lastEffect 最后一个有副作用的节点

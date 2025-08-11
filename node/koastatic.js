@@ -1,7 +1,7 @@
 const Koa = require('koa')
 const path = require('path')
 const mime = require('mime')
-const queryString = require('querystring')
+// const queryString = require('querystring')
 
 const fs = require('fs')
 const fsPromises = fs.promises
@@ -12,13 +12,13 @@ let app = new Koa()
 // app.use(serve(__dirname));
 
 app.use(static('./view'))
-.use(bodyParse())
+// .use(bodyParse())
 .use((ctx,next)=>{
     console.log(ctx.req.method,ctx.path)
-    if(ctx.method.toLocaleLowerCase() === 'post' && ctx.path === '/form'){
+    if(ctx.method.toLocaleLowerCase() === 'get' && ctx.path === '/v1/opt/mix/rfq/tradablePairs'){
         let queryObj = ctx.request.body
         console.log('1111',queryObj)
-        ctx.body = queryObj
+        ctx.body = {name: '111'}
     }else{
         ctx.body = 'static test'
     }

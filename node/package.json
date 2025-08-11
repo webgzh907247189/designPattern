@@ -17,7 +17,7 @@
     "delegates": "^1.0.0",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
-    "koa": "^2.11.0",
+    "koa": "^2.15.3",
     "koa-route": "^3.2.0",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
@@ -31,7 +31,7 @@
     "excel-parser": "^0.2.2",
     "iconv-lite": "^0.5.0",
     "koa-cors": "0.0.16",
-    "mime": "^2.4.4",
+    "mime": "^2.6.0",
     "node-xlsx": "^0.15.0",
     "nodemon": "^1.17.5",
     "superagent": "^6.1.0"

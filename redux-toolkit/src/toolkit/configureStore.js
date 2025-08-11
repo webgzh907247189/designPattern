@@ -18,6 +18,9 @@ export default function configureStore(options = {}){
         rootReducer = combineReducers(reducer)
     }
 
+    // middleware 支持 fn， 传入 一个 cb (默认支持 thunk)
+    middleware = typeof middleware === 'function' ?  middleware(() => [thunk]) : middleware
+
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
     return createStore(rootReducer, preloadedState, composeEnhancers(applyMiddleware(...middleware)))
 }

@@ -83,3 +83,32 @@ type res = Test<never>; // never
 
 type Test1<T> = T extends true ? 1 : 2;
 type res1 = Test1<any>; // 1 ｜ 2        
+
+
+
+
+type OptionalKeys<T, R extends string = '', P = keyof T> = P extends keyof T
+  ? `${P & string}=${T[P] & string}`
+  : R;
+
+type UnionToIntersection<K> = (
+  K extends K ? (x: K) => unknown : never
+) extends (x: infer R) => unknown
+  ? R
+  : never;
+
+type UnionToTuple<L> =
+  UnionToIntersection<
+    L extends any ? () => L : never
+  > extends () => infer ReturnType
+    ? [...UnionToTuple<Exclude<L, ReturnType>>, ReturnType]
+    : [];
+
+type ListAdd<K, P extends string = ''> = K extends [infer L, ...infer R]
+  ? L extends string
+    ? ListAdd<R, `${P}${P extends '' ? '' : '&'}${L}`>
+    : P
+  : P;
+
+type aa = UnionToTuple<OptionalKeys<{ name: '123'; age: '111'; sex: 'nan' }>>;
+type cc = ListAdd<aa>;
