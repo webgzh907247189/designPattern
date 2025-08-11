@@ -1,0 +1,290 @@
+import React from "react";
+import ReactDOM from "react-dom/client";
+// import "./global.css";
+
+const root = ReactDOM.createRoot(document.getElementById("app"));
+root.render(
+  <div>
+    <div className="w-[600px]">
+      <div className="flex justify-end items-center mb-[16px] hover:cursor-pointer">
+        <span className="SVGWrapper_svg-wrapper__HwGgr">
+          <svg
+            width="24"
+            height="28"
+            viewBox="0 0 24 28"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g id="TransactionHistory">
+              <g id="Group 1960812763">
+                <g id="Vector">
+                  <path
+                    d="M3.375 4.04481H15.9003L19.8413 8.04668V12.9658H18.4094V8.63326L15.3008 5.47653H4.80685V22.9067H10.6483V24.3385H3.375V4.04481Z"
+                    fill="#040B0F"
+                  ></path>
+                  <path
+                    d="M14.9626 9.71496V8.28324H7.47059V9.71496H14.9626Z"
+                    fill="#040B0F"
+                  ></path>
+                  <path
+                    d="M12.3269 12.9659H7.47059V11.5341H12.3269V12.9659Z"
+                    fill="#040B0F"
+                  ></path>
+                </g>
+                <path
+                  id="Ellipse 7819 (Stroke)"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M17.2481 14.043C15.1548 14.043 13.4577 15.7399 13.4577 17.8331C13.4577 19.9263 15.1548 21.6232 17.2481 21.6232C19.3415 21.6232 21.0386 19.9263 21.0386 17.8331C21.0386 15.7399 19.3415 14.043 17.2481 14.043ZM12.0259 17.8331C12.0259 14.9492 14.364 12.6113 17.2481 12.6113C20.1323 12.6113 22.4704 14.9492 22.4704 17.8331C22.4704 20.717 20.1323 23.0549 17.2481 23.0549C14.364 23.0549 12.0259 20.717 12.0259 17.8331Z"
+                  fill="#040B0F"
+                ></path>
+                <path
+                  id="Vector 5306 (Stroke)"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M16.5376 15.4355H17.9694V17.5491L19.1235 18.7031L18.1111 19.7155L16.5376 18.1422V15.4355Z"
+                  fill="#040B0F"
+                ></path>
+              </g>
+            </g>
+          </svg>
+        </span>
+        <div className="ml-[4px]">交易記錄</div>
+      </div>
+      <div className="border-[1px] border-solid border-textHint rounded-[14px] px-[32px] pt-[30px] atPhone:px-[16px] atPhone:pt-[16px]">
+        <div className="flex justify-around h-[62px] leading-[62px] rounded-[100px] bg-basicBlockRfq mb-[34px] atPhone:leading-[40px] atPhone:h-[40px] atPhone:mb-[20px]">
+          <div
+            className="w-1/3 flex justify-center text-descriptionText select-none hover:cursor-pointer bg-g00 !text-alwaysWhite rounded-[100px] cursor-pointer"
+            data-coin-idx="1"
+          >
+            買入
+          </div>
+          <div
+            className="w-1/3 flex justify-center text-descriptionText select-none hover:cursor-pointer"
+            data-coin-idx="2"
+          >
+            賣出
+          </div>
+          <div
+            className="w-1/3 flex justify-center text-descriptionText select-none hover:cursor-pointer"
+            data-coin-idx="3"
+          >
+            兌換
+          </div>
+        </div>
+        <div className="flex leading-[26px] items-center mb-[18px]">
+          <div className="text-alwaysBlack text-[20px] font-[600]">買入金額</div>
+          <div className="text-buttonHighlight text-[10px] font-600 bg-g00 opacity-70 px-[4px] ml-[8px] rounded-[4px] h-[20px] leading-[20px]">
+            <span className="">0</span>
+            <span>Fee</span>
+          </div>
+          <div className="ml-[8px]">
+            <div className="text-[14px] font-[500] leading-[16px] text-subtitleText border-[1px] border-solid border-basicLine rounded-[16px] px-[10px] py-[4px] flex hover:cursor-pointer">
+              <span className="SVGWrapper_svg-wrapper__HwGgr">
+                <svg
+                  width="15"
+                  height="12"
+                  viewBox="0 0 15 12"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g id="Group 1533211692">
+                    <path
+                      id="Vector 5310"
+                      d="M4.11172 2.41558L8.74372 2.4156L2.91923 8.2401"
+                      stroke="#040B0F"
+                      strokeWidth="1.6"
+                    ></path>
+                    <path
+                      id="Vector 5311"
+                      d="M10.7013 9.97844L6.85733 9.97842L12.6818 4.15392"
+                      stroke="#040B0F"
+                      strokeWidth="1.6"
+                    ></path>
+                  </g>
+                </svg>
+              </span>
+              <div className="select-none ml-[2px]">按數量交易</div>
+            </div>
+          </div>
+        </div>
+        <div className="mb-[56px] atPhone:mb-[20px]">
+          <span className="ant-input-group-wrapper ant-input-group-wrapper-borderless css-dev-only-do-not-override-7dkqj4 Rfq-input">
+            <span className="ant-input-wrapper ant-input-group css-dev-only-do-not-override-7dkqj4">
+              {/* <input
+                min="0"
+                maxLength="30"
+                max="10000000000.00000000"
+                placeholder="0"
+                className="ant-input css-dev-only-do-not-override-7dkqj4 ant-input-borderless"
+                type="text"
+              /> */}
+              <span className="ant-input-group-addon">USD</span>
+            </span>
+          </span>
+        </div>
+        <div className="mb-[70px] atPhone:mb-[36px]">
+          <div className="flex justify-between items-center mb-[50px] atPhone:mb-[30px]">
+            <div className="text-alwaysBlack text-[20px] font-[600] leading-[24px]">
+              買入
+            </div>
+            <div className="text-alwaysBlack text-[20px] font-[600]">
+              <div className="ant-select ant-select-borderless RFQ-coin-select w-full bg-transparent text-titleText font-chakra-500 bg-basicBlock css-dev-only-do-not-override-7dkqj4 ant-select-single ant-select-show-arrow">
+                <div className="ant-select-selector">
+                  <span className="ant-select-selection-wrap">
+                    <span className="ant-select-selection-search">
+                      {/* <input
+                        autoComplete="off"
+                        className="ant-select-selection-search-input"
+                        role="combobox"
+                        aria-expanded="false"
+                        aria-haspopup="listbox"
+                        aria-owns="rc_select_0_list"
+                        aria-autocomplete="list"
+                        aria-controls="rc_select_0_list"
+                        readOnly=""
+                        unselectable="on"
+                        type="search"
+                        id="rc_select_0"
+                        style="opacity: 0"
+                      /> */}
+                    </span>
+                    <span className="ant-select-selection-item">
+                      <div className="flex items-center justify-end gap-[8px] ml-[100px]">
+                        {/* <img
+                          alt="unknown"
+                          loading="lazy"
+                          width="24"
+                          height="24"
+                          decoding="async"
+                          data-nimg="1"
+                          srcSet="
+                        https://static-glb.osltest.com/public/web/2edf1ef8b333c40979976d1a49bc234c.png?w=24&amp;h=24 1x,
+                        https://static-glb.osltest.com/public/web/2edf1ef8b333c40979976d1a49bc234c.png?w=24&amp;h=24 2x
+                      "
+                          src="https://static-glb.osltest.com/public/web/2edf1ef8b333c40979976d1a49bc234c.png?w=24&amp;h=24"
+                          style="color: transparent"
+                        /> */}
+                        <span className="text-alwaysBlack text-[20px] font-[600]">
+                          BTC
+                        </span>
+                      </div>
+                    </span>
+                  </span>
+                </div>
+                <span
+                  className="ant-select-arrow"
+                  unselectable="on"
+                  aria-hidden="true"
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g id="CaretDown">
+                      <path
+                        id="Polygon 1"
+                        d="M12.2674 15.6399C12.1343 15.8192 11.8659 15.8192 11.7328 15.6399L7.1984 9.53133C7.03534 9.31167 7.19213 9 7.46571 9L16.5346 9C16.8081 9 16.9649 9.31167 16.8019 9.53133L12.2674 15.6399Z"
+                        fill="#040B0F"
+                      ></path>
+                    </g>
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-between mb-[8px] items-center">
+            <div className="text-alwaysBlack text-[20px] font-[600] leading-[24px]">
+              支付
+            </div>
+            <div className="text-alwaysBlack text-[20px] font-[600]">
+              <div className="ant-select ant-select-borderless RFQ-coin-select w-full bg-transparent text-titleText font-chakra-500 bg-basicBlock css-dev-only-do-not-override-7dkqj4 ant-select-single ant-select-show-arrow">
+                <div className="ant-select-selector">
+                  <span className="ant-select-selection-wrap">
+                    <span className="ant-select-selection-search">
+                      {/* <input
+                        autoComplete="off"
+                        className="ant-select-selection-search-input"
+                        role="combobox"
+                        aria-expanded="false"
+                        aria-haspopup="listbox"
+                        aria-owns="rc_select_1_list"
+                        aria-autocomplete="list"
+                        aria-controls="rc_select_1_list"
+                        readOnly=""
+                        unselectable="on"
+                        type="search"
+                        id="rc_select_1"
+                        style="opacity: 0"
+                      /> */}
+                    </span>
+                    <span className="ant-select-selection-item">
+                      <div className="flex items-center justify-end gap-[8px] ml-[100px]">
+                        {/* <img
+                          alt="unknown"
+                          loading="lazy"
+                          width="24"
+                          height="24"
+                          decoding="async"
+                          data-nimg="1"
+                          srcSet="
+                        https://static-glb.osltest.com/public/web/ebadcb28f6b71d7a3a1c9a0cd1851328.png?w=24&amp;h=24 1x,
+                        https://static-glb.osltest.com/public/web/ebadcb28f6b71d7a3a1c9a0cd1851328.png?w=24&amp;h=24 2x
+                      "
+                          src="https://static-glb.osltest.com/public/web/ebadcb28f6b71d7a3a1c9a0cd1851328.png?w=24&amp;h=24"
+                          style="color: transparent"
+                        /> */}
+                        <span className="text-alwaysBlack text-[20px] font-[600]">
+                          USD
+                        </span>
+                      </div>
+                    </span>
+                  </span>
+                </div>
+                <span
+                  className="ant-select-arrow"
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g id="CaretDown">
+                      <path
+                        id="Polygon 1"
+                        d="M12.2674 15.6399C12.1343 15.8192 11.8659 15.8192 11.7328 15.6399L7.1984 9.53133C7.03534 9.31167 7.19213 9 7.46571 9L16.5346 9C16.8081 9 16.9649 9.31167 16.8019 9.53133L12.2674 15.6399Z"
+                        fill="#040B0F"
+                      ></path>
+                    </g>
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end items-center">
+            <div className="text-[16px] font-[400] leading-[20px] text-descriptionText border-b-[1px] border-dashed border-descriptionText">
+              <button data-state="closed">可用</button>
+            </div>
+            <div className="text-[16px] font-[400] leading-[20px] text-descriptionText ml-[6px]">
+              1,000,859,066.78
+            </div>
+            <div className="text-[16px] font-[400] leading-[20px] text-descriptionText ml-[4px]">
+              USD
+            </div>
+            <div className="ml-[4px] text-[16px] font-[600] text-g00 cursor-pointer">
+              充值
+            </div>
+          </div>
+        </div>
+        <div className="mb-[74px] atPhone:mb-[30px] py-[18px] flex justify-center items-center rounded-[24px] text-alwaysWhite cursor-pointer bg-g00 select-none opacity-30">
+          買入
+        </div>
+      </div>
+    </div>
+  </div>
+);

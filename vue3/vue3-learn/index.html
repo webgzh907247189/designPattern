@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>
+            vue3 source
+        </title>
+    </head>
+    <body>
+        <div id="app"></div>
+          
+        <!-- <script type="module">
+            import { reactive } from './packages/reactivity/dist/reactivity.js'
+            const obj = {name: 1, age: 2}
+            const proxy1 = reactive(obj)
+
+            debugger
+            const proxy2 = reactive(proxy1)
+            console.log(proxy1 === proxy2, '????', proxy2)
+        </script> -->
+
+        <!-- <script type="module">
+            import { reactive, effect } from './packages/reactivity/dist/reactivity.js'
+            const obj = {name: 1, age: 2}
+            const proxy1 = reactive(obj)
+
+            debugger
+            effect(() => {
+                debugger
+                document.getElementById('app').innerHTML = proxy1.name + '?' + proxy1.age
+                
+                effect(() => {
+                    debugger
+                    proxy1.age ++    
+                })
+                
+                debugger
+                document.getElementById('app').innerHTML = proxy1.name + '?' + proxy1.age
+            })
+
+        </script> -->
+
+        <!-- <script type="module">
+            import { reactive, effect } from './packages/reactivity/dist/reactivity.js'
+            const obj = {name: 1, age: 2}
+            const proxy1 = reactive(obj)
+
+            effect(() => {
+                document.getElementById('app').innerHTML = proxy1.name + '?' + proxy1.age
+            })
+
+            setTimeout(() => {
+                proxy1.age++
+            }, 1000)
+        </script> -->
+
+        <!-- <script type="module">
+            import { reactive, effect } from './packages/reactivity/dist/reactivity.js'
+            const obj = {name: 1, age: 2, flag: true}
+            const proxy1 = reactive(obj)
+
+            effect(() => {
+                console.log('runner')
+                document.getElementById('app').innerHTML = proxy1.flag ? proxy1.name : proxy1.age
+                // document.getElementById('app').innerHTML = proxy1.flag +  proxy1.flag+  proxy1.flag 
+            })
+
+            setTimeout(() => {
+                proxy1.flag = false
+                setTimeout(() => {
+                    console.log('???')
+                    proxy1.name = '??'
+                })
+            }, 1000)
+        </script> -->
+
+
+        <!-- <script type="module">
+            import { reactive, effect } from './packages/reactivity/dist/reactivity.js'
+            const obj = {name: 1, age: 2, flag: true}
+            const proxy1 = reactive(obj)
+
+            let runner = effect(() => {
+                console.log('runner')
+                document.getElementById('app').innerHTML =  proxy1.name + proxy1.age
+            }, {
+                scheduler: () => {
+                    console.log('数据更新了，不重新渲染，走自定义逻辑 scheduler')
+                    runner()
+                }
+            })
+
+            setTimeout(() => {
+                proxy1.age = 3
+            }, 1000)
+        </script> -->
+
+
+        <!-- <script type="module">
+            import { reactive, effect } from './packages/reactivity/dist/reactivity.js'
+            const obj = {name: 1, age: 2, flag: true }
+            const proxy1 = reactive(obj)
+
+            let runner = effect(() => {
+                console.log('runner')
+                document.getElementById('app').innerHTML =  proxy1.name + proxy1.age 
+
+                proxy1.age = Math.random()
+            })
+        </script> -->
+
+        <!-- <script type="module">
+            import { reactive, effect } from './packages/reactivity/dist/reactivity.js'
+            const obj = {name: 1, age: 2, flag: true, address: {
+                home: 'aa'
+            }}
+            const proxy1 = reactive(obj)
+
+            let runner = effect(() => {
+                console.log('runner')
+                debugger
+                document.getElementById('app').innerHTML =  proxy1.name + proxy1.address.home
+            })
+
+            setTimeout(() => {
+                proxy1.address.home = 'bb'
+            }, 1000)
+        </script> -->
+
+
+        <!-- <script type="module">
+            import { reactive, effect, ref } from './packages/reactivity/dist/reactivity.js'
+            const refVal = ref(true)
+
+            let runner = effect(() => {
+                console.log('runner')
+                debugger
+                document.getElementById('app').innerHTML =  refVal.value ? '1' : '2'
+            })
+
+            setTimeout(() => {
+                refVal.value = false
+            }, 1000)
+        </script> -->
+
+
+        <!-- <script type="module">
+            import { reactive, effect, ref, toRef, toRefs, proxyRefs } from './packages/reactivity/dist/reactivity.js'
+            const obj = {name: 1, age: 2, flag: true, address: {
+                home: 'aa'
+            }}
+            const proxy1 = reactive(obj)
+
+            // 通过 toRef 转换， name1 仍然保持与 proxy1.name 的关系
+            let name1 = toRef(proxy1, 'name')
+            console.log(name1.value, 'toRef')
+
+
+            let {name, age} = toRefs(proxy1)
+            console.log(name.value, age.value, 'toRefs')
+
+
+
+            // 在 template 里面都是这样处理的
+            let proxyRefsVal = proxyRefs({ ...toRefs(proxy1), a: 100 })
+
+            // 使用 proxyRefs 赋值， 不需要加上 .value 属性
+            // proxyRefsVal.age = 20
+
+            // 非 proxy 属性，
+            proxyRefsVal.a = 200
+
+            console.log(proxyRefsVal.a, proxyRefsVal.name, proxyRefsVal.age)
+        </script> -->
+
+        <script type="module">
+            import { reactive, effect, ref, toRef, toRefs, proxyRefs, computed } from './packages/reactivity/dist/reactivity.js'
+            const obj = {name: 1, age: 2, flag: true }
+            const proxy1 = reactive(obj)
+
+            // 通过 toRef 转换， name1 仍然保持与 proxy1.name 的关系
+            debugger
+            let computedAge = computed(() => {
+                console.log('computedAge')
+                return proxy1.age + '??'
+            })
+
+            effect(() => {
+                console.log(computedAge.value, 'computedAge1')
+                console.log(computedAge.value, 'computedAge2')
+            })
+
+            setTimeout(() => {
+                debugger
+                proxy1.age = 20
+            }, 1000)
+
+        </script> 
+
+        <!-- <script type="module">
+            import { reactive, effect, ref, toRef, toRefs, proxyRefs, computed,watch } from './packages/reactivity/dist/reactivity.js'
+            const reactiveVal = reactive({val: ''})
+
+            function getData(timer) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        resolve(timer)
+                    }, timer)
+                })
+            }
+
+            let timer = 3000
+
+            let queue = []
+            watch(reactiveVal, async () => {
+                let flag = true
+
+                for (let index = 0; index < queue.length; index++) {
+                    const queueItem = queue[index];
+                    queueItem()
+                }
+
+                timer -= 1000
+                queue.push(() => flag = false)
+
+                let r = await getData(timer)
+
+                if(flag){
+                    app.innerHTML = r;
+                }
+            }, {
+                flush: 'sync'
+            })
+
+            setTimeout(() => {
+                reactiveVal.val = 'a'
+                reactiveVal.val = 'b'
+            }, 1000);
+        </script> -->
+
+
+        <!-- <script type="module">
+            import { reactive, effect, ref, toRef, toRefs, proxyRefs, computed,watch } from './packages/reactivity/dist/reactivity.js'
+            const reactiveVal = reactive({val: ''})
+
+            function getData(timer) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        resolve(timer)
+                    }, timer)
+                })
+            }
+
+            let timer = 3000
+            watch(reactiveVal, async (newVal, oldVal, cleanUp) => {
+                let flag = true
+
+                timer -= 1000
+                cleanUp(() => {
+                    flag = false
+                })
+
+                let r = await getData(timer)
+
+                if(flag){
+                    app.innerHTML = r;
+                }
+            }, {
+                flush: 'sync'
+            })
+
+            setTimeout(() => {
+                reactiveVal.val = 'a'
+                reactiveVal.val = 'b'
+            }, 1000);
+        </script> -->
+    </body>
+</html>

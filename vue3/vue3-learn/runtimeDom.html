@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>
+            vue3 source
+        </title>
+    </head>
+    <body>
+        <div id="app"></div>
+
+
+        <script type="module">
+            import { render, createRenderer, h } from './packages/runtime-dom/dist/runtime-dom.js'
+            
+            // 1. render 内置的 渲染器
+            // 2. createRenderer 可以自定义渲染器 (定制化修改渲染器)
+            // 3. h 可以创建一个 虚拟 dom (type, propsOrChildren, children) -> 创建一个对象 表示 虚拟dom
+
+            let ele = h('h1', {"color": "red"}, '11')
+            console.log(ele)
+        </script> 
+
+    </body>
+</html>
