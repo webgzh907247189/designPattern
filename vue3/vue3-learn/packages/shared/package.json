@@ -7,5 +7,8 @@
             "esm-bundler",
             "cjs"
         ]
+    },
+    "dependencies": {
+        "@vue/reactivity": "^3.5.21"
     }
 }

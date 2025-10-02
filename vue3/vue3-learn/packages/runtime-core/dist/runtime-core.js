@@ -62,7 +62,7 @@ var h = (...args) => {
 };
 
 // packages/runtime-core/src/renderer.ts
-function createRenderer(renderOptions2) {
+function createRenderer(renderOptions) {
   const {
     insert: hostInsert,
     // 删除节点
@@ -77,7 +77,7 @@ function createRenderer(renderOptions2) {
     createElement: hostCreateElement,
     createText: hostCreateText,
     patchProps: hostPatchProps
-  } = renderOptions2;
+  } = renderOptions;
   const mountChildren = (children, container) => {
     for (let index = 0; index < children.length; index++) {
       const element = children[index];
@@ -116,7 +116,7 @@ function createRenderer(renderOptions2) {
     }
     processElement(n1, n2, container, anchor);
   };
-  const render2 = (vnode, container) => {
+  const render = (vnode, container) => {
     console.log(vnode, container);
     if (vnode === null) {
       if (container._vnode) {
@@ -134,10 +134,10 @@ function createRenderer(renderOptions2) {
     let el = n2.el = n1.el;
     let oldProps = n1.props ?? {};
     let newProps = n2.props ?? {};
-    patchProps2(oldProps, newProps, el);
+    patchProps(oldProps, newProps, el);
     patchChildren(n1, n2, el);
   };
-  const patchProps2 = (oldProps, newProps, el) => {
+  const patchProps = (oldProps, newProps, el) => {
     for (const key in newProps) {
       hostPatchProps(el, key, oldProps[key], newProps[key]);
     }
@@ -258,127 +258,14 @@ function createRenderer(renderOptions2) {
     }
   };
   return {
-    render: render2
+    render
   };
 }
-
-// packages/runtime-dom/src/nodeOpts.ts
-var nodeOps = {
-  insert(child, parent, anchor = null) {
-    parent.insertBefore(child, anchor);
-  },
-  // 删除节点
-  remove(child) {
-    let parentNode = child.parentNode;
-    if (parentNode) {
-      parentNode.removeChild(child);
-    }
-  },
-  // 文本节点
-  // 元素节点动态变更
-  setElementText(el, text) {
-    el.textContent = text;
-  },
-  setText(node, text) {
-    node.nodeValue = text;
-  },
-  querySelector(selector) {
-    return document.querySelector(selector);
-  },
-  parentNode(node) {
-    return node.parentNode;
-  },
-  nextSibiling(node) {
-    return node.nextSibiling;
-  },
-  createElement(ele) {
-    return document.createElement(ele);
-  },
-  createText(ele) {
-    return document.createTextNode(ele);
-  }
-};
-
-// packages/runtime-dom/src/modules/attr.ts
-var patchAttr = (el, key, nextVal) => {
-  if (nextVal) {
-    el.setAttribute(key, nextVal);
-  } else {
-    el.removeAttribute(key);
-  }
-};
-
-// packages/runtime-dom/src/modules/class.ts
-var patchClass = (el, nextVal) => {
-  if (nextVal === null) {
-    el.removeAttribute("class");
-  } else {
-    el.className = nextVal;
-  }
-};
-
-// packages/runtime-dom/src/modules/event.ts
-var patchEvent = (el, eventName, naxtVal) => {
-  let invokers = el._vei || (el._vei = {});
-  let extis = invokers[eventName];
-  if (extis && naxtVal) {
-    extis.value = naxtVal;
-  } else {
-    let event = eventName.slice(2).toLowerCase();
-    if (naxtVal) {
-      let invoker = invokers[eventName] = createInvoker(naxtVal);
-      el.addEventListener(event, invoker);
-    } else if (extis) {
-      el.removeEventListener(event, extis);
-      invokers[eventName] = void 0;
-    }
-  }
-};
-function createInvoker(cb) {
-  const invoker = (e) => invoker.value(e);
-  invoker.value = cb;
-  return invoker;
-}
-
-// packages/runtime-dom/src/modules/style.ts
-var patchStyle = (el, prevVal, nextVal = {}) => {
-  for (const key in nextVal) {
-    el.style[key] = nextVal[key];
-  }
-  if (prevVal) {
-    for (const key in prevVal) {
-      if (!nextVal[key]) {
-        el.style[key] = null;
-      }
-    }
-  }
-};
-
-// packages/runtime-dom/src/patchProps.ts
-var patchProps = (el, key, prevVal, nextVal) => {
-  if (key === "class") {
-    patchClass(el, nextVal);
-  } else if (key === "style") {
-    patchStyle(el, prevVal, nextVal);
-  } else if (/^on[^a-z]/.test(key)) {
-    patchEvent(el, key, nextVal);
-  } else {
-    patchAttr(el, key, nextVal);
-  }
-};
-
-// packages/runtime-dom/src/index.ts
-var renderOptions = Object.assign({}, nodeOps, { patchProps });
-var render = (vnode, container) => {
-  console.log(renderOptions, "renderOptions");
-  return createRenderer(renderOptions).render(vnode, container);
-};
 export {
   createRenderer,
   createVnode,
   h,
   isSameVnode,
-  isVnode,
-  render
+  isVnode
 };
-//# sourceMappingURL=runtime-dom.js.map
+//# sourceMappingURL=runtime-core.js.map

@@ -172,7 +172,7 @@
             console.log(proxyRefsVal.a, proxyRefsVal.name, proxyRefsVal.age)
         </script> -->
 
-        <script type="module">
+        <!-- <script type="module">
             import { reactive, effect, ref, toRef, toRefs, proxyRefs, computed } from './packages/reactivity/dist/reactivity.js'
             const obj = {name: 1, age: 2, flag: true }
             const proxy1 = reactive(obj)
@@ -184,6 +184,7 @@
                 return proxy1.age + '??'
             })
 
+            debugger
             effect(() => {
                 console.log(computedAge.value, 'computedAge1')
                 console.log(computedAge.value, 'computedAge2')
@@ -194,7 +195,7 @@
                 proxy1.age = 20
             }, 1000)
 
-        </script> 
+        </script>  -->
 
         <!-- <script type="module">
             import { reactive, effect, ref, toRef, toRefs, proxyRefs, computed,watch } from './packages/reactivity/dist/reactivity.js'
@@ -238,7 +239,7 @@
         </script> -->
 
 
-        <!-- <script type="module">
+        <script type="module">
             import { reactive, effect, ref, toRef, toRefs, proxyRefs, computed,watch } from './packages/reactivity/dist/reactivity.js'
             const reactiveVal = reactive({val: ''})
 
@@ -251,7 +252,9 @@
             }
 
             let timer = 3000
+            // debugger
             watch(reactiveVal, async (newVal, oldVal, cleanUp) => {
+                console.log(newVal, oldVal, 'newVal, oldVal,')
                 let flag = true
 
                 timer -= 1000
@@ -272,6 +275,6 @@
                 reactiveVal.val = 'a'
                 reactiveVal.val = 'b'
             }, 1000);
-        </script> -->
+        </script>
     </body>
 </html>

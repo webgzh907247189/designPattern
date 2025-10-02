@@ -113,3 +113,7 @@ export const proxyRefs = (objectWithRef) => {
         }
     })
 }
+
+export const isRef = (value) => {
+    return value && value.__v_isRef
+}

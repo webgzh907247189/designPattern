@@ -85,7 +85,7 @@ export class ReactiveEffect {
         // 每次 运行后 effect 变为 不脏
         this._dirtyLevel = DirtyLevels.NODIRTY
 
-        debugger
+        // debugger
         if(!this.active){
             // 非 激活 状态，执行后，什么都不需要做
             return this.fn()
@@ -129,7 +129,7 @@ export class ReactiveEffect {
 // {flag, age}
 export const trackEffect = (effect, dep)=> {
     // 优化了多余的 依赖收集 (历史版本是 Set 所以没有这个问题)
-    debugger
+    // debugger
 
     // 场景: state.flag + state.flag + state.flag, 
     // 第一次执行完更新了  effect._trackId， 后续在 dep.get(effect) 没办法进入 if 判断

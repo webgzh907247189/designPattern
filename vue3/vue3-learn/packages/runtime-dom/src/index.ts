@@ -1,6 +1,5 @@
 import { createRenderer } from "@vue/runtime-core"
-
-export * from '@vue/reactivity'
+export * from '@vue/runtime-core'
 
 
 import { nodeOps } from "./nodeOpts"
