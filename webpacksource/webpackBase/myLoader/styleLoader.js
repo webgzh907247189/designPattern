@@ -17,7 +17,7 @@ const styleLoader = function(source){
 
 // remainingRequest(剩余的请求) => css-loader!less-loader ./index.less 
 
-// style-loader 
+// style-loader 。
 // require(!!css-loader!less-loader!./index.less)
 
 // 因为 css-loader 返回的是 "module.exports = 'xxx'" 字符串
@@ -48,3 +48,15 @@ module.exports = styleLoader;
 // remainingRequest  ->  /Users/fer/webpack-loader-demo/loaders/c-loader.js!/Users/fer/webpack-loader-demo/src/data.txt #剩余请求
 // precedingRequest  ->  /Users/fer/webpack-loader-demo/loaders/a-loader.js #前置请求
 // {} #空的数据对象
+
+
+
+// https://blog.csdn.net/lcl130/article/details/125214788
+// https://mp.weixin.qq.com/s/Z79QhAlP8tBQn3mXQ11byQ
+// https://www.jianshu.com/p/f47556e726de
+// https://www.cnblogs.com/skychx/p/webpack-hash-chunkhash-contenthash.html
+// https://juejin.cn/post/6844903806090608647#heading-19
+// https://juejin.cn/post/6844904182915432455#heading-8
+// https://juejin.cn/post/7033301123440050190
+// https://zhuanlan.zhihu.com/p/106796295
+// https://zhuanlan.zhihu.com/p/104205895
