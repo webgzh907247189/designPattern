@@ -33,6 +33,7 @@ class ComputedRefImpl {
                 this._dirty = true
                
                 // 触发更新
+                // 场景：effect 函数里面套一个 effect
                 triggerEffect(this.dep)
             }
         })
@@ -41,6 +42,7 @@ class ComputedRefImpl {
     // 类中的属性访问器， 编译出来是 Object.defineProperty
     get value(){
         // 依赖收集
+        // 场景：effect 函数里面套一个 effect
         trackEffect(this.dep)
         
         // 避免多次取值 (第一次取值完毕之后， _dirty 为 false，再次取值进不来，直接返回值 因为_dirty 为 false)

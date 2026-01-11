@@ -21,6 +21,7 @@ class RefImpl {
     }
     set value(newValue){
         // 触发更新
+        // 拿原始值进行对比, this._value 已经是包装过的新值了
         if(this.rowValue !== newValue){
             this._value = toReactive(newValue)
             this.rowValue = newValue

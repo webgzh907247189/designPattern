@@ -108,6 +108,10 @@ export const effect = (fn, options) => {
 
     // 此处保证可以在外面 直接调用 runner.effect.stop()
     runner.effect = _effect;
+
+    // runner 有个属性, ( runner可以直接调用 )
+    // 1. runner.effect.stop
+    // 2. runner()
     return runner;
 }
 
@@ -133,6 +137,7 @@ export const triggerEffect = (effects) => {
         // 避免出现 effect 的 fn 里面又继续修改 state， 造成 effect 重复执行问题
         if(effect != activeEffect){
             if(effect.scheduler){
+                // scheduler 里面一般都是调用 runner，本质上是高阶函数
                 effect.scheduler()
             }else{
                 effect.run();
