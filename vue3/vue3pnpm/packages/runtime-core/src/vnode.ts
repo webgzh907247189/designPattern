@@ -27,7 +27,7 @@ export const createVnode = (type, props, children = null) => {
     // c&b > 0 有 b  
     // c&b == 0 没有b
     const vnode = {
-        __v_isVnode: true,
+        __v_isVnode: true, // 表示是不是一个虚拟节点
         shapeFlag,
         type,
         props,
@@ -60,6 +60,7 @@ export const createVnode = (type, props, children = null) => {
 }
 
 
+// 表示是不是一个虚拟节点
 export const isVnode = (value) => {
     return !!(value && value.__v_isVnode)
 }   
