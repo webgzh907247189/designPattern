@@ -17,6 +17,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@vue/shared": "workspace:^1.0.0"
+    "@vue/shared": "workspace:^"
   }
 }
