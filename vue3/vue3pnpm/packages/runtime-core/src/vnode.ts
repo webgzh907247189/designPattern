@@ -7,6 +7,11 @@ export const isSameVnode = (oldVnode, newVnode) => {
 }
 
 
+// 本质上 h 方法就是对 createVnode 的封装 --->  createVnode 一定需要三个参数, element props children
+// 本质上 h 方法就是对 createVnode 的封装 --->  createVnode 一定需要三个参数, element props children
+// 本质上 h 方法就是对 createVnode 的封装 --->  createVnode 一定需要三个参数, element props children
+
+
 // vue2 vue3 vnode 有什么区别 ，没有 shapeFlag的时候怎么做的 ???
 
 // 1. 先用 shapeFlag 表示自己元素的类型
