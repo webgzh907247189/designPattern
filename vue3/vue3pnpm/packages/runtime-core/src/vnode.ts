@@ -48,6 +48,8 @@ export const createVnode = (type, props, children = null) => {
             type = ShapeFlags.ARRAY_CHILDREN
         }else{
             children = String(children)
+            // vnode.children = children
+
             type = ShapeFlags.TEXT_CHILDREN
         }
 
@@ -78,6 +80,6 @@ export const isVnode = (value) => {
  * 
  * 011 & 001 > 0  说明包含   普通用户的权限
  * 011 & 010 > 0  说明包含   管理员的权限
- * 011 & 100 < 0  说明不包含  超级管理员的权限
+ * 011 & 100 <= 0  说明不包含  超级管理员的权限
  */
 
