@@ -26,10 +26,12 @@ export class ReactiveEffect{
     // effect 记录 属性 (属性也要记录 effect)
     public deps = []
     public parent = null
+    scheduler?: null
 
     public active = true // 这个 effect 默认是 激活状态
-    constructor(public fn, public scheduler){ // 相当于 this.fn = fn
+    constructor(public fn, scheduler?){ // 相当于 this.fn = fn
         recordEffectScope(this)
+        this.scheduler = scheduler
     }
 
     run(){

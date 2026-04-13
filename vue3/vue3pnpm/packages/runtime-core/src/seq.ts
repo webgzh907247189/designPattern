@@ -32,7 +32,7 @@
 // [3, 4]
 // [3, 4, 5]
 // [3, 4, 5, 9]
-// [3, 4, 5, 7]
+// [3, 4, 5, 7] // 开始使用 二分查找，(二分查找 前提一个数组必须是有序的)
 // [3, 4, 5, 6]
 // [2, 3, 4, 5]
 // [1, 2, 3, 4]
@@ -45,6 +45,8 @@
 // vue3 中出现0 可以忽略，因为 0代表新增
 const getSequence = (list) => {
     const len = list.length
+
+    // 默认填充 0 进去
     const result = [0]
 
     let start
@@ -53,14 +55,18 @@ const getSequence = (list) => {
     for (let index = 0; index < len; index++) {
         const item = list[index];
         if(item !== 0){
+            // 获取结果集 最后一个
             const resultLastIdx = result[result.length - 1]
 
             // 最后一项 与 当前循环到的 这个对比
             if(list[resultLastIdx] < item){
+                // 这里 push 的是 索引
                 result.push(index)
                 continue;
             }
 
+
+            // 上面是贪心，下面是二分查找 (二分查找 前提一个数组必须是有序的)
             start = 0
             end = result.length - 1
             while(start < end){
@@ -86,3 +92,6 @@ const getSequence = (list) => {
 
 //[2, 3, 6, 7, 9] -> idx: [0, 7, 4, 5, 6]
 console.log(getSequence([2,5,8,4,6,7,9,3]))
+
+// [ 4, 3, 8, 5, 6, 9 ]
+console.log(getSequence([3,5,7,4,2,8,9,11,6,10]))

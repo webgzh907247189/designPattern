@@ -1,5 +1,6 @@
 import { isString, ShapeFlags } from "@vue/shared";
-import { createVnode, isSameVnode, TEXT } from "./vnode";
+import { createVnode, isSameVnode, TEXT, FRAGEMENT } from "./vnode";
+import { reactive, ReactiveEffect } from "@vue/reactivity";
 
 export const createRenderer = (renderOptions) => {
 
@@ -54,6 +55,20 @@ export const createRenderer = (renderOptions) => {
                 hostPatchProps(el, key, null, props[key])
             }
         }
+
+        // 权限的组合可以使用 | 的方式
+        /**
+         * 001 = 1  普通用户的权限
+         * 010 = 2  管理员的权限
+         * 100 = 4  超级管理员的权限
+         * 
+         * 
+         * 一个角色的权限运算出来是: 011    (由 001 | 010 运算得来)
+         * 
+         * 011 & 001 > 0  说明包含   普通用户的权限
+         * 011 & 010 > 0  说明包含   管理员的权限
+         * 011 & 100 <= 0  说明不包含  超级管理员的权限
+         */
 
         // 17 数组children;  9 字符串children
         //  8 & 17 (16 + 1 -> 8+x) -> 0b01000 & 0b10001 -> 0b 00000  0
@@ -312,6 +327,16 @@ export const createRenderer = (renderOptions) => {
         patchChildren(oldValue, newVnode, el)
     }
 
+    // 渲染 Fragment 的 children 一定都是数组
+    const processFragment = (oldValue, newVnode, container) => { 
+         if(oldValue == null){
+           mountChildren(newVnode.children, container)
+        }else{
+            // 更新
+            patchKeydChildren(oldValue.children, newVnode.children, container)
+        }
+    }
+
     const processText = (oldValue, newVnode, container) => {
         if(oldValue == null){
             newVnode.el = hostCreateText(newVnode.children)
@@ -331,6 +356,64 @@ export const createRenderer = (renderOptions) => {
             // 元素对比
             patchElement(oldValue, newVnode, container)
         }
+    }
+
+    const processComponent = (oldValue, newVnode, container, anchor) => { 
+        // 初始化 挂载 组件
+        if(oldValue == null){
+            mountComponent(newVnode, container, anchor)
+        }else{
+            // 更新组件
+            updateComponent(oldValue, newVnode, container)
+        }
+    }
+
+    const mountComponent = (initialVnode, container, anchor) => { 
+        // 组件的数据 和 render 函数
+        const { data = () => ({ }), render } = initialVnode.type;
+
+        // 把 组件的 数据变为 响应式的
+        const state = reactive(data())
+
+
+        // getCurrentInstance() 获取当前组件的实列
+        // 组件的实列
+        const instance = {
+            state,
+            isMounted: false, // 组件有没有 挂载
+            subTree: null,
+
+            vnode: initialVnode, // 组件的虚拟节点
+
+            update: null
+        }
+
+        // 组件有自己的虚拟节点，返回的虚拟节点叫 subtree
+        const componentUpdate = () => {
+            debugger
+            if(instance.isMounted){
+                const prevSubTree = instance.subTree
+                const nextSubTree = render.call(state, state)
+                instance.subTree = nextSubTree
+                patch(prevSubTree, nextSubTree, container, anchor)
+            }else{
+                // 组件挂载
+                const subTree = render.call(state, state)
+                patch(null, subTree, container, anchor)
+                instance.subTree = subTree
+                instance.isMounted = true;
+            }
+        }
+        // 组件有自己的虚拟节点，返回的虚拟节点叫 subtree
+        const effect = new ReactiveEffect(componentUpdate)
+
+        // 这里 改为 下面的写法了，不直接调用 effect.run()
+        // effect.run()
+        //
+        const update = instance.update = effect.run.bind(effect)
+        update()
+    }
+    const updateComponent = (oldVnode, newVnode, container) => { 
     }
 
     // 无论是更新 还是 创建  都走 patch
@@ -360,12 +443,21 @@ export const createRenderer = (renderOptions) => {
                 case TEXT:
                     processText(oldValue, newVnode, container)
                     break;
+                case FRAGEMENT:
+                    // 渲染 Fragment 的 children 一定都是数组
+                    processFragment(oldValue, newVnode, container)
+                    break;
                 default:
                     // 元素节点走此 创建方法
                     // 17 & 1   1
                     //  9 & 1   1
                     if(shapeFlag & ShapeFlags.ELEMENT){
                         processElement(oldValue, newVnode, container, anchor)
+                    }else if(shapeFlag & ShapeFlags.COMPONENT){
+                        // 当前这个 if 处理 是组件 的情况
+
+                        // 组件变化了， 插槽变化了， 走这里的逻辑
+                        processComponent(oldValue, newVnode, container, anchor)
                     }
             }
         // }else{
@@ -374,6 +466,12 @@ export const createRenderer = (renderOptions) => {
     }
 
     const unmount = (vnode) => {
+        const { shapeFlag, type, children } = vnode
+
+        // 渲染 Fragment 的 children 一定都是数组
+        if (type === FRAGEMENT) {
+            return unmountChildren(children)
+        }
         hostRemove(vnode.el)
     }   
 

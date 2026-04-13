@@ -1,5 +1,6 @@
-import { isArray, isString, ShapeFlags } from "@vue/shared"
+import { isArray, isObject, isString, ShapeFlags } from "@vue/shared"
 export const TEXT = Symbol('text')
+export const FRAGEMENT = Symbol('fragment')
 
 
 export const isSameVnode = (oldVnode, newVnode) => {
@@ -20,7 +21,8 @@ export const isSameVnode = (oldVnode, newVnode) => {
 export const createVnode = (type, props, children = null) => {
     debugger
     // 组合方案 shapeFlag
-    let shapeFlag = isString(type) ? ShapeFlags.ELEMENT : 0
+    // type 是对象 说明当前的 vnode 是组件
+    let shapeFlag = isString(type) ? ShapeFlags.ELEMENT : isObject(type) ? ShapeFlags.STATEFUL_COMPONENT : 0
 
     // shapeFlag 标识 自己 和 children 的 类型(多个儿子还是一个儿子)
     // a|b = c 

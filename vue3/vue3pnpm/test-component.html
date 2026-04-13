@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>monitor</title>
+</head>
+<body>
+    <div id="container">
+        
+    </div>
+</body>
+<script src="./packages/runtime-dom/dist/runtime-dom.global.js">
+</script>
+
+
+<!-- <script src="./node_modules/.pnpm/vue@3.2.33//node_modules//@vue//runtime-dom/dist//runtime-dom.global.js"> -->
+<!-- <script src="./node_modules/vue/dist/vue.esm-browser.js"></script> -->
+</script>
+<script type="module">
+    // 原始的 vue 提供的
+    // import { createRenderer, h, render, Text as TEXT, Fragment as FRAGEMENT } from './node_modules/vue/dist/vue.esm-browser.js'
+    
+    const { createRenderer, h, render, TEXT, FRAGEMENT } = VueRuntimeDOM
+
+    let renderer = createRenderer({
+        createElement(ele){
+            return document.createElement(ele)
+        },
+        setElementText(el, text){
+            el.innerHTML = text
+        },
+        patchProp(el, key, prevVal, nextVal){
+            console.log(key, prevVal, nextVal, 'patchProp')
+            if(key === 'style'){
+                for (const key1 in nextVal) {
+                   const val = nextVal[key1]
+                   el.setAttribute(key1, val)
+                }
+            }
+        },
+        insert(el, container){
+            container.appendChild(el)
+        }
+    })
+
+    // 组件的组成有几部分？ 组件的好处是什么？ vue的组件有什么特点？
+    // 组件化 (对Ui的封装，自己的状态，外面传入的props)
+    // 模块化 (对业务的封装)
+    const VueComponent = {
+        data(){
+            return {
+                name: '111'
+            }
+        },
+        render(proxy){
+            // 变更触发 响应式
+            setTimeout(() => {
+                proxy.name = '222'
+            }, 2000);
+
+            return h(FRAGEMENT, [
+                h('span', 'world'),
+                h(TEXT, proxy.name)
+            ])
+        }
+    }
+
+    // 组件渲染 返回的是 vnode (vnode 可以是 组件 也可以是 元素)
+    render(h(VueComponent), container)
+</script>
+</html>
