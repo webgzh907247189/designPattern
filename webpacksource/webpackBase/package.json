@@ -12,7 +12,8 @@
     "dll": "webpack --config wepack.dll.config.js",
     "aotoExternal": "webpack --config webpack.config.autoExternal.js",
     "lazy": "webpack --config webpack.config.prod.lazy.js",
-    "preinstall": "node ./preinstall.js"
+    "preinstall": "node ./preinstall.js",
+    "testYalc": "webpack --config webpack.yalc.config.js"
   },
   "author": "",
   "license": "ISC",
@@ -28,10 +29,11 @@
     "expose-loader": "^1.0.0",
     "file-loader": "^6.2.0",
     "happypack": "^5.0.1",
-    "html-webpack-plugin": "^3.2.0",
+    "html-webpack-plugin": "^4.5.0",
     "html-withimg-loader": "^0.1.16",
     "jquery": "^3.3.1",
     "jszip": "^3.7.1",
+    "less": "^4.1.3",
     "loader-utils": "^1.2.0",
     "mime": "^2.5.2",
     "mini-css-extract-plugin": "^0.5.0",
