@@ -19,7 +19,7 @@ export const isSameVnode = (oldVnode, newVnode) => {
 // 2. 在拿到 children 的 类型
 // 3. 通过 children的类型 & 自己的元素类型进行运算， 拿到最终的 shapeFlag 代表 (自己 + children)
 export const createVnode = (type, props, children = null) => {
-    debugger
+    // debugger
     // 组合方案 shapeFlag
     // type 是对象 说明当前的 vnode 是组件
     let shapeFlag = isString(type) ? ShapeFlags.ELEMENT : isObject(type) ? ShapeFlags.STATEFUL_COMPONENT : 0

@@ -69,7 +69,6 @@ var VueRuntimeDOM = (() => {
     return oldVnode.key === newVnode.key && oldVnode.type === newVnode.type;
   };
   var createVnode = (type, props, children = null) => {
-    debugger;
     let shapeFlag = isString(type) ? 1 /* ELEMENT */ : isObject(type) ? 4 /* STATEFUL_COMPONENT */ : 0;
     const vnode = {
       __v_isVnode: true,
@@ -146,7 +145,6 @@ var VueRuntimeDOM = (() => {
   // packages/reactivity/src/effect.ts
   var activeEffect = void 0;
   var cleanupEffect = (effect2) => {
-    debugger;
     const { deps } = effect2;
     deps.forEach((item) => {
       item.delete(effect2);
@@ -214,7 +212,6 @@ var VueRuntimeDOM = (() => {
   };
   var targetMap = /* @__PURE__ */ new WeakMap();
   var track = (target, type, key) => {
-    debugger;
     if (!activeEffect) {
       return;
     }
@@ -229,7 +226,6 @@ var VueRuntimeDOM = (() => {
     trackEffect(depSet);
   };
   var trigger = (target, type, key, value, oldValue) => {
-    debugger;
     const depsMap = targetMap.get(target);
     if (!depsMap) {
       return;
@@ -462,6 +458,26 @@ var VueRuntimeDOM = (() => {
     });
   };
 
+  // packages/runtime-core/src/scheduler.ts
+  var queue = [];
+  var isFlushing = false;
+  var p = Promise.resolve();
+  function queueJobs(job) {
+    if (!queue.includes(job)) {
+      queue.push(job);
+    }
+    if (!isFlushing) {
+      isFlushing = true;
+      p.then(() => {
+        isFlushing = false;
+        let copyQueue = queue.slice(0);
+        queue.length = 0;
+        copyQueue.forEach((job2) => job2());
+        copyQueue.length = 0;
+      });
+    }
+  }
+
   // packages/runtime-core/src/render.ts
   var createRenderer = (renderOptions2) => {
     const {
@@ -671,13 +687,16 @@ var VueRuntimeDOM = (() => {
       const instance = {
         state,
         isMounted: false,
-        subTree: null
+        subTree: null,
+        vnode: initialVnode,
+        update: null
       };
       const componentUpdate = () => {
         debugger;
         if (instance.isMounted) {
           const prevSubTree = instance.subTree;
           const nextSubTree = render3.call(state, state);
+          instance.subTree = nextSubTree;
           patch(prevSubTree, nextSubTree, container, anchor);
         } else {
           const subTree = render3.call(state, state);
@@ -686,8 +705,12 @@ var VueRuntimeDOM = (() => {
           instance.isMounted = true;
         }
       };
-      const effect2 = new ReactiveEffect(componentUpdate);
-      effect2.run();
+      const effect2 = new ReactiveEffect(componentUpdate, () => {
+        debugger;
+        queueJobs(instance.update);
+      });
+      const update = instance.update = effect2.run.bind(effect2);
+      update();
     };
     const updateComponent = (oldVnode, newVnode, container) => {
     };

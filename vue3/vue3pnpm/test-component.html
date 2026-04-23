@@ -49,22 +49,35 @@
     const VueComponent = {
         data(){
             return {
-                name: '111'
+                name: 1,
+                age: 100
             }
         },
+        // 没有做渲染合并，就多出现更新多次数组，更新多次组件
         render(proxy){
             // 变更触发 响应式
+
+            // 这里需要使用 批处理，不然每次 属性变了，都触发了 effect 的 scheduler
+            // 批处理，主要使用 promise then 结合锁 来处理
             setTimeout(() => {
-                proxy.name = '222'
+                // debugger
+                proxy.name += 1
+                // debugger
+                proxy.age += 1
+                // debugger
             }, 2000);
 
+            // debugger
             return h(FRAGEMENT, [
                 h('span', 'world'),
-                h(TEXT, proxy.name)
+                h(TEXT, proxy.name),
+                h(TEXT, '---'),
+                h(TEXT, proxy.age)
             ])
         }
     }
 
+    debugger
     // 组件渲染 返回的是 vnode (vnode 可以是 组件 也可以是 元素)
     render(h(VueComponent), container)
 </script>

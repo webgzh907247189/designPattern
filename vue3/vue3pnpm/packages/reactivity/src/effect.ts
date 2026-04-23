@@ -4,7 +4,7 @@ import { recordEffectScope } from './effectScope'
 export let activeEffect = undefined
 
 const cleanupEffect = (effect) => {
-    debugger
+    // debugger
     const { deps } = effect
 
     deps.forEach(item => {
@@ -22,7 +22,7 @@ const cleanupEffect = (effect) => {
 }
 
 export class ReactiveEffect{
-    debugger
+    // debugger/
     // effect 记录 属性 (属性也要记录 effect)
     public deps = []
     public parent = null
@@ -158,7 +158,7 @@ const targetMap = new WeakMap()
 
 // 解决了 没有在 effect 里面执行 修改状态的 问题 (判断有没有 activeEffect)
 export const track = (target, type, key) => {
-    debugger
+    // debugger
     // 没有激活的 effect 不需要收集
     // 没有在 effect 中使用的 不需要管 不需要收集
     if(!activeEffect){
@@ -181,7 +181,7 @@ export const track = (target, type, key) => {
 
 // weakMap { obj: Map{ key: Set(effect) } }
 export const trigger = (target, type, key, value, oldValue) => {
-    debugger
+    // debugger
     const depsMap = targetMap.get(target)
 
     // 触发的值不在模板中使用, 不需要更新

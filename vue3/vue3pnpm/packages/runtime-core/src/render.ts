@@ -1,6 +1,7 @@
 import { isString, ShapeFlags } from "@vue/shared";
 import { createVnode, isSameVnode, TEXT, FRAGEMENT } from "./vnode";
 import { reactive, ReactiveEffect } from "@vue/reactivity";
+import { queueJobs } from "./scheduler";
 
 export const createRenderer = (renderOptions) => {
 
@@ -405,7 +406,11 @@ export const createRenderer = (renderOptions) => {
             }
         }
         // 组件有自己的虚拟节点，返回的虚拟节点叫 subtree
-        const effect = new ReactiveEffect(componentUpdate)
+        const effect = new ReactiveEffect(componentUpdate, () => {
+            debugger
+            // 批处理
+            queueJobs(instance.update)
+        })
 
         // 这里 改为 下面的写法了，不直接调用 effect.run()
         // effect.run()

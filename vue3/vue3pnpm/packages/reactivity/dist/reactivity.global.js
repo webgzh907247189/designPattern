@@ -91,7 +91,6 @@ var VueReactivity = (() => {
   // packages/reactivity/src/effect.ts
   var activeEffect = void 0;
   var cleanupEffect = (effect2) => {
-    debugger;
     const { deps } = effect2;
     deps.forEach((item) => {
       item.delete(effect2);
@@ -159,7 +158,6 @@ var VueReactivity = (() => {
   };
   var targetMap = /* @__PURE__ */ new WeakMap();
   var track = (target, type, key) => {
-    debugger;
     if (!activeEffect) {
       return;
     }
@@ -174,7 +172,6 @@ var VueReactivity = (() => {
     trackEffect(depSet);
   };
   var trigger = (target, type, key, value, oldValue) => {
-    debugger;
     const depsMap = targetMap.get(target);
     if (!depsMap) {
       return;

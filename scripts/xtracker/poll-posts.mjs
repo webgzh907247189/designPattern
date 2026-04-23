@@ -12,11 +12,10 @@
  */
 import { execSync } from 'node:child_process'
 
-const DEFAULT_URL = 
-  'https://xtracker.polymarket.com/api/users/elonmusk/posts?startDate=2026-04-13T16:00:00.000Z&endDate=2026-04-15T15:59:59.000Z'
+const DEFAULT_URL = 'https://xtracker.polymarket.com/api/users/elonmusk/posts?startDate=2026-04-17T16:00:00.000Z&endDate=2026-04-24T15:59:59.000Z'
 
 const TARGET_URL = process.env.XTRACKER_URL || DEFAULT_URL
-const INTERVAL_MS = Math.max(1000, Number(process.env.INTERVAL_MS || 30000))
+const INTERVAL_MS = Math.max(1000, Number(process.env.INTERVAL_MS || 1000 * 60 * 2 ))
 
 /** 上一次响应体字节长度；首次请求为 null，不标红 */
 let lastResponseLength = null
