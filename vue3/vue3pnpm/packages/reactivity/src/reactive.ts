@@ -1,6 +1,14 @@
 import { isObject } from '@vue/shared';
 import { baseHandler, ReactiveFlags } from './baseHandler';
 
+// reactive  
+// shallowReactive  创建浅层响应式对象，只有根级属性是响应式的 (嵌套对象保持非响应式状态 - 对嵌套属性的更改不会触发更新)
+// readonly 创建只读响应式对象，防止任何修改操作 (深度转换整个对象结构为只读（包括嵌套对象）)
+// shallowReadonly 创建浅层只读对象，只有根级属性受到修改保护 (根级属性不能被修改，但嵌套对象仍然可变)
+
+// toRaw 功能：获取响应式代理对象背后的原始对象
+// markRaw 标记一个对象，使其永远不会被转换为响应式对象
+
 // 0. reactive 只能做 对象的 代理
 // 1. 解决了 同一个对象被反复 代理的问题 (优先查找已经被代理的缓存)
 // 2. 解决了 属性访问器的问题， 使用 Reflect
@@ -58,3 +66,13 @@ const obj = {
         return this.name
     }
 }
+
+const proxy = new Proxy(obj, {
+    get(target, key, receiver) {
+        // 使用 Reflect.get(target, key , receiver)， 使得  this.name 的 this 指向 receiver (代理之后的对象) 
+        // return Reflect.get(target, key, receiver)
+        return target[key]
+    }
+})
+
+console.log(proxy.test)

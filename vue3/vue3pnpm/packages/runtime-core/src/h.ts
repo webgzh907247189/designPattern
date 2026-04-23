@@ -2,6 +2,11 @@ import { isArray, isObject } from '@vue/shared'
 import { createVnode, isVnode } from './vnode'
 
 // 最终 h 创建出来的 children 就两种情况， 一种是 文本， 一种是 数组
+// 本质上 h 方法就是对 createVnode 的封装 --->  createVnode 一定需要三个参数, element props children
+
+// 什么情况使用 h 方法
+// 1. 模版搞不定
+// 2. 不想引入 jsx
 export const h = function(type, propsOrChinlren, children){
     const l = arguments.length
 

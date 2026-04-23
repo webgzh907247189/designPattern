@@ -1,10 +1,16 @@
-import { isArray, isString, ShapeFlags } from "@vue/shared"
+import { isArray, isObject, isString, ShapeFlags } from "@vue/shared"
 export const TEXT = Symbol('text')
+export const FRAGEMENT = Symbol('fragment')
 
 
 export const isSameVnode = (oldVnode, newVnode) => {
     return oldVnode.key === newVnode.key && oldVnode.type === newVnode.type
 }
+
+
+// 本质上 h 方法就是对 createVnode 的封装 --->  createVnode 一定需要三个参数, element props children
+// 本质上 h 方法就是对 createVnode 的封装 --->  createVnode 一定需要三个参数, element props children
+// 本质上 h 方法就是对 createVnode 的封装 --->  createVnode 一定需要三个参数, element props children
 
 
 // vue2 vue3 vnode 有什么区别 ，没有 shapeFlag的时候怎么做的 ???
@@ -13,16 +19,17 @@ export const isSameVnode = (oldVnode, newVnode) => {
 // 2. 在拿到 children 的 类型
 // 3. 通过 children的类型 & 自己的元素类型进行运算， 拿到最终的 shapeFlag 代表 (自己 + children)
 export const createVnode = (type, props, children = null) => {
-    debugger
+    // debugger
     // 组合方案 shapeFlag
-    let shapeFlag = isString(type) ? ShapeFlags.ELEMENT : 0
+    // type 是对象 说明当前的 vnode 是组件
+    let shapeFlag = isString(type) ? ShapeFlags.ELEMENT : isObject(type) ? ShapeFlags.STATEFUL_COMPONENT : 0
 
     // shapeFlag 标识 自己 和 children 的 类型(多个儿子还是一个儿子)
     // a|b = c 
     // c&b > 0 有 b  
     // c&b == 0 没有b
     const vnode = {
-        __v_isVnode: true,
+        __v_isVnode: true, // 表示是不是一个虚拟节点
         shapeFlag,
         type,
         props,
@@ -43,6 +50,8 @@ export const createVnode = (type, props, children = null) => {
             type = ShapeFlags.ARRAY_CHILDREN
         }else{
             children = String(children)
+            // vnode.children = children
+
             type = ShapeFlags.TEXT_CHILDREN
         }
 
@@ -53,6 +62,27 @@ export const createVnode = (type, props, children = null) => {
 }
 
 
+// 表示是不是一个虚拟节点
 export const isVnode = (value) => {
     return !!(value && value.__v_isVnode)
 }   
+
+/**
+ * 位运算案例
+ */
+
+
+// 权限的组合可以使用 | 的方式
+/**
+ * 001 = 1  普通用户的权限
+ * 010 = 2  管理员的权限
+ * 100 = 4  超级管理员的权限
+ * 
+ * 
+ * 一个角色的权限运算出来是: 011    (由 001 | 010 运算得来)
+ * 
+ * 011 & 001 > 0  说明包含   普通用户的权限
+ * 011 & 010 > 0  说明包含   管理员的权限
+ * 011 & 100 <= 0  说明不包含  超级管理员的权限
+ */
+

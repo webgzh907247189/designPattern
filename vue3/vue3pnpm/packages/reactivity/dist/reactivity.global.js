@@ -91,7 +91,6 @@ var VueReactivity = (() => {
   // packages/reactivity/src/effect.ts
   var activeEffect = void 0;
   var cleanupEffect = (effect2) => {
-    debugger;
     const { deps } = effect2;
     deps.forEach((item) => {
       item.delete(effect2);
@@ -101,11 +100,11 @@ var VueReactivity = (() => {
   var ReactiveEffect = class {
     constructor(fn, scheduler) {
       this.fn = fn;
-      this.scheduler = scheduler;
       this.deps = [];
       this.parent = null;
       this.active = true;
       recordEffectScope(this);
+      this.scheduler = scheduler;
     }
     run() {
       if (!this.active) {
@@ -159,7 +158,6 @@ var VueReactivity = (() => {
   };
   var targetMap = /* @__PURE__ */ new WeakMap();
   var track = (target, type, key) => {
-    debugger;
     if (!activeEffect) {
       return;
     }
@@ -174,7 +172,6 @@ var VueReactivity = (() => {
     trackEffect(depSet);
   };
   var trigger = (target, type, key, value, oldValue) => {
-    debugger;
     const depsMap = targetMap.get(target);
     if (!depsMap) {
       return;
@@ -193,6 +190,7 @@ var VueReactivity = (() => {
     return typeof value === "function";
   };
   var isArray = Array.isArray;
+  console.log(6 /* COMPONENT */ & 1 /* ELEMENT */);
 
   // packages/reactivity/src/baseHandler.ts
   var baseHandler = {
@@ -237,10 +235,22 @@ var VueReactivity = (() => {
     if (exisitingProxy) {
       return exisitingProxy;
     }
-    const proxy = new Proxy(target, baseHandler);
-    reactiveMap.set(target, proxy);
-    return proxy;
+    const proxy2 = new Proxy(target, baseHandler);
+    reactiveMap.set(target, proxy2);
+    return proxy2;
   };
+  var obj = {
+    name: "123",
+    get test() {
+      return this.name;
+    }
+  };
+  var proxy = new Proxy(obj, {
+    get(target, key, receiver) {
+      return target[key];
+    }
+  });
+  console.log(proxy.test);
 
   // packages/reactivity/src/computed.ts
   var computed = (getterOrOptions) => {

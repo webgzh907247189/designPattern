@@ -1,4 +1,8 @@
 {
+    const str = `即将加载语言包: test`
+    Reflect.apply(console.log, console, [str])
+}
+{
     console.log(Reflect.apply(Object.prototype.toString, '1', [])); // [object String]
     console.log(Object.prototype.toString.call('1')) // [object String]
 

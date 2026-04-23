@@ -4,7 +4,7 @@ import { recordEffectScope } from './effectScope'
 export let activeEffect = undefined
 
 const cleanupEffect = (effect) => {
-    debugger
+    // debugger
     const { deps } = effect
 
     deps.forEach(item => {
@@ -22,14 +22,16 @@ const cleanupEffect = (effect) => {
 }
 
 export class ReactiveEffect{
-    debugger
+    // debugger/
     // effect 记录 属性 (属性也要记录 effect)
     public deps = []
     public parent = null
+    scheduler?: null
 
     public active = true // 这个 effect 默认是 激活状态
-    constructor(public fn, public scheduler){ // 相当于 this.fn = fn
+    constructor(public fn, scheduler?){ // 相当于 this.fn = fn
         recordEffectScope(this)
+        this.scheduler = scheduler
     }
 
     run(){
@@ -108,6 +110,10 @@ export const effect = (fn, options) => {
 
     // 此处保证可以在外面 直接调用 runner.effect.stop()
     runner.effect = _effect;
+
+    // runner 有个属性, ( runner可以直接调用 )
+    // 1. runner.effect.stop
+    // 2. runner()
     return runner;
 }
 
@@ -133,6 +139,7 @@ export const triggerEffect = (effects) => {
         // 避免出现 effect 的 fn 里面又继续修改 state， 造成 effect 重复执行问题
         if(effect != activeEffect){
             if(effect.scheduler){
+                // scheduler 里面一般都是调用 runner，本质上是高阶函数
                 effect.scheduler()
             }else{
                 effect.run();
@@ -151,7 +158,7 @@ const targetMap = new WeakMap()
 
 // 解决了 没有在 effect 里面执行 修改状态的 问题 (判断有没有 activeEffect)
 export const track = (target, type, key) => {
-    debugger
+    // debugger
     // 没有激活的 effect 不需要收集
     // 没有在 effect 中使用的 不需要管 不需要收集
     if(!activeEffect){
@@ -174,7 +181,7 @@ export const track = (target, type, key) => {
 
 // weakMap { obj: Map{ key: Set(effect) } }
 export const trigger = (target, type, key, value, oldValue) => {
-    debugger
+    // debugger
     const depsMap = targetMap.get(target)
 
     // 触发的值不在模板中使用, 不需要更新
