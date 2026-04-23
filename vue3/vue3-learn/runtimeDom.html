@@ -10,14 +10,90 @@
 
 
         <script type="module">
-            import { render, createRenderer, h } from './packages/runtime-dom/dist/runtime-dom.js'
-            
+            // import { h } from './node_modules/@vue/runtime-dom/dist/runtime-dom.esm-browser.js'
+            import { render, h } from './packages/runtime-dom/dist/runtime-dom.js'
             // 1. render 内置的 渲染器
             // 2. createRenderer 可以自定义渲染器 (定制化修改渲染器)
             // 3. h 可以创建一个 虚拟 dom (type, propsOrChildren, children) -> 创建一个对象 表示 虚拟dom
 
-            let ele = h('h1', {"color": "red"}, '11')
-            console.log(ele)
+            
+            // let ele = h('h1', { style: {"color": "red"}}, '33')
+            // let ele1 = h('h1', { style: {"color": "green"}}, [h('span', '11'), h('p', '22')]);
+            // render(ele1, document.getElementById('app'))
+            // setTimeout(() => {
+            //     // render(null, document.getElementById('app'))
+            //     render(ele,document.getElementById('app'))
+            // }, 5000)
+
+
+
+
+            // let ele = h('h1', { style: {"color": "red"}}, [
+            //     h('li', {key: 'a'}, 'aa'),
+            //     h('li',  {key: 'b'}, 'bb'),
+            //     h('li',  {key: 'c'}, 'cc')
+            // ])
+
+            // let ele1 = h('h1', { style: {"color": "green"}}, [
+            //     h('li', {key: 'a'}, 'aa'),
+            //     h('li',  {key: 'b'}, 'bb'),
+            //     h('li',  {key: 'd'}, 'dd'),
+            //     h('li',  {key: 'e'}, 'ee')
+            // ])
+            // render(ele, document.getElementById('app'))
+            // setTimeout(() => {
+            //     render(ele1,document.getElementById('app'))
+            // }, 5000)
+
+
+            // let ele = h('h1', { style: {"color": "red"}}, [
+            //     h('li', {key: 'a'}, 'aa'),
+            //     h('li',  {key: 'b'}, 'bb'),
+            //     h('li',  {key: 'c'}, 'cc')
+            // ])
+
+            // let ele1 = h('h1', { style: {"color": "green"}}, [
+            //     h('li',  {key: 'd'}, 'dd'),
+            //     h('li', {key: 'e'}, 'ee'),
+            //     h('li',  {key: 'b'}, 'bb'),
+            //     h('li',  {key: 'c'}, 'cc')
+            // ])
+            // render(ele, document.getElementById('app'))
+            // setTimeout(() => {
+            //     render(ele1,document.getElementById('app'))
+            // }, 5000)
+
+
+
+
+            let ele = h('h1', { style: {"color": "red"}}, [
+                h('li', {key: 'a'}, 'aa'),
+                h('li',  {key: 'b'}, 'bb'),
+
+                h('li',  {key: 'c'}, 'cc'),
+                h('li',  {key: 'd'}, 'dd'),
+                h('li', {key: 'e'}, 'ee'),
+
+                h('li',  {key: 'f'}, 'ff'),
+                h('li', {key: 'g'}, 'gg'),
+            ])
+
+            let ele1 = h('h1', { style: {"color": "green"}}, [
+                h('li', {key: 'a'}, 'aa'),
+                h('li',  {key: 'b'}, 'bb'),
+               
+                h('li', {key: 'e'}, 'ee'),
+                h('li',  {key: 'c'}, 'cc'),
+                h('li',  {key: 'd'}, 'dd'),
+                h('li',  {key: 'h'}, 'hh'),
+
+                h('li',  {key: 'f'}, 'ff'),
+                h('li', {key: 'g'}, 'gg'),
+            ])
+            render(ele, document.getElementById('app'))
+            setTimeout(() => {
+                render(ele1,document.getElementById('app'))
+            }, 5000)
         </script> 
 
     </body>

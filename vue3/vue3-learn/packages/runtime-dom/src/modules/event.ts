@@ -8,7 +8,7 @@ export const patchEvent = (el, eventName, naxtVal) => {
 
     // 已经绑定过事件了,并且这一次需要重新绑定 新事件
     if(extis && naxtVal){
-        // 直接更新事件
+        // 直接更新事件, 没有重新创建事件
         extis.value = naxtVal
     }else{
         let event = eventName.slice(2).toLowerCase()

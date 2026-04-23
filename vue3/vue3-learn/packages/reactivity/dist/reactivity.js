@@ -61,7 +61,6 @@ var ReactiveEffect = class {
   }
   run() {
     this._dirtyLevel = 0 /* NODIRTY */;
-    debugger;
     if (!this.active) {
       return this.fn();
     }
@@ -86,7 +85,6 @@ var ReactiveEffect = class {
   }
 };
 var trackEffect = (effect2, dep) => {
-  debugger;
   if (dep.get(effect2) !== effect2._trackId) {
     dep.set(effect2, effect2._trackId);
     const oldDep = effect2.deps[effect2._depsLength];
@@ -274,6 +272,9 @@ var proxyRefs = (objectWithRef) => {
     }
   });
 };
+var isRef = (value) => {
+  return value && value.__v_isRef;
+};
 
 // packages/reactivity/src/computed.ts
 var ComputedImpl = class {
@@ -335,7 +336,7 @@ var doWatch = (source, cb, { immediate, deep, flush }) => {
       if (clean) {
         clean();
       }
-      cb(oldVal, newVal, onCleanUp);
+      cb(newVal, oldVal, onCleanUp);
       oldVal = newVal;
     } else {
       effect2.run();
@@ -344,12 +345,20 @@ var doWatch = (source, cb, { immediate, deep, flush }) => {
   let getter;
   if (isReactive(source)) {
     getter = () => {
-      reactiveGetter(source);
+      return reactiveGetter(source);
     };
+  } else if (isRef(source)) {
+    getter = () => source.value;
+  } else if (isFunction(source)) {
+    getter = source;
   }
   const effect2 = new ReactiveEffect(getter, job);
   if (cb) {
-    oldVal = effect2.run();
+    if (immediate) {
+      job();
+    } else {
+      oldVal = effect2.run();
+    }
   } else {
     effect2.run();
   }
@@ -385,6 +394,7 @@ export {
   createRef,
   effect,
   isReactive,
+  isRef,
   proxyRefs,
   reactive,
   ref,

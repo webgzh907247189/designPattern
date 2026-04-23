@@ -1,6 +1,7 @@
-import { isObject } from "@vue/shared"
+import { isFunction, isObject } from "@vue/shared"
 import { ReactiveEffect } from "./effect"
 import { isReactive } from "./reactive"
+import { isRef } from "./ref"
 
 export const watch = (source, cb, options) => {
     return doWatch(source, cb, options)
@@ -26,6 +27,7 @@ const doWatch = (source, cb, { immediate, deep, flush }) => {
 
     let oldVal
     const job = () => {
+        // debugger
         if(cb){
             const newVal = effect.run()
 
@@ -33,7 +35,8 @@ const doWatch = (source, cb, { immediate, deep, flush }) => {
                 clean() // 下一次调用之前 清理上一次的副作用
             }
 
-            cb(oldVal, newVal, onCleanUp)
+            // debugger
+            cb(newVal, oldVal, onCleanUp)
             oldVal = newVal
         }else{
             effect.run()
@@ -43,17 +46,27 @@ const doWatch = (source, cb, { immediate, deep, flush }) => {
     let getter
     if(isReactive(source)){
         getter = () => {
-            reactiveGetter(source)
+            return reactiveGetter(source)
         }
+    }else if(isRef(source)){
+        getter = () => source.value
+    }else if(isFunction(source)){
+        getter = source
     }
     const effect = new ReactiveEffect(getter, job)
-
+// debugger
     if(cb){
-        oldVal = effect.run()
+        if(immediate){
+            job()
+        }else{
+            oldVal = effect.run()
+            // debugger
+        }
     }else{
         effect.run()
     }
 
+    // debugger
     const unwatch = () => { effect.stop() }
     return unwatch
 }
