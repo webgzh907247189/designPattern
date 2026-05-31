@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>monitor</title>
+</head>
+<body>
+    <div id="container">
+        
+    </div>
+</body>
+<script src="./packages/runtime-dom/dist/runtime-dom.global.js">
+</script>
+
+
+<!-- <script src="./node_modules/.pnpm/vue@3.2.33//node_modules//@vue//runtime-dom/dist//runtime-dom.global.js"> -->
+<!-- <script src="./node_modules/vue/dist/vue.esm-browser.js"></script> -->
+</script>
+<script type="module">
+    // 原始的 vue 提供的
+    // import { createRenderer, h, render, Text as TEXT, Fragment as FRAGEMENT } from './node_modules/vue/dist/vue.esm-browser.js'
+    
+    const { createRenderer, h, render, TEXT, FRAGEMENT, reactive, toRefs, onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, getCurrentInstance } = VueRuntimeDOM
+
+    let renderer = createRenderer({
+        createElement(ele){
+            return document.createElement(ele)
+        },
+        setElementText(el, text){
+            el.innerHTML = text
+        },
+        patchProp(el, key, prevVal, nextVal){
+            console.log(key, prevVal, nextVal, 'patchProp')
+            if(key === 'style'){
+                for (const key1 in nextVal) {
+                   const val = nextVal[key1]
+                   el.setAttribute(key1, val)
+                }
+            }
+        },
+        insert(el, container){
+            container.appendChild(el)
+        }
+    })
+
+
+    const useMyHook = () => {
+        onMounted(() => {
+            const instance = getCurrentInstance()
+            console.log('onMounted--instance--apiLifecycle', instance)
+        })
+        
+    }
+
+    // 组件的组成有几部分？ 组件的好处是什么？ vue的组件有什么特点？
+    // 组件化 (对Ui的封装，自己的状态，外面传入的props)
+    // 模块化 (对业务的封装)
+    const VueComponent = {
+        setup(props, context){
+
+            const instance = getCurrentInstance()
+
+            onBeforeMount(() => {
+                console.log('onBeforeMount--apiLifecycle')
+            })
+            onMounted(() => {
+                console.log('onMounted--apiLifecycle', instance)
+            })
+            useMyHook()
+
+            onBeforeUpdate(() => {
+                console.log('onBeforeUpdate--apiLifecycle')
+            })
+            onUpdated(() => {
+                console.log('onUpdated--apiLifecycle')
+            })
+
+            onBeforeUnmount(() => {
+                console.log('onBeforeUnmount--apiLifecycle')
+            })
+            onUnmounted(() => {
+                console.log('onUnmounted--apiLifecycle')
+            })
+           
+            // const slots = context.slots
+            // // 1. 业务逻辑都在 setup 编写
+            // // 2. setup 返回值会放到 render 函数中以 proxy 参数形式存在
+            return {
+                // ...slots,
+            }
+        },
+
+        // props 是一个浅响应式的，使用 shallowReactive ( {a: 1, b: 2, c: { test: 'c' } }, 深层 c 属性 不是响应式的，  更改 a、b 会触发视图更新，改 c 不会触发视图更新 )
+        // 属性分为两种: 第一种:props & 第二种: attrs (开发环境下是 响应式的， 生产环境下 非响应式的)
+        // attrs = 用户传递的 props - propsOptions (用户传递的 props 没有被消费的都放到了 attrs 中)
+
+        // 没有做渲染合并，就多出现更新多次数组，更新多次组件
+        render(proxy){
+            // debugger
+            // console.log(h(TEXT, '--'), h(TEXT, [proxy.$slots.header()]), 'proxy.$slots.header')
+            // debugger
+            return h(FRAGEMENT, [
+                h('div', [
+                    h(TEXT, '---'), h(FRAGEMENT, [proxy.$slots.header()]),
+                    h(TEXT, '---'), h(FRAGEMENT, proxy.$slots.default('作用域插槽')),
+                    h(TEXT, '---'), h(FRAGEMENT, proxy.$slots.footer())
+                ]),
+            ])
+
+            // debugger
+            // return h(TEXT, proxy.$slots.footer())
+        }
+    }
+
+    debugger
+    // 组件渲染 返回的是 vnode (vnode 可以是 组件 也可以是 元素)
+
+    // 组件的儿子就是插槽， 插槽一定是一个对象
+
+    // 插槽 
+    // 1.作用域插槽  ---> 使用了参数，就是作用域插槽
+    // 2.普通插槽    ---> 数据来自 于父组件
+    // 3.匿名插槽。  ---> 放在default 中
+    render(h(VueComponent, {}, {
+        default: (text) => {
+            // debugger
+            return h(TEXT, 'default' + text)
+        },
+        header: () => {
+            return h(TEXT, 'header')
+        },
+        footer: () => {
+            return h(TEXT, 'footer')
+        }
+    }), container)
+
+
+    setTimeout(() => {
+        render(h(VueComponent, {}, {
+            default: (text) => {
+                // debugger
+                return h(TEXT, 'default1' + text)
+            },
+            header: () => {
+                return h(TEXT, 'header1')
+            },
+            footer: () => {
+                return h(TEXT, 'footer1')
+            }
+        }), container)
+    }, 2000);
+
+
+    setTimeout(() => {
+        render(h(null), container)
+    }, 4000);
+</script>
+</html>

@@ -20,8 +20,8 @@ export const computed = (getterOrOptions)=> {
 class ComputedRefImpl {
     public effect
     public _dirty = true// 默认取值时候进行计算
-    public _v_isReadOnly = true
-    public _v_isRef = true // 这个属性代表需要使用 .value 来访问
+    public __v_isReadOnly = true
+    public __v_isRef = true // 这个属性代表需要使用 .value 来访问
     public _value
     public dep = new Set()
 

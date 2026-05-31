@@ -7,7 +7,7 @@ import { createVnode, isVnode } from './vnode'
 // 什么情况使用 h 方法
 // 1. 模版搞不定
 // 2. 不想引入 jsx
-export const h = function(type, propsOrChinlren, children){
+export const h = function(type, propsOrChinlren, children?){
     const l = arguments.length
 
     if(l === 2){

@@ -8,7 +8,7 @@ export const ref = (value) => {
 // proxy 只支持对象，所以基本数据类型 使用 Object.defineProperty 来处理
 class RefImpl {
     public _value
-    public _v_isRef = true
+    public __v_isRef = true
     public dep = new Set
     constructor(public rowValue){
         this._value = toReactive(rowValue)
@@ -73,11 +73,11 @@ export const proxyRefs = (object) => {
         get(target, key, recevier){
             const r = Reflect.get(target, key, recevier)
 
-            return r._v_isRef ? r.value : r;
+            return r.__v_isRef ? r.value : r;
         },
         set(target, key, value, recevier){
             let oldValue = target[key]
-            if(oldValue._v_isRef){
+            if(oldValue.__v_isRef){
                 oldValue.value = value
                 return true
             }else{

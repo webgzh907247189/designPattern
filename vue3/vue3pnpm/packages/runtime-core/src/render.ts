@@ -1,7 +1,8 @@
-import { isString, ShapeFlags } from "@vue/shared";
-import { createVnode, isSameVnode, TEXT, FRAGEMENT } from "./vnode";
+import { invokeArrayFn, isString, ShapeFlags } from "@vue/shared";
+import { createVnode, isSameVnode, TEXT, FRAGEMENT, PATCHFLAGS } from "./vnode";
 import { reactive, ReactiveEffect } from "@vue/reactivity";
 import { queueJobs } from "./scheduler";
+import { createComponentInstance, setupComponent } from "./components";
 
 export const createRenderer = (renderOptions) => {
 
@@ -30,11 +31,11 @@ export const createRenderer = (renderOptions) => {
         return children[idx]
     }
 
-    const mountChildren = (children, container) => {
+    const mountChildren = (children, container, parentComponent) => {
         for (let index = 0; index < children.length; index++) {
             // const elementVnode = children[index];
             let child = normalise(children, index)
-            patch(null, child, container)
+            patch(null, child, container,null, parentComponent)
         }
     }
 
@@ -42,11 +43,11 @@ export const createRenderer = (renderOptions) => {
     // 2. 挂载 props
     // 3. 创建 children (children 两种，1. 文本 2.数组)
     // 4. 把自己挂载到 父元素
-    const mountElement = (vnode, container, anchor) => {
+    const mountElement = (vnode, container, anchor, parentComponent) => {
         console.log(vnode, 'vnode')
         // debugger
         // vue2 是 tag, vue3 是 type
-        let { type, props, children, shapeFlag} = vnode
+        let { type, props, children, shapeFlag, transition } = vnode
 
         // 把 真实的 dom 节点挂载到虚拟节点上， 后续用于复用节点
         let el = vnode.el = hostCreateElement(type)
@@ -80,10 +81,21 @@ export const createRenderer = (renderOptions) => {
         if(ShapeFlags.TEXT_CHILDREN & shapeFlag){ // 文本
             hostSetElementText(el, children)
         }else if(ShapeFlags.ARRAY_CHILDREN & shapeFlag){ // 数组
-            mountChildren(children, el)
+            mountChildren(children, el, parentComponent)
         }
+
+        // 兼容 transition 组件
+        if(transition){
+            transition.beforeEnter(el)
+        }
+
         // 子元素创建完成，在挂载 父元素
         hostInsert(el, container, anchor)
+
+        // 兼容 transition 组件
+        if(transition){
+            transition.enter(el)
+        }
     }
 
     const patchProps = (oldProps, newProps, el) => {
@@ -98,16 +110,16 @@ export const createRenderer = (renderOptions) => {
             }
         }
     }
-    const unmountChildren = (oldChildren) => {
+    const unmountChildren = (oldChildren, parentComponent) => {
         for (let index = 0; index < oldChildren.length; index++) {
             const elementVnode = oldChildren[index];
-            unmount(elementVnode);
+            unmount(elementVnode, parentComponent);
         }
     }
 
     // 使用下面这种方案，尽可能减少比较的内容
     // 先把特殊情况的拆出来， 尽可能减少比较多内容
-    const patchKeydChildren = (oldChildren, newChildren, el) => {
+    const patchKeydChildren = (oldChildren, newChildren, el, parentComponent) => {
         let i = 0
         let oldChildrenLength = oldChildren.length - 1
         let newChildrenLength = newChildren.length - 1
@@ -125,7 +137,7 @@ export const createRenderer = (renderOptions) => {
             const newChildrenItem = newChildren[i]
 
             if(isSameVnode(oldChildrenItem, newChildrenItem)){
-                patch(oldChildrenItem, newChildrenItem, el)
+                patch(oldChildrenItem, newChildrenItem, el, null, parentComponent)
             }else{
                 break
             }
@@ -143,7 +155,7 @@ export const createRenderer = (renderOptions) => {
             const newChildrenItem = newChildren[newChildrenLength]
 
             if(isSameVnode(oldChildrenItem, newChildrenItem)){
-                patch(oldChildrenItem, newChildrenItem, el)
+                patch(oldChildrenItem, newChildrenItem, el, null, parentComponent)
             }else{
                 break
             }
@@ -165,7 +177,7 @@ export const createRenderer = (renderOptions) => {
                     const nextPos = newChildrenLength + 1
                     const anchor = nextPos < newChildren.length ? newChildren[nextPos].el : null;
                     // 创建新节点
-                    patch(null, newChildren[i], el, anchor)
+                    patch(null, newChildren[i], el, anchor, parentComponent)
                     i++
                 }
             }
@@ -178,7 +190,7 @@ export const createRenderer = (renderOptions) => {
             // i 和 oldChildrenLength 之间   为卸载的内容
             if(i <= oldChildrenLength){
                 while(i <= oldChildrenLength){
-                    unmount(oldChildren[i])
+                    unmount(oldChildren[i], parentComponent)
                     i++
                 }
             }
@@ -209,7 +221,7 @@ export const createRenderer = (renderOptions) => {
 
             // if 里面说明 老的有，新的没有，直接卸载
             if(!!newIdx){
-                unmount(oldElement)
+                unmount(oldElement, parentComponent)
             }else{
                 // newIdx 是 新元素组成的 map (key, idx)  取值(取 老的 key) 返回 新元素 在新数组的 下标
                 // newIdx - s2 从 0 开始算 ，和 map 对应上
@@ -222,7 +234,7 @@ export const createRenderer = (renderOptions) => {
                 /*****  新数组的 vnode元素 对应在 老数组 里面vnode元素 位置下标， 如果是 0 代表老数组之前没有该元素，该元素是新增的 ****/
                 /*****  数组的位置是按照新数组的 vnode元素 位置来确定的 ****/
                 
-                patch(oldElement, newChildren[newIdx], el)
+                patch(oldElement, newChildren[newIdx], el, null, parentComponent)
             }
         }
         console.log(newIndexToOldIndexMap) // [5,3,4,0]
@@ -238,7 +250,7 @@ export const createRenderer = (renderOptions) => {
             
             // 新增的元素
             if(newIndexToOldIndexMap[index] === 0){
-                patch(null, current, el, anchor)
+                patch(null, current, el, anchor, parentComponent)
             }else{// 不是0 说明是patch 的元素
 
                 // 此时是patch 阶段 current.el  肯定存在
@@ -247,7 +259,7 @@ export const createRenderer = (renderOptions) => {
         }
     }
 
-    const patchChildren = (oldValue, newVnode, el) => {
+    const patchChildren = (oldValue, newVnode, el, parentComponent) => {
         const oldChildren = oldValue && oldValue.children
         const newChildren = newVnode && newVnode.children
 
@@ -273,7 +285,7 @@ export const createRenderer = (renderOptions) => {
             // 老的是数组
             // 先删除，在给之前的节点的 父节点上面挂载 newChildren 
             if(prevFlag & ShapeFlags.ARRAY_CHILDREN){
-                unmountChildren(oldChildren) // 删除所有的子节点
+                unmountChildren(oldChildren, parentComponent) // 删除所有的子节点
             }
 
             // 先删除，在给之前的节点的 父节点上面挂载 newChildren 
@@ -291,10 +303,10 @@ export const createRenderer = (renderOptions) => {
                 if(shapeFlag & ShapeFlags.ARRAY_CHILDREN){
                     debugger
                     // diff 算法
-                    patchKeydChildren(oldChildren, newChildren, el)
+                    patchKeydChildren(oldChildren, newChildren, el, parentComponent)
                 }else{
                     // 之前是数组， 现在不是数组 (现在的可能性: 空)
-                    unmountChildren(oldChildren)
+                    unmountChildren(oldChildren, parentComponent)
                     // hostSetElementText(el, newChildren)
                 }
             }else{
@@ -307,34 +319,55 @@ export const createRenderer = (renderOptions) => {
                 }
                 // 挂载 新的数组
                 if(shapeFlag & ShapeFlags.ARRAY_CHILDREN){
-                    mountChildren(newVnode, el)
+                    mountChildren(newVnode, el, parentComponent)
                 }
             }
         }
 
     }
     // 先复用节点， 在比较属性， 在比较 children
-    const patchElement = (oldValue, newVnode, container) => {
+    const patchElement = (oldValue, newVnode, container, parentComponent) => {
         debugger
         // 复用节点
         let el = newVnode.el = oldValue.el
         let oldProps = oldValue.props
         let newProps = newVnode.props
 
-        // 对比属性， 复用 vnode的 el 属性
-        patchProps(oldProps, newProps, el)
+        if(newVnode.patchFlag){
+            // 这里只处理了 TEXT 情况
+            if(newVnode.patchFlag && PATCHFLAGS.TEXT){
+                if(oldValue.children !== newVnode.children){
+                    hostSetElementText(el, newVnode.children)
+                }
+            }
+        }else{
+            // 对比属性， 复用 vnode的 el 属性
+            patchProps(oldProps, newProps, el)
+        }
 
-        // 对比 children
-        patchChildren(oldValue, newVnode, el)
+
+        if(newVnode.dynamicChildren){
+            // 快速 diff
+            pathchBlockChildren(oldValue, newVnode, container, parentComponent)
+        }else{
+            // 对比 children
+            patchChildren(oldValue, newVnode, el, parentComponent)
+        }
+    }
+
+    const pathchBlockChildren = (oldValue, newVnode, container, parentComponent) => {
+        for (let index = 0; index < newVnode.dynamicChildren.length; index++) {
+            patchElement(oldValue.dynamicChildren[index], newVnode.dynamicChildren[index], container, parentComponent)
+        }
     }
 
     // 渲染 Fragment 的 children 一定都是数组
-    const processFragment = (oldValue, newVnode, container) => { 
+    const processFragment = (oldValue, newVnode, container, parentComponent) => { 
          if(oldValue == null){
-           mountChildren(newVnode.children, container)
+           mountChildren(newVnode.children, container, parentComponent)
         }else{
             // 更新
-            patchKeydChildren(oldValue.children, newVnode.children, container)
+            patchKeydChildren(oldValue.children, newVnode.children, container, parentComponent)
         }
     }
 
@@ -350,59 +383,110 @@ export const createRenderer = (renderOptions) => {
             }
         }
     }
-    const processElement = (oldValue, newVnode, container, anchor) => {
+    const processElement = (oldValue, newVnode, container, anchor, parentComponent) => {
         if(oldValue == null){
-            mountElement(newVnode, container, anchor)
+            mountElement(newVnode, container, anchor, parentComponent)
         }else{
             // 元素对比
-            patchElement(oldValue, newVnode, container)
+            patchElement(oldValue, newVnode, container, parentComponent)
         }
     }
 
-    const processComponent = (oldValue, newVnode, container, anchor) => { 
+    const processComponent = (oldValue, newVnode, container, anchor, parentComponent) => { 
         // 初始化 挂载 组件
         if(oldValue == null){
-            mountComponent(newVnode, container, anchor)
+            mountComponent(newVnode, container, anchor, parentComponent)
         }else{
             // 更新组件
-            updateComponent(oldValue, newVnode, container)
+            updateComponent(oldValue, newVnode, container, anchor, parentComponent)
         }
     }
 
-    const mountComponent = (initialVnode, container, anchor) => { 
-        // 组件的数据 和 render 函数
-        const { data = () => ({ }), render } = initialVnode.type;
+    const updateProps = (instance, nextProps) => {
+        let prevProps = instance.props
 
-        // 把 组件的 数据变为 响应式的
-        const state = reactive(data())
-
-
-        // getCurrentInstance() 获取当前组件的实列
-        // 组件的实列
-        const instance = {
-            state,
-            isMounted: false, // 组件有没有 挂载
-            subTree: null,
-
-            vnode: initialVnode, // 组件的虚拟节点
-
-            update: null
+        for (const key in nextProps) {
+            prevProps[key] = nextProps[key]
         }
 
+        for (const key in prevProps) {
+            if (!(key in nextProps)) {
+                delete prevProps[key]
+            }
+        }
+    }
+
+    const updatePreRender = (instance, next) => {
+        instance.next = null
+
+        // 更新虚拟节点
+        instance.vnode = next
+        updateProps(instance, next.props)
+
+        // 更新插槽
+
+        // 这样写可能存在问题, 换成下面的写法 (第29章)
+        // 在 setup 中直接 使用 slots.xx 渲染，(props, { slots }) => slots.header()
+        // instance.slots = next.children
+
+        Object.assign(instance.slots, next.children)
+    }
+
+    const setupRenderEffect = (instance, container, anchor) => {
         // 组件有自己的虚拟节点，返回的虚拟节点叫 subtree
         const componentUpdate = () => {
             debugger
+
+            // 组件更新逻辑
             if(instance.isMounted){
                 const prevSubTree = instance.subTree
-                const nextSubTree = render.call(state, state)
+                // const nextSubTree = render.call(state, state)
+
+                // 说明属性有更新
+                if(instance.next){
+                    // 渲染前，更新变化的 props
+                    updatePreRender(instance, instance.next)
+                }
+
+                let { bu, u } = instance
+                // 执行 onBeforeUpdate 生命周期函数
+                invokeArrayFn(bu)
+
+                let nextSubTree
+                if(instance.shapeFlag & ShapeFlags.FUNCTIONAL_COMPONENT){
+                    nextSubTree = instance.type(instance.props, { slots: instance.slots })
+                }else{
+                    nextSubTree = instance.render.call(instance.proxy, { slots: instance.slots })
+                }
+                
+
                 instance.subTree = nextSubTree
-                patch(prevSubTree, nextSubTree, container, anchor)
+                patch(prevSubTree, nextSubTree, container, anchor, instance)
+
+                // 执行 onUpdated 生命周期函数
+                invokeArrayFn(u)
             }else{
-                // 组件挂载
-                const subTree = render.call(state, state)
-                patch(null, subTree, container, anchor)
+                let { bm, m, vnode } = instance
+
+                // 执行 beforeMounted 生命周期函数
+                invokeArrayFn(bm)
+
+                let subTree
+                if(vnode.shapeFlag & ShapeFlags.FUNCTIONAL_COMPONENT){
+                    // instance.attrs 应该是 响应式的，先简写
+                    subTree = vnode.type(instance.props, { slots: instance.slots })
+                }else{
+                    // 组件挂载
+                    // const subTree = render.call(state, state)
+                    subTree = instance.render.call(instance.proxy, { slots: instance.slots })
+                }
+
+                patch(null, subTree, container, anchor, instance)
                 instance.subTree = subTree
                 instance.isMounted = true;
+
+                // 执行 mounted 生命周期函数
+                invokeArrayFn(m) 
             }
         }
         // 组件有自己的虚拟节点，返回的虚拟节点叫 subtree
@@ -418,19 +502,99 @@ export const createRenderer = (renderOptions) => {
         const update = instance.update = effect.run.bind(effect)
         update()
     }
-    const updateComponent = (oldVnode, newVnode, container) => { 
+
+    const mountComponent = (initialVnode, container, anchor, parentComponent) => { 
+
+        /** 被合并到 createComponentInstance 方法中了  **/
+        /** 
+            // 组件的数据 和 render 函数
+            const { data = () => ({ }), render, props: propsOptions } = initialVnode.type;
+
+            // getCurrentInstance() 获取当前组件的实列
+            // 组件的实列
+            const instance = {
+                state: {},
+                isMounted: false, // 组件有没有 挂载
+                subTree: null,
+
+                vnode: initialVnode, // 组件的虚拟节点
+
+                update: null,
+
+                attrs: {},
+                props: {},
+
+                propsOptions,
+
+                // 实列 上的 代理属性
+                proxy: null
+            }
+        */
+        /** 被合并到 createComponentInstance 方法中了  **/
+
+        // 1. 创建组件实列 
+        const instance = createComponentInstance(initialVnode, parentComponent)
+
+        // 2. 启动组件， 赋值
+        setupComponent(instance)
+
+        // 3. 渲染组件
+        setupRenderEffect(instance, container, anchor)
+    }
+
+    // 1. 属性更新执行这里
+    // 2. 插槽更新也会执行这里
+    const updateComponent = (oldVnode, newVnode, container, anchor, parentComponent) => { 
+        // props 内部是 浅响应式的
+        const instance = (newVnode.component = oldVnode.component)
+
+        if(shouldComponentUpdate(oldVnode, newVnode)){
+            instance.next = newVnode
+            instance.update()
+        }
+    }
+
+    // 判断是否需要 更新组件
+    const shouldComponentUpdate = (oldVnode, newVnode) => {
+        const oldProps = oldVnode.props
+        const newProps = newVnode.props
+
+        if(oldProps === newProps) return false
+
+        // 判断 组件插槽 是否需要跟新
+        if(oldVnode.children || newVnode.children) return true
+        // if(oldVnode.children !== newVnode.children) return true
+
+        return hasChanged(oldProps, newProps)
+    }
+
+    const hasChanged = (oldProps, newProps) => {
+        let oldKeys = Object.keys(oldProps)
+        let newKeys = Object.keys(newProps)
+
+        if(oldKeys.length !== newKeys.length){
+            return true
+        }
+
+        for (let index = 0; index < newKeys.length; index++) {
+            const key = newKeys[index];
+            if(newProps[key] !== oldProps[key]){
+                return true
+            }
+        }
+        return false
     }
 
     // 无论是更新 还是 创建  都走 patch
     // 在 patch 里面调用 processElement or processText， 在这两个方法里面区分更新和创建
-    const patch = (oldValue, newVnode, container, anchor = null) => {
+    const patch = (oldValue, newVnode, container, anchor = null, parentComponent = null) => {
         // console.log(oldValue, newVnode)
         if(oldValue === newVnode) return
 
         // 判断老元素和新元素 是不是相同的，之后把 老元素 置为空， 调用后续的方法(相当于新创建)
         if(oldValue && !isSameVnode(oldValue, newVnode)){
             // 删除的逻辑
-            unmount(oldValue)
+            unmount(oldValue, parentComponent)
             oldValue = null
         }
 
@@ -450,19 +614,27 @@ export const createRenderer = (renderOptions) => {
                     break;
                 case FRAGEMENT:
                     // 渲染 Fragment 的 children 一定都是数组
-                    processFragment(oldValue, newVnode, container)
+                    processFragment(oldValue, newVnode, container, parentComponent)
                     break;
                 default:
                     // 元素节点走此 创建方法
                     // 17 & 1   1
                     //  9 & 1   1
                     if(shapeFlag & ShapeFlags.ELEMENT){
-                        processElement(oldValue, newVnode, container, anchor)
+                        processElement(oldValue, newVnode, container, anchor, parentComponent)
                     }else if(shapeFlag & ShapeFlags.COMPONENT){
                         // 当前这个 if 处理 是组件 的情况
 
                         // 组件变化了， 插槽变化了， 走这里的逻辑
-                        processComponent(oldValue, newVnode, container, anchor)
+                        processComponent(oldValue, newVnode, container, anchor, parentComponent)
+                    }else if(shapeFlag & ShapeFlags.TELEPORT){
+                        type.process(oldValue, newVnode, container, anchor, {
+                            mountChildren,
+                            patchChildren,
+                            move(vnode, el, anchor){
+                                hostInsert(vnode.component ? vnode.component.subTree.el : vnode.el,  el, anchor)
+                            }
+                        })
                     }
             }
         // }else{
@@ -470,13 +642,35 @@ export const createRenderer = (renderOptions) => {
         // }
     }
 
-    const unmount = (vnode) => {
+    const unmount = (vnode, parentComponent = null) => {
         const { shapeFlag, type, children } = vnode
 
         // 渲染 Fragment 的 children 一定都是数组
         if (type === FRAGEMENT) {
-            return unmountChildren(children)
+            return unmountChildren(children, parentComponent)
         }
+
+        if(shapeFlag & ShapeFlags.TELEPORT){
+            // hostRemove(vnode.target)
+            type.remove(vnode)
+            return
+        }
+
+        // 组件卸载
+        if(shapeFlag & ShapeFlags.COMPONENT){
+
+            let { bum, um } = vnode.component
+            // 执行 onBeforeUnmount 生命周期函数
+            invokeArrayFn(bum)
+
+            unmount(vnode.component.subTree, parentComponent)
+
+            // 执行 onUnmounted 生命周期函数
+            invokeArrayFn(um)
+
+            return
+        }
+
         hostRemove(vnode.el)
     }   
 

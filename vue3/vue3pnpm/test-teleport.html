@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>monitor</title>
+</head>
+<body>
+    <div id="container">
+        
+    </div>
+
+    <div id="teleport">
+        
+    </div>
+</body>
+<script src="./packages/runtime-dom/dist/runtime-dom.global.js">
+</script>
+
+
+<!-- <script src="./node_modules/.pnpm/vue@3.2.33//node_modules//@vue//runtime-dom/dist//runtime-dom.global.js"> -->
+<!-- <script src="./node_modules/vue/dist/vue.esm-browser.js"></script> -->
+</script>
+<script type="module">
+    // 原始的 vue 提供的
+    // import { createRenderer, h, render, Text as TEXT, Fragment as FRAGEMENT } from './node_modules/vue/dist/vue.esm-browser.js'
+    
+    const { _openBlock, _createElementBlock, _createElementVNode, _toDisplayString, ref, createRenderer, h, render, TEXT, FRAGEMENT, reactive, toRefs, onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, getCurrentInstance, inject, provide, defineAsyncComponent, Teleport } = VueRuntimeDOM
+
+    let renderer = createRenderer({
+        createElement(ele){
+            return document.createElement(ele)
+        },
+        setElementText(el, text){
+            el.innerHTML = text
+        },
+        patchProp(el, key, prevVal, nextVal){
+            console.log(key, prevVal, nextVal, 'patchProp')
+            if(key === 'style'){
+                for (const key1 in nextVal) {
+                   const val = nextVal[key1]
+                   el.setAttribute(key1, val)
+                }
+            }
+        },
+        insert(el, container){
+            container.appendChild(el)
+        }
+    })
+
+    /*** 简洁用法 ***/
+    const TeleportComponent = {
+        setup(){
+            return () => {
+                
+                return h(Teleport, { to : '#teleport' }, [h(TEXT, 'hello'), h(TEXT, 'vue')])
+            }
+        }
+    }
+    /*** 简洁用法 ***/
+
+    // 组件渲染 返回的是 vnode (vnode 可以是 组件 也可以是 元素)
+
+    // 组件的儿子就是插槽， 插槽一定是一个对象
+    render(h(TeleportComponent), container)
+
+
+    setTimeout(() => {
+        render(h({
+            setup(){
+                return () => {
+                    return h(Teleport, { to : '#teleport' }, [h(TEXT, 'hello11'), h(TEXT, 'vue11')])
+                }
+            }
+        }), container)
+    }, 6000)
+</script>
+</html>

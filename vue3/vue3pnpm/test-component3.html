@@ -20,7 +20,7 @@
     // 原始的 vue 提供的
     // import { createRenderer, h, render, Text as TEXT, Fragment as FRAGEMENT } from './node_modules/vue/dist/vue.esm-browser.js'
     
-    const { createRenderer, h, render, TEXT, FRAGEMENT } = VueRuntimeDOM
+    const { createRenderer, h, render, TEXT, FRAGEMENT, reactive, toRefs } = VueRuntimeDOM
 
     let renderer = createRenderer({
         createElement(ele){
@@ -47,10 +47,26 @@
     // 组件化 (对Ui的封装，自己的状态，外面传入的props)
     // 模块化 (对业务的封装)
     const VueComponent = {
-        data(){
+        setup(props, context){
+            const state = reactive({ name: 'test', age: 30 })
+
+            const setAge = () => {
+                state.age++
+            }
+            
+
+            const emitClick = (title) => {
+                context.emit('myOutEvent', title)
+            }
+
+            context.expose({ emitClick })
+
+            // 1. 业务逻辑都在 setup 编写
+            // 2. setup 返回值会放到 render 函数中以 proxy 参数形式存在
             return {
-                name: 1,
-                age: 100
+                ...toRefs(state),
+                setAge,
+                emitClick
             }
         },
 
@@ -60,6 +76,7 @@
 
         // 没有做渲染合并，就多出现更新多次数组，更新多次组件
         render(proxy){
+            console.log(proxy.name, '??')
             // 变更触发 响应式
 
             // 这里需要使用 批处理，不然每次 属性变了，都触发了 effect 的 scheduler
@@ -74,17 +91,19 @@
 
             // debugger
             return h(FRAGEMENT, [
-                h('span', 'world'),
-                h(TEXT, '---'),
-                h(TEXT, proxy.name),
-                h(TEXT, '---'),
-                h(TEXT, proxy.age)
+                h('div', [h(TEXT, '---'), h(TEXT, proxy.name), h(TEXT, '---'), h(TEXT, proxy.age), h('button', {
+                    onClick: () => {
+                        proxy.setAge()
+                        debugger
+                        proxy.emitClick('test11');
+                    }
+                }, '点击')]),
             ])
         }
     }
 
     debugger
     // 组件渲染 返回的是 vnode (vnode 可以是 组件 也可以是 元素)
-    render(h(VueComponent, { a: 1, b: 2 }), container)
+    render(h(VueComponent, { a: 1, b: 2, onMyOutEvent: (val) => { console.log('onMyOutEvent~~') }  }), container)
 </script>
 </html>

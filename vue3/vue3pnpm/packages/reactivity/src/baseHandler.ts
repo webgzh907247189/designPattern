@@ -44,5 +44,5 @@ export const baseHandler = {
 
 // 标识有没有被 反复proxy
 export const enum ReactiveFlags {
-    IS_REACTIVE = '_v_isReactive'
+    IS_REACTIVE = '__v_isReactive'
 }

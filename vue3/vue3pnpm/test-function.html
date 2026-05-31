@@ -20,7 +20,7 @@
     // 原始的 vue 提供的
     // import { createRenderer, h, render, Text as TEXT, Fragment as FRAGEMENT } from './node_modules/vue/dist/vue.esm-browser.js'
     
-    const { createRenderer, h, render, TEXT, FRAGEMENT } = VueRuntimeDOM
+    const { _openBlock, _createElementBlock, _createElementVNode, _toDisplayString, ref, createRenderer, h, render, TEXT, FRAGEMENT, reactive, toRefs, onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, getCurrentInstance, inject, provide } = VueRuntimeDOM
 
     let renderer = createRenderer({
         createElement(ele){
@@ -43,48 +43,26 @@
         }
     })
 
+
     // 组件的组成有几部分？ 组件的好处是什么？ vue的组件有什么特点？
     // 组件化 (对Ui的封装，自己的状态，外面传入的props)
     // 模块化 (对业务的封装)
-    const VueComponent = {
-        data(){
-            return {
-                name: 1,
-                age: 100
-            }
-        },
 
-        // props 是一个浅响应式的，使用 shallowReactive ( {a: 1, b: 2, c: { test: 'c' } }, 深层 c 属性 不是响应式的，  更改 a、b 会触发视图更新，改 c 不会触发视图更新 )
-        // 属性分为两种: 第一种:props & 第二种: attrs (开发环境下是 响应式的， 生产环境下 非响应式的)
-        // attrs = 用户传递的 props - propsOptions (用户传递的 props 没有被消费的都放到了 attrs 中)
 
-        // 没有做渲染合并，就多出现更新多次数组，更新多次组件
-        render(proxy){
-            // 变更触发 响应式
-
-            // 这里需要使用 批处理，不然每次 属性变了，都触发了 effect 的 scheduler
-            // 批处理，主要使用 promise then 结合锁 来处理
-            // setTimeout(() => {
-            //     // debugger
-            //     proxy.name += 1
-            //     // debugger
-            //     proxy.age += 1
-            //     // debugger
-            // }, 2000);
-
-            // debugger
-            return h(FRAGEMENT, [
-                h('span', 'world'),
-                h(TEXT, '---'),
-                h(TEXT, proxy.name),
-                h(TEXT, '---'),
-                h(TEXT, proxy.age)
-            ])
-        }
+    // props 其实就是 attrs (因为没办法接收 props)
+    function VueComponent(props, context){
+        console.log(props, '????--propsprops')
+        return context.slots.default(props)
     }
 
     debugger
     // 组件渲染 返回的是 vnode (vnode 可以是 组件 也可以是 元素)
-    render(h(VueComponent, { a: 1, b: 2 }), container)
+
+    // 组件的儿子就是插槽， 插槽一定是一个对象
+    render(h(VueComponent, { a: 1, b: 2 }, {
+        default(props){
+            return h('div', {}, props.a + '--插槽--' +  props.b)
+        }
+    }), container)
 </script>
 </html>

@@ -20,7 +20,7 @@
     // 原始的 vue 提供的
     // import { createRenderer, h, render, Text as TEXT, Fragment as FRAGEMENT } from './node_modules/vue/dist/vue.esm-browser.js'
     
-    const { createRenderer, h, render, TEXT, FRAGEMENT } = VueRuntimeDOM
+    const { createRenderer, h, render, TEXT, FRAGEMENT, reactive, toRefs } = VueRuntimeDOM
 
     let renderer = createRenderer({
         createElement(ele){
@@ -47,10 +47,13 @@
     // 组件化 (对Ui的封装，自己的状态，外面传入的props)
     // 模块化 (对业务的封装)
     const VueComponent = {
-        data(){
+        setup(props, context){
+           
+            // const slots = context.slots
+            // // 1. 业务逻辑都在 setup 编写
+            // // 2. setup 返回值会放到 render 函数中以 proxy 参数形式存在
             return {
-                name: 1,
-                age: 100
+                // ...slots,
             }
         },
 
@@ -60,31 +63,42 @@
 
         // 没有做渲染合并，就多出现更新多次数组，更新多次组件
         render(proxy){
-            // 变更触发 响应式
-
-            // 这里需要使用 批处理，不然每次 属性变了，都触发了 effect 的 scheduler
-            // 批处理，主要使用 promise then 结合锁 来处理
-            // setTimeout(() => {
-            //     // debugger
-            //     proxy.name += 1
-            //     // debugger
-            //     proxy.age += 1
-            //     // debugger
-            // }, 2000);
-
+            // debugger
+            // console.log(h(TEXT, '--'), h(TEXT, [proxy.$slots.header()]), 'proxy.$slots.header')
             // debugger
             return h(FRAGEMENT, [
-                h('span', 'world'),
-                h(TEXT, '---'),
-                h(TEXT, proxy.name),
-                h(TEXT, '---'),
-                h(TEXT, proxy.age)
+                h('div', [
+                    h(TEXT, '---'), h(FRAGEMENT, [proxy.$slots.header()]),
+                    h(TEXT, '---'), h(FRAGEMENT, proxy.$slots.default('作用域插槽')),
+                    h(TEXT, '---'), h(FRAGEMENT, proxy.$slots.footer())
+                ]),
             ])
+
+            // debugger
+            // return h(TEXT, proxy.$slots.footer())
         }
     }
 
     debugger
     // 组件渲染 返回的是 vnode (vnode 可以是 组件 也可以是 元素)
-    render(h(VueComponent, { a: 1, b: 2 }), container)
+
+    // 组件的儿子就是插槽， 插槽一定是一个对象
+
+    // 插槽 
+    // 1.作用域插槽  ---> 使用了参数，就是作用域插槽
+    // 2.普通插槽    ---> 数据来自 于父组件
+    // 3.匿名插槽。  ---> 放在default 中
+    render(h(VueComponent, {}, {
+        default: (text) => {
+            // debugger
+            return h(TEXT, 'default' + text)
+        },
+        header: () => {
+            return h(TEXT, 'header')
+        },
+        footer: () => {
+            return h(TEXT, 'footer')
+        }
+    }), container)
 </script>
 </html>

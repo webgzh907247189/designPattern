@@ -20,6 +20,9 @@ export const assign = Object.assign;
 
 
 
+export const invokeArrayFn = (fns) => {
+    fns && fns.forEach((fn) => fn())
+}
 
 
 /**

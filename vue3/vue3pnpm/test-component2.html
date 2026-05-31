@@ -43,14 +43,22 @@
         }
     })
 
+    const ChildCom = {
+        props: {
+            msg: String
+        },
+        render(proxy){
+            return h(TEXT, proxy.msg)
+        }
+    }
+
     // 组件的组成有几部分？ 组件的好处是什么？ vue的组件有什么特点？
     // 组件化 (对Ui的封装，自己的状态，外面传入的props)
     // 模块化 (对业务的封装)
     const VueComponent = {
         data(){
             return {
-                name: 1,
-                age: 100
+                flag: true,
             }
         },
 
@@ -74,11 +82,10 @@
 
             // debugger
             return h(FRAGEMENT, [
-                h('span', 'world'),
-                h(TEXT, '---'),
-                h(TEXT, proxy.name),
-                h(TEXT, '---'),
-                h(TEXT, proxy.age)
+                h('button', { onClick: () => {
+                    this.flag = !this.flag
+                } }, '更新组件'),
+                h(ChildCom, { msg: this.flag ? 'ok' : 'not ok' }),
             ])
         }
     }
