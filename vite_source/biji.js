@@ -21,6 +21,15 @@
  * lerna publish --force-publish=@shuinfo/wepack-plugin-obfuscator 发布指定的包
  * 
  * 
+ * 忽略根命名空间检查 添加到包到根目录
+ * yarn add xx --ignore-workspace-root-check
+ * 
+ * xx 包 添加 yyy 包
+ * yarn workspace xx add yyy
+ * 
+ * 
+ * 
+ * 
  * yarn workspace 允许我们使用 monorepo 的形式来管理项目
  * 在安装 node_modules 的时候它不会安装到每个子项目的 node_modules 里面， 而是直接安装到根目录下面，这样每个子项目都可以读取到根目录的 node_modules
  * 整个项目只有跟目录下面才有一份 yarn.lock 文件，子项目也会被link到 node_modules 里面，这样就允许我们就可以直接用import倒入对应的项目

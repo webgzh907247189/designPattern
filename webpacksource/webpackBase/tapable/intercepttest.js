@@ -3,39 +3,40 @@ const { SyncHook } = require('./index');
 
 
 const hook = new SyncHook(['name', 'age'])
-hook.intercept({
-    // 每次添加一个新的事件函数就会触发
-    register(tapInfo){
-        console.log('拦截器1 register开始', tapInfo.name);
-        return tapInfo
-    },
-    // 每当一个事件函数执行了就会触发
-    tap(){
-        console.log('拦截器1 tap 开始')
-    },
-    // 每次调用call 就会触发
-    call(name, age){
-        console.log('拦截器1 call 开始', name, age);
-    }
-})
-hook.intercept({
-    // 每次添加一个新的事件函数就会触发
-    register(tapInfo){
-        console.log('拦截器2 register开始', tapInfo.name);
-        return tapInfo
-    },
-    // 每当一个事件函数执行了就会触发
-    tap(){
-        console.log('拦截器2 tap 开始')
-    },
-    // 每次调用call 就会触发
-    call(name, age){
-        console.log('拦截器2 call 开始', name, age);
-    }
-})
+// hook.intercept({
+//     // 每次添加一个新的事件函数就会触发
+//     register(tapInfo){
+//         console.log('拦截器1 register开始', tapInfo.name);
+//         return tapInfo
+//     },
+//     // 每当一个事件函数执行了就会触发
+//     tap(){
+//         console.log('拦截器1 tap 开始')
+//     },
+//     // 每次调用call 就会触发
+//     call(name, age){
+//         console.log('拦截器1 call 开始', name, age);
+//     }
+// })
+// hook.intercept({
+//     // 每次添加一个新的事件函数就会触发
+//     register(tapInfo){
+//         console.log('拦截器2 register开始', tapInfo.name);
+//         return tapInfo
+//     },
+//     // 每当一个事件函数执行了就会触发
+//     tap(){
+//         console.log('拦截器2 tap 开始')
+//     },
+//     // 每次调用call 就会触发
+//     call(name, age){
+//         console.log('拦截器2 call 开始', name, age);
+//     }
+// })
 
 hook.tap('node', (name, age) => {
     console.log('node', name, age);
+    return
 })
 hook.tap('react', (name, age) => {
     console.log('react', name, age);

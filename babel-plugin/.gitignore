@@ -11,6 +11,8 @@ yarn-error.log*
 selenium-debug.log
 /buildSsr/
 /static/
+pnpm-lock.yaml
+/packages/*/coverage
 
 # Editor directories and files
 .idea

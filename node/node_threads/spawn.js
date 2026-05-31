@@ -1,6 +1,20 @@
 // node 很早以前不支持开启线程   (现在支持了 work-thead 但是不稳定)
 // 现在用 node 还是开启多进程方式启动 node
 
+
+/**
+ * 文件描述符
+ * https://zhuanlan.zhihu.com/p/160853278
+ * UNIX系统的同学应该知道，系统创建的每个进程默认会打开3个文件：
+ * 标准输入(0)
+ * 标准输出(1)
+ * 标准错误(2)
+ * 
+ * 
+ * node中，进程间server的传递，为什么要传递文件描述符？
+ * https://www.zhihu.com/question/60472363/answer/176518276
+ * 
+ */
 const path = require('path');
 const { spawn } = require('child_process')
 const cp = spawn('node', ['nodesum.js', 'arg1', 'arg2'], {

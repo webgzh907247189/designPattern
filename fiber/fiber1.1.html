@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+</head>
+
+<body>
+    <div>
+        <div id="app">
+            通过 fiber ，让自己的协调过程可以中断，适时的让出 CPU 执行权，让浏览器可以及时的响应用户的交互
+        </div>
+    </div>
+</body>
+<script>
+	const element = {
+		type: 'div', 
+		props: {
+			key: 'A1',
+            id: 'A1',
+			children: [
+				{ type: 'div', props: {key: 'B1', id: 'B1',children: [{ type: 'div', props:{key: 'C1', id: 'C1',}},{ type: 'div', props:{key: 'C2', id: 'C1',} }]} },
+				{ type: 'div', props: {key: 'B2', id: 'B1',} }
+			]
+		},
+	}
+
+    render(element, document.getElementById('app'))
+
+    function render(ele, container){
+        const dom = document.createElement(ele.type)
+
+        Object.keys(ele.props).filter(_ => _ !==  'children').forEach((item) => {
+            dom[item] = ele.props[item]
+        })
+
+
+        if(Array.isArray(ele.props.children)){
+            for (const iterator of ele.props.children) {
+                render(iterator, dom)
+            }
+        }
+        container.appendChild(dom)
+    }
+</script>
+
+</html>

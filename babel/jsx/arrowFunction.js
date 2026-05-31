@@ -8,8 +8,17 @@ const generate = require('@babel/generator').default;
 const types = require('@babel/types');
 
 
-const sourceCode = `const add = (a, b)  => {
+// const sourceCode = `const add = (a, b)  => {
+//     console.log(this);
+//     return a + b
+// }`
+
+const sourceCode = `const add = function(a, b)  {
     console.log(this);
+
+    const aa = () => {
+        console.log(this)
+    }
     return a + b
 }`
 

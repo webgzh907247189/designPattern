@@ -1,66 +1,161 @@
-# parseTemplatei18
-# https://juejin.cn/post/7121954521127288868
+# babel-remove-conosle (行覆盖率、函数覆盖率、分支覆盖率、语句覆盖率居均达到 100%)
 
+## 移除 项目中的 conosle
+
+### 可以选择保留一些 conosle，通过 exclude 排除一些不需要移除的 conosle.xx
+
+### 或者 通过 contain, 只要是 带 contain 里面的关键字的 console.xx 就不会被移除
 
 ## Demo
 
 ```javascript
-    const parseTemplatei18 = require('parseTemplatei18')
-    module.exports = {
-        presets: [
-            '@babel/preset-env'
-        ],
-        plugins: [
-            [parseTemplatei18, { calleeSourceCode: '_vm.providerI18n.t', calleeTargetCode: 'providerI18n' }]
-        ]
-    };
+const babelRemoveConsole = require('babel-remove-console');
+module.exports = {
+    presets: ['@babel/preset-env'],
+    plugins: [[babelRemoveConsole, { exclude: ['log'], contain: ['node remove'] }]],
+};
 ```
 
+## Example
+
+### In
+
 ```javascript
-    import Vue from 'vue';
+const babelRemoveConsole = require('babel-remove-console');
+module.exports = {
+    presets: ['@babel/preset-env'],
+    plugins: [[babelRemoveConsole, { exclude: ['log'], contain: ['notremove'] }]],
+};
 
-    const mixinsGlobal = () => {
-        Vue.mixin({
-            beforeCreate() {
-            if (this.$options && this.$options.i18n) { //根组件
-                this.cusI18n = this.$options && this.$options.i18n;
-            } else {
-                // 深度先续遍历
-                this.cusI18n = this.$parent && this.$parent.cusI18n;
-            }
-            }
-        });
-    };
-    export default mixinsGlobal;
-
-    // other js run
-    mixinsGlobal()
+let s = 1;
+let a = '2';
+const getList = () => {
+    console.log(s, '??', 'notremove');
+    console('??', 'notremove');
+    console.info('??', 'notremo22ve');
+    console.log(s, '??', 'notremove11');
+};
+console.error(a, '??', 'notremove11');
+console.error(s, '??', 'notremove');
 ```
 
+### Out
+
 ```javascript
-    // webpack.config.js
-    new webpack.ProvidePlugin({
-        providerI18n: [ path.resolve(path.join(__dirname, 'xxxxx')), 'default']
-    });
+let s = 1;
+let a = '2';
+const getList = () => {
+    console.log(s, '??', 'notremove');
+    console('??', 'notremove');
+    console.log(s, '??', 'notremove11');
+};
+console.error(s, '??', 'notremove');
 ```
 
+### In
+
 ```javascript
-  <el-select
-    v-model="xxx"
-    :placeholder="providerI18n.t('xxx')"
-    style="width: 100%"
-    size="small"
-  >
-    <el-option
-      label="test"
-      value="testVal"
-    ></el-option>
-  </el-select>
+const babelRemoveConsole = require('babel-remove-console');
+module.exports = {
+    presets: ['@babel/preset-env'],
+    plugins: [[babelRemoveConsole, { exclude: ['log'], contain: ['notremove'] }]],
+};
+
+let s = 1;
+let a = '2';
+console.log(s, '??', 'notremove');
+console('??', 'notremove');
+console.info('??', 'notremo22ve');
+console.log(s, '??', 'notremove11');
+console.error(a, '??', 'notremove11');
+console.error(s, '??', 'notremove');
 ```
 
-**Compile Vue template Out**
+### Out
 
 ```javascript
-    // 不包含_vm.providerI18n.t('xx'), 变为 providerI18n.t('xx')
-    providerI18n.t('xx')
+let s = 1;
+let a = '2';
+console.log(s, '??', 'notremove');
+console('??', 'notremove');
+console.log(s, '??', 'notremove11');
+console.error(s, '??', 'notremove');
+```
+
+### In
+
+```javascript
+const babelRemoveConsole = require('babel-remove-console');
+module.exports = {
+    presets: ['@babel/preset-env'],
+    plugins: [[babelRemoveConsole]],
+};
+
+let s = 1;
+console.log(s, '??', 'notremove');
+console('??', 'notremove');
+console.info('??', 'notremo22ve');
+console.log(s, '??', 'notremove11');
+console.error(s, '??', 'notremove11');
+```
+
+### Out
+
+```javascript
+let s = 1;
+console('??', 'notremove');
+```
+
+### In
+
+```javascript
+const babelRemoveConsole = require('babel-remove-console');
+module.exports = {
+    presets: ['@babel/preset-env'],
+    plugins: [[babelRemoveConsole, { exclude: ['log'] }]],
+};
+
+let s = 1;
+console.log(s, '??', 'notremove');
+console('??', 'notremove');
+console.info('??', 'notremo22ve');
+console.log(s, '??', 'notremove11');
+console.error(s, '??', 'notremove11');
+```
+
+### Out
+
+```javascript
+let s = 1;
+console.log(s, '??', 'notremove');
+console('??', 'notremove');
+console.log(s, '??', 'notremove11');
+```
+
+### In
+
+```javascript
+const babelRemoveConsole = require('babel-remove-console');
+module.exports = {
+    presets: ['@babel/preset-env'],
+    plugins: [[babelRemoveConsole, { contain: [1] }]],
+};
+
+let s = 1;
+let a = '2';
+console.log(s, '??', 'notremove');
+console('??', 'notremove');
+console.info('??', 'notremo22ve');
+console.log(s, '??', 'notremove11');
+console.error(a, '??', 'notremove11');
+```
+
+### Out
+
+```javascript
+let s = 1;
+let a = '2';
+console.log(s, '??', 'notremove');
+console('??', 'notremove');
+console.log(s, '??', 'notremove11');
 ```

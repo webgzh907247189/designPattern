@@ -89,6 +89,15 @@ type AppendArgumentTest2 = AppendArgument2<(a: string, b :number) => unknown, { 
 // 1. 过滤 key 
 // 2. 函数传参限制 key
 
+type Getkeys<T, V> = keyof { [K in keyof T as T[K] extends V ? K : never]: T[K] }
+type GetkeysTest = Getkeys<{name: string, age: number}, string>
+
+type FilterAction = {
+  [key: string]: number | number[];
+};
+let oo: FilterAction = {1: 2, true: 1}
+
+
 
 type ooo = {
     name: string,

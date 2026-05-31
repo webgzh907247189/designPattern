@@ -35,6 +35,7 @@
 		}
 	]
 
+	// 追加 timeout 参数，告诉浏览器有空的时候执行任务，但是如果过期了，不管有没有空，都要帮我执行这个函数
 	requestIdleCallback(workLoop, { timeout: 1000 })
 
 	function workLoop(deadline){

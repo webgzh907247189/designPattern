@@ -1,5 +1,6 @@
 /**
  * https://gitee.com/martsforever-study/typescript-practice/blob/master/exercises/part_03.md
+ * https://www.bilibili.com/video/BV1yq4y1q7bU?spm_id_from=333.999.0.0
  */
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
@@ -60,6 +61,8 @@ var __assign = (this && this.__assign) || function () {
 }
 {
     // {a: string} & {b: string} & {c: string}
+}
+{
 }
 {
 }

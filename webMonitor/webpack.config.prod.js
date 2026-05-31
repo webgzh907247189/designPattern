@@ -14,8 +14,8 @@ module.exports = {
     // https://zhuanlan.zhihu.com/p/32831172
     // https://juejin.cn/post/6844903640533041159
     // 三个重大更新
-    // 1. 持久化缓存(默认开启，默认启用内存缓存) 2. tree shaking (sideEffects: ['*.css'])  3. 模块联邦
-    // 处理资源的loader 内置了；  支持在请求中处理学医(URIs)；  deterministic 变更；   移除 node 核心模块的 polyfill(版本4 默认打包打进来，5不会打进去)
+    // 1. 持久化缓存(默认开启，默认启用内存缓存) 2. tree shaking (sideEffects: ['*.css'])  3. 模块联邦  4. 取消node polyfill 5. 长期缓存优化 deterministic
+    // 处理资源的loader 内置了；  支持在请求中处理学医(URIs)；  deterministic 变更(长期缓存的算法)；   移除 node 核心模块的 polyfill(版本4 默认打包打进来，5不会打进去)
 
     // 内置 Web Worker 构建能力;      *** 内置了 Prepack 的部分能力 (scope hosting) ****； *****  内置 WebAssembly 编译及异步加载能力 ******
     // 注意，在new URL()中不能使用.worker.js命名文件，否则会优先被 worker-loader 解析而导致最终你的 worker 无法正常运行
@@ -53,8 +53,8 @@ module.exports = {
     optimization: {
         usedExports: true, // 表示使用到的导出
         // minimize:true, //开启压缩 (删除未使用代码)
-        moduleIds: 'deterministic',
-        chunkIds: 'deterministic',
+        moduleIds: 'deterministic', // 改为根据上下文模块路径计算
+        chunkIds: 'deterministic', // chunkId根据chunk内容计算
     },
     resolve: {
         // 需要 polyfill

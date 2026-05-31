@@ -215,7 +215,15 @@
 }
 
 {
-    type UnionToTuple<T> = T extends any ? (p: T) => any : never
+    type GetLast<T> = (T extends any ? (K: () => T) => any : never) extends (K: infer I) => any ? I : never
+    type GetLastTest = GetLast<1 | 2 | 3>
+
+    type GetLastVal<T> = GetLast<T> extends () => infer R ? R : never // 写 any 报错
+    type GetLastValTest = GetLastVal<1 | 2 | 3>;
+
+    type UnionToTuple<T, R extends unknown[] = [], Last = GetLastVal<T>> = 
+        [Last] extends [never] ? R : UnionToTuple<Exclude<T, Last>, [...R, Last]>
+
     // 联合类型转换为元组类型
     type a = UnionToTuple<1 | 2 | 3>                      // [1,2,3]
     type b = UnionToTuple<1 | string | boolean>           // [1,string,boolean]

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MVVM</title>
+</head>
+<body>
+    <div id="app">
+        {{a}}--{{b}}
+    </div>
+
+    
+    <!-- 引入依赖的 js 文件 -->
+    <script src="vue.js"></script>
+    <script>
+
+    // 注意有个场景
+    // data: {
+    //     a: 1
+    // }
+    // mounted(){
+    //     Vue.nextTick(() => {
+    //         console.log(app.innerHTML)
+    //     })
+    //     this.a = 100
+    // }
+    // 此时 拿到的 app.innerHTML 还是1 ，追踪源码发现
+    // callBacks 里面存放两个元素 [cb, flushQueue(queue -> [render watcher])] , cb 是用户传入的， 第二个是 flushQueue
+    // 所以执行顺序 还是 cb 先执行。 同步放入，异步执行
+
+        const data = {a: 1, b: '22', c: 'testcc'}
+        let vm = new Vue({
+            el: '#app',
+            data,
+            mounted(){
+                debugger
+                Vue.nextTick(() => {
+                    console.log(app.innerHTML) // 1 - 22
+                })
+                this.a = 100
+            }
+        });
+    </script>
+</body>
+</html>

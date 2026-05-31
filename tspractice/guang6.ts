@@ -110,5 +110,6 @@ type ListAdd<K, P extends string = ''> = K extends [infer L, ...infer R]
     : P
   : P;
 
-type aa = UnionToTuple<OptionalKeys<{ name: '123'; age: '111'; sex: 'nan' }>>;
+type aaa = OptionalKeys<{ name: '123'; age: '111'; sex: 'nan' }>
+type aa = UnionToTuple<aaa>;
 type cc = ListAdd<aa>;

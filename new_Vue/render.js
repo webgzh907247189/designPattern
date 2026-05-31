@@ -1,4 +1,5 @@
 import { h, patch, render, createElement, createTextVnode } from './vdom';
+import { vnode } from './vdom/create-element';
 
 export default function renderMinxin(Vue){
     // 元素虚拟节点
@@ -23,6 +24,8 @@ export default function renderMinxin(Vue){
         let vm = this;
         let render = vm.$options.render;
         // vNode
-        return render.call(vm, h)
+        const vnode = render.call(vm, h)
+        console.log(vnode, 'vnode')
+        return vnode
     }
 }

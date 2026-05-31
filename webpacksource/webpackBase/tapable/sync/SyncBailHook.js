@@ -11,7 +11,7 @@ class Lesson{
     tap(){
         this.hook.arch.tap('vue', (name) => {
             console.log('vue', name);
-            return undefined;
+            return '';
         })
 
         // 返回非 undefined 就停止运行代码

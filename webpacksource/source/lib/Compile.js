@@ -4,6 +4,7 @@ const NormalModuleFactory = require('./NormalModuleFactory');
 const Compilation = require('./Compilation');
 const Stats = require('./Stats')
 const mkdirp = require('mkdirp')
+const path = require('path')
 
 class Compile extends Tapable{
     constructor(context){
@@ -100,7 +101,7 @@ class Compile extends Tapable{
             for (const file in assets) {
                const source = assets[file]
                let targetPath = path.posix.join(outputPath, file)
-               this.outputFileSystem.writeFileSync(targetPath, source)
+               this.outFileSystem.writeFileSync(targetPath, source)
             }
             cb()
         }

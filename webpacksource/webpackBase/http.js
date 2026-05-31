@@ -37,3 +37,9 @@ function multiRequest(maxNum, urls, iteratorFn){
 multiRequest(2, [1000, 5000, 3000, 2000], timeout);
 
 
+
+/******/ 	// create a fake namespace object 
+/******/ 	// mode & 1: value is a module id,  value是模块ID直接用__webpack_require__加载
+/******/ 	// mode & 2: merge all properties of value into the ns require it 把所有的属性合并到命名空间ns上
+/******/ 	// mode & 4: return value when already ns object 已经是ns对象了，可以直接返回值
+/******/ 	// mode & 8|1: behave like require 行为类似于require

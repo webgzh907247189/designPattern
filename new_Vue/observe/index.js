@@ -61,6 +61,7 @@ function initDate(vm){
 
 function initComputed(vm){
     let computed = vm.$options.computed
+    // 渲染 wactehr 默认缓存在 vm 上面
     let watchers = vm._watchersComputed =Object.create(null)
     for(let key in computed){
         const useDef = computed[key]

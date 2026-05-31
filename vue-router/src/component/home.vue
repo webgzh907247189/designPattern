@@ -1,6 +1,6 @@
 <template>
 	<div>
-        我是home -> vuex的数据 {{this.$store.state.count}}
+        我是home -> vuex的数据 {this.$store.state.count}
 	</div>
 </template>
 
@@ -14,10 +14,10 @@
 		},
 		asyncDate(store){
 			// 返回到是一个promise
-			return store.dispatch('action')
+			// return store.dispatch('action')
 		},
 		mounted(){
-			this.$store.dispatch('action')
+			// this.$store.dispatch('action')
 		}
 	}
 </script>

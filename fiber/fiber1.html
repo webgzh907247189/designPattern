@@ -4,6 +4,7 @@
 	<title></title>
 </head>
 <body>
+	通过 fiber ，让自己的协调过程可以中断，适时的让出 CPU 执行权，让浏览器可以及时的响应用户的交互
 	<div>
 		<div id="process" style="background: lightblue; width: 0px; height: 20px;">
 		</div>
@@ -21,6 +22,7 @@
 		let current = Date.now()
 		start = current;
 
+		// 绘制前执行
 		requestAnimationFrame(processFn)
 	})
 
@@ -36,6 +38,7 @@
 			console.log(current - start) // 开始准备执行的时间 到 真正执行的时间的时间差
 
 			start = current
+			// 绘制前执行
 			requestAnimationFrame(processFn)
 		}
 	}

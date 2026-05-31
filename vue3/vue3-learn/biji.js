@@ -8,6 +8,9 @@
 // pnpm install @vue/shared --workspace --filter @vue/reactivity 
 // pnpm install @vue/shared -D --workspace --filter @vue/reactivit
 
+// pnpm install @vue/shared -WD --filter @vue/reactivit // -WD 是 -W -D的缩写， -D 表示安装在 devDependencies
+
+
 // 这样安装的是 公网的 @vue/shared
 // pnpm install @vue/shared  --filter @vue/reactivity 
 

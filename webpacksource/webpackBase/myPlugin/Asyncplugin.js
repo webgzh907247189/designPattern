@@ -18,7 +18,9 @@ module.exports = class Asyncplugin {
             })
         })
 
+        // 创建 compilation 时 触发这钩子
         compiler.hooks.compilation.tap('Assetplugin', (compilation,cb) => {
+            // 每当往 chunks 路面 push 一个新的 file 触发 下面这个钩子
             compilation.hooks.chunkAsset.tap('Assetplugin',(chunk, filename) => {
                 console.log(chunk.name, filename, 'gzh--compilation');
             })

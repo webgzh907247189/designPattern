@@ -64,9 +64,12 @@ export function mountComponent(vm){
         vm._update(vm._render()) // 更新组件
     }
 
-    new Watcher(vm,updateCom) // 渲染watcher
+    new Watcher(vm,updateCom, () => {
+        console.log('beforeUpdate'); // 更新前
+    }) // 渲染watcher
 }
 
+// 与 mergeHook 打通， 形成数组，后面才能被循环
 export function callHook(vm, hook){
     const handler  = vm.$options[hook]
     if(handler){

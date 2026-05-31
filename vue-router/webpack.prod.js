@@ -15,6 +15,10 @@ const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const WebpackObfuscator = require('webpack-obfuscator');
+const TerserPlugin = require("terser-webpack-plugin");
+
+// const ErrorWithImportPackage = require('./ggg');
+
 
 // const setIterm2Badge = require('set-iterm2-badge');
 // setIterm2Badge('prod环境');
@@ -26,6 +30,7 @@ module.exports = {
 	entry: {
 		index: './src/main.js'
 	},
+	mode: 'production',
 	devtool: 'source-map',
 	output: {
 		filename: 'scripts/[name].[hash:5].bundle.js',
@@ -53,19 +58,19 @@ module.exports = {
 				// include: [path.resolve('src')],
 				exclude: /node_modules/
 			},
-			{
-				test: /\.js$/,
-				exclude: [ 
-					path.resolve(__dirname, 'src/test.js') 
-				],
-				enforce: 'post',
-				use: { 
-					loader: WebpackObfuscator.loader, 
-					options: {
-						rotateStringArray: true
-					}
-				}
-			},
+			// {
+			// 	test: /\.js$/,
+			// 	exclude: [ 
+			// 		path.resolve(__dirname, 'src/test.js') 
+			// 	],
+			// 	enforce: 'post',
+			// 	use: { 
+			// 		loader: WebpackObfuscator.loader, 
+			// 		options: {
+			// 			rotateStringArray: true
+			// 		}
+			// 	}
+			// },
 			{
 				test: /\.css$/,
 				use: [{
@@ -151,6 +156,21 @@ module.exports = {
 			name: 'runtime'
 		},
 		minimizer: [
+			new TerserPlugin({
+                terserOptions: {
+                    mangle: false,
+                    // compress: {
+                    //     arguments: false,
+                    //     dead_code: true
+                    // },
+                    output: {
+                        beautify: true, // 最紧凑的输出
+                        comments: false, // 删除所有的注释
+                    },
+                },
+                extractComments: false,
+            }),
+			
 			// 用于优化css文件 (CSS nano 解决单页的css)
 			new OptimizeCssAssetsPlugin({
 				assetNameRegExp: /\.css$/g,
@@ -169,6 +189,13 @@ module.exports = {
 		]
 	},
 	plugins: [
+		
+		// new UglifyJsPlugin({
+		// 	uglifyOptions: {	
+		// 		mangle: false,
+		// 	}
+        // }),
+
 		new VueLoaderPlugin(),
 		// new WebpackDeepScopeAnalysisPlugin(),
 		new MiniCssExtractPlugin({
@@ -181,6 +208,7 @@ module.exports = {
 		}),
 		// new InlineManifestWebpackPlugin('runtime'),
 		new ProgressBarPlugin(),
-		new ManifestPlugin()
+		new ManifestPlugin(),
+		// new ErrorWithImportPackage(['fastclick'])
 	]
 }

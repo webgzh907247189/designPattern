@@ -22,6 +22,7 @@
 {
 }
 {
+    A = [any, never, 1, '2', true];
 }
 {
     // -> { readonly MacOS: 0, readonly Windows: 1, readonly Linux: 2 }

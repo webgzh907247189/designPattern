@@ -1,11 +1,11 @@
 <template>
 	<div>
-        {{sss}}---{{test2}}我是about -> vuex数据: {{this.$store.state.count}}
-		<div>vuex 模块a的数据: {{this.$store.state.a}}</div>
+        {{sss}}---{{test2}}我是about -> vuex数据: {this.$store.state.count}
+		<div>vuex 模块a的数据: {this.$store.state.a}</div>
 		<button @click="btn">按钮改变state</button>
 
 		<div>
-			getters  改变数据 -> {{this.$store.getters.getCount}}
+			getters  改变数据 -> {this.$store.getters.getCount}
 		</div>
 
 		<div>
@@ -49,13 +49,17 @@
 				this.test2 = 'test3'
 			})
 
-			this.name.sex.age.asd.asd.asda = '1'
+			// this.name.sex.age.asd.asd.asda = '1'
 		},
 		created(){
 			console.log('about--created')
 			this.$on('hook:mounted', () => {
 				// debugger
 				console.log('mounted--自定义')
+			})
+
+			let id = setTimeout(() => {
+				console.log('setTimeout')
 			})
 		},
 		methods: {

@@ -28,6 +28,7 @@
 	"bugs": {
 		"url": "https://github.com/webgzh907247189/vue-music-demo/issues"
 	},
+	"sideEffects": false,
 	"homepage": "https://github.com/webgzh907247189/vue-music-demo#readme",
 	"dependencies": {
 		"@sentry/vue": "^6.13.3",

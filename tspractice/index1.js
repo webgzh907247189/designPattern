@@ -1,24 +1,87 @@
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
+var _a;
 /**
  * https://www.bilibili.com/video/BV1EY411s7EY/
  *
  * https://www.wolai.com/aE1oVmBGkgqPhzQcwmRuJU?theme=light
  */
 {
-    // Uppercase<S> extends `${infer S}${infer K}`
 }
 {
-    T;
-    "".concat(infer);
-    S;
 }
-$;
 {
-    infer;
-    K;
 }
-" ? S : K };\n    type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\n\n    type a1 = CapitalizeString<'handler'>       // Handler\n    type a2 = CapitalizeString<'parent'>        // Parent\n    type a3 = CapitalizeString<233>             // 233\n}\n\n{\n    // \u83B7\u53D6\u5B57\u7B26\u4E32\u5B57\u9762\u91CF\u4E2D\u7684\u7B2C\u4E00\u4E2A\u5B57\u7B26\n\n    type A = FirstChar<'BFE'> // 'B'\n    type B = FirstChar<'dev'> // 'd'\n    type C = FirstChar<''> // never\n}\n\n{\n    // \u83B7\u53D6\u5B57\u7B26\u4E32\u5B57\u9762\u91CF\u4E2D\u7684\u6700\u540E\u4E00\u4E2A\u5B57\u7B26\n    type A = LastChar<'BFE'> // 'E'\n    type B = LastChar<'dev'> // 'v'\n    type C = LastChar<''> // never\n}\n\n{\n    // \u5B57\u7B26\u4E32\u8F6C\u6362\u4E3A\u5143\u7EC4\u7C7B\u578B\n    type A = StringToTuple<'BFE.dev'> // ['B', 'F', 'E', '.', 'd', 'e','v']\n    type B = StringToTuple<''> // []    \n}\n\n{\n    // \u5C06\u5B57\u7B26\u4E32\u7C7B\u578B\u7684\u5143\u7D20\u8F6C\u6362\u4E3A\u5B57\u7B26\u4E32\u5B57\u9762\u91CF\u7C7B\u578B\n    type A = TupleToString<['a', 'b', 'c']> // 'abc'\n    type B = TupleToString<[]>              // ''\n    type C = TupleToString<['a']>           // 'a'\n}\n\n{\n    // \u590D\u5236\u5B57\u7B26T\u4E3A\u5B57\u7B26\u4E32\u7C7B\u578B\uFF0C\u957F\u5EA6\u4E3AC\n    type A = RepeatString<'a', 3> // 'aaa'\n    type B = RepeatString<'a', 0> // ''\n}\n\n{\n    // \u5C06\u5B57\u7B26\u4E32\u5B57\u9762\u91CF\u7C7B\u578B\u6309\u7167\u6307\u5B9A\u5B57\u7B26\uFF0C\u5206\u5272\u4E3A\u5143\u7EC4\u3002\u65E0\u6CD5\u5206\u5272\u5219\u8FD4\u56DE\u539F\u5B57\u7B26\u4E32\u5B57\u9762\u91CF\n    type A1 = SplitString<'handle-open-flag', '-'>        // [\"handle\", \"open\", \"flag\"]\n    type A2 = SplitString<'open-flag', '-'>               // [\"open\", \"flag\"]\n    type A3 = SplitString<'handle.open.flag', '.'>        // [\"handle\", \"open\", \"flag\"]\n    type A4 = SplitString<'open.flag', '.'>               // [\"open\", \"flag\"]\n    type A5 = SplitString<'open.flag', '-'>               // [\"open.flag\"]\n}\n\n{\n    // \u8BA1\u7B97\u5B57\u7B26\u4E32\u5B57\u9762\u91CF\u7C7B\u578B\u7684\u957F\u5EA6\n    type A = LengthOfString<'BFE.dev'> // 7\n    type B = LengthOfString<''> // 0\n}\n\n{\n    // \u9A7C\u5CF0\u547D\u540D\u8F6C\u6A2A\u6760\u547D\u540D\n    type a1 = KebabCase<'HandleOpenFlag'>           // handle-open-flag\n    type a2 = KebabCase<'OpenFlag'>                 // open-flag\n}\n\n{\n    // \u6A2A\u6760\u547D\u540D\u8F6C\u5316\u4E3A\u9A7C\u5CF0\u547D\u540D\n    type a1 = CamelCase<'handle-open-flag'>         // HandleOpenFlag\n    type a2 = CamelCase<'open-flag'>                // OpenFlag\n}\n\n{\n    // \u5F97\u5230\u5BF9\u8C61\u4E2D\u7684\u503C\u8BBF\u95EE\u5B57\u7B26\u4E32\n    // \u7B80\u5355\u6765\u8BF4\uFF0C\u5C31\u662F\u6839\u636E\u5982\u4E0B\u5BF9\u8C61\u7C7B\u578B\uFF1A\n    /*\n    {\n        home: {\n            topBar: {\n                title: '\u9876\u90E8\u6807\u9898',\n                welcome: '\u6B22\u8FCE\u767B\u5F55'\n            },\n            bottomBar: {\n                notes: 'XXX\u5907\u6848\uFF0C\u5F52XXX\u6240\u6709',\n            },\n        },\n        login: {\n            username: '\u7528\u6237\u540D',\n            password: '\u5BC6\u7801'\n        }\n    }\n    */\n    // \u5F97\u5230\u8054\u5408\u7C7B\u578B\uFF1A\n    /*\n    home.topBar.title | home.topBar.welcome | home.bottomBar.notes | login.username | login.password\n    */\n\n    // \u5B8C\u6210 createI18n \u51FD\u6570\u4E2D\u7684 ObjectAccessPaths<Schema>\uFF0C\u9650\u5236\u51FD\u6570i18n\u7684\u53C2\u6570\u4E3A\u5408\u6CD5\u7684\u5C5E\u6027\u8BBF\u95EE\u5B57\u7B26\u4E32\n    function createI18n<Schema>(schema: Schema): ((path: ObjectAccessPaths<Schema>) => string) {return [{schema}] as any}\n\n    // i18n\u51FD\u6570\u7684\u53C2\u6570\u7C7B\u578B\u4E3A\uFF1Ahome.topBar.title | home.topBar.welcome | home.bottomBar.notes | login.username | login.password\n    const i18n = createI18n({\n        home: {\n            topBar: {\n                title: '\u9876\u90E8\u6807\u9898',\n                welcome: '\u6B22\u8FCE\u767B\u5F55'\n            },\n            bottomBar: {\n                notes: 'XXX\u5907\u6848\uFF0C\u5F52XXX\u6240\u6709',\n            },\n        },\n        login: {\n            username: '\u7528\u6237\u540D',\n            password: '\u5BC6\u7801'\n        }\n    })\n\n    i18n('home.topBar.title')           // correct\n    i18n('home.topBar.welcome')         // correct\n    i18n('home.bottomBar.notes')        // correct\n\n    // i18n('home.login.abc')              // error\uFF0C\u4E0D\u5B58\u5728\u7684\u5C5E\u6027\n    // i18n('home.topBar')                 // error\uFF0C\u6CA1\u6709\u5230\u6700\u540E\u4E00\u4E2A\u5C5E\u6027\n}\n\n{\n    // \u5B9A\u4E49\u7EC4\u4EF6\u7684\u76D1\u542C\u4E8B\u4EF6\u7C7B\u578B\n    // \u5B9E\u73B0 ComponentEmitsType<Emits> \u7C7B\u578B\uFF0C\u5C06\n    /*\n    {\n        'handle-open': (flag: boolean) => true,\n        'preview-item': (data: { item: any, index: number }) => true,\n        'close-item': (data: { item: any, index: number }) => true,\n    }\n    */\n    // \u8F6C\u5316\u4E3A\u7C7B\u578B\n    /*\n    {\n        onHandleOpen?: (flag: boolean) => void,\n        onPreviewItem?: (data: { item: any, index: number }) => void,\n        onCloseItem?: (data: { item: any, index: number }) => void,\n    }\n    */\n\n\n    function createComponent<Emits extends Record<string, any>>(emits: Emits): ComponentEmitsType<Emits> {return [{emits}] as any}\n\n    // \u6700\u540E\u8FD4\u56DE\u7684 Component\u53D8\u91CF\u7C7B\u578B\u4E3A\u4E00\u4E2A\u5408\u6CD5\u7684React\u7EC4\u4EF6\u7C7B\u578B\uFF0C\u5E76\u4E14\u80FD\u591F\u901A\u8FC7";
-on事件驼峰命名(__makeTemplateObject(["\u7684\u65B9\u5F0F\uFF0C\u76D1\u542C\u5B9A\u4E49\u7684\u4E8B\u4EF6\uFF0C\u5E76\u4E14\u80FD\u591F\u81EA\u52A8\u63A8\u5BFC\u51FA\u4E8B\u4EF6\u7684\u53C2\u6570\u7C7B\u578B\n    const Component = createComponent({\n        'handle-open': (flag: boolean) => true,\n        'preview-item': (data: { item: any, index: number }) => true,\n        'close-item': (data: { item: any, index: number }) => true,\n    })\n    console.log(\n        <Component\n            // onHandleOpen \u7684\u7C7B\u578B\u4E3A (flag: boolean) => void\n            onHandleOpen={val => console.log(val.valueOf())}\n            // onPreviewItem \u7684\u7C7B\u578B\u4E3A (data: { item: any, index: number }) => void\n            onPreviewItem={val => {\n                const {item, index} = val\n                const a: number = item\n                console.log(a, index.toFixed(2))\n            }}\n            // \u6240\u6709\u7684\u76D1\u542C\u4E8B\u4EF6\u5C5E\u6027\u90FD\u662F\u53EF\u9009\u5C5E\u6027\uFF0C\u53EF\u4EE5\u4E0D\u4F20\u5904\u7406\u51FD\u6570\u53E5\u67C4\n            // onCloseItem={val => [{val}]}\n        />\n    )\n\n    // \u63D0\u793A\uFF0C\u5B9A\u4E49\u7EC4\u4EF6\u7684props\u7C7B\u578B\u65B9\u5F0F\u4E3A { (props: Partial<Convert<Emits>>): any }\n    // \u6BD4\u5982 Comp \u53EF\u4EE5\u63A5\u6536\u5C5E\u6027 {name:string, age:number, flag:boolean, id?:string}\uFF0C\u5176\u4E2Did\u4E3A\u53EF\u9009\u5C5E\u6027\uFF0C\u90A3\u4E48\u53EF\u4EE5\u8FD9\u6837\u5199\n\n    const Comp: { (props: { name: string, age: number, flag: boolean, id?: string }): any } = Function as any\n\n    console.log(<Comp name=\"\" age={1} flag/>)           // \u6B63\u786E\n    console.log(<Comp name=\"\" age={1} flag id=\"111\"/>)  // \u6B63\u786E\n    // console.log(<Comp name={1} age={1} flag/>)          // \u9519\u8BEF\uFF0Cname\u4E3A\u5B57\u7B26\u4E32\u7C7B\u578B\n    // console.log(<Comp age={1} flag/>)                   // \u9519\u8BEF\uFF0C\u7F3A\u5C11\u5FC5\u987B\u5C5E\u6027name:string\n}"], ["\u7684\u65B9\u5F0F\uFF0C\u76D1\u542C\u5B9A\u4E49\u7684\u4E8B\u4EF6\uFF0C\u5E76\u4E14\u80FD\u591F\u81EA\u52A8\u63A8\u5BFC\u51FA\u4E8B\u4EF6\u7684\u53C2\u6570\u7C7B\u578B\n    const Component = createComponent({\n        'handle-open': (flag: boolean) => true,\n        'preview-item': (data: { item: any, index: number }) => true,\n        'close-item': (data: { item: any, index: number }) => true,\n    })\n    console.log(\n        <Component\n            // onHandleOpen \u7684\u7C7B\u578B\u4E3A (flag: boolean) => void\n            onHandleOpen={val => console.log(val.valueOf())}\n            // onPreviewItem \u7684\u7C7B\u578B\u4E3A (data: { item: any, index: number }) => void\n            onPreviewItem={val => {\n                const {item, index} = val\n                const a: number = item\n                console.log(a, index.toFixed(2))\n            }}\n            // \u6240\u6709\u7684\u76D1\u542C\u4E8B\u4EF6\u5C5E\u6027\u90FD\u662F\u53EF\u9009\u5C5E\u6027\uFF0C\u53EF\u4EE5\u4E0D\u4F20\u5904\u7406\u51FD\u6570\u53E5\u67C4\n            // onCloseItem={val => [{val}]}\n        />\n    )\n\n    // \u63D0\u793A\uFF0C\u5B9A\u4E49\u7EC4\u4EF6\u7684props\u7C7B\u578B\u65B9\u5F0F\u4E3A { (props: Partial<Convert<Emits>>): any }\n    // \u6BD4\u5982 Comp \u53EF\u4EE5\u63A5\u6536\u5C5E\u6027 {name:string, age:number, flag:boolean, id?:string}\uFF0C\u5176\u4E2Did\u4E3A\u53EF\u9009\u5C5E\u6027\uFF0C\u90A3\u4E48\u53EF\u4EE5\u8FD9\u6837\u5199\n\n    const Comp: { (props: { name: string, age: number, flag: boolean, id?: string }): any } = Function as any\n\n    console.log(<Comp name=\"\" age={1} flag/>)           // \u6B63\u786E\n    console.log(<Comp name=\"\" age={1} flag id=\"111\"/>)  // \u6B63\u786E\n    // console.log(<Comp name={1} age={1} flag/>)          // \u9519\u8BEF\uFF0Cname\u4E3A\u5B57\u7B26\u4E32\u7C7B\u578B\n    // console.log(<Comp age={1} flag/>)                   // \u9519\u8BEF\uFF0C\u7F3A\u5C11\u5FC5\u987B\u5C5E\u6027name:string\n}"]));
+{
+}
+{
+}
+{
+}
+{
+}
+{
+}
+{
+    //字面量类型 和 类型字面量 的区别
+    // 字面量类型
+    var aa_1 = 'handle-open-flag';
+}
+{
+}
+{
+    function orderFn(schema) { return [{ schema: schema }]; }
+    // i18n函数的参数类型为：home.topBar.title | home.topBar.welcome | home.bottomBar.notes | login.username | login.password
+    var getName_1 = orderFn({
+        home: {
+            topBar: {
+                title: '顶部标题',
+                welcome: '欢迎登录'
+            },
+            bottomBar: {
+                notes: 'XXX备案，归XXX所有',
+            },
+        },
+        login: {
+            username: '用户名',
+            password: '密码'
+        }
+    });
+    getName_1('home.bottomBar.notes');
+    getName_1('home.topBar.welcome');
+    getName_1('home.bottomBar.notes');
+    // i18n('home.login.abc')              // error，不存在的属性
+    // i18n('home.topBar')                 // error，没有到最后一个属性
+}
+{
+    function createComponent(emits) { return [{ emits: emits }]; }
+    // 最后返回的 Component变量类型为一个合法的React组件类型，并且能够通过`on事件驼峰命名`的方式，监听定义的事件，并且能够自动推导出事件的参数类型
+    var Component_1 = createComponent({
+        'handle-open': function (flag) { return true; },
+        'preview-item': function (data) { return true; },
+        'close-item': function (data) { return true; },
+        'name': 'test'
+    });
+    // const aa: sss = {
+    //     onGetName
+    // }
+    console.log(
+    // onHandleOpen 的类型为 (flag: boolean) => void
+    onHandleOpen, { val: val, console: console, : .log(val.valueOf()) }
+    // onPreviewItem 的类型为 (data: { item: any, index: number }) => void
+    , 
+    // onPreviewItem 的类型为 (data: { item: any, index: number }) => void
+    onPreviewItem = { val: val }, {
+        const: (item = val.item, index = val.index, val),
+        const: a,
+        number: number,
+        console: console,
+        : .log(a, index.toFixed(2))
+    });
+}
+// 所有的监听事件属性都是可选属性，可以不传处理函数句柄
+onCloseItem = (_a = { val: val }, _a[{ val: val }] = , _a) /  >
+;
+// 提示，定义组件的props类型方式为 { (props: Partial<Convert<Emits>>): any }
+// 比如 Comp 可以接收属性 {name:string, age:number, flag:boolean, id?:string}，其中id为可选属性，那么可以这样写
+var Comp = Function;
+console.log(name, "", age = { 1:  }, flag /  > ); // 正确
+console.log(name, "", age = { 1:  }, flag, id = "111" /  > ); // 正确

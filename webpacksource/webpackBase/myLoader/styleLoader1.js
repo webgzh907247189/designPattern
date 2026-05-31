@@ -1,0 +1,50 @@
+const loadUtils = require('loader-utils');
+
+const styleLoader = function(source){
+    // style loader 导出一个 脚本
+
+    let str = `
+        let style = document.createElement('style')
+        style.innerHTML = ${source}
+
+        document.head.appendChild(style);
+    `
+    return str;
+}
+
+// 在 styleLoader 上面添加 pitch 方法
+// style-loader.pitch -> css-loader.pitch  ->  less-loader.pitch
+
+// remainingRequest(剩余的请求) => css-loader!less-loader ./index.less 
+
+// style-loader 
+// require(!!css-loader!less-loader!./index.less)
+
+// 因为 css-loader 返回的是 "module.exports = 'xxx'" 字符串
+// 此时被 styleLoader.pitch 劫持了，并且被赋值 style.innerHTML = require("module.exports = 'xxx'" )
+
+
+// Pitching Loader 返回非 undefined 值时，就会实现熔断效果
+
+/**
+ * @remainingRequest 剩余请求
+ * @precedingRequest 前置请求
+ * @data 数据对象    pitch 函数中往 data 对象上添加数据，之后在 normal 函数中通过 this.data 的方式读取已添加的数据。
+ */
+// styleLoader.pitch = function(remainingRequest, precedingRequest, data){
+//     let str = `
+//         let style = document.createElement('style')
+//         style.innerHTML = require(${loadUtils.stringifyRequest(this, '!!' + remainingRequest)})
+
+//         document.head.appendChild(style);
+//     `
+//     return str;
+// }
+
+module.exports = styleLoader;
+
+
+// a -> b -> c
+// remainingRequest  ->  /Users/fer/webpack-loader-demo/loaders/c-loader.js!/Users/fer/webpack-loader-demo/src/data.txt #剩余请求
+// precedingRequest  ->  /Users/fer/webpack-loader-demo/loaders/a-loader.js #前置请求
+// {} #空的数据对象

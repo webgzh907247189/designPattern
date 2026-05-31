@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+
+	// react 16+ 渲染流程
+	// 1. scheduler 选择高优先级的任务进入  reconciler
+	// 2. reconciler 计算变更的 内容  (render 阶段)
+	// 3. react-dom 把变更的内容渲染到页面上  (commit 阶段)
+
+	// domDiff 拿到老的fiber 树 跟新的 vdom 对比，生成新的 fiber 树的过程
+	</title>
+</head>
+<body>
+	<div id="root">
+	</div>
+</body>
+<script>
+	function setProps(dom, oldProps, newProps){
+		for (const key in oldProps) {
+			
+		}
+
+		for (const key in newProps) {
+			if (key !== 'children') {
+				setProp(dom, key, newProps[key])
+			}
+		}
+	}
+
+	function setProp(dom, key, val){
+		if(/^on/.test(key)){
+			dom[key.toLowerCase()] = val
+		}else if(key === 'style'){
+			for (const styleName in val) {
+				dom.style[styleName] = val[styleName]
+			}
+		}else {
+			dom.setAttribute(key, val)
+		}
+	}
+</script>
+<script>
+	const ELEMENT_TEXT = Symbol.for('ELEMENT_TEXT') // 文本元素
+	const TAG_ROOT = Symbol.for('TAG_ROOT') // 根 fiber
+	const TAG_HOST = Symbol.for('TAG_HOST') // 原生的 节点 span p
+	const TAG_TEXT = Symbol.for('TAG_TEXT') // 文本节点
+
+	const PLACEMENT = Symbol.for('PLACEMENT'); //插入节点
+	const UPDATE = Symbol.for('UPDATE'); // 更新节点
+	const DELETION = Symbol.for('DELETION'); // 删除节点
+
+	/**
+	 * 从根节点开始渲染和调度
+	 * 两个阶段
+	 * 
+	 * 1. diff 阶段 (render 阶段 ->  diff 就是 render) 对比新旧vdom， 进行增量 更新或者重建
+	 * 这个阶段比较花时间，我们对任务进行拆分，拆分
+	 * 一个 vdom 节点对应一个 fiber任务，比较完一个节点 判断有没有时间，有的话，进入下一个比较任务, 此阶段可以暂停(调度)
+	 * 此阶段成果是
+	 * 1.1 根据vdm 生成 fiber 树
+	 * 1.2 effect list (产出一个 单链表 ->  节点 单链表)，知道哪些节点更新或者哪些节点删除，哪些节点是新增
+	 * 
+	 * 2. commit 阶段， dom 更新阶段，此阶段不可暂停 (假设可以暂停， UI 一个一个向外蹦，一会渲染一个一会渲染一个)
+	 */
+	let nextUnitOfWork = null;
+	let workInProcessRoot = null;
+	function scheduleRoot(rootFiber){
+		// debugger
+		nextUnitOfWork = rootFiber
+		workInProcessRoot = rootFiber
+	}
+
+	function performUnitOfWork(currentFiber){
+		// debugger
+		beiginWork(currentFiber)
+		if(currentFiber.child){
+			return currentFiber.child
+		}
+		// 没有 child 就算完成了, 完成之后(所有的儿子完成了，自己也就完成了)
+		// 有 slibling 返回 slibling。先返回 父亲，在找父亲的 弟弟
+		while(currentFiber){
+			complateUnitOfWork(currentFiber)
+			if(currentFiber.slibling){
+				return currentFiber.slibling
+			}
+
+			currentFiber = currentFiber.return
+		}
+	}
+	function complateUnitOfWork(currentFiber){
+		// console.log('完成', JSON.stringify(currentFiber.props.key ?? currentFiber.props.text))
+		// 在完成的时候，收集有 副作用的 fiber，组成 effectList
+		// 每个 fiber 有两个属性 
+		// 1. firstEffect 指向第一个有副作用的 子节点 
+		// 2. lastEffect 指向最后一个有副作用的子节点 
+		// 3. 中间用 nextEffect 做成一个单链表
+		let returnFilber = currentFiber.return
+
+		//	  A1
+		// B1    B2
+		// 第一次 A1 的 firstEffect 和 lastEffect 都指向 B1
+		// 第二次 A1 的 lastEffect 的 nextEffect 指向 B2
+		// 把 A1 的 lastEffect 指向 B2.
+		// (形成一个三角形， A1 的 firstEffect 指向 B1，B1 的 nextEffect 指向 B2， A1 的 lastEffect 指向 B2)
+
+
+		// 	       A1
+		//    B1       B2
+		// C1   C2   D1   D2
+		// 第一次 走(===)下面的逻辑   B1.firstEffect = C1; B1.lastEffect = C1 
+		// 第二次 走(===)下面的逻辑   (B1.lastEffect)C1.nextEffect = C2; B1.lastEffect = C2 // B1 -> C1 -> C2
+		// 第三次 走(===)上下面的逻辑  A1.firstEffect = C1; A1.lastEffect = C2; (A1.lastEffect)C2.nextEffect = B1;  A1.lastEffect = B1;
+		// A1 -> C1 -> C2 -> B1; (A1.lastEffect = B1)
+		// 第四次 走(===)下面的逻辑   B2.firstEffect = D1; B2.lastEffect = D1 
+		// 第五次 走(===)下面的逻辑   (B2.lastEffect)D1.nextEffect = D2; B2.lastEffect = D2; B2 -> D1 -> D2
+		// 第六次 走(===)下面的逻辑   (returnFilber.lastEffect)B1.nextEffect = D1; A1.lastEffect = D2;
+		// (returnFilber.lastEffect)D2.nextEffect = B2; A1.lastEffect = B2
+		// A1 -> C1 -> C2 -> B1 -> D1 -> D2 -> B2; (A1.lastEffect = B2)
+
+		if(returnFilber){
+			// 这一段把 儿子挂到爷爷身上
+			if(!returnFilber.firstEffect){
+				returnFilber.firstEffect = currentFiber.firstEffect
+			}
+			if(currentFiber.lastEffect){
+				if(returnFilber.lastEffect){
+					returnFilber.lastEffect.nextEffect = currentFiber.firstEffect
+				}
+				returnFilber.lastEffect = currentFiber.lastEffect
+			}
+
+			// === 这一段把自己挂到 父亲上面 ===
+			const effectTag = currentFiber.effectTag // effectTag ->  (副作用标识)
+			if(effectTag){ // 自己有副作用
+				if(returnFilber.lastEffect){
+					returnFilber.lastEffect.nextEffect = currentFiber
+				}else{
+					returnFilber.firstEffect = currentFiber
+				}
+				returnFilber.lastEffect = currentFiber
+			}
+		}
+	}
+
+	function beiginWork(currentFiber){
+		// beiginWork 的功能
+		// 1. 给每个 fiber 节点创建 dom 元素
+		// 2. 创建 子fiber 节点
+		console.log('开始' + JSON.stringify(currentFiber.props.key ?? currentFiber.props.text))
+		if(currentFiber.tag === TAG_ROOT){
+			updateHostRoot(currentFiber)
+		}else if(currentFiber.tag === TAG_TEXT){
+			updateHostText(currentFiber)
+		}else if(currentFiber.tag === TAG_HOST){
+			updateHost(currentFiber) // 原生 dom 节点
+		}
+	}
+	function updateHost(currentFiber){
+		if(!currentFiber.stateNode){ // 如果此 fiber 还没有创建 DOM 节点
+			currentFiber.stateNode = createDom(currentFiber)
+		}
+		let newChildren = currentFiber.props.children
+		reconcileChildren(currentFiber, newChildren)
+	}
+	function createDom(currentFiber){
+		if(currentFiber.tag === TAG_TEXT){
+			return document.createTextNode(currentFiber.props.text)
+		}else if(currentFiber.tag === TAG_HOST){
+			let stateNode = document.createElement(currentFiber.type)
+			updateDom(stateNode, {}, currentFiber.props)
+			return stateNode
+		}
+	}
+	function updateDom(stateNode, oldProps, newProps){
+		// 更新 dom 属性
+		setProps(stateNode, oldProps, newProps)
+	}
+	function updateHostText(currentFiber){
+		if(!currentFiber.stateNode){ // 如果此 fiber 还没有创建 DOM 节点
+			currentFiber.stateNode = createDom(currentFiber)
+		}
+	}
+	function updateHostRoot(currentFiber){
+		// 1. 先处理自己， 如果是一个原生节点，创建真实 dom
+		// 2. 
+		let newChildren = currentFiber.props.children
+		reconcileChildren(currentFiber, newChildren)
+	}
+	function reconcileChildren(currentFiber, newChildren = []){
+		// debugger
+		let newChildIndex = 0; // 新子节点的索引
+		let prevSibling;// 上一个新的子fiber
+
+		// 遍历 vdom 元素数组，为每个 vdom 元素 创建 fiber 单元
+		while(newChildIndex < newChildren.length){
+			let newChild = newChildren[newChildIndex]
+			let tag
+			if(newChild.type === ELEMENT_TEXT){
+				tag = TAG_TEXT // 文本节点
+			} else if(typeof newChild.type === 'string'){
+				tag = TAG_HOST // 原生 dom 节点
+			}
+
+
+			let newFiber = {
+				tag,
+				type: newChild.type,
+				props: newChild.props,
+				stateNode: null, // 还没有创建dom 元素
+				return: currentFiber,
+				effectTag: PLACEMENT, // 副作用标识 (表示当前 fiber 单元 后续针对 DOM 的操作是什么操作)
+				nextEffect: null, // 单链表 -> 执行的顺序 和 完成的顺序一致
+			}
+
+			if(newChildIndex == 0){ // 索引为0， child 就是当前的 fiber
+				currentFiber.child = newFiber
+			}else{
+				prevSibling.slibling = newFiber // 完成 slibling 挂载
+			}
+
+			prevSibling = newFiber
+			newChildIndex++
+		}
+	}
+
+	function workLoop(deadline){
+		let shouldYield = false
+		while(nextUnitOfWork && !shouldYield){
+			nextUnitOfWork = performUnitOfWork(nextUnitOfWork)
+			shouldYield = deadline.timeRemaining() < 1 // 没有时间需要让出执行任务的控制权
+		}
+		
+		if(!nextUnitOfWork){
+			// 没有 fiber 单元任务需要执行了
+			console.log('render 阶段结束～', nextUnitOfWork)
+			commitRoot()
+		}
+
+		// 每一帧都需要重新进行判断 是否需要重新调度任务
+		// 如果上次的时间片到期了但是还有任务没有执行完， 就需要在次请求浏览器进行调度 任务执行
+		if(nextUnitOfWork){
+			requestIdleCallback(workLoop, { timeout: 500 })
+		}
+	}
+	// 优先级的概念 expirationtime ｜ lane
+	requestIdleCallback(workLoop, { timeout: 500 }) // 500ms
+
+	function commitRoot(){
+		// debugger
+		console.log(workInProcessRoot, 'workInProcessRoot', nextUnitOfWork)
+		let currentFiber = workInProcessRoot && workInProcessRoot.firstEffect
+		while(currentFiber && workInProcessRoot){
+			commitWork(currentFiber)
+			currentFiber = currentFiber.nextEffect
+		}
+
+		workInProcessRoot = null
+	}
+
+	function commitWork(currentFiber){
+		if(!currentFiber) return
+		let returnFiber = currentFiber.return
+		let returnDOM = returnFiber.stateNode
+		// 说明需要插入dom 把自己插入给父亲
+		// 父fiber 的 dom  appendChild  ->   子fiber 的 stateNode
+		if(currentFiber.effectTag === PLACEMENT){
+			returnDOM.appendChild(currentFiber.stateNode)
+		}
+		currentFiber.effectTag = null
+	}
+</script>
+<script>
+	function createElement(type, props, ...children){
+		delete props.__self
+		delete props.__souce
+
+		return {
+			type,
+			props: {
+				...props,
+				children: children.map((item) => {
+					return typeof item === 'object' ? item : { type: ELEMENT_TEXT, props: { text: item, children: [] } }
+				})
+			}
+		}
+	}
+
+	let element = createElement('div', { key: 'A1' }, 'A1的值',
+		createElement('div', { key: 'B1'}, 
+			'B1的值',
+			createElement('div', { key: 'C1'}, 'C1的值'),
+			createElement('div', { key: 'C2'}, 'C2的值')
+		), 
+		createElement('div', { key: 'B2'}, 'B2的值')
+	)
+	console.log(element, 'element')
+
+	function render(ele, container){
+		// 跟 fiber
+		let rootFiber = {
+			tag: TAG_ROOT, // 每个 fiber 就是一个对象，有个 tag 标识他的 类型
+			stateNode: container, // 每个 fiber 就是一个对象 有stateNode 标识，一般情况下这个元素是原生节点的话，stateNode 指向 真实的DOM 元素
+			props: {
+				key: 'root',
+				children: [ele], // props 的 children 是需要渲染的元素
+			}
+		}
+		
+		scheduleRoot(rootFiber)
+	}
+	render(element,document.getElementById('root'))
+
+</script>
+</html>

@@ -41,7 +41,7 @@
 		requestAnimationFrame((rafTime)=> {
 			console.log('rafTime', rafTime)
 
-			// 这一帧的截止时间 = rafTime(每一帧开始的时间) + activeFrameTime(每一帧时间)
+			// 这一帧的截止时间 = rafTime(每一帧开始的时间) + activeFrameTime(每一帧时间)
 			frameDeadline = rafTime + activeFrameTime;
 
 			pendingCallback = cb;

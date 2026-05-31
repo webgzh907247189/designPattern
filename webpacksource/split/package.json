@@ -1,0 +1,19 @@
+{
+    "name": "webpacksource",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "delete": "rm -rf ./dist",
+      "delete2": "rm -rf ./dist2",
+      "dev1": "npm run delete && webpack",
+      "dev2": "npm run delete2 && webpack --config webpack.config1.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+    },
+    "dependencies": {
+    }
+  }
+  

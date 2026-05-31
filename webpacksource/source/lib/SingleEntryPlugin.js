@@ -6,12 +6,12 @@ class SingleEntryPlugin {
     }
 
     apply(compile){
-        compile.hooks.make.tapAsync('SingleEntryPlugin', (compilation,cb) => {
+        compile.hooks.make.tapAsync('SingleEntryPlugin', (compilation,seal) => {
             const {context, entry, name} = this;
 
             // 从此入口开始编译
             // console.log('addEntry');
-            compilation.addEntry(context, entry, name,cb)
+            compilation.addEntry(context, entry, name,seal)
         })
     }
 }

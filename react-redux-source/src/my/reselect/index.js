@@ -1,4 +1,5 @@
 // https://juejin.im/post/5df0cef76fb9a0165936e06a
+// https://juejin.cn/post/6981664519244218382
 function createSelect(selector,reduce){
     let lastState
     let lastResult

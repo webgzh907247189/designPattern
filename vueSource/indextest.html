@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MVVM</title>
+</head>
+<body>
+    <div id="app">
+        {{name}}
+        <div id="container"></div>
+        <test1/>
+    </div>
+    <script src="vue.js"></script>
+    
+    <script>
+        let id = 1
+        let vm = new Vue({
+            el: '#app',
+            data(){
+                return {
+                    name: '11',
+                    // checkList: [{x: 100, y: 200, id: 1}, {x: 100, y: 200, id: 2}],
+                }
+            },
+            mounted(){
+            //    let btn = document.getElementById('btn')
+                
+            },
+            methods: {
+                let maxVal = Math.max.apply(checkList)
+            },
+            components: {
+                test1: {
+                    template: `<div>
+                        <div v-for="item in list" style='width: item.width; height: item.height'>
+                            
+                        </div>
+                        <button @click='btnclick'>btnclick</button>
+                    </div>`,
+                    created(){
+                        let root = document.getElementById('container');
+                        this.root = root
+                    },
+                    data(){
+                        return {
+                            list: [{id: id++,
+                                width: 100,
+                                height: 100,selected: false} , {}]
+                        }
+                    },
+                    methods:{
+                        btnclick(){
+                            console.log('111')
+                            // let div = document.createElement('div')
+                            // div.style.width = '100px'
+                            // div.style.height = '100px'
+                            // this.root.appendChild(div)
+                            this.list.push({
+                                id: id++,
+                                width: 100,
+                                height: 100
+                            })
+                        }
+                    },
+                    computed: {
+                        getFilterByListMax(){
+                            // let widthList = this.list.filter(_ => _.selected).map(_ => _.width)
+
+                            let widthList = this.list.reduce((result, item) => {
+                                if(item.selected){
+                                    result.push(item.width)
+                                }   
+                                return result
+                            }, [])
+                            return Math.max.apply(widthList);
+                        }
+                    }
+                },
+            },
+            created(){
+               
+            },
+        });
+    </script>
+</body>
+</html>

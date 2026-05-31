@@ -228,16 +228,19 @@ function createRenderer(renderOptions) {
         const vnode = newChildren[i2];
         keyToNewIndexMap.set(vnode.key, i2);
       }
+      let toBePatch = e2 - s2 + 1;
+      let newIndexToOldMapIndex = new Array(toBePatch).fill(0);
       for (let i2 = s1; i2 <= e1; i2++) {
         const vnode = oldChildren[i2];
         const newIndex = keyToNewIndexMap.get(vnode.key);
         if (newIndex === void 0) {
           unmount(vnode);
         } else {
+          newIndexToOldMapIndex[newIndex - s2] = i2 + 1;
           patch(vnode, newChildren[newIndex], el);
         }
       }
-      let toBePatch = e2 - s2 + 1;
+      console.log(newIndexToOldMapIndex, "newIndexToOldMapIndexnewIndexToOldMapIndex");
       debugger;
       for (let i2 = toBePatch - 1; i2 >= 0; i2--) {
         let newIndex = s2 + i2;

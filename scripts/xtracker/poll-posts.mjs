@@ -12,10 +12,9 @@
  */
 import { execSync } from 'node:child_process'
 
-const DEFAULT_URL = 'https://xtracker.polymarket.com/api/users/elonmusk/posts?startDate=2026-04-17T16:00:00.000Z&endDate=2026-04-24T15:59:59.000Z'
-
+const DEFAULT_URL = 'https://xtracker.polymarket.com/api/users/elonmusk/posts?startDate=2026-04-27T16:00:00.000Z&endDate=2026-04-29T15:59:59.000Z'
 const TARGET_URL = process.env.XTRACKER_URL || DEFAULT_URL
-const INTERVAL_MS = Math.max(1000, Number(process.env.INTERVAL_MS || 1000 * 60 * 2 ))
+const INTERVAL_MS = Math.max(1000, Number(process.env.INTERVAL_MS || 1000 ))
 
 /** 上一次响应体字节长度；首次请求为 null，不标红 */
 let lastResponseLength = null
@@ -64,6 +63,7 @@ async function fetchOnce() {
   const res = await fetch(TARGET_URL, {
     headers: { Accept: 'application/json, text/plain, */*' },
   })
+  console.log(res, '??')
   const buf = await res.arrayBuffer()
   const byteLength = buf.byteLength
   const text = new TextDecoder().decode(buf)

@@ -69,20 +69,20 @@ const router1 = new Router({
 		},
 	]
 })
-router1.beforeEach((to,form, next) => {
-	console.log(to,form, next)
-	setTimeout(() => {
-		console.log('1111')
-		next()
-	}, 1000)	
-})
-router1.beforeEach((to,form, next) => {
-	console.log(to,form, next)
-	setTimeout(() => {
-		console.log('2222')
-		next()
-	}, 1000)
-})
+// router1.beforeEach((to,form, next) => {
+// 	console.log(to,form, next)
+// 	setTimeout(() => {
+// 		console.log('1111')
+// 		next()
+// 	}, 1000)	
+// })
+// router1.beforeEach((to,form, next) => {
+// 	console.log(to,form, next)
+// 	setTimeout(() => {
+// 		console.log('2222')
+// 		next()
+// 	}, 1000)
+// })
 
 export default router1
 

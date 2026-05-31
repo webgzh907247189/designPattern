@@ -9,7 +9,13 @@ class EntryOptionPlugin {
     apply(compile){
         compile.hooks.entryOption.tap('EntryOptionPlugin', (context, entry) => {
             console.log('EntryOptionPlugin 注册')
-            itemToPlugin(context, entry, 'main').apply(compile)
+            if (typeof entry === 'string') {
+                itemToPlugin(context, entry, 'main').apply(compile)
+            } else {
+                for (const entryName in entry) {
+                    itemToPlugin(context, entry[entryName], 'main').apply(compile)
+                }
+            }
         })
     }
 }

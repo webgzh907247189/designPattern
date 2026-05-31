@@ -1,6 +1,7 @@
 {
 	"presets": ["@babel/preset-env"], // 从右向左解析
 	"plugins": [
+		
 		"@babel/plugin-transform-runtime",
 		"@babel/plugin-proposal-export-default-from",
 		"@babel/plugin-proposal-logical-assignment-operators",
@@ -16,5 +17,6 @@
         "@babel/plugin-proposal-do-expressions",
         "transform-vue-jsx",
 		"@babel/plugin-syntax-dynamic-import"
+		// ["./aaa", {"start": "console.log('听说你很能打start')", "end": "console.log('我只想cb end')"}]	
 	]
 }

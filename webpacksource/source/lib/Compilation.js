@@ -15,6 +15,12 @@ const ejs = require('ejs');
 const mainTempalte = fs.readFileSync(path.posix.join(__dirname, '../templates', 'main.ejs'), 'utf-8')
 const mainRender = ejs.compile(mainTempalte)
 
+const mainAsyncTempalte = fs.readFileSync(path.posix.join(__dirname, '../templates', 'mainAsync.ejs'), 'utf-8')
+const mainAsyncRender = ejs.compile(mainAsyncTempalte)
+
+const chunkTempalte = fs.readFileSync(path.posix.join(__dirname, '../templates', 'chunk.ejs'), 'utf-8')
+const chunkRender = ejs.compile(chunkTempalte)
+
 module.exports = class Compilation extends Tapable {
     constructor(compiler){
         super();
@@ -51,19 +57,20 @@ module.exports = class Compilation extends Tapable {
      * @param {*} name      main
      * @param {*} cb        完成的回调
      */
-    addEntry(context, entry, name, cb){
-        this._addModuleChain(context, entry, name, (err, module) => {
-            cb(err, module)
+    addEntry(context, entry, name, seal){
+        this._addModuleChain(context, entry, name, false, (err, module) => {
+            seal(err, module)
         })
     }
-    _addModuleChain(context, entry, name, cb){
+    _addModuleChain(context, entry, name, async, seal){
         this.createModule({ 
             name,
             context,
             rawRequest: entry,
             resource: path.posix.join(context, entry), // 入口的绝对路径
             parser,
-        }, entryModule => this.entries.push(entryModule), cb)
+            async,
+        }, entryModule => this.entries.push(entryModule), seal)
     }
     /**
      * 
@@ -71,7 +78,7 @@ module.exports = class Compilation extends Tapable {
      * @param {*} addEntry 可选的增加入口的方法， 如果这个模块是入口模块，就执行。负责，什么都不做
      * @param {*} cb 编译完成之后的 cb 回调
      */
-    createModule(data, addEntry, cb){
+    createModule(data, addEntry, sealWrap){
         let module = normalModuleFactory.create(data)
         module.moduleId = './' + path.posix.relative(this.context, module.resource)  // resource 模块的绝对路径
 
@@ -84,14 +91,14 @@ module.exports = class Compilation extends Tapable {
         this.modules.push(module) // 给普通模块添加一个模块
 
         const afterBuild = (err, module) => {
-            // 当前的moule 已经编译完成了， 需要编译此模块的依赖的模块
 
+            // 当前的moule 已经编译完成了， 需要编译此模块的依赖的模块
             if(module.dependencies.length > 0){
                 this.precessModuleDependencies(module, err => {
-                    cb(err, module)
+                    sealWrap(err, module)
                 })
             }else {
-                cb(err, module)
+                sealWrap(err, module)
             } 
         }
         this.buildModule(module, afterBuild)
@@ -105,10 +112,12 @@ module.exports = class Compilation extends Tapable {
             afterBuild(err, module)
         })
     }   
-
-    precessModuleDependencies(module, cb){
+    // 编译 依赖的 模块  (同步的依赖)
+    precessModuleDependencies(module, sealWrapWrap){
+        debugger
         // 拿到当前模块依赖的模块
         let dependencies = module.dependencies
+        debugger
 
         // 循环编译 dependencies 的每个 item 模块，所有的模块都结束之后，执行 cb
         neoAsync.forEach(dependencies, (dependencie, done) => {
@@ -130,7 +139,7 @@ module.exports = class Compilation extends Tapable {
                 moduleId,
             }, null, done)
 
-        }, cb)
+        }, sealWrapWrap)
     }
     
     /**
@@ -141,12 +150,15 @@ module.exports = class Compilation extends Tapable {
         this.hooks.seal.call()
         this.hooks.beforeChunks.call()
 
+        // 本质上 this.entries 里面存放的也是 module， 只是 每一个 module 是 属于 入口模块
         for (const entrie of this.entries) {
             const chunk = new Chunk(entrie) // 每个入口对应一个 chunk
             this.chunks.push(chunk)
 
             // this.modules 所有的模块 过滤出来 
+            debugger
             chunk.modules = this.modules.filter(_ => _.name === chunk.name)
+            debugger
         }
 
         this.hooks.afterChunks.call(this.chunks)
@@ -155,16 +167,24 @@ module.exports = class Compilation extends Tapable {
         cb()
     }
     createChunkAssets(){
-        for (let index = 0; index < this.chunks; index++) {
+        for (let index = 0; index < this.chunks.length; index++) {
             const chunk = this.chunks[index];
             const file = chunk.name + '.js'
 
             chunk.files.push(file)
+            let source
+            if(chunk.async){
+                source = chunkRender({
+                    chunkName: chunk.name, // chunk.entryModule.moduleId,
+                    modules: chunk.modules
+                })
+            }else{
+                source = mainAsyncRender({
+                    entryModuleId: chunk.entryModule.moduleId,
+                    modules: chunk.modules
+                })
+            }
 
-            let source = mainRender({
-                entryModuleId: chunk.entryModule.moduleId,
-                modules: chunk.modules
-            })
             this.emitAssets(file, source)
         }
     }

@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": false, // 自动生成声明文件
+    "removeComments": true,
+    "emitDecoratorMetadata": true, // 发射装饰器的 元数据文件
+    "experimentalDecorators": true, // 启动 装饰器
+    "target": "es2016",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

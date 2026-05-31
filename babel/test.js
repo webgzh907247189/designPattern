@@ -18,6 +18,8 @@
     const babel = require('@babel/core');
     const code = `class C {#brand;};`; // class Person{}; // class C {#brand;}
     // transformXxx 的 api，已经被标记为过时了，后续会删掉，不建议用，直接用 transformXxxSync 和 transformXxxAsync。
+    
+    
     const ast1 = babel.transformSync(code, {
       presets: [
         [

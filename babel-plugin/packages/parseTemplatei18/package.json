@@ -1,11 +1,18 @@
 {
-  "name": "parsetemplatei18",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC"
+    "name": "parsetemplatei18",
+    "version": "1.0.0",
+    "description": "babel plugin parsetemplatei18",
+    "main": "index.js",
+    "scripts": {
+        "test": "jest",
+        "coverage": "jest --coverage"
+    },
+    "keywords": [
+        "babel",
+        "plugin",
+        "parseTemplatei18",
+        "i18"
+    ],
+    "author": "",
+    "license": "ISC"
 }

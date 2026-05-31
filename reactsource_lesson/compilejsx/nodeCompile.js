@@ -5,18 +5,26 @@ function Com(params) {
 
 function App(params) {
     return <div>
-        <Com/>
+        <>
+            <Com/>
+        </>
+        
         <span>123123</span>
     </div>
 }
 `
 
 const babelCore = require("@babel/core");
+const attrPlugins = require('./attrPlugins.js')
+
 let resultCode = babelCore.transformSync(code, {
-    plugins: [["@babel/plugin-transform-react-jsx", {
+    plugins: [
+        attrPlugins,
+        ["@babel/plugin-transform-react-jsx", {
         // "pragma": "h1h", // default pragma is React.createElement
         // "runtime": "automatic", // classic | automatic, defaults to classic
-    }]],
+    }]]
+    ,
 });
 console.log(resultCode.code);
 

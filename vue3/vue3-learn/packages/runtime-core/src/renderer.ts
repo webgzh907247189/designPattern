@@ -284,6 +284,11 @@ export function createRenderer(renderOptions) {
                 keyToNewIndexMap.set(vnode.key, i)
             }
 
+
+            // keyToNewIndexMap -> {e: 2, c: 3, d: 4, h: 5}
+            let toBePatch = e2 - s2 + 1 // 倒叙插入的个数
+            let newIndexToOldMapIndex = new Array(toBePatch).fill(0) // newIndexToOldMapIndex -> [0,0,0,0]
+
             for (let i = s1; i <= e1; i++) {
                 const vnode = oldChildren[i];
                 const newIndex = keyToNewIndexMap.get(vnode.key)
@@ -292,16 +297,32 @@ export function createRenderer(renderOptions) {
                 if(newIndex === undefined){
                     unmount(vnode)
                 }else{
+                    // 老的 vnode list 对应的 新的 vnode list 元素下标
+                    // c -> newIndex: 3; i: 2
+                    // d -> newIndex: 4; i: 3
+                    // e -> newIndex: 2; i: 4
+
+                    // newIndexToOldMapIndex[newIndex - s2] = i; // [4, 2, 3, 0]
+                    newIndexToOldMapIndex[newIndex - s2] = i + 1; // [4, 2, 3, 0]
+                    // vue 里面下标为 0 的表示，当前元素没有被 patch 过，需要直接创建当前节点
+
+
                     patch(vnode, newChildren[newIndex], el)
                 }
             }
+            console.log(newIndexToOldMapIndex, 'newIndexToOldMapIndexnewIndexToOldMapIndex')
+            // newIndexToOldMapIndex -> [4, 2, 3, 0]
+            // 根据最长递增子序列找到下标
+
+
 
             // 经过上面的运算， 新旧节点对比之后，----> 老的节点中不需要的节点都已经被删除了
             // 调整顺序，倒叙插入
             // [a, b,   c, d, e,    f, g] 
             // [a, b,   e, c, d, h, f, g] 
             // console.log(i, e1, e2) ------>  2 4 5
-            let toBePatch = e2 - s2 + 1 // 倒叙插入的个数
+            // s2 = s1 = 2
+            // let toBePatch = e2 - s2 + 1 // 倒叙插入的个数
             debugger
             for (let i = toBePatch - 1; i >= 0; i--) {
                 let newIndex = s2 + i;

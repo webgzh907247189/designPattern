@@ -12,7 +12,9 @@ function urlLoader(source){
         return require('./fileLoader').call(this, source)
     }
 }
+
 // 使用二进制处理数据
+// 默认情况下，loader 得到的是一个字符串， 声明 raw true，告诉webpack 不要把原文件内容转成字符串
 urlLoader.raw = true;
 
 module.exports = urlLoader;

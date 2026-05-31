@@ -8,23 +8,37 @@ class Store{
 
         // 把state 数据变为响应式
         let state = this.options.state
-        this._vm = new Vue({
-            data: {
-                state
-            }
-        })
 
         // 处理getters，直接把getters 挂载到 this._vm.state 上面
         let getters = options.getters
+
+        let computed = {}
         if(getters){
             forEach(getters,(getterName,getterFn)=>{
-                Object.defineProperty(this._vm.state,[getterName],{
+                computed[getterName] = ()=>{
+                    return getterFn(state)
+                }
+                
+                // Object.defineProperty(this._vm.$$state.getters,[getterName],{
+                //     get:()=>{
+                //         return getterFn(state)
+                //     }
+                // })
+
+                // 利用计算属性 来缓存
+                Object.defineProperty(getters,[getterName],{
                     get:()=>{
-                        return getterFn(state)
+                        return this._vm[getterName]
                     }
                 })
             })
         }
+        this._vm = new Vue({
+            data: {
+                $$state: state
+            },
+            computed
+        })
 
         let mutations = options.mutations
         if(mutations){
@@ -61,7 +75,7 @@ class Store{
 
     get state(){
         // 返回响应式 数据
-        return this._vm.state
+        return this._vm._data.$$state
 
         // return this.options.state
     }

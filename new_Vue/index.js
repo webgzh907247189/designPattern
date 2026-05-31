@@ -38,6 +38,7 @@ Vue.prototype.$mount = function(){
 
     const options = vm.$options;
     // 编译模版
+    // 先找 redner 函数，在找 template， 最后找 outHTML
     if(!options.render){
         let template = options.template
         if(!template & el){

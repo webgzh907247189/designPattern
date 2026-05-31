@@ -10,6 +10,9 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
 const smp = new SpeedMeasurePlugin();
 
+// const ErrorWithImportPackage = require('./fff');
+// const TestVue = require('./ggg')
+
 const setTitle = require('node-bash-title');
 setTitle('webpack  Server');
 
@@ -32,17 +35,41 @@ module.exports = smp.wrap({
         rules: [
             {
                 test: /\.vue$/,
-                loader: 'vue-loader',
+                use: ['vue-loader', {
+                    loader: 'vue-part-compile-loader',
+                    options: {language: 'zh-cn'},
+                }],
+               
+                include: [/src\/component/],
+            },
+            {
+                test: /\.vue$/,
+                loader: ['vue-loader'],
+                // { loader:path.resolve(__dirname,"./eee.js") },
+                // { loader:path.resolve(__dirname,"./ddd.js"), options:{   name:"hello" } },
                 // use: ['thread-loader', 'vue-loader'],
                 include: [path.resolve('src')],
                 exclude: /node_modules/
             },
             {
                 test: /\.js$/,
-                use: ['cache-loader','babel-loader'],
+                // use: ['cache-loader','babel-loader'],
+                loader: [ 'babel-loader'], // 
                 include: [path.resolve('src')],
                 exclude: /node_modules/
             },
+            // {
+            //     test: /\.js$/,
+            //     use: {
+            //         loader:path.resolve(__dirname,"./ddd.js"),
+            //         options:{
+            //             name:"hello"
+            //         }
+            //     },
+            //     enforce: "post",
+            //     // include: [path.resolve('src')],
+            //     // exclude: /node_modules/
+            // },
             {
                 test: /\.css$/,
                 use: [
@@ -107,6 +134,9 @@ module.exports = smp.wrap({
             }
         ]
     },
+    resolveLoader: {
+        modules: ['node_modules', path.resolve(__dirname, './ddd.js')] 
+    },
     optimization: {
         splitChunks: {
             cacheGroups: {
@@ -125,6 +155,7 @@ module.exports = smp.wrap({
     },
     plugins: [
         new VueLoaderPlugin(),
+        // new TestVue(),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NamedModulesPlugin(), //  显示被替换模块的名称
         new WebpackDeepScopeAnalysisPlugin(),
@@ -143,30 +174,31 @@ module.exports = smp.wrap({
         new WebpackBuildNotifierPlugin({
             title: "Webpack Build",
             suppressSuccess: true
-        })
+        }), 
+        // new ErrorWithImportPackage(['fastclick'])
     ],
-    devServer: {
-        // contentBase: path.join(__dirname, "dist"),
-        host: 'localhost',      // 默认是localhost
-        port: '3001',             // 端口
-        open: true,             // 自动打开浏览器
-        hot: true,               // 开启热更新
-        overlay: true,           // 如果代码出错，会在浏览器页面弹出“浮动层”。类似于 vue-cli 等脚手架
-        proxy: {
-            /** 联调环境下 **/
-            '/api/*': {
-                target: 'http://localhost:4000'
-            }
+    // devServer: {
+    //     // contentBase: path.join(__dirname, "dist"),
+    //     host: 'localhost',      // 默认是localhost
+    //     port: '3001',             // 端口
+    //     open: true,             // 自动打开浏览器
+    //     hot: true,               // 开启热更新
+    //     overlay: true,           // 如果代码出错，会在浏览器页面弹出“浮动层”。类似于 vue-cli 等脚手架
+    //     proxy: {
+    //         /** 联调环境下 **/
+    //         '/api/*': {
+    //             target: 'http://localhost:4000'
+    //         }
 
-            /** 开发环境下 **/
-            // '/api/*': {
-            //     target: `http://localhost:${mockPort}`
-            // }
-        },
-        before(app){
-            app.get('/test',(req,res)=>{
-                res.json({name: 'test'})
-            })
-        }
-    }   
+    //         /** 开发环境下 **/
+    //         // '/api/*': {
+    //         //     target: `http://localhost:${mockPort}`
+    //         // }
+    //     },
+    //     before(app){
+    //         app.get('/test',(req,res)=>{
+    //             res.json({name: 'test'})
+    //         })
+    //     }
+    // }   
 });

@@ -30,4 +30,5 @@ exports = module.exports = webpack
 // 执行所有的插件，执行插件的 apply 方法，让插件方法注册
 // 注册 SingleEntryPlugin.make
 
-// 执行： beforeRun -> run -> beforeCompile -> compile -> make (提前暴露了很多钩子 beforeRun、run、beforeCompile...， 让用户可以自定义添加)
+// 执行： beforeRun -> run -> beforeCompile -> compile
+// thisCompilation -> compilation -> make -> afterCompile -> emit -> done (提前暴露了很多钩子 beforeRun、run、beforeCompile...， 让用户可以自定义添加)

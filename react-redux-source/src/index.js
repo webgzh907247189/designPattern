@@ -2,15 +2,15 @@ import React from 'react';
 // import React from './my/react';
 import ReactDOM from 'react-dom';
 // import Demo from './reactDemo'
-import Middlerare from './middlerare';
+// import Middlerare from './middlerare';
 
-import ReduxHooks from './redux-hooks';
-import HoosUseState from './hoosUseState'
-import RouterApp from './router';
-import ReduxActionsDemo from "./reduxActionsDemo";
-import ReduxHooksDemoContainer from "./reduxHooksDemo";
+// import ReduxHooks from './redux-hooks';
+// import HoosUseState from './hoosUseState'
+// import RouterApp from './router';
+// import ReduxActionsDemo from "./reduxActionsDemo";
+// import ReduxHooksDemoContainer from "./reduxHooksDemo";
 
-import Test from './test'
+import Test from './test2'
 // /** hooks 测试 */
 // import Hooks from './hooks'
 // Hooks()

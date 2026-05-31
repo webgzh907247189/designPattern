@@ -11,8 +11,10 @@ webpack 中最核心的 负责编译的 Compile 和 负责创建 bundle 的 Comp
 
 
 
+basic 执行每一个事件函数， 不关心返回值
 
-bail。 遇到返回值 不为 undefined 的，就结束执行， 执行下一个 (返回非 undefined 就停止运行代码，进行下一个)
+bail 遇到返回值 不为 undefined 的，就结束执行， 执行下一个 (返回非 undefined 就停止运行代码，进行下一个)
+
 waterfail 类似于 compose， 上个函数返回值 被下个函数当参数来使用 (没有返回值向上查找，找到前一个函数的返回值)
 
 loop 返回值不为 undefined ，重复执行  (返回值为 undefined，可以 return 出来)

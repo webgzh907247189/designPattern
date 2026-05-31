@@ -10,5 +10,10 @@ keyedHook.tap('key', 'plugin1', (name) => { console.log(1, name) })
 
 keyedHook.for('key').tap('plugin2', (name) => { console.log(1, name) })
 
-const hook = keyedHook.get('key')
-hook.call('chifan')
+
+
+// const hook = keyedHook.get('key')
+// hook.call('chifan')
+
+// 下面这个等同于 上面的 写法
+keyedHook.for('key').call('chi')

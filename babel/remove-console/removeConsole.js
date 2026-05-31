@@ -15,6 +15,7 @@ const getValNodeListByPath = (list) => {
             let matchItem = ''
             let s = item.findParent(_ => {
 
+
                 let consoleCallPrevNodeList = _.getAllPrevSiblings()
                 let consoleCallNextNodeList = _.getAllNextSiblings()
                 let consoleCallAllNodeList = [...consoleCallPrevNodeList, ...consoleCallNextNodeList]
@@ -50,14 +51,16 @@ const getValNodeListByPath = (list) => {
     }, [])
 }
 
-module.exports = function(types){
+module.exports = function(types, option111){
     return {
         name: 'remove-console',
         visitor: {
             CallExpression(path, state){
+                console.log(option111, 'option111')
                 let options = state.opts;
                 let calleeObjectCode = path.get('callee').get('object').toString()
                 let calleePropertyCode = path.get('callee').get('property').toString()
+            
 
                 // 同时设置了 exclude 和 contain， 优先以 contain 为判定条件
                 if(options && isArray(options.exclude) && isArray(options.contain)){

@@ -6,6 +6,7 @@ Vue.mixin({
     }
 })
 
+// 优先使用组件自己的组件
 Vue.component('my-button', {
     template: '<div>my-button11</div>'
 })
@@ -47,10 +48,10 @@ let vue = new Vue({
     //     return h('p',{}, this.name1)
     // },
     // template: '<my-button></my-button><div id="app" style="font-size: 22px; font-weight: 400;"> <div style="color: red;"><span><p>hello</p>111{{msg}}aa{{test}}很好</span></div> </div>',
-    template: '<div><my-button></my-button><my-button></my-button><my-button></my-button></div>',
+    template: '<p><my-button></my-button></p>',
     components: {
         'my-button': {
-            template: '<div>my-button22</div>'
+            template: '<span>my-button22</span>'
         }
     }
 })

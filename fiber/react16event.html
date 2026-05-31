@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+    e代表的是合成事件对象  加个 native 代表是原生的对象
+    e.stopPropagation() 阻止向上冒泡，但是本级剩下的监听函数还是会执行
+    e.stopImmediatePropagation() 阻止同级传播 但是本级剩下的监听函数不会执行
+
+    react 16 事件代理在 document 上面， 16 执行 stopPropagation ，没办法阻止冒泡到 document 上面，所以要使用 stopImmediatePropagation
+    17代理在容器上面
+	<div id="parent">
+        <div id="child">react 16 事件</div>
+	</div>
+</body>
+<script>
+    // document元素原生捕获
+    // 父元素原生捕获
+    // 子元素原生捕获
+    // 子元素原生冒泡
+    // 父元素原生冒泡
+    // 父元素 react 捕获
+    // 子元素 react 捕获
+    // 子元素 react 冒泡
+    // 父元素 react 冒泡
+    // document元素原生冒泡
+
+    function dispatch(e){
+        let paths = []
+        let current = e.target
+        while(current){
+            paths.push(current)
+            current = current.parentNode
+        }
+        for (let len = paths.length - 1; len >= 0; len--) {
+            const fn = paths[len].onClickCapture;
+            fn && fn()
+        }
+
+        for (let len = 0; len < paths.length; len++) {
+            const fn = paths[len].onClick;
+            fn && fn()
+        }
+    }
+
+    document.addEventListener('click',dispatch)
+
+    let parent = document.getElementById('parent')
+    let child = document.getElementById('child')
+
+    parent.addEventListener('click', () => {
+        console.log('父元素原生捕获')
+    }, true)
+    parent.addEventListener('click', () => {
+        console.log('父元素原生冒泡')
+    })
+
+    child.addEventListener('click', () => {
+        console.log('子元素原生捕获')
+    }, true)
+    child.addEventListener('click', () => {
+        console.log('子元素原生冒泡')
+    })
+
+    document.addEventListener('click', () => {
+        console.log('document元素原生捕获')
+    }, true)
+    document.addEventListener('click', () => {
+        console.log('document元素原生冒泡')
+    })
+
+    parent.onClick = function(){
+        console.log('父元素 react 冒泡')
+    }
+    parent.onClickCapture = function(){
+        console.log('父元素 react 捕获')
+    }
+
+    child.onClick = function(){
+        console.log('子元素 react 冒泡')
+    }
+    child.onClickCapture = function(){
+        console.log('子元素 react 捕获')
+    }
+</script>
+</html>

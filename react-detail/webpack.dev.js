@@ -23,7 +23,7 @@ const commonDevModules = [
 module.exports = smp.wrap({
     entry: {
         common: commonDevModules,
-        index: './index.tsx',
+        index: './index.jsx',
         vendor: ['react','react-dom']
     },
     output: {
@@ -49,7 +49,7 @@ module.exports = smp.wrap({
     module: {
         rules: [
             {   
-                test: /\.tsx?$/,
+                test: /\.jsx?$/,
                 exclude: /node_modules/,
                 use: ['cache-loader','babel-loader','ts-loader']   //可优化，因为ts不走babel编译也可以 (抽离antd没用到的css)
             },

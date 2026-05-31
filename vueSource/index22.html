@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MVVM</title>
+</head>
+
+<body>
+    <div id="app">
+        11v2.6.12
+        <Test1 :aa="aa" :bb="bb" />
+    </div>
+
+    <!-- 引入依赖的 js 文件 -->
+    <script src="vue.js"></script>
+    <!-- <script src="vue.2.6.10.js"></script> -->
+    <script>
+
+        Vue.component('Test2', {
+            name: 'test2',
+            template: '<div>{{aa}}--{{bb}}-{{cc}}</div>',
+            props: {
+                bb: {
+                    type: String,
+                    default: '',
+                },
+                aa: {
+                    type: String,
+                    default: ''
+                },
+                cc: {
+                    type: String,
+                    default: ''
+                }
+            },
+        })
+        Vue.component('Test1', {
+            template: '<Test2 v-bind="$attrs" :cc="cc"/>',
+            props: {
+                // bb: {
+                //     type: String,
+                //     default: '',
+                // },
+                // aa: {
+                //     type: String,
+                //     default: ''
+                // }
+            },
+            mounted() {
+                console.log(this.$attrs, 'attrs')
+            },
+
+            data() {
+                return {
+                    cc: 'cc1'
+                }
+            }
+
+        })
+
+        let vm = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    aa: 'aa1',
+                    bb: 'bb1',
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

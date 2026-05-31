@@ -1,4 +1,4 @@
-import React from './source/react';
+// import React from './source/react';
 // import './immer/source/test'
 
 /**
@@ -7,21 +7,21 @@ import React from './source/react';
  * React 渲染 demo
  */
 
-import dayjs from 'dayjs';
-const str = '2021/01/01T16:00:00+0000'
+// import dayjs from 'dayjs';
+// const str = '2021/01/01T16:00:00+0000'
 
-console.log(dayjs(str.split('+')[0]).format('YYYY-MM-DD hh:mm:ss'))
+// console.log(dayjs(str.split('+')[0]).format('YYYY-MM-DD hh:mm:ss'))
 
-dayjs('2021-01-01T16:00:00+0000').format('YYYY-MM-DD hh:mm:ss')
-// debugger
-dayjs('2021/01/01T16:00:00+0000').format('YYYY-MM-DD hh:mm:ss')
+// dayjs('2021-01-01T16:00:00+0000').format('YYYY-MM-DD hh:mm:ss')
+// // debugger
+// dayjs('2021/01/01T16:00:00+0000').format('YYYY-MM-DD hh:mm:ss')
 
 // immer.js
-// import React from 'react';
+import React from 'react';
 // import ImmerApp from './immer/index';
 
-// import ReactDOM from 'react-dom';
-// import App from './App';
+import ReactDOM from 'react-dom';
+import App from './App';
 
 
 /*****渲染文本节点********/
@@ -131,8 +131,11 @@ class Counter1 extends React.Component{
     }
 }
 {/* <Counter {name: '计数器'}/> */}
-React.render(React.createElement(Counter1, {name: '计数器'}), document.getElementById('root'));
+// React.render(React.createElement(Counter1, {name: '计数器'}), document.getElementById('root'));
 /*********渲染组件***********/
 
 
-// ReactDOM.render(<ImmerApp/>, document.getElementById('root'));
+// ReactDOM.render(<App/>, document.getElementById('root'));
+
+// 异步可中断渲染
+ReactDOM.unstable_createRoot(document.getElementById('root')).render(<App/>)

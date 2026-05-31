@@ -1028,7 +1028,7 @@
       return
     }
 
-    console.log(dep, key, val, '????',property)
+    // console.log(dep, key, val, '????',property)
     // cater for pre-defined getter/setters
     var getter = property && property.get;
     var setter = property && property.set;
@@ -1055,7 +1055,7 @@
         return value
       },
       set: function reactiveSetter (newVal) {
-        debugger
+        // debugger
 
         var value = getter ? getter.call(obj) : val;
         /* eslint-disable no-self-compare */
@@ -1926,7 +1926,7 @@
 
   function flushCallbacks () {
     // pending = false;
-    console.log('111', callbacks)
+    // console.log('111', callbacks)
     // debugger
     var copies = callbacks.slice(0);
     callbacks.length = 0;
@@ -2020,7 +2020,7 @@
     });
     // if (!pending) {
       // pending = true;
-      console.log('??????')
+      // console.log('??????')
       timerFunc();
     // }
     // $flow-disable-line
@@ -2496,7 +2496,7 @@
         var source = vm;
         while (source) {
           if (source._provided && hasOwn(source._provided, provideKey)) {
-            console.log(source._provided, provideKey)
+            // console.log(source._provided, provideKey)
             result[key] = source._provided[provideKey];
             break
           }
@@ -2670,7 +2670,7 @@
         ret[i] = render(i + 1, i);
       }
     } else if (isObject(val)) {
-      console.log('111', hasSymbol,val[Symbol.iterator])
+      // console.log('111', hasSymbol,val[Symbol.iterator])
       if (hasSymbol && val[Symbol.iterator]) {
         ret = [];
         var iterator = val[Symbol.iterator]();
@@ -2680,7 +2680,7 @@
           result = iterator.next();
         }
       } else {
-        console.log('222')
+        // console.log('222')
         keys = Object.keys(val);
         ret = new Array(keys.length);
         for (i = 0, l = keys.length; i < l; i++) {
@@ -2786,6 +2786,8 @@
     asProp,
     isSync
   ) {
+    debugger
+
     if (value) {
       if (!isObject(value)) {
         warn(
@@ -3157,6 +3159,7 @@
     },
 
     prepatch: function prepatch (oldVnode, vnode) {
+      debugger
       var options = vnode.componentOptions;
       var child = vnode.componentInstance = oldVnode.componentInstance;
       updateChildComponent(
@@ -3306,6 +3309,7 @@
     vnode, // we know it's MountedComponentVNode but flow doesn't
     parent // activeInstance in lifecycle state
   ) {
+    debugger
     var options = {
       _isComponent: true,
       _parentVnode: vnode,
@@ -3534,6 +3538,7 @@
     var parentData = parentVnode && parentVnode.data;
 
     /* istanbul ignore else */
+    debugger
     {
       defineReactive$$1(vm, '$attrs', parentData && parentData.attrs || emptyObject, function () {
         !isUpdatingChildComponent && warn("$attrs is readonly.", vm);
@@ -3965,6 +3970,8 @@
 
   function lifecycleMixin (Vue) {
     Vue.prototype._update = function (vnode, hydrating) {
+      console.log(vnode, 'vnode')
+      // debugger
       var vm = this;
       var prevEl = vm.$el;
       var prevVnode = vm._vnode;
@@ -4165,7 +4172,9 @@
     // update $attrs and $listeners hash
     // these are also reactive so they may trigger child update if the child
     // used them during render
+    // debugger
     vm.$attrs = parentVnode.data.attrs || emptyObject;
+    // debugger
     vm.$listeners = listeners || emptyObject;
 
     // update props
@@ -4182,13 +4191,13 @@
       // keep a copy of raw propsData
       vm.$options.propsData = propsData;
     }
-
+    // debugger
     // update listeners
     listeners = listeners || emptyObject;
     var oldListeners = vm.$options._parentListeners;
     vm.$options._parentListeners = listeners;
     updateComponentListeners(vm, listeners, oldListeners);
-
+    // debugger
     // resolve slots + force update if has children
     if (needsForceUpdate) {
       vm.$slots = resolveSlots(renderChildren, parentVnode.context);
@@ -4411,7 +4420,7 @@
    * pushed when the queue is being flushed.
    */
   function queueWatcher (watcher) {
-    console.log('ddd', watcher)
+    // console.log('ddd', watcher)
     var id = watcher.id;
     if (has[id] == null) {
       has[id] = true;
@@ -4508,7 +4517,7 @@
    * Evaluate the getter, and re-collect dependencies.
    */
   Watcher.prototype.get = function get () {
-    debugger
+    // debugger
     pushTarget(this);
     var value;
     var vm = this.vm;
@@ -5003,6 +5012,7 @@
 
   function initMixin (Vue) {
     Vue.prototype._init = function (options) {
+      debugger
       var vm = this;
       // a uid
       vm._uid = uid$3++;
@@ -5038,6 +5048,7 @@
       // expose real self
       // debugger
       vm._self = vm;
+      debugger
       initLifecycle(vm);
       initEvents(vm);
       initRender(vm);
@@ -5061,6 +5072,8 @@
   }
 
   function initInternalComponent (vm, options) {
+
+    debugger
     var opts = vm.$options = Object.create(vm.constructor.options);
     // doing this because it's faster than dynamic enumeration.
     var parentVnode = options._parentVnode;
@@ -5177,6 +5190,7 @@
      * Class inheritance
      */
     Vue.extend = function (extendOptions) {
+      // debugger
       extendOptions = extendOptions || {};
       var Super = this;
       var SuperId = Super.cid;
@@ -5196,10 +5210,12 @@
       Sub.prototype = Object.create(Super.prototype);
       Sub.prototype.constructor = Sub;
       Sub.cid = cid++;
+      debugger
       Sub.options = mergeOptions(
         Super.options,
         extendOptions
       );
+      debugger
       Sub['super'] = Super;
 
       // For props and computed properties, we define the proxy getters on
@@ -6013,7 +6029,9 @@
     }
 
     function createComponent (vnode, insertedVnodeQueue, parentElm, refElm) {
+      debugger
       var i = vnode.data;
+      debugger
       if (isDef(i)) {
         var isReactivated = isDef(vnode.componentInstance) && i.keepAlive;
         if (isDef(i = i.hook) && isDef(i = i.init)) {
@@ -9454,6 +9472,7 @@
         }
         break
       }
+      console.log(html, 'htmlhtmlhtml')
     }
 
     // Clean up any remaining tags
@@ -10985,6 +11004,7 @@
     ast,
     options
   ) {
+    // debugger
     var state = new CodegenState(options);
     var code = ast ? genElement(ast, state) : '_c("div")';
     return {
@@ -10994,6 +11014,7 @@
   }
 
   function genElement (el, state) {
+    // debugger
     if (el.parent) {
       el.pre = el.pre || el.parent.pre;
     }
@@ -11481,6 +11502,7 @@
   }
 
   function genProps (props) {
+    // debugger
     var staticProps = "";
     var dynamicProps = "";
     for (var i = 0; i < props.length; i++) {
@@ -11979,7 +12001,9 @@
         }, this);
         var render = ref.render;
         var staticRenderFns = ref.staticRenderFns;
+        // debugger
         options.render = render;
+        // debugger
         options.staticRenderFns = staticRenderFns;
 
         /* istanbul ignore if */

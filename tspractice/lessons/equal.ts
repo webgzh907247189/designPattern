@@ -61,10 +61,13 @@ type Equal<X, Y> =
 type ssss111s = Equal<{ readonly a: 'A' }, { a: 'A' }>
 
 
+type IsEqual<A, B> = (A extends B ? true : false) & (B extends A ? true : false);
+type IsEqual1 = IsEqual<{ readonly a: 'A' }, { a: 'A' }>
 
 
 
-
+// 如果从大的类型变为小的类型，那就是类型的缩小，叫做逆变。
+// 如果从小的类型变为大的类型，那就是类型的放大，叫做协变。
 type UnionToIntersection<U> = (U extends U ? (arg: U) => any: never) extends (arg: infer T) => any
   ? T
   : never;
@@ -72,7 +75,7 @@ type UnionToIntersection<U> = (U extends U ? (arg: U) => any: never) extends (ar
 // 测试用例
 type U0 = UnionToIntersection<string | number> // never
 
-type U1 = UnionToIntersection<{ name: string } | { age: number }> // { name: string; } & { age: number; }
+type U1 = UnionToIntersection<{ age: string } | { name: string }> // { name: string; } & { age: number; }
 // <string | number> 在 (U extends U ? (arg: U) => any: never)  
 //这一段变成了 string extends string | number ? (arg: string) => any 
 //| number extends string | number ? (arg: number) => any  , 

@@ -1,4 +1,4 @@
-const webpack = require('webpack') //require('./source')
+const webpack = require('./source') //require('./source')
 const webpackConfig = require('./webpack.config');
 
 debugger

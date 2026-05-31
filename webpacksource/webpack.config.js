@@ -7,8 +7,43 @@ module.exports = {
     devtool: false,
     entry: './src/index.js',
     output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'main.js',
+        path: path.resolve(__dirname, 'distMywebpack'),
+        filename: 'main.[chunkhash].js',
+    },
+    optimization: {
+        splitChunks: {
+            chunks: 'all', // 默认 async        要分割哪些代码块  initial 同步， async 异步代码块  all = initial + async
+            minSize: 0, // 默认 30kb            被提供的代码块的最小尺寸 (公用的代码块体积 > 0 就 提取)
+            name: true, // 默认使用 ～ 进行分割   设置代码打包之后的名称， 
+            automaticNameDelimiter: '~~',
+            
+            // 缓存组设置不同的缓存组来抽取不同规则的 chunk
+            // 针对缓存组的设置，相同的配置可以 提出去， 类似 chunks: 'all' 可以提取出去
+            // 缓存组有优先级的设置 priority
+            cacheGroups: {
+                // 打包的名字
+                venders: {
+                    chunks: 'all',
+                    test: /node_modules/,
+                    priority: -10
+                },
+                // 打包的名字
+                commons: {
+                    chunks: 'all',
+                    minChunks: 2, // 如果这个模块被2个或2个以上的代码块引用了，就可以单独提取出去
+                    minSize: 8, // 被提供的代码的大小， 默认30kb， 超过才会提取出去
+                    priority: -30
+                }
+            }
+        }
+    },
+    module: {
+        rules: [
+            {
+                test: /\.less$/,
+                use: ['style-loader', 'less-loader']
+            }
+        ]
     }
 }
 // webpack4 电子书

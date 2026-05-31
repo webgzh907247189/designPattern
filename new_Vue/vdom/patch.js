@@ -19,6 +19,7 @@ function createComponent(vnode) {
     return false
 }
 
+// 把创建的真实dom 和 虚拟 dom 映射在一起，方便后续比对 
 export function createEle(vnode){
     let {tag, props, key, children, text} = vnode
     // console.log(vnode, 'vnode')
@@ -38,6 +39,7 @@ export function createEle(vnode){
             render(item,vnode.el)
         });
     } else {
+        // 把创建的真实dom 和 虚拟 dom 映射在一起，方便后续比对 
         vnode.el =  document.createTextNode(text)
     }
 
@@ -204,6 +206,7 @@ function updateChildren(parent, oldChildren, newChildren){
         }
     }
 
+    // 头头  尾尾
     if(newStartIndex <= newEndIndex){
         for(let i = newStartIndex; i <= newEndIndex; i++){
             // insertBefore(xx, null) === appendChild

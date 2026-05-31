@@ -14,19 +14,21 @@ const Asyncplugin = require('./myPlugin/Asyncplugin');
 const FileListplugin = require('./myPlugin/FileListplugin');
 const InlineSourceplugin = require('./myPlugin/InlineSourceplugin');
 const zip = require('./myPlugin/zip');
+const HashPlugin = require('./myPlugin/HashPlugin')
 // tree-shaking  scope-hosting
 
+const AutoExternalPlugin = require('./myPlugin/autoExternal')
 //  happypack 打包 多线程打包
 const happypack = require('happypack');
 module.exports = {
     // 当前工作目录
     context: process.cwd(),
-    mode: 'production',
+    mode: 'development',
     devtool: false,
     entry: './src/index.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'main.[hash:5].js',
+        filename: 'main.[chunkhash].js',
     },
     /**
      * 以下情况的代码块会被分割
@@ -205,7 +207,7 @@ module.exports = {
                             publicPath: '', // ??? 指定引入时的目录
 
                             // img、font中是没有chunkHash的，仍然需要用到hash
-                            // name: './assets/imgs/[name].[contentHash].[ext]'
+                            name: './[name].[contenthash:10].[ext]'
                         }
                     }
                 },
@@ -225,12 +227,22 @@ module.exports = {
     // 'source-map' 生成单独的 source-map 文件
     // 'eval-source-map' 不产生单独的 source-map 文件，但是可以显示 行列
     devtool: 'source-map',
-    externals: {
-        // key 是模块名 value 是全局变量名
-        // vue: 'Vue',
-        'vue-router': 'VueRouter',
-    },
+    // externals: {
+    //     // key 是模块名 value 是全局变量名
+    //     // vue: 'Vue',
+    //     'vue-router': 'VueRouter',
+    // },
     plugins: [
+        // key 是 模块的名字
+        // 值是一个对象  expose 的 value 代表 挂载 在 window 上面的变量名； url 为路径
+        new AutoExternalPlugin({
+            'vue-router': {
+                expose: 'VueRouter',
+                url: 'https://cdn.bootcdn.net/ajax/libs/vue-router/3.5.0/vue-router.js',
+            }
+        }),
+
+
         // "preprod": "rm -rf ./dist",
         new CleanWebpackPlugin(),
 
@@ -249,7 +261,7 @@ module.exports = {
         }),
         new miniCssExtractPlugin({
             // 此处加不加 / 影响很大
-            filename: 'css/main.[hash].css',
+            filename: 'css/main.[contenthash].css',
         }),
         new CopyWebpackPlugin([
             {from: './doc', to: './'},
@@ -268,6 +280,7 @@ module.exports = {
             filename: 'list.md',
         }),
         new zip(),
+        new HashPlugin(),
         // new InlineSourceplugin({
         //     match: /\.(css)$/
         // }),

@@ -9,20 +9,33 @@ const removeConsole = require('./removeConsole.js');
 //     console.log(s, '??', 'notremove11');
 //     console.error(s, '??', 'notremove11');
 // `
-let sourceCode1 = `
-    let s = 's'; 
-    const afun =() => {   
-        console.log(s, '??', 'notremove');
+
+// let sourceCode1 = `
+//     let s = 's'; 
+
+//     const afun =() => {   
+//         console.log(s, '??', 'notremove');
         
-        let s1 = 's11'; 
-        console.log(s1, '??', 'notremove');
-        let s2 = 's2'; 
-    } 
+//         let s1 = 's11'; 
+//         console.log(s1, '??', 'notremove');
+//         let s2 = 's2'; 
+//     } 
+// `
+
+let sourceCode1 = `
+    let s = 1; 
+    let a = '2'
+    console.log(s, '??', 'notremove');
+    console('??', 'notremove');
+    console.info('??', 'notremo22ve');
+    console.log(s, '??', 'notremove11');
+    console.error(a, '??', 'notremove11');
 `
+
 //exclude: ['error'], contain: ['notremove']
 const code = babelCore.transformSync(sourceCode1, {
-    // plugins: [[removeConsole, { contain: ['notremove'], exclude: [] }]]
-    plugins: [[removeConsole, { contain: ['s'], exclude: [''] }]]
+    plugins: [[removeConsole, { contain: [1] }]]
+    // plugins: [[removeConsole, { contain: ['s'], exclude: [''] }]]
     // plugins: [[removeConsole]]
     // plugins: [[removeConsole, { contain: ['notremove'] }]]
     // plugins: [[removeConsole, { exclude: ['log'] }]]

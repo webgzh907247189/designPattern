@@ -1,20 +1,26 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import axios from 'axios'
-import fastclick from 'fastclick'
-import store from './store/index1'
-fastclick.attach(document.body)
+// import axios from 'axios'
+// import fastclick from 'fastclick'
+// import store from './store/index1'
+// fastclick.attach(document.body)
 
-Vue.prototype.axios = axios
+// Vue.prototype.axios = axios
+// Vue.prototype.cusgzh = (sss) => {
+	
+// 	console.log('wo shi gzh')
+// 	return sss
+// }
 
-import(/* webpackChunkName:"testgzh1" */'./test').then((data) => {
-	window.data = data
-})
+// import(/* webpackChunkName:"testgzh1" */'./test').then((data) => {
+// 	window.data = data
+// })
+
 new Vue({
 	el: '#root',
 	router,
-	store,
+	// store,
     template: '<App/>',
 	components: {
 		App

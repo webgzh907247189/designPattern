@@ -131,7 +131,7 @@ function runSyncOrAsync(fn, loaderContext, args, runCallback){
     }
 
     loaderContext.async = () => {
-        let isSync = false // 异步执行
+        isSync = false // 异步执行
         return loaderContext.callback
     }
 
@@ -150,6 +150,7 @@ function processResource(processOptions, loaderContext, pitchCb){
     // console.log(loaderContext.resource, 'loaderContext.resource');
 
     processOptions.readResource(loaderContext.resource, (err, buffer) => {
+        // console.log(loaderContext.resource, 'loaderContext.resource')
         processOptions.resourceBuffer = buffer
         loaderContext.loaderIndex--
 
@@ -165,6 +166,7 @@ function iterateNormalLoaders(processOptions, loaderContext, args, pitchCb){
     }
 
     let currentLoader = loaderContext.loaders[loaderContext.loaderIndex]
+    // 判断已经执行过了
     if(currentLoader.normalExecuted){
         // ???/
         loaderContext.loaderIndex --;

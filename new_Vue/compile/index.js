@@ -5,6 +5,7 @@ import { parseHtml } from './parse';
 // ????? this.dep 和 dep的关系
 // ????? dep 记住 watcher，为了方便当 属性变了，对watchers 循环执行每个wacther的update， 但是 watcher 记住dep 的 原因是？
 
+// vue3 有 blocktree patchFlag
 export function compileToFunction(template){
     const ast = parseHtml(template)
     // console.log(ast, 'ast')

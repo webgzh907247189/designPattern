@@ -12,7 +12,7 @@ module.exports = {
         testDiff: './testDiff.js',
     },
     output: {
-        filename: 'chunk[contentHash:5].js',
+        filename: 'chunk.[name].[contentHash:5].js',
         path: path.resolve(__dirname, './dist')
     },
     resolve: {
