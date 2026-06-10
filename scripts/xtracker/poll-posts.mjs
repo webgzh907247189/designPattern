@@ -12,7 +12,7 @@
  */
 import { execSync } from 'node:child_process'
 
-const DEFAULT_URL = 'https://xtracker.polymarket.com/api/users/elonmusk/posts?startDate=2026-04-27T16:00:00.000Z&endDate=2026-04-29T15:59:59.000Z'
+const DEFAULT_URL = 'https://xtracker.polymarket.com/api/users/elonmusk/posts?startDate=2026-06-01T16:00:00.000Z&endDate=2026-06-03T16:00:59.000Z'
 const TARGET_URL = process.env.XTRACKER_URL || DEFAULT_URL
 const INTERVAL_MS = Math.max(1000, Number(process.env.INTERVAL_MS || 1000 ))
 
@@ -60,10 +60,11 @@ function analyzeJsonLength(data) {
 
 async function fetchOnce() {
   const t0 = Date.now()
+  console.log('111')
   const res = await fetch(TARGET_URL, {
     headers: { Accept: 'application/json, text/plain, */*' },
   })
-  console.log(res, '??')
+  console.log('2222', res, '??')
   const buf = await res.arrayBuffer()
   const byteLength = buf.byteLength
   const text = new TextDecoder().decode(buf)
@@ -126,3 +127,5 @@ main().catch((e) => {
   console.error(e)
   process.exit(1)
 })
+
+

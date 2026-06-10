@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>polymarket</title>
+</head>
+
+<body>
+    <div id="container">
+        polymarkets ---
+        <span id="count">0</span>
+    </div>
+</body>
+<!-- <script>
+    const params = 'elon-musk-of-tweets-june-4-june-6'
+    const url = `https://gamma-api.polymarket.com/events?slug=${params}`
+
+    const getData = async() => {
+        const data = await fetch(url)
+
+        return data.json()
+    }
+    getData();
+    
+</script> -->
+
+<script>
+    let lastCount = 0
+    const TIME = 1000 * 60 * 1
+    const url = `https://xtracker.polymarket.com/api/users/elonmusk/posts?startDate=2026-06-08T16:00:00.000Z&endDate=2026-06-10T15:59:59.000Z`
+    const countID = document.getElementById('count')
+
+    const getData = async () => {
+        const data = await fetch(url)
+        return data.json()
+    }
+
+    const getNotication = async () => {
+        const data = await fetch('http://localhost:3000/api/notication')
+        return data.json()
+    }
+
+    const initCount = async() => {
+        let data = await getData()
+        lastCount = data.data.length
+        countID.innerHTML = lastCount
+    }
+
+    const main = async () => {
+        initCount()
+
+        setInterval(async () => {
+            const data = await getData();
+            const len = data.data.length
+            console.log(data, '??', len)
+            countID.innerHTML = len
+
+            // getNotication()
+            if (len !== lastCount) {
+                // console.log('123123')
+                getNotication()
+            }
+            lastCount = len
+        }, TIME)
+    }
+
+    main()
+</script>
+
+</html>

@@ -8,13 +8,14 @@
   "scripts": {
     "devCore": "node scripts/dev.js runtime-core -f esm",
     "devDom": "node scripts/dev.js runtime-dom -f esm",
-    "devShared": "node scripts/dev.js shared -f esm"
+    "devShared": "node scripts/dev.js shared -f esm",
+    "devCore2": "node scripts/dev2.js runtime-core -f esm"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "esbuild": "^0.20.2",
+    "esbuild": "^0.28.0",
     "minimist": "^1.2.8",
     "typescript": "^5.4.5"
   },

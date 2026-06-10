@@ -41,7 +41,7 @@ export const createVnode = (type, props, children = null, pathchFlag = 0) => {
         key: props?.key,
         el: null, // ******** 虚拟节点上对应的 真实的节点 ， 服务于后续 diff 算法 ********
 
-        pathchFlag,
+        pathchFlag, // 控制单个元素内部局部靶向更新
         dynamicChildren: null,
     }
     // 用新的 props 更新老的 vnode.props 之后，在批量更新到 vnode.el 上面

@@ -1,2 +1,12 @@
 {
+    // 格式化 python 使用
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true
+    },
+    "code-runner.executorMap": {
+        // 设置 PYTHONIOENCODING 服务于中文乱码场景
+        // window 使用 set PYTHONIOENCODING=utf8 && python run $fullFileName
+        "python": "export PYTHONIOENCODING=utf8 && python3 -u $fullFileName"
+    }
 }

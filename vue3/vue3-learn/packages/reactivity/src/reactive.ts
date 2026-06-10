@@ -37,6 +37,7 @@ export const toReactive = (value) => {
     return isObject(value) ? reactive(value) : value
 }
 
+// 判断是不是响应式对象 -> 看有没有被代理过
 export const isReactive = (value) => {
     return !!(value && value[ReactiveFlags.IS_REACTIVE])
 }
