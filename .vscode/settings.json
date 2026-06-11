@@ -4,6 +4,10 @@
         "editor.defaultFormatter": "ms-python.black-formatter",
         "editor.formatOnSave": true
     },
+    "[javascript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+        "editor.formatOnSave": true
+    },
     "code-runner.executorMap": {
         // 设置 PYTHONIOENCODING 服务于中文乱码场景
         // window 使用 set PYTHONIOENCODING=utf8 && python run $fullFileName
